@@ -28,6 +28,7 @@ bash instalar.sh
 Tiene los siguientes parametros:
 
 > -f: Lista de palabras clave
+
 > -t: tipo. Puede ser:
 > 		online : Aplica solo los patrones mas comunes
 > 		offline: Aplica todos los patrones 

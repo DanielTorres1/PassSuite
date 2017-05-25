@@ -27,14 +27,14 @@ bash instalar.sh
 
 Tiene los siguientes parametros:
 
--f: Lista de palabras clave
--t: tipo. Puede ser:
-		online : Aplica solo los patrones mas comunes
-		offline: Aplica todos los patrones 
--l: lenguaje. Puede ser:
-		es: Adiciona los passwords mas comunes en Español
-		en: Adiciona los passwords mas comunes en Ingles
--o: Archivo donde esribira la lista final
--v: si ponemos 1 mostrara que patrones se esta aplicando
-
-ejemplo :  passGen.sh -f lista.txt -t online -l es -o online.txt -v 1
+> -f: Lista de palabras clave
+> -t: tipo. Puede ser:
+> 		online : Aplica solo los patrones mas comunes
+> 		offline: Aplica todos los patrones 
+> -l: lenguaje. Puede ser:
+> 		es: Adiciona los passwords mas comunes en Español
+> 		en: Adiciona los passwords mas comunes en Ingles
+> -o: Archivo donde esribira la lista final
+> -v: si ponemos 1 mostrara que patrones se esta aplicando
+> 
+> ejemplo :  passGen.sh -f lista.txt -t online -l es -o online.txt -v 1

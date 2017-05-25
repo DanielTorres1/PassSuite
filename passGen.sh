@@ -61,7 +61,7 @@ USO:
 -o: Archivo donde esribira la lista final
 -v: si ponemos 1 mostrara que patrones se esta aplicando
 
-ejemplo :  crear-passwords.sh -f lista.txt -t online -l es -o online.txt -v 1
+ejemplo :  passGen.sh -f lista.txt -t online -l es -o online.txt -v 1
 EOF
 }
 

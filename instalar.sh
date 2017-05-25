@@ -41,5 +41,5 @@ echo -e "${RED}[+]${GREEN} Copiando dicconarios comunes ${RESET}"
 sudo mkdir /usr/share/wordlists 2>/dev/null
 sudo cp wordlist/passwords-comunes* /usr/share/wordlists/
 
-cp crear-passwords.sh /usr/bin
-chmod a+x /usr/bin/crear-passwords.sh
+cp passGen.sh /usr/bin
+chmod a+x /usr/bin/passGen.sh

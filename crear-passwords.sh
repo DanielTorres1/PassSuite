@@ -29,34 +29,56 @@ else
 	comunes="/usr/share/wordlists/passwords-comunes-en.txt"
 fi
 
+function print_ascii_art {
+cat << "EOF"
+                                                                                       
+88888888ba                                       ,ad8888ba,                            
+88      "8b                                     d8"'    `"8b                           
+88      ,8P                                    d8'                                     
+88aaaaaa8P'  ,adPPYYba,  ,adPPYba,  ,adPPYba,  88              ,adPPYba,  8b,dPPYba,   
+88""""""'    ""     `Y8  I8[    ""  I8[    ""  88      88888  a8P_____88  88P'   `"8a  
+88           ,adPPPPP88   `"Y8ba,    `"Y8ba,   Y8,        88  8PP"""""""  88       88  
+88           88,    ,88  aa    ]8I  aa    ]8I   Y8a.    .a88  "8b,   ,aa  88       88  
+88           `"8bbdP"Y8  `"YbbdP"'  `"YbbdP"'    `"Y88888P"    `"Ybbd8"'  88       88  
+                                                                                                                                                                            
+https://github.com/DanielTorres1 - daniel{dot}torres{at}owasp.org
+EOF
+}
+
+
+function uso {
+cat << "EOF"
+                                                                                       
+USO: 
+
+-f: Lista de palabras clave
+-t: tipo. Puede ser:
+		online : Aplica solo los patrones mas comunes
+		offline: Aplica todos los patrones 
+-l: lenguaje. Puede ser:
+		es: Adiciona los passwords mas comunes en Español
+		en: Adiciona los passwords mas comunes en Ingles
+-o: Archivo donde esribira la lista final
+-v: si ponemos 1 mostrara que patrones se esta aplicando
+
+ejemplo :  crear-passwords.sh -f lista.txt -t online -l es -o online.txt -v 1
+EOF
+}
+
+
+
+
 if [ $VERBOSE == "1" ]
 then
-echo -e " _____                               _                                                        _              __   _____ "
-echo -e "|  __ \                             | |                                                      | |            /  | |  _  |"
-echo -e '| |  \/ ___ _ __   ___ _ __ __ _  __| | ___  _ __   _ __   __ _ ___ _____      _____  _ __ __| |___  __   __ | | | | / |'
-echo -e '| | __ / _ \  _ \ / _ \  __/ _` |/ _` |/ _ \|  __| |  _ \ / _  / __/ __\ \ /\ / / _ \|  __/ _` / __| \ \ / / | | |  /| |'
-echo -e "| |_\ \  __/ | | |  __/ | | (_| | (_| | (_) | |    | |_) | (_| \__ \__ \\ V  V /  (_) | | | (_| \__ \  \ V / _| |_| |_/ /"
-echo -e " \____/\___|_| |_|\___|_|  \__,_|\__,_|\___/|_|    | .__/ \__,_|___/___/ \_/\_/ \___/|_|  \__,_|___/   \_/  \___(_)___/ "
-echo -e "						   | |                                                                  "
-echo -e "	  					   |_|                     "														  
-echo -e "			 		  __ __                   "															  
-echo -e "					|(_ |__)    _ _  _    |_  _  "
-echo -e "					|__)|__).  (_(_)|||.  |_)(_) "
-echo ""
-echo "					daniel.torres@owasp.org"
-echo "				https://github.com/DanielTorres1"
-echo ""
+   print_ascii_art
 fi
 
 
 
 if [ $FILE = NULL ] ; then
 
-echo "|              														 			"
-echo "| USO: crear-passwords.sh -f [Lista de passwords base] -t [offline/online] -l [en/es] -o [salida] -v 1"
-echo "|																		 			"
-echo "|  Author:daniel.torres@owasp.org                              			"
-echo ""
+print_ascii_art
+uso
 exit
 fi
 ######################

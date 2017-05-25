@@ -30,7 +30,7 @@ EOF
 print_ascii_art
 
 echo -e "${RED}[+]${GREEN} Instalando john the ripper ${RESET}"
-#sudo apt-get update
+sudo apt-get update
 sudo apt-get install john
 
 echo -e "${RED}[+]${GREEN} Copiando reglas de john the ripper ${RESET}"

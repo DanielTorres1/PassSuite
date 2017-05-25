@@ -19,9 +19,11 @@ Patrones comunes
 - Volver Mayuscula la primera letra
 
 ## Instalar
+```sh
 git clone https://github.com/DanielTorres1/PassGen
 cd PassGen
 bash instalar.sh
+```
 
 ## ¿Como usar?
 

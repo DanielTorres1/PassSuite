@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd /opt/JohnTheRipper-bleeding-jumbo/run && ./john "$@"
+

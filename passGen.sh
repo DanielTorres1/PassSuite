@@ -1,13 +1,12 @@
 #!/bin/bash
 
 
-while getopts ":t:f:o:l:v:" OPTIONS
+while getopts ":t:f:o:v:" OPTIONS
 do
             case $OPTIONS in            
             f)     FILE=$OPTARG;;
             t)     TYPE=$OPTARG;;
             o)     OUTPUT=$OPTARG;;
-            l)     LANGUAGE=$OPTARG;;
             v)     VERBOSE=$OPTARG;;
             ?)     printf "Opcion invalida: -$OPTARG\n" $0
                           exit 2;;
@@ -22,12 +21,6 @@ LANGUAGE=${LANGUAGE:=NULL}
 VERBOSE=${VERBOSE:=NULL}
 
 
-if [ $LANGUAGE == "es" ]
-then
-	comunes="/usr/share/wordlists/passwords-comunes-es.txt"
-else
-	comunes="/usr/share/wordlists/passwords-comunes-en.txt"
-fi
 
 function print_ascii_art {
 cat << "EOF"
@@ -55,13 +48,10 @@ USO:
 -t: tipo. Puede ser:
 		online : Aplica solo los patrones mas comunes
 		offline: Aplica todos los patrones 
--l: lenguaje. Puede ser:
-		es: Adiciona los passwords mas comunes en Español
-		en: Adiciona los passwords mas comunes en Ingles
 -o: Archivo donde esribira la lista final
 -v: si ponemos 1 mostrara que patrones se esta aplicando
 
-ejemplo :  passGen.sh -f lista.txt -t online -l es -o online.txt -v 1
+ejemplo :  passGen.sh -f lista.txt -t online -o online.txt -v 1
 EOF
 }
 
@@ -82,6 +72,8 @@ uso
 exit
 fi
 ######################
+FILE=`pwd`/$FILE
+#echo $FILE
 
  if [ $TYPE == "year" ]
   then
@@ -153,7 +145,7 @@ fi
     john --wordlist=temp-pass.txt --rules=rule17 --stdout >> temp-pass1.txt 2> /dev/null
     #john --wordlist=temp-pass.txt --rules=rule18 --stdout >> temp-pass1.txt 2> /dev/null
 
- cat $FILE temp-pass.txt temp-pass1.txt $comunes | sort | uniq > $OUTPUT 
+ cat $FILE temp-pass.txt temp-pass1.txt | sort | uniq > $OUTPUT 
  rm temp-pass.txt temp-pass1.txt   
 
    

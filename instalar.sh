@@ -30,16 +30,31 @@ EOF
 print_ascii_art
 
 echo -e "${RED}[+]${GREEN} Instalando john the ripper ${RESET}"
-#sudo apt-get update
-sudo apt-get install john
+distro=`cat /etc/*-release | head -1|cut -d "=" -f2`
+if [ $distro = "Kali" ] ; then 
+	echo "{+} kali detectado"
+	sudo apt-get install john
 
-echo -e "${RED}[+]${GREEN} Copiando reglas de john the ripper ${RESET}"
-sudo cat john.conf >> /etc/john/john.conf
-echo ""
+	echo -e "${RED}[+]${GREEN} Copiando reglas de john the ripper ${RESET}"
+	sudo cat john.conf >> /etc/john/john.conf
+	echo ""
 
-echo -e "${RED}[+]${GREEN} Copiando dicconarios comunes ${RESET}"
-sudo mkdir /usr/share/wordlists 2>/dev/null
-sudo cp wordlist/passwords-comunes* /usr/share/wordlists/
+else
+	echo "{+} $distro detectado"
+	cp john.conf /opt/
+	cp john /usr/bin
+	chmod a+x /usr/bin/john
+
+	cd /opt/; wget https://github.com/magnumripper/JohnTheRipper/archive/bleeding-jumbo.tar.gz
+	tar -zxvf bleeding-jumbo.tar.gz
+	sudo cat john.conf >> JohnTheRipper-bleeding-jumbo/run/john.conf
+	cd JohnTheRipper-bleeding-jumbo/src
+	./configure && make
+
+fi	
+
+make clean && make -s
+
 
 cp passGen.sh /usr/bin
 chmod a+x /usr/bin/passGen.sh

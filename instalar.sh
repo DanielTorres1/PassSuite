@@ -53,8 +53,5 @@ else
 
 fi	
 
-make clean && make -s
-
-
 cp passGen.sh /usr/bin
 chmod a+x /usr/bin/passGen.sh

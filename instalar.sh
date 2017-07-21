@@ -29,6 +29,10 @@ EOF
 
 print_ascii_art
 
+echo -e "${RED}[+]${GREEN} Copiando passGen ${RESET}"
+cp passGen.sh /usr/bin
+chmod a+x /usr/bin/passGen.sh
+
 echo -e "${RED}[+]${GREEN} Instalando john the ripper ${RESET}"
 distro=`cat /etc/*-release | head -1|cut -d "=" -f2`
 if [ $distro = "Kali" ] ; then 
@@ -52,6 +56,3 @@ else
 	./configure && make
 
 fi	
-
-cp passGen.sh /usr/bin
-chmod a+x /usr/bin/passGen.sh

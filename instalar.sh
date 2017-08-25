@@ -33,10 +33,13 @@ echo -e "${RED}[+]${GREEN} Copiando passGen ${RESET}"
 cp passGen.sh /usr/bin
 chmod a+x /usr/bin/passGen.sh
 
+cp crack-ntlm.sh /usr/bin
+chmod a+x /usr/bin/crack-ntlm.sh
+
 echo -e "${RED}[+]${GREEN} Instalando john the ripper ${RESET}"
 distro=`cat /etc/*-release | head -1|cut -d "=" -f2`
-if [ $distro = "Kali" ] ; then 
-	echo "{+} kali detectado"
+if [ $distro = "Kali" ]  || [ $distro = "Parrot" ] ; then 
+	echo "{+} kali/Parrot detectado"
 	sudo apt-get install john
 
 	echo -e "${RED}[+]${GREEN} Copiando reglas de john the ripper ${RESET}"

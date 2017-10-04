@@ -134,18 +134,21 @@ FILE=`pwd`/$FILE
  
 
 
+
     if [ $VERBOSE == "1" ]
     then	  
-	  echo -e "\n REGLA 16: Volver Mayuscula la primera letra"
-	  echo -e "\n REGLA 17: Volver Mayuscula todo"	  
-	  #echo -e "\n  REGLA 18: Mutar s/$ , a/@ , l/1, e/3, g/9, i=1, o=0"
+	  	 echo -e "\n  REGLA 18: Mutar s/$ , a/@ , l/1, e/3, g/9, i=1, o=0"
+	  	 echo -e "\n REGLA 16: Volver Mayuscula la primera letra"
+		 echo -e "\n REGLA 17: Volver Mayuscula todo"	  
     fi
  
+    
+    john --wordlist=$FILE --rules=rule18 --stdout >> temp-pass.txt 2> /dev/null
+    john --wordlist=$FILE --rules=rule19 --stdout >> temp-pass.txt 2> /dev/null
+    
     john --wordlist=temp-pass.txt --rules=rule16 --stdout >> temp-pass1.txt 2> /dev/null
     john --wordlist=temp-pass.txt --rules=rule17 --stdout >> temp-pass1.txt 2> /dev/null
-    #john --wordlist=temp-pass.txt --rules=rule18 --stdout >> temp-pass1.txt 2> /dev/null
 
  cat $FILE temp-pass.txt temp-pass1.txt | sort | uniq > $OUTPUT 
  rm temp-pass.txt temp-pass1.txt   
-
    

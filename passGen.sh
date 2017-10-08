@@ -1,11 +1,12 @@
 #!/bin/bash
 
 
-while getopts ":t:f:o:v:" OPTIONS
+while getopts ":t:f:e:o:v:" OPTIONS
 do
             case $OPTIONS in            
             f)     FILE=$OPTARG;;
             t)     TYPE=$OPTARG;;
+            e)     ENTITY=$OPTARG;;
             o)     OUTPUT=$OPTARG;;
             v)     VERBOSE=$OPTARG;;
             ?)     printf "Opcion invalida: -$OPTARG\n" $0
@@ -16,6 +17,7 @@ done
 
 TYPE=${TYPE:=NULL}
 FILE=${FILE:=NULL}
+ENTITY=${ENTITY:=NULL}
 OUTPUT=${OUTPUT:=NULL}
 LANGUAGE=${LANGUAGE:=NULL}
 VERBOSE=${VERBOSE:=NULL}
@@ -48,7 +50,9 @@ USO:
 -t: tipo. Puede ser:
 		online : Aplica solo los patrones mas comunes
 		offline: Aplica todos los patrones 
+		top20 : Solo genera 20 passwords mas usados. Requiere parametro -e
 -o: Archivo donde esribira la lista final
+-e: Empresa o sigla para generar
 -v: si ponemos 1 mostrara que patrones se esta aplicando
 
 ejemplo :  passGen.sh -f lista.txt -t online -o online.txt -v 1
@@ -75,10 +79,20 @@ fi
 FILE=`pwd`/$FILE
 #echo $FILE
 
- if [ $TYPE == "year" ]
+ if [ $TYPE == "top20" ]
   then
-  john --wordlist=$FILE --rules=rule15 --stdout >> temp-pass.txt 2> /dev/null	
-  cat $FILE temp-pass.txt | sort | uniq > $OUTPUT 
+  john --wordlist=$FILE --rules=rule14 --stdout >> temp-pass.txt 2> /dev/null	
+  echo `cat $FILE`"123"  >> temp-pass.txt 2> /dev/null	
+  echo `cat $FILE`"1234"   >> temp-pass.txt 2> /dev/null	
+  echo `cat $FILE`"12345"   >> temp-pass.txt 2> /dev/null	
+  echo `cat $FILE`"123456"  >> temp-pass.txt 2> /dev/null	
+  echo `cat $FILE`"1234567"  >> temp-pass.txt 2> /dev/null	
+  echo `cat $FILE`"12345678"  >> temp-pass.txt 2> /dev/null	
+  echo `cat $FILE`"123456789"  >> temp-pass.txt 2> /dev/null	
+  echo `cat $FILE`"1234567890"  >> temp-pass.txt 2> /dev/null	
+  
+  cat $FILE /usr/share/wordlists/top20.txt temp-pass.txt | sort | uniq > $OUTPUT 
+  rm temp-pass.txt 
   exit
   fi
   

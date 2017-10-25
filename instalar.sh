@@ -33,6 +33,9 @@ echo -e "${RED}[+]${GREEN} Copiando passGen ${RESET}"
 cp passGen.sh /usr/bin
 chmod a+x /usr/bin/passGen.sh
 
+cp mkbrutus.py /usr/bin
+chmod a+x /usr/bin/mkbrutus.py
+
 cp crack-ntlm.sh /usr/bin
 chmod a+x /usr/bin/crack-ntlm.sh
 

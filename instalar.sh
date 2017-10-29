@@ -63,5 +63,4 @@ else
 	sudo cat john.conf >> JohnTheRipper-bleeding-jumbo/run/john.conf
 	cd JohnTheRipper-bleeding-jumbo/src
 	./configure && make
-
 fi	

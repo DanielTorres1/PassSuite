@@ -36,7 +36,10 @@ chmod a+x /usr/bin/passGen.sh
 cp mkbrutus.py /usr/bin
 chmod a+x /usr/bin/mkbrutus.py
 
+cp passTelnet.pl /usr/bin
 cp crack-ntlm.sh /usr/bin
+
+chmod a+x /usr/bin/passTelnet.pl
 chmod a+x /usr/bin/crack-ntlm.sh
 
 echo -e "${RED}[+]${GREEN} Instalando john the ripper ${RESET}"

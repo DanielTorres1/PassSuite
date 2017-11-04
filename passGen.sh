@@ -82,6 +82,7 @@ FILE=`pwd`/$FILE
  if [ $TYPE == "top20" ]
   then
   john --wordlist=$FILE --rules=rule14 --stdout >> temp-pass.txt 2> /dev/null	
+  echo `cat $FILE`"987"  >> temp-pass.txt 2> /dev/null	
   echo `cat $FILE`"123"  >> temp-pass.txt 2> /dev/null	
   echo `cat $FILE`"1234"   >> temp-pass.txt 2> /dev/null	
   echo `cat $FILE`"12345"   >> temp-pass.txt 2> /dev/null	

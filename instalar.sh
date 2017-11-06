@@ -30,6 +30,9 @@ EOF
 print_ascii_art
 
 echo -e "${RED}[+]${GREEN} Copiando passGen ${RESET}"
+cp cracker.sh /usr/bin
+chmod a+x /usr/bin/cracker.sh
+
 cp passGen.sh /usr/bin
 chmod a+x /usr/bin/passGen.sh
 

@@ -131,6 +131,7 @@ then
 		
 		echo -e "\n\t########### $ip #######"							
 		medusa -e n -u sa -P top.txt -h $ip -M mssql | tee -a  logs/cracking/$ip-mssql.txt
+		medusa -e n -u adm -P top.txt -h $ip -M mssql | tee -a  logs/cracking/$ip-mssql.txt
 		medusa -e n -u $entidad -P top.txt -h $ip -M mssql | tee -a  logs/cracking/$ip-mssql.txt
 		
 		grep --color=never SUCCESS logs/cracking/$ip-mssql.txt > vulnerabilities/$ip-mssql-password.txt
@@ -209,18 +210,25 @@ then
 	read bruteforce	  
 	  
 	if [ $bruteforce == 's' ]
-    then      	  
-	  echo -e "$OKBLUE\n\t#################### Testing common pass MYSQL (lennnto) ######################$RESET"	
-	  for line in $(cat .services/mysql.txt); do
-		ip=`echo $line | cut -f1 -d":"`
-		port=`echo $line | cut -f2 -d":"`
-		echo -e "\n\t########### $ip #######"			
-		medusa -e n -u root -P top.txt -h $ip -M mysql | tee -a  logs/cracking/$ip-mysql.txt
-		medusa -e n -u mysql -P top.txt -h $ip -M mysql | tee -a  logs/cracking/$ip-mysql.txt
-		medusa -e n -u $entidad  -P top.txt -h $ip -M mysql | tee -a  logs/cracking/$ip-mysql.txt
-		grep --color=never SUCCESS logs/cracking/$ip-mysql.txt > vulnerabilities/$ip-mysql-password.txt
-		echo ""			
-	 done
+    then        	
+		echo -e "$OKBLUE\n\t#################### Testing common pass MYSQL (lennnto) ######################$RESET"	
+		for line in $(cat .services/mysql.txt); do
+			ip=`echo $line | cut -f1 -d":"`
+			port=`echo $line | cut -f2 -d":"`
+			echo -e "\n\t########### $ip #######"			
+			hostlive=`nmap -n -Pn -p 3306 $ip`
+			if [[ ${hostlive} == *"open"*  ]];then   	  
+				medusa -e n -u root -P top.txt -h $ip -M mysql | tee -a  logs/cracking/$ip-mysql.txt 2>> logs/cracking/$ip-mysql.txt
+				medusa -e n -u mysql -P top.txt -h $ip -M mysql | tee -a  logs/cracking/$ip-mysql.txt
+				medusa -e n -u $entidad  -P top.txt -h $ip -M mysql | tee -a  logs/cracking/$ip-mysql.txt
+				grep --color=never SUCCESS logs/cracking/$ip-mysql.txt > vulnerabilities/$ip-mysql-password.txt
+				echo ""			
+			else
+				echo "Host apagado"
+			fi
+			
+			
+		done		
 	fi # if bruteforce
 fi
 
@@ -251,6 +259,7 @@ then
 		
 	  done
 	  
+	  sleep 5
 	  ### wait to finish
 	  while true; do
 		ncrack_instances=`pgrep ncrack | wc -l`

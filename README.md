@@ -24,16 +24,18 @@
     
  2. cracker.sh: Realiza un ataque de diccionario (top 20
     passwords mas usados+ diccionario personalizado) a los siguientes
-    protcolos/servicios Windows, ZKSoftware, MS-SQL, Postgres, Mysql y
-    VNC
+    protcolos/servicios Windows (SMB), ZKSoftware, MS-SQL, Postgres, Mysql y VNC
+    
+3. local-admin-checker.sh: Realiza un ataque Pass-the-hash a toda la red para descubrir el reuso de passwords de cuentas administrativas locales descubiertas en la fase de explotación.
+    
 
 
 ## ¿COMO INSTALAR?
 
 Testeado en Kali 2:
 
-    git clone https://github.com/DanielTorres1/PassGen
-    cd PassGen
+    git clone https://github.com/DanielTorres1/PassSuite
+    cd PassSuite
     bash instalar.sh
 
 
@@ -42,14 +44,15 @@ Testeado en Kali 2:
 
 Opciones: 
 
--f: Lista de palabras clave
--t: tipo. Puede ser:
-		online : Aplica solo los patrones mas comunes
-		offline: Aplica todos los patrones para ataques offline
--o: Archivo donde esribira la lista final
--v: si ponemos 1 mostrara que patrones se esta aplicando
+    -f: Lista de palabras clave
+    -t: tipo. Puede ser:
+    		online : Aplica solo los patrones mas comunes
+    		offline: Aplica todos los patrones para ataques offline
+    -o: Archivo donde esribira la lista final
+    -v: si ponemos 1 mostrara que patrones se esta aplicando
 
 ejemplo :  passGen.sh -f lista.txt -t online -o online.txt -v 1
+
 
 
 **cracker.sh**
@@ -57,13 +60,43 @@ ejemplo :  passGen.sh -f lista.txt -t online -o online.txt -v 1
 Ejecutar el script en el directorio creado por lanscanner (https://github.com/DanielTorres1/lanscanner). 
 
 Opciones: 
--e : Nombre de la empresa (Usado para generar diccionario de passwords)
- 
--d :Diccionario de passwords a usar (opcional)
+
+    -e : Nombre de la empresa (Usado para generar diccionario de passwords)     
+    -d :Diccionario de passwords a usar (opcional)
 
 Ejemplo 1: Ataque de diccionario con passwords personallizados (basados en la palabra "microsoft") + 20 passwords mas usados
-	cracker.sh -e microsoft
+
+    cracker.sh -e microsoft
 
 Ejemplo 2: Ataque de diccionario con lista de passwords
-	cracker.sh -d passwords.txt
+
+    cracker.sh -d passwords.txt
+
+
+**local-admin-checker.sh**
+
+Ejecutar el script en el directorio creado por lanscanner (https://github.com/DanielTorres1/lanscanner). 
+
+Opciones: 
+
+    -u : usuario
+    -h : hash NTLM (Solo la segunda parte del hash)
+    -p : password
+    -o : salida
+    -f : Lista de IPs
+
+Ejemplo 1:
+Probar Pass-the-hash a toda la red con el usuario **administrador** y el password **P@ssw0rd**
+
+    local-admin-checker.sh -u administrador -p P@ssw0rd -o pth.txt
+
+Ejemplo 2:
+Probar Pass-the-hash a toda la red con el usuario **administrador** y el hash **c46b9e588fa0d112de6f59fd6d58eae3**
+
+    local-admin-checker.sh -u administrador -h c46b9e588fa0d112de6f59fd6d58eae3 -o pth.txt
+
+Ejemplo 3:
+Probar Pass-the-hash a la lista de IPs **ips.txt** con el usuario **administrador** y el password **P@ssw0rd**
+
+    local-admin-checker.sh -u administrador -p P@ssw0rd -f ips.txt -o pth.txt
 

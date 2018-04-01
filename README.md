@@ -40,7 +40,8 @@ Testeado en Kali 2:
 
 
 ## ¿COMO USAR?
-**passGen.sh**
+
+### **passGen.sh**
 
 Opciones: 
 
@@ -55,7 +56,7 @@ ejemplo :  passGen.sh -f lista.txt -t online -o online.txt -v 1
 
 
 
-**cracker.sh**
+### **cracker.sh**
 
 Ejecutar el script en el directorio creado por lanscanner (https://github.com/DanielTorres1/lanscanner). 
 
@@ -73,7 +74,7 @@ Ejemplo 2: Ataque de diccionario con lista de passwords
     cracker.sh -d passwords.txt
 
 
-**local-admin-checker.sh**
+### **local-admin-checker.sh**
 
 Ejecutar el script en el directorio creado por lanscanner (https://github.com/DanielTorres1/lanscanner). 
 

@@ -124,6 +124,8 @@ FILE=`pwd`/$FILE
 	  john --wordlist=$FILE --rules=rule8 --stdout >> temp-pass.txt 2> /dev/null	
 	  john --wordlist=$FILE --rules=rule9 --stdout >> temp-pass.txt 2> /dev/null 	  
 	  john --wordlist=$FILE --rules=rule15 --stdout >> temp-pass.txt 2> /dev/null 	  
+	  john --wordlist=$FILE --rules=rule20 --stdout >> temp-pass.txt 2> /dev/null 	  
+	  john --wordlist=$FILE --rules=rule21 --stdout >> temp-pass.txt 2> /dev/null 	  
    else
 
 

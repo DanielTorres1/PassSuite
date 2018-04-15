@@ -74,7 +74,8 @@ else
 
 fi
 
-
+echo "postgres" >> top.txt	
+echo "mysql" >> top.txt	
 
 
 if [ -f .services/Windows.txt ]

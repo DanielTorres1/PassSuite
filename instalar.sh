@@ -39,6 +39,9 @@ chmod a+x /usr/bin/passGen.sh
 cp mkbrutus.py /usr/bin
 chmod a+x /usr/bin/mkbrutus.py
 
+cp XBruteForcer.pl /usr/bin
+chmod a+x /usr/bin/XBruteForcer.pl
+
 cp passTelnet.pl /usr/bin
 cp crack-ntlm.sh /usr/bin
 
@@ -67,3 +70,9 @@ else
 	cd JohnTheRipper-bleeding-jumbo/src
 	./configure && make
 fi	
+
+cd /usr/share/wordlists
+wget https://raw.githubusercontent.com/DanielTorres1/passwords/master/top100.txt
+wget https://raw.githubusercontent.com/DanielTorres1/passwords/master/top20.txt
+
+

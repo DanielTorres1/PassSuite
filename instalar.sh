@@ -72,7 +72,7 @@ else
 fi	
 
 cd /usr/share/wordlists
-wget https://raw.githubusercontent.com/DanielTorres1/passwords/master/top100.txt
+wget https://raw.githubusercontent.com/DanielTorres1/passwords/master/top1000.txt
 wget https://raw.githubusercontent.com/DanielTorres1/passwords/master/top20.txt
 
 

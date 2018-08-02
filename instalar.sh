@@ -45,6 +45,9 @@ chmod a+x /usr/bin/XBruteForcer.pl
 cp passTelnet.pl /usr/bin
 cp crack-ntlm.sh /usr/bin
 
+cp webCrack.sh /usr/bin
+chmod a+x /usr/bin/webCrack.sh
+
 chmod a+x /usr/bin/passTelnet.pl
 chmod a+x /usr/bin/crack-ntlm.sh
 

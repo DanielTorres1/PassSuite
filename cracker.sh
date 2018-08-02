@@ -118,7 +118,7 @@ then
 			hydra -l soporte -P top.txt -t 1 $ip smb | tee -a  logs/cracking/$ip-windows.txt 2>/dev/null
 			hydra -l sistemas -P top.txt -t 1 $ip smb | tee -a  logs/cracking/$ip-windows.txt 2>/dev/null
 			hydra -l $entidad -P top.txt -t 1 $ip smb | tee -a  logs/cracking/$ip-windows.txt 2>/dev/null		
-			grep --color=never 'password:' logs/cracking/$ip-windows.txt > vulnerabilities/$ip-windows-password.txt
+			egrep --color=never 'password:|login:' logs/cracking/$ip-windows.txt > vulnerabilities/$ip-windows-password.txt
 			
 			#https://github.com/m4ll0k/SMBrute (shared)
 		

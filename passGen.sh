@@ -85,15 +85,7 @@ FILE=`pwd`/$FILE
  if [ $TYPE == "top20" ]
   then
   john --wordlist=$FILE --rules=rule14 --stdout >> temp-pass.txt 2> /dev/null	
-  echo `cat $FILE`"987"  >> temp-pass.txt 2> /dev/null	
-  echo `cat $FILE`"123"  >> temp-pass.txt 2> /dev/null	
-  echo `cat $FILE`"1234"   >> temp-pass.txt 2> /dev/null	
-  echo `cat $FILE`"12345"   >> temp-pass.txt 2> /dev/null	
-  echo `cat $FILE`"123456"  >> temp-pass.txt 2> /dev/null	
-  echo `cat $FILE`"1234567"  >> temp-pass.txt 2> /dev/null	
-  echo `cat $FILE`"12345678"  >> temp-pass.txt 2> /dev/null	
-  echo `cat $FILE`"123456789"  >> temp-pass.txt 2> /dev/null	
-  echo `cat $FILE`"1234567890"  >> temp-pass.txt 2> /dev/null	
+  john --wordlist=$FILE --rules=rule22 --stdout >> temp-pass.txt 2> /dev/null			
   
   cat $FILE /usr/share/wordlists/top20.txt temp-pass.txt | sort | uniq > $OUTPUT 
   rm temp-pass.txt 
@@ -103,15 +95,7 @@ FILE=`pwd`/$FILE
   if [ $TYPE == "top1000" ]
   then
   john --wordlist=$FILE --rules=rule14 --stdout >> temp-pass.txt 2> /dev/null	
-  echo `cat $FILE`"987"  >> temp-pass.txt 2> /dev/null	
-  echo `cat $FILE`"123"  >> temp-pass.txt 2> /dev/null	
-  echo `cat $FILE`"1234"   >> temp-pass.txt 2> /dev/null	
-  echo `cat $FILE`"12345"   >> temp-pass.txt 2> /dev/null	
-  echo `cat $FILE`"123456"  >> temp-pass.txt 2> /dev/null	
-  echo `cat $FILE`"1234567"  >> temp-pass.txt 2> /dev/null	
-  echo `cat $FILE`"12345678"  >> temp-pass.txt 2> /dev/null	
-  echo `cat $FILE`"123456789"  >> temp-pass.txt 2> /dev/null	
-  echo `cat $FILE`"1234567890"  >> temp-pass.txt 2> /dev/null	
+  john --wordlist=$FILE --rules=rule22 --stdout >> temp-pass.txt 2> /dev/null		
   
   cat $FILE /usr/share/wordlists/top1000.txt temp-pass.txt | sort | uniq > $OUTPUT 
   rm temp-pass.txt 

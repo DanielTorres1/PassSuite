@@ -67,7 +67,7 @@ rm vulnerabilities/* 2>/dev/null
 if [ $DICTIONARY = NULL ] ; then
 
 	echo $ENTIDAD > base.txt
-	passGen.sh -f base.txt -t top20 -o top.txt 
+	passGen.sh -f base.txt -t top200 -o top.txt 
 	rm base.txt
 else
 	mv $DICTIONARY top.txt	
@@ -79,6 +79,34 @@ echo "mysql" >> top.txt
 echo "cisco" >> top.txt	
 
 
+
+if [ -f .services/admin-web.txt ]
+then
+
+	echo -e "\n\t $OKBLUE Encontre paneles de administracion web activos. Realizar ataque de passwords ? s/n $RESET"	  
+	read bruteforce	  
+	  
+	if [ $bruteforce == 's' ]
+		then       	 
+      	  
+		echo -e "$OKBLUE\n\t#################### Testing pass web admin ######################$RESET"	
+			
+		for line in $(cat .services/admin-web.txt); do
+			echo -e "\n\t########### $line #######"
+			ip_port=`echo $line | cut -d "/" -f 3`
+			path=`echo $line | cut -d "/" -f 4`		
+			ip=`echo $ip_port | cut -d ":" -f 1`
+			port=`echo $ip_port | cut -d ":" -f 2`
+		
+			result=`webData.pl -t $ip -d "/$path/" -p $port -e todo -l web.html`	
+			if [[ $result = *"phpmyadmin"* ]]; then
+				echo -e "\t[+] phpMyAdmin identificado"
+				passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u root -f top.txt > vulnerabilities/$ip-$port-$path.txt			
+			fi		
+		done		
+		
+	 fi	
+fi
 
 if [ -f .services/cisco.txt ]
 then
@@ -146,7 +174,7 @@ then
 		echo -e "$OKBLUE\n\t#################### Testing pass ZKSoftware ######################$RESET"	
 		for ip in $(cat .services/ZKSoftware.txt); do
 			echo -e "\n\t########### $ip #######"			
-			passWeb.pl -t $ip -p 80 -s ZKSoftware -f top.txt > vulnerabilities/$ip-80-password.txt
+			passWeb.pl -t $ip -p 80 -m ZKSoftware -u administrator -f top.txt > vulnerabilities/$ip-80-password.txt
 			echo ""			
 		done
 	 fi	

@@ -58,7 +58,7 @@ USO:
 
 ejemplo :  passGen.sh -f lista.txt -t online -o online.txt -v 1
 
-ejemplo :  passGen.sh -f lista.txt -t top1000 -o top.txt -v 1
+ejemplo :  passGen.sh -f lista.txt -t top200 -o top.txt -v 1
 EOF
 }
 
@@ -96,6 +96,8 @@ FILE=`pwd`/$FILE
   then
   john --wordlist=$FILE --rules=rule14 --stdout >> temp-pass.txt 2> /dev/null	
   john --wordlist=$FILE --rules=rule22 --stdout >> temp-pass.txt 2> /dev/null		
+  john --wordlist=$FILE --rules=rule23 --stdout >> temp-pass.txt 2> /dev/null		
+  john --wordlist=$FILE --rules=rule24 --stdout >> temp-pass.txt 2> /dev/null		
   
   cat $FILE /usr/share/wordlists/top200.txt temp-pass.txt | sort | uniq > $OUTPUT 
   rm temp-pass.txt 
@@ -131,6 +133,9 @@ FILE=`pwd`/$FILE
 	  john --wordlist=$FILE --rules=rule15 --stdout >> temp-pass.txt 2> /dev/null 	  
 	  john --wordlist=$FILE --rules=rule20 --stdout >> temp-pass.txt 2> /dev/null 	  
 	  john --wordlist=$FILE --rules=rule21 --stdout >> temp-pass.txt 2> /dev/null 	  
+	  john --wordlist=$FILE --rules=rule22 --stdout >> temp-pass.txt 2> /dev/null		
+	  john --wordlist=$FILE --rules=rule23 --stdout >> temp-pass.txt 2> /dev/null		
+	  john --wordlist=$FILE --rules=rule24 --stdout >> temp-pass.txt 2> /dev/null		
    else
 
 
@@ -152,6 +157,8 @@ FILE=`pwd`/$FILE
 	  john --wordlist=$FILE --rules=rule13 --stdout >> temp-pass.txt 2> /dev/null
 	  john --wordlist=$FILE --rules=rule14 --stdout >> temp-pass.txt 2> /dev/null
 	  john --wordlist=$FILE --rules=rule15 --stdout >> temp-pass.txt 2> /dev/null 	  
+	  john --wordlist=$FILE --rules=rule23 --stdout >> temp-pass.txt 2> /dev/null		
+	  john --wordlist=$FILE --rules=rule24 --stdout >> temp-pass.txt 2> /dev/null		
    fi
  
 

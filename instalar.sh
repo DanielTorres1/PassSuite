@@ -74,8 +74,24 @@ else
 	./configure && make
 fi	
 
+
+# oracle 
+
+apt-get install ruby-dev libaio-dev build-essential libgmp-dev
+mkdir /opt/oracle
+mv instantclient_18_3 /opt/oracle
+
+export PATH=$PATH:/opt/oracle/instantclient_18_3
+export SQLPATH=/opt/oracle/instantclient_18_3
+export TNS_ADMIN=/opt/oracle/instantclient_18_3
+export LD_LIBRARY_PATH=/opt/oracle/instantclient_18_3
+export ORACLE_HOME=/opt/oracle/instantclient_18_3
+
+cd ruby-oci8-ruby-oci8-2.1.8
+make
+make install
+
 cd /usr/share/wordlists
-wget https://raw.githubusercontent.com/DanielTorres1/passwords/master/top1000.txt
-wget https://raw.githubusercontent.com/DanielTorres1/passwords/master/top20.txt
+wget https://raw.githubusercontent.com/DanielTorres1/passwords/master/top200.txt
 
 

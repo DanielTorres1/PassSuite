@@ -1,0 +1,775 @@
+# @markup markdown
+
+2.1.8
+=====
+
+New Features
+------------
+
+### Send and receive timeouts
+
+New methods {OCI8#send_timeout}, {OCI8#send_timeout=}, {OCI8#recv_timeout} and {OCI8#recv_timeout=}
+were added. They are available on Oracle 11.1 or upper.
+
+Use them at your own risk because they use [undocumented OCI handle attributes](http://blog.jiubao.org/2015/01/undocumented-oci-handle-attributes.html).
+
+### Cancel read system calls not to prevent ruby process termination
+
+When network quality is poor and incoming packets are lost irregularly,
+the ruby process termination may be blocked until TCP keepalive time (2 hours).
+
+By setting [OCI8.properties[:cancel_read_at_exit]](OCI8.html#properties-class_method)
+true, read system calls, which may wait incoming packets, are canceled at exit.
+See: [github issue #56](https://github.com/kubo/ruby-oci8/issues/56)
+
+This feature is disabled by default because it uses [unusual technique](https://github.com/kubo/plthook)
+which hooks read system calls issued by Oracle client library and it works only on
+Linux, Windows and OSX.
+
+### RGenGC
+
+Object allocation code is rewritten to use [RGenGC](http://www.infoq.com/news/2013/12/ruby21).
+
+Fixed Issues
+------------
+
+-   Raises an exception when a closed OCI8 object is used.
+    Using a closed cursor causes various problems such as segmentation
+    fault, nil comparison error and so on.
+    See: [github issue #61](https://github.com/kubo/ruby-oci8/issues/61)
+    and [github issue #62](https://github.com/kubo/ruby-oci8/issues/62)
+
+    (reported by Mike Bourgeous)
+
+-   Fix "RuntimeError:executing in another thread"
+    when a closed connection is used. This bug was introduced by
+    the previously listed issue.
+    See: [github issue #64](https://github.com/kubo/ruby-oci8/issues/64)
+
+    (reported by Yasuo Honda)
+
+-   Fix SEGV when a temporary LOB is freed by GC while reading another
+    lob and the ruby version is 2.0.0 or upper.
+
+-   Skip rollback on logoff when no transactions are in progress.
+
+-   Fix a broken link in README.md.
+    See: [github issue #67](https://github.com/kubo/ruby-oci8/issues/67)
+
+    (reported by Zloy)
+
+-   Don't use SYM2ID on ruby 2.2.0 or later not to make symbols unGCable
+    by [Symbol GC](http://www.infoq.com/news/2014/12/ruby-2.2.0-released).
+
+2.1.7
+=====
+
+New Features
+------------
+
+### Add OCI8::Metadata::Base#obj_link.
+
+Fixed Issues
+------------
+
+-   Fix OCI8#describe_table to follow synonyms in a remote database.
+
+2.1.6
+=====
+
+New Features
+------------
+
+### Support ruby 2.1.0
+
+### Support cygwin x86_64
+
+### OCI8#describe_synonym and OCI8#describe_any accept 'PUBLIC.XXX' as a public synonym name.
+
+Fixed Issues
+------------
+
+-   fix wrong return valus of OCI8::Metadata::Synonym#schema_name
+    and #translated_name for synonyms with a database link but
+    without schema_name.
+
+-   fix ruby version checking in binary gem. Gem::ruby_version of
+    ruby 2.0.0p195 is 2.0.0.195, which doesn't match '= 2.0.0'.
+
+    (github issue #36 reported by sodonnel)
+
+-   fix SEGV when metadata are accessed after the session is disconnected.
+
+-   fix undefined method 'char_used?' when OCI8::Metadata::Argument#inspect is called.
+
+-   fix tests in an environment where the data size of "CAST('1' AS CHAR(1 char))"
+    is wrong.
+
+-   suppress warnings "MiniTest::Unit::TestCase is now Minitest::Test"
+    when minitest gem is installed.
+
+-   fix SEGV when oci8lib.so is compiled by mingw64 without runtime-check option.
+    Note that binary gems are compiled with runtime-check to check available Oracle
+    client features at runtime.
+
+-   fix SEGV when one connection is used by more than two threads and temporary
+    lobs are freed by GC.
+
+2.1.5
+=====
+
+New Features
+------------
+
+### V$SESSION_CONNECT_INFO.CLIENT_DRIVER.
+
+'rubyoci8' is set as the driver name, which is displayed in
+V$SESSION_CONNECT_INFO.CLIENT_DRIVER when both the client and
+the server are Oracle 11g or upper.
+
+Fixed Issues
+------------
+
+-   fix segmentation fault when the process exits on rubinius.
+
+-   fix "OCI Library Initialization Error" only when the Oracle
+    instant client is 11.2.0.3 for Solaris x86 32-bit, the ruby
+    version is 1.9.3 or upper and the ruby is compiled by gcc.
+
+2.1.4
+=====
+
+New Features
+------------
+
+### Fast Application Notification (FAN) support
+
+Look at {http://php.net/manual/en/oci8.connection.php} to know what is FAN.
+[oci8.events](http://php.net/manual/en/oci8.configuration.php#ini.oci8.events) in PHP
+corresponds to {OCI8.properties  OCI8.properties[:events_mode]} in ruby-oci8.
+
+Note: You need to set `OCI8.properties[:events_mode]` after `"require 'oci8'"` and before
+any methods which call Oracle OCI functions.
+
+Fixed Issues
+------------
+
+-   fix SEGV when a temporary LOB is freed when `OCILobRead` returns `OCI_NEED_DATA`.
+    See: [github issue #20](https://github.com/kubo/ruby-oci8/issues/20)
+
+    (reported by Edgars Beigarts)
+
+-   use `RUBY_VERSION` instead of `RbConfig::CONFIG['ruby_version']` to know the
+    ruby ABI version. The latter may be changed by the configure option
+    --with-ruby-version.
+    See: [github issue #24](https://github.com/kubo/ruby-oci8/issues/24)
+
+    (reported by suhrawardi)
+
+-   add a script encoding magic comment for ruby 2.0.0 preview2.
+    See: [github issue #25](https://github.com/kubo/ruby-oci8/issues/25)
+
+    (reported by aboltart)
+
+-   fix {OCI8#describe_table} not to follow synonyms until stack overflow.
+    Now the recursive level is limited to 20.
+    See: [github issue #26](https://github.com/kubo/ruby-oci8/issues/26)
+
+    (reported by Brian Henderson)
+
+2.1.3
+=====
+
+New Features
+------------
+
+### {OCI8::Cursor#statement}
+
+It returns the text of the SQL statement prepared in the cursor.
+
+    cursor = conn.parse("select * from country where country_code = 'ja'")
+    cursor.statement # => "select * from country where country_code = 'ja'"
+
+See: [github issue #16](https://github.com/kubo/ruby-oci8/issues/16)
+
+Specification changes
+---------------------
+
+### License was changed to 2-clause BSD-style license.
+
+The former license was same with old ruby (<= 1.9.2) license.
+
+### Oracle object type's DATE field type
+
+Ruby-oci8 had returned a DateTime object when Oracle object type's DATE
+field type was accessed. Now it returns a Time object.
+
+Fixed Issues
+------------
+
+-   Fix to work with procedures and functions that return temporary lobs.
+    See: [github issue #13](https://github.com/kubo/ruby-oci8/issues/13)
+
+    (contributed by timon)
+
+-   Fix Oracle object type's DATE field tests.
+    See: [github issue #17](https://github.com/kubo/ruby-oci8/issues/17)
+
+    (reported by Yasuo Honda)
+
+-   Fix a sequence test failure on Oracle 11gR2.
+    See: [github issue #18](https://github.com/kubo/ruby-oci8/issues/18)
+
+    (reported by Yasuo Honda)
+
+-   Include COPYING files.
+    See: [github issue #19](https://github.com/kubo/ruby-oci8/issues/19)
+
+    (requested by Johannes Weberhofer)
+
+-   Fix SEGV when a temporary LOB is GCed while another LOB is read.
+    See: [github issue #20](https://github.com/kubo/ruby-oci8/issues/20)
+
+    (reported by techsplicer)
+
+-   Fix #<NoMethodError: undefined method `timezone' for Time:Class>
+    when ruby is less than 1.9.2 and an object type's time attribute is accessed.
+
+2.1.2
+=====
+
+Specification changes
+---------------------
+
+### Statement caching in OCI is disabled by default.
+
+This is workaround about a SIGSEGV issue.
+See: [oracle enhanced issue #162](https://github.com/rsim/oracle-enhanced/issues/162)
+
+Fixed Issues
+------------
+
+-   delete code which overwrites signal handlers registered by ruby.
+    See: [rubyforge thread 50690](http://rubyforge.org/forum/forum.php?thread_id=50690&forum_id=1078)
+
+-   fix internal heap error in OCI.
+    See: [github issue #12](https://github.com/kubo/ruby-oci8/issues/12)
+
+    (reported by Yasuo Honda)
+
+2.1.1
+=====
+
+New Features
+------------
+
+### Statement caching in OCI
+
+See {http://docs.oracle.com/cd/E11882_01/appdev.112/e10646/oci09adv.htm#i471377}.
+This feature is enabled only when the Oracle client is 9iR2 or upper.
+
+The default cache size is 20. It can be changed as follows.
+
+    # change the size to 100.
+    OCI8.properties[:statement_cache_size] = 100
+
+Note: The default size was changed to zero in 2.1.2.
+
+Specification changes
+---------------------
+
+### OCI8::LOB#read() returns an empty string '' when it is an empty lob.
+
+It had been returned nil.
+
+Fixed Issues
+------------
+
+-   OCI8::CLOB.new(conn, '') works now.
+
+-   fix core dump when calling PL/SQL procedure with cursor argument.
+    See: {https://github.com/kubo/ruby-oci8/issues/11}
+
+    (reported by Raimonds Simanovskis)
+
+-   fix testcase failures in DST.
+    See: {https://github.com/kubo/ruby-oci8/issues/8}
+
+    (reported by Yasuo Honda)
+
+-   fix a compilation issue on Redhat.
+
+    (reported by John Beckwith and others)
+
+-   fix "wrong number of arguments (1 for 2)" when a date member in a object type is accessed.
+
+    (repored by Leoš Bitto)
+
+2.1.0
+=====
+
+New Features
+------------
+
+### OCI connection pooling
+
+See: {OCI8::ConnectionPool}
+
+### Daylight saving time aware if TZ is set.
+
+You should set the environment variable TZ if your applications run
+in a time zone with daylight saving time transitions.
+Otherwise, Oracle session time zone is set with current constant
+offset from GMT.
+(reported by Yasuo Honda)
+
+### connect as sysasm (Oracle 11g only)
+
+You can connect to the Oracle server as SYSASM privilege as follows:
+
+    OCI8.new('username/password as sysasm')
+
+or
+
+    OCI8.new('username', 'password', nil, :SYSASM)
+
+### Oracle number is converted to ruby float exactly same as ruby does.
+
+From ruby 1.9.2, a float value converted from Oracle number 15.7 by
+the Oracle function OCINumberToReal() makes a string representation
+15.700000000000001 by `Float#to_s`. (See: {http://redmine.ruby-lang.org/issues/4656})
+To avoid this issue, any Oracle number is converted to a float as
+ruby's `String#to_f` does.
+
+The behavior is customizable by {OCI8.properties OCI8.properties[:float\_conversion\_type]}.
+
+    OCI8.properties[:float_conversion_type] = :oracle # => Use OCINumberToReal()
+    OCI8.properties[:float_conversion_type] = :ruby # => Use String#to_f
+
+The default value is :ruby.
+
+### `OCISuccessWithInfo` exceptions are not raised any more.
+
+Ruby-oci8 2.0 treats `OCI_SUCCESS_WITH_INFO` in OCI layer as an error
+and raise an exception {OCISuccessWithInfo} such as "ORA-24347: Warning of
+a NULL column in an aggregate function" and "ORA-28002: the password will
+expire within xx days."
+
+From 2.1.0, it is treated as a warning and the exception is set
+to {OCI8#last_error}.
+
+### {OCI8#last_error} is added.
+
+The last error or warning associated with the session is set to
+{OCI8#last_error}. The usecase is to detect {OCISuccessWithInfo}.
+It is reset by {OCI8#exec} and {OCI8#parse}.
+
+### Experimental support of character length semantics
+
+{OCI8.properties OCI8.properties[:length\_semantics]} indicates length semantics
+of {OCI8::Cursor#bind\_param}. When it is `:char`, the length is counted by the
+number of characters. When it is `:byte`, it is counted by the number of
+bytes.
+
+### {OCI8.client\_charset\_name} and {OCI8#database\_charset\_name} are added.
+
+They return Oracle charset name such as WE8ISO8859P15.
+
+Specification changes
+---------------------
+
+### The parent class {OCINoData} was changed from {OCIException} to {OCIError}.
+
+### Oracle 8 and Oracie 8i is not supported anymore.
+
+Fixed Issues
+------------
+
+-   Fix a bug that an array is always bound as null.
+    This bug was introduced in ruby-oci8 2.0.5.
+
+    (reported by Leoš Bitto)
+
+-   Avoid a gcc internal compiler error when using ruby1.9.2-p290 on
+    ubuntu 11.10 (64bit).
+
+    (reported by Bob Saveland.)
+
+-   Fix compilation problems on Solaris.
+
+    (Reported by Sanjiv Patel.)
+
+-   Fix compilation problems on Linux.
+
+    (Reported by Edgars Beigarts.)
+
+-   Connections are released by GC without explicit logoff.
+
+-   Set ruby encoding CP950 for oracle characterset ZHT16MSWIN950 and
+    CP951 for ZHT16HKSCS and ZHT16HKSCS31 when the ruby is 1.9.3.
+
+-   Clear an executuing thread information in a connection when a SQL
+    executions is canceled by Thread#kill or Timeout::timeout.
+
+    (reported by Aaron Qian)
+
+-   Fix some test cases for object type and TZ issues.
+
+    (reported by Yasuo Honda)
+
+-   Use Gem::Command.build_args to get arguments after '--'.
+
+    (reported by jbirdjavi)
+
+2.0.6
+=====
+
+Fixed issues
+------------
+
+-   fix SEGV when freeing a temporary LOB during GC on rubinius 1.2.3.
+
+-   revert the exception type from RuntimeError to OCIException when
+    a closed OCI handle's method is called. It was chaned in 2.0.5
+    by mistake.
+
+2.0.5
+=====
+
+New Features
+------------
+
+### Support Rubinius.
+
+### {OraNumber#has\_decimal\_part?} is added.
+
+Example:
+
+    OraNumber(10).has_decimal_part?   # => false
+    OraNumber(10.1).has_decimal_part? # => true
+
+### Limitted support for OraNumber's positive and negative infinity.
+
+They are converted to '~' and '-~' respectively as described in
+{http://www.ixora.com.au/notes/infinity.htm}.
+
+### {OCI8.properties} is added to control ruby-oci8 behaviour.
+
+It supports :bind_string_as_nchar only for now.
+
+### {OCI8.properties}[:bind\_string\_as\_nchar] is added.
+
+You need to set "`OCI8.properties[:bind_string_as_nchar] = true`"
+if the database character set is not UTF-8 and 'NCHAR'/'NVARCHAR2' columns
+contain characters which cannot be converted to the database character set.
+
+See: {http://rubyforge.org/forum/forum.php?thread\_id=48838&forum\_id=1078}
+
+Fixed issues
+------------
+
+-   Fix InvalidHandle errors on Rails.
+
+    (reported by Jordan Curzon and Aaron Qian)
+
+    See: {http://rubyforge.org/forum/forum.php?thread\_id=49751&forum\_id=1078}
+
+-   Raise "OCIError: ORA-01805: possible error in date/time operation"
+    when Oracle 11gR2's client and server timezone versions are not same
+    instead of raising a exception "undefined method `*' for nil:NilClass."
+
+    See: {http://rubyforge.org/forum/forum.php?thread\_id=49102&forum\_id=1078}
+
+-   Fix unexpectedly disconnect when failed-logon connections is GC'ed
+    and the connection object's address is accidentally same with
+    an alive connection.
+
+-   Fix segmentation fault when calling {OCI8::Cursor#[]} for
+    closed statement objects.
+
+    (reported by Hugo L. Borges)
+
+-   Fix a bug that a string is bound to RAW.
+    Its encoding had been convertd to {OCI8.encoding} incorrectly.
+
+-   Fix memory leaks when temporary lobs are used.
+
+-   Fix a problem to assign 'NULL' bind value to object type bind variables.
+
+    (reported by Raimonds Simanovskis)
+
+-   Support LOB datatypes in object type.
+
+    (reported by Michael Sexton)
+
+-   Fix to compile on cygwin. The declaration of 'boolean' in Oracle
+    conflicts with that of latest cygwin.
+
+    (reported by Don Hill).
+
+-   Fix to complie for the 32-bit ruby which was compiled on x86\_64 linux
+    and configured without '--build', '--host' nor '--target'.
+    The 'RUBY_PLATFORM' is 'x86_64-linux' even though the ruby is 32-bit.
+
+    (reported by Jason Renschler)
+
+-   Fix wrong dependencies in Makefile when running 'make -jNNN (where NNN >= 2)'
+
+    (contributed by Alyano Alyanos. See bug #28129 on rubyforge.)
+
+-   Fix to compile on HP-UX. Duplicated const qualifiers prevented HP-UX cc
+    from compiling.
+
+    (reported by Sebastian YEPES)
+
+2.0.4
+=====
+
+New Features
+------------
+
+### {OCI8.error_message} is added.
+
+Gets the Oracle error message specified by message id.
+Its language depends on 'NLS_LANGUAGE'.
+
+Note: This method is unavailable if the Oracle client version is 8.0.
+
+    # When NLS_LANG is AMERICAN_AMERICA.AL32UTF8
+    OCI8.error_message(1)
+    # => "ORA-00001: unique constraint (%s.%s) violated"
+
+    # When NLS_LANG is FRENCH_FRANCE.AL32UTF8
+    OCI8.error_message(1)
+    # => "ORA-00001: violation de contrainte unique (%s.%s)"
+
+### {OraNumber#dump} is added.
+
+Returns {OraNumber}'s internal representation whose format
+is same with the return value of Oracle SQL function DUMP().
+  
+    OraNumber.new(100).dump #=> "Typ=2 Len=2: 194,2"
+    OraNumber.new(123).dump #=> "Typ=2 Len=3: 194,2,24"
+    OraNumber.new(0.1).dump #=> "Typ=2 Len=2: 192,11"
+
+Fixed issues
+------------
+
+-   Fractional second part is lost when ruby's Time instance is bound
+    to Oracle datatype TIMESTAMP.
+
+    (reported by Raimonds Simanovskis)
+
+-   {OraNumber#to\_i} and {OraNumber#to\_s} fail when its scale is larger
+    than 38.
+
+    (reported by Raimonds Simanovskis)
+
+-   Memory leak about 30 bytes per one place holder for object type.
+
+-   Segmentation fault when a collection of string is bound.
+
+    (reported by Raimonds Simanovskis)
+
+-   Segmentation fault when GC starts while initializing a bind
+    object for object type.
+
+    (reported by Remi Gagnon)
+
+-   Segmentation fault when OCI8::Cursor#fetch is called prior to
+    {OCI8::Cursor#exec}.
+
+-   Detailed error message is not reported when 'PL/SQL NO_DATA_FOUND'
+    exception is raised.
+
+    (reported by Raimonds Simanovskis)
+
+2.0.3
+=====
+
+Incompatible Changes
+--------------------
+
+### Number column in a SQL statement
+
+Changes the default data type for number column which fit neither
+Integer nor Float from {OraNumber} to BigDecimal.
+
+    conn.exec("select 1.0 from dual") do |row|
+      p row[0] # => BigDecimal("1") if the ruby-oci8 version is 2.0.3.
+               # => OraNumber(1) if the version is 2.0.2.
+    end
+
+### Priority of OraNumber within numerical types
+
+The return types of basic arithmetic operations with other numerical
+types are changed.
+
+2.0.3:
+
+    OraNumber + Integer    => OraNumber  (OraNumber wins.)
+    OraNumber + Float      => Float      (OraNumber loses.)
+    OraNumber + Rational   => Rational   (OraNumber loses.)
+    OraNumber + BigDecimal => BigDecimal (OraNumber loses.)
+
+2.0.2:
+
+    OraNumber + Integer    => OraNumber  (OraNumber wins always.)
+    OraNumber + Float      => OraNumber
+    OraNumber + Rational   => OraNumber
+    OraNumber + BigDecimal => OraNumber
+
+### Interval day to second
+
+The retrived value of Oracle data type "interval day to second"
+was changed from the number of days as a Rational to the number
+of seconds as a Float by default.
+Use 'OCI8::BindType::IntervalDS.unit = :day' to make it compatible
+with the previous versions.
+
+    conn.exec("select to_dsinterval('0 00:00:01') from dual") do |row|
+      p row[0] # => 1.0 if the version is 2.0.3 and
+               #    OCI8::BindType::IntervalDS.unit is :second.
+               # => (1/86400) if the version is 2.0.3 and
+               #    OCI8::BindType::IntervalDS.unit is :day or
+               #    the version is 2.0.2.
+    end
+
+### Date, timestamp, timestamp with time zone data types and ruby 1.9.2
+
+These data types are retrived always as Time values when the
+ruby version is 1.9.2 because the Time class is enhanced to
+represent any time zone and is free from year 2038 problem.
+
+Prior to ruby 1.9.2, if the time cannot be represented by
+Unix time or the time zone is neither utc nor local, they are
+retrived as DateTime values.
+
+### Non-blocking mode and ruby 1.9
+
+Non-blocking mode is enabled by default when the ruby is 1.9.
+
+New Features
+------------
+
+### BigDecimal and Rational are availabe as bind values.
+
+### New methods {OCI8#module=}, {OCI8#action=} and {OCI8#client_info=} are added.
+
+These methods change the module name, the action name and the client_info
+in the current session respectively.
+
+After Oracle 10g client, these don't perform network round trips.
+The change is reflected to the server by the next round trip such as
+{OCI8#exec}, {OCI8#ping}, etc.
+
+Prior to Oracle 10g client, these call PL/SQL functions such as
+`DBMS_APPLICATION_INFO.SET_MODULE`, `DBMS_APPLICATION_INFO.SET_ACTION`,
+and `DBMS_APPLICATION_INFO.SET_CLIENT_INFO` internally.
+The change is reflected immediately by a network round trip.
+
+### {OCI8::BindType.default_timezone}
+
+The default time zone of Time or DateTime values. This parameter is used only when
+
+* date values are fetched and the Oracle client version is 8.x
+
+    or
+
+* object types have date data type attributes.
+
+Note that if the Oracle client version is 9i or upper, the time
+zone is determined by the session time zone. The default value
+is local time zone. You can change it to GMT by executing the
+following SQL statement for each connection.
+
+    alter session set time_zone = '00:00'
+
+Note: The session time zone is set by the environment variable TZ from
+ruby-oci8 2.1.0.
+
+Other specification changes
+---------------------------
+
+-   Add a global function OraNumber(obj) as a shortcut of OraNumber.new(obj)
+    as Rational and BigDecimal do.
+
+-   Fix to accept nil attribute in object type's
+    constructors. This works only for simple data types such as number,
+    string. But it doesn't for complex types such as object types.
+    (requested by Remi Gagnon)
+
+- add DATE datatype support in object types.
+
+-   Change {OCI8::LOB#write} to accept an object which is not a String and
+    doesn't respond to 'to_str' as IO#write does.
+    (requested by Christopher Jones)
+
+-   Change the initial polling interval of
+    non-blocking mode for ruby 1.8 from 100 msec to 10 msec, which
+    is same with ruby-oci8 1.0.
+
+Fixed installation issues
+-------------------------
+
+-   Fix oraconf.rb for ruby 1.8.5 with Oracle 8.x which needs some object
+    files to link with.
+
+    (reported by Jayson Cena)
+
+-   Fix oraconf.rb for ruby 1.9.2 preview1.
+
+    (pointed by Raimonds Simanovskis)
+
+-   Fix oraconf.rb to compile for AIX instant clients.
+
+    (reported by Kazuya Teramoto)
+
+2.0.2
+=====
+
+*   add new methods
+    -   {OCI8#select_one}
+
+    -   {OCI8#ping}   -> true or false
+
+        Verifies that the Oracle connection is alive.
+        {OCI8#ping} also can be used to flush all the pending OCI
+        client-side calls to the server if any exist.
+
+    -   {OCI8#client\_identifier=}client\_id
+
+        Look at the following link to know what is the client identifier.
+        {http://it.toolbox.com/blogs/database-solutions/oracle-session-tracing-part-i-16356}
+
+        Note that the specified identifier doesn't change the v$session
+        immediately. It is done by the next network round trip
+        such as OCI8#exec or OCI8#ping.
+
+*   fix problems when compiling with Oracle 9.2 and 8.0.
+
+    (reported by Axel Reinhold)
+
+*   [dbi] fix to pass a newly added sanity check in dbi 0.4.1.
+
+    (reported by Dirk Herzhauser)
+
+*   fix an error when executing "select NULL from dual".
+
+    {http://rubyforge.org/forum/forum.php?thread\_id=32468&forum\_id=1078}
+    (contributed by Raimonds Simanovskis)
+
+*   [ruby 1.9] fix OCI8::BLOB to read/write binary. Prior to 2.0.1,
+
+    it was treated as text tagged with 'NLS_LANG' encoding.
+
+*   [ruby 1.9] fix to bind string data by the length got from String#bytesize
+    converted to {OCI8.encoding}, not by String#size.
+
+2.0.1
+=====
+
+*   release a binary gem for Windows, which contains libraries for both
+    ruby 1.8 and ruby 1.9.1.
+*   add {OCI8#oracle\_server\_version}.
+*   fix bugs when fetching and binding time objects.

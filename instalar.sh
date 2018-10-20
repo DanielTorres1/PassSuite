@@ -48,6 +48,9 @@ cp crack-ntlm.sh /usr/bin
 cp webCrack.sh /usr/bin
 chmod a+x /usr/bin/webCrack.sh
 
+cp webmailCracker.sh /usr/bin
+chmod a+x /usr/bin/webmailCracker.sh
+
 chmod a+x /usr/bin/passTelnet.pl
 chmod a+x /usr/bin/crack-ntlm.sh
 

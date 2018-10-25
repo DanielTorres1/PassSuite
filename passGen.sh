@@ -50,7 +50,7 @@ USO:
 -t: tipo. Puede ser:
 		online : Aplica solo los patrones mas comunes
 		offline: Aplica todos los patrones 
-		top20 : Solo genera 20 passwords mas usados. Requiere parametro -e
+		top50 : Solo genera 50 passwords mas usados (Passwords personales). 
 		top200 : Genera 200 passwords mas usados. Requiere parametro -e
 -o: Archivo donde escribira la lista final
 -e: Empresa o sigla para generar
@@ -82,12 +82,12 @@ fi
 FILE=`pwd`/$FILE
 #echo $FILE
 
- if [ $TYPE == "top20" ]
+ if [ $TYPE == "top50" ]
   then
   john --wordlist=$FILE --rules=rule14 --stdout >> temp-pass.txt 2> /dev/null	
   john --wordlist=$FILE --rules=rule22 --stdout >> temp-pass.txt 2> /dev/null			
   
-  cat $FILE /usr/share/wordlists/top20.txt temp-pass.txt | sort | uniq > $OUTPUT 
+  cat $FILE /usr/share/wordlists/top50.txt temp-pass.txt | sort | uniq > $OUTPUT 
   rm temp-pass.txt 
   exit
   fi

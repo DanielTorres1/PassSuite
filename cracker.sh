@@ -107,7 +107,8 @@ then
 			
 			if [[ $result = *"phpmyadmin"* ]]; then
 				echo -e "\t[+] phpMyAdmin identificado"
-				passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u root -f top.txt > logs/cracking/$ip-$port-$path.txt			
+				passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u root -f top.txt > logs/cracking/$ip-$port-$path.txt
+				passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u admin -f top.txt >> logs/cracking/$ip-$port-$path.txt
 				grep --color=never 'encontrado' logs/cracking/$ip-$port-$path.txt > vulnerabilidades/$ip-$port-$path.txt
 			fi	
 						
@@ -168,7 +169,7 @@ then
 			port=`echo $line | cut -f2 -d":"`
 			
 			echo -e "\n\t########### $ip #######"						
-			passWeb.pl -t $ip -p 80 -m PRTG -u prtgadmin -f top.txt > logs/cracking/$ip-PRTG-password.txt
+			passWeb.pl -t $ip -p 80 -d / -m PRTG -u prtgadmin -f top.txt > logs/cracking/$ip-PRTG-password.txt
 			sleep 2
 			grep --color=never 'encontrado' logs/cracking/$ip-PRTG-password.txt | tee -a vulnerabilidades/$ip-PRTG-password.txt
 			
@@ -223,7 +224,7 @@ then
 			hydra -l sistemas -P top.txt -t 1 $ip smb >>  logs/cracking/$ip-windows.txt 2>/dev/null
 			hydra -l $entidad -P top.txt -t 1 $ip smb >>  logs/cracking/$ip-windows.txt 2>/dev/null		
 			sleep 2
-			egrep --color=never 'password:' logs/cracking/$ip-windows.txt | tee -a vulnerabilidades/$ip-windows-password.txt
+			egrep --color=never 'password:' logs/cracking/$ip-windows.txt | tee -a vulnerabilidades/$ip-windows-passwordHost.txt
 			
 			#https://github.com/m4ll0k/SMBrute (shared)
 		
@@ -302,7 +303,7 @@ then
 		medusa -e n -u adm -P top.txt -h $ip -M mssql >>  logs/cracking/$ip-mssql.txt
 		medusa -e n -u $entidad -P top.txt -h $ip -M mssql >>  logs/cracking/$ip-mssql.txt
 		
-		grep --color=never SUCCESS logs/cracking/$ip-mssql.txt > vulnerabilidades/$ip-mssql-password.txt
+		grep --color=never SUCCESS logs/cracking/$ip-mssql.txt > vulnerabilidades/$ip-mssql-passwordBD.txt
 		
 	 done	
 	 insert_data
@@ -329,7 +330,7 @@ then
 		
 		echo -e "\n\t########### $ip #######"							
 		msfconsole -x "use auxiliary/admin/oracle/oracle_login;set RHOSTS $ip;run;exit" > logs/vulnerabilidades/$ip-oracle-password.txt 2>/dev/null		
-		egrep --color=never 'Found' logs/vulnerabilidades/$ip-oracle-password.txt | tee -a vulnerabilidades/$ip-oracle-password.txt
+		egrep --color=never 'Found' logs/vulnerabilidades/$ip-oracle-password.txt | tee -a vulnerabilidades/$ip-oracle-passwordBD.txt
 		
 	 done	
 	 insert_data
@@ -354,7 +355,7 @@ then
 		medusa -e n -u pgsql -P top.txt -h $ip -M postgres >>  logs/cracking/$ip-postgres.txt
 		medusa -e n -u $entidad -P top.txt -h $ip -M postgres >>  logs/cracking/$ip-postgres.txt
 		
-		grep --color=never SUCCESS logs/cracking/$ip-postgres.txt > vulnerabilidades/$ip-postgres-password.txt
+		grep --color=never SUCCESS logs/cracking/$ip-postgres.txt > vulnerabilidades/$ip-postgres-passwordBD.txt
 		
 	 done	
 	 insert_data
@@ -400,7 +401,7 @@ then
 				medusa -e n -u root -P top.txt -h $ip -M mysql >>  logs/cracking/$ip-mysql.txt
 				medusa -e n -u mysql -P top.txt -h $ip -M mysql >> logs/cracking/$ip-mysql.txt
 				medusa -e n -u $entidad  -P top.txt -h $ip -M mysql >>  logs/cracking/$ip-mysql.txt
-				grep --color=never -i SUCCESS logs/cracking/$ip-mysql.txt | tee -a vulnerabilidades/$ip-mysql-password.txt
+				grep --color=never -i SUCCESS logs/cracking/$ip-mysql.txt | tee -a vulnerabilidades/$ip-mysql-passwordBD.txt
 				echo ""			
 			else
 				echo "Host apagado"

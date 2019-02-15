@@ -271,6 +271,13 @@ then
 		for line in $(cat .servicios/ftp.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
+		
+		######## revisar si no es impresora #####
+		egrep -iq "Printer|JetDirect" .enumeracion2/$ip-23-banner.txt 2>/dev/null
+		greprc=$?
+		if [[ $greprc -eq 0 ]] ; then			
+			echo -e "\t [+] Es una impresora"
+		else			
 			echo -e "\n\t########### $ip #######"			
 			
 			medusa -e n -u admin -P top.txt -h $ip -M ftp >>  logs/cracking/$ip-ftp.txt
@@ -278,7 +285,10 @@ then
 			medusa -e n -u ftp -P top.txt -h $ip -M ftp >>  logs/cracking/$ip-ftp.txt
 			medusa -e n -u test -P top.txt -h $ip -M ftp >>  logs/cracking/$ip-ftp.txt
 			grep --color=never SUCCESS logs/cracking/$ip-ftp.txt > vulnerabilidades/$ip-ftp-password.txt
-			echo ""			
+			echo ""		
+		fi	
+		#######################################		
+				
 		done
 		insert_data
 	 fi	

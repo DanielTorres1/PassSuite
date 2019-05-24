@@ -256,7 +256,7 @@ then
 			#https://github.com/m4ll0k/SMBrute (shared)
 		
 		else
-			echo "Equipo apagado"
+			echo "$ip (Equipo apagado)"
 		fi									
 	 done	
 	 insert_data
@@ -385,9 +385,9 @@ then
 	  for ip in $(cat .servicios/MikroTik.txt); do		
 		echo -e "[+] Probando $ip"
 				
-		mkbrutus.py -t $ip -u admin --dictionary top.txt | tee -a  logs/cracking/$ip-MikroTik-password.txt
-		mkbrutus.py -t $ip -u $ENTIDAD --dictionary top.txt | tee -a  logs/cracking/$ip-MikroTik-password.txt
-		grep --color=never successful logs/cracking/$ip-MikroTik-password.txt > .vulnerabilidades/$ip-MikroTik-password.txt
+		mkbrutus.py -t $ip -u admin --dictionary top.txt | tee -a  logs/cracking/$ip-8728-passwordMikroTik.txt
+		mkbrutus.py -t $ip -u $ENTIDAD --dictionary top.txt | tee -a  logs/cracking/$ip-8728-passwordMikroTik.txt
+		grep --color=never successful logs/cracking/$ip-8728-passwordMikroTik.txt > .vulnerabilidades/$ip-8728-passwordMikroTik.txt
 		
 		echo ""			
 	 done

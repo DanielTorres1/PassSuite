@@ -61,7 +61,7 @@ for user in `cat $USUARIOS`;
 do
 	echo $ENTIDAD > base.txt 		
 	echo $user >> base.txt
-	passGen.sh -f base.txt -t top1000 -o top.txt	
+	passGen.sh -f base.txt -t top200 -o top.txt	
 	echo -e "$OKBLUE\n\t#################### Testeando usuario: $user ######################$RESET"	    	
 	webintruder.pl -f $ARCHIVO -t login -u $user -p top.txt -q 1
 	rm top.txt

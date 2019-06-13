@@ -51,8 +51,8 @@ chmod a+x /usr/bin/generate-password.pl
 cp webCrack.sh /usr/bin
 chmod a+x /usr/bin/webCrack.sh
 
-cp webmailCracker.sh /usr/bin
-chmod a+x /usr/bin/webmailCracker.sh
+cp mailCracker.sh /usr/bin
+chmod a+x /usr/bin/mailCracker.sh
 
 chmod a+x /usr/bin/passTelnet.pl
 chmod a+x /usr/bin/crack-ntlm.sh

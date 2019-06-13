@@ -93,7 +93,7 @@ FILE=`pwd`/$FILE
   fi
   
   if [ $TYPE == "top200" ]
-  then
+  then  
   john --wordlist=$FILE --rules=rule14 --stdout >> temp-pass.txt 2> /dev/null	
   john --wordlist=$FILE --rules=rule22 --stdout >> temp-pass.txt 2> /dev/null		
   john --wordlist=$FILE --rules=rule23 --stdout >> temp-pass.txt 2> /dev/null		

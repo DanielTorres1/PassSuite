@@ -464,29 +464,29 @@ fi
 
 
 
-if [ -f .servicios/vmware.txt ]
-then
+#if [ -f .servicios/vmware.txt ]
+#then
 
-	if [ "$TYPE" = NULL ] ; then
-		echo -e "\n\t $OKBLUE Encontre servicios de vmware activos. Realizar ataque de passwords ? s/n $RESET"	  
-		read bruteforce	     
-	fi
+	#if [ "$TYPE" = NULL ] ; then
+		#echo -e "\n\t $OKBLUE Encontre servicios de vmware activos. Realizar ataque de passwords ? s/n $RESET"	  
+		#read bruteforce	     
+	#fi
 	  	
-	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
+	#if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
       	  
-	  echo -e "$OKBLUE\n\t#################### Testing common pass vmware ######################$RESET"	
-	  for line in $(cat .servicios/vmware.txt); do
-		ip=`echo $line | cut -f1 -d":"`
-		port=`echo $line | cut -f2 -d":"`
-		echo -e "[+] Probando $ip"
-		medusa -e n -u root -P top.txt -h $ip -M vmauthd | tee -a  logs/cracking/$ip-vmware.txt	
+	  #echo -e "$OKBLUE\n\t#################### Testing common pass vmware ######################$RESET"	
+	  #for line in $(cat .servicios/vmware.txt); do
+		#ip=`echo $line | cut -f1 -d":"`
+		#port=`echo $line | cut -f2 -d":"`
+		#echo -e "[+] Probando $ip"
+#		medusa -e n -u root -P top.txt -h $ip -M vmauthd | tee -a  logs/cracking/$ip-vmware.txt	
 		#medusa -e n -u $entidad  -P top.txt -h $ip -M vmauthd | tee -a  logs/cracking/$ip-vmware.txt
-		grep --color=never SUCCESS logs/cracking/$ip-vmware.txt > .vulnerabilidades/$ip-vmware-password.txt
-		echo ""			
-	 done
-	 insert_data
-	fi # if bruteforce
-fi
+		#grep --color=never SUCCESS logs/cracking/$ip-vmware.txt > .vulnerabilidades/$ip-vmware-password.txt
+#		echo ""			
+	 #done
+	 #insert_data
+#	fi # if bruteforce
+#fi
 
 
 if [ -f .servicios/mongoDB.txt ]
@@ -498,14 +498,14 @@ then
 	  	
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
 	     	  
-	  echo -e "$OKBLUE\n\t#################### Testing common pass vmware ######################$RESET"	
+	  echo -e "$OKBLUE\n\t#################### Testing  mongoDB ######################$RESET"	
 	  for line in $(cat .servicios/mongoDB.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "[+] Probando $ip"
 		echo "nmap -n -sV -p $port --script=mongodb-brute $ip"  > logs/cracking/$ip-monogodb-password.txt 2>/dev/null 
 		nmap -n -sV -p $port --script=mongodb-brute $ip  >> logs/cracking/$ip-monogodb-password.txt 2>/dev/null 
-		grep "|" logs/cracking/$ip-monogodb.txt > .vulnerabilidades/$ip-monogodb-password.txt 
+		grep "|" logs/cracking/$ip-monogodb-password.txt > .vulnerabilidades/$ip-monogodb-password.txt 
 		echo ""			
 	 done
 	 insert_data

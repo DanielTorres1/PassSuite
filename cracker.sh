@@ -134,56 +134,68 @@ then
 
 				grep --color=never 'encontrado' logs/cracking/$ip-$port-phpmyadminPassword.txt | sort | uniq > .vulnerabilidades/$ip-$port-phpmyadminPassword.txt 
 			fi	
+			
+			if [[ $result = *"joomla"* ]]; then
+				echo -e "\t[+] Joomla identificado"
+				echo -e "\t[+] Probando contraseñas comunes ...."
+				echo "admin" > username.txt
+				msfconsole -x "use auxiliary/scanner/http/joomla_bruteforce_login;set USER_FILE username.txt;set USERPASS_FILE '';set RHOSTS $ip;set AUTH_URI /$path/index.php;set PASS_FILE top.txt;set RPORT $port; set USERNAME admin; set STOP_ON_SUCCESS true;run;exit" > logs/cracking/$ip-$port-joomla.txt 2>/dev/null
+				grep --color=never 'Successful login' logs/cracking/$ip-$port-joomla.txt | sort | uniq > .vulnerabilidades/$ip-$port-joomla.txt 
+				rm username.txt
+						
+			fi	
 						
 			if [[ $result = *"tomcat"* ]]; then
 				echo -e "\t[+] Tomcat identificado"
 				
-				patator http_fuzz method=GET url=$line user_pass=tomcat:FILE0 0=top.txt -e user_pass:b64 --threads=1 > logs/cracking/$ip-$port-passTomcat.txt 2>> logs/cracking/$ip-$port-passTomcat.txt				
+				patator http_fuzz method=GET url=$line  user_pass=tomcat:tomcat -e user_pass:b64 --threads=1 > logs/cracking/$ip-$port-passTomcat.txt 2>> logs/cracking/$ip-$port-passTomcat.txt
+
+				#patator http_fuzz method=GET url=$line user_pass=tomcat:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/$ip-$port-passTomcat.txt 2>> logs/cracking/$ip-$port-passTomcat.txt
 				#si encontro el password
 				egrep -iq "200 OK" logs/cracking/$ip-$port-passTomcat.txt
 				greprc=$?
 				if [[ $greprc -eq 0 ]] ; then			
 					echo -e "\t[i] Password encontrado"
 					# 12:56:35 patator    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
-					password=`grep --color=never "200 OK" logs/cracking/$ip-$port-passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
+					#password=`grep --color=never "200 OK" logs/cracking/$ip-$port-passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`					
 					echo "password $password"
-					echo "$line (Usuario:tomcat Password:$password)" > .vulnerabilidades/$ip-$port-passTomcat.txt								
+					echo "[Tomcat] $line (Usuario:tomcat Password:tomcat)" > .vulnerabilidades/$ip-$port-passTomcat.txt								
 				fi
 															
 		
-				patator http_fuzz method=GET url=$line user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 > logs/cracking/$ip-$port-passTomcat1.txt 2>> logs/cracking/$ip-$port-passTomcat1.txt				
+				#patator http_fuzz method=GET url=$line user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 > logs/cracking/$ip-$port-passTomcat1.txt 2>> logs/cracking/$ip-$port-passTomcat1.txt				
 				#si encontro el password
-				egrep -iq "200 OK" logs/cracking/$ip-$port-passTomcat1.txt
-				greprc=$?
-				if [[ $greprc -eq 0 ]] ; then			
-					echo -e "\t[i] Password encontrado"
-					# 12:56:35 patator    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
-					password=`grep --color=never "200 OK" logs/cracking/$ip-$port-passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
-					echo "$line (Usuario:admin Password:$password)" > .vulnerabilidades/$ip-$port-passTomcat.txt								
-				fi
+				#egrep -iq "200 OK" logs/cracking/$ip-$port-passTomcat1.txt
+				#greprc=$?
+				#if [[ $greprc -eq 0 ]] ; then			
+					#echo -e "\t[i] Password encontrado"
+					## 12:56:35 patator    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
+					#password=`grep --color=never "200 OK" logs/cracking/$ip-$port-passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
+					#echo "$line (Usuario:admin Password:$password)" > .vulnerabilidades/$ip-$port-passTomcat.txt								
+				#fi
 												
 				
-				patator http_fuzz method=GET url=$line user_pass=manager:FILE0 0=top.txt -e user_pass:b64 --threads=1 > logs/cracking/$ip-$port-passTomcat2.txt 2>> logs/cracking/$ip-$port-passTomcat2.txt
+				#patator http_fuzz method=GET url=$line user_pass=manager:FILE0 0=top.txt -e user_pass:b64 --threads=1 > logs/cracking/$ip-$port-passTomcat2.txt 2>> logs/cracking/$ip-$port-passTomcat2.txt
 				#si encontro el password
-				egrep -iq "200 OK" logs/cracking/$ip-$port-passTomcat2.txt
-				greprc=$?
-				if [[ $greprc -eq 0 ]] ; then			
-					echo -e "\t[i] Password encontrado"
-					# 12:56:35 patator    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
-					password=`grep --color=never "200 OK" logs/cracking/$ip-$port-passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
-					echo "$line (Usuario:manager Password:$password)" > .vulnerabilidades/$ip-$port-passTomcat.txt								
-				fi
+#				egrep -iq "200 OK" logs/cracking/$ip-$port-passTomcat2.txt
+				#greprc=$?
+				#if [[ $greprc -eq 0 ]] ; then			
+					#echo -e "\t[i] Password encontrado"
+					## 12:56:35 patator    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
+					#password=`grep --color=never "200 OK" logs/cracking/$ip-$port-passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
+					#echo "$line (Usuario:manager Password:$password)" > .vulnerabilidades/$ip-$port-passTomcat.txt								
+				#fi
 				
-				patator http_fuzz method=GET url=$line user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 > logs/cracking/$ip-$port-passTomcat3.txt 2>> logs/cracking/$ip-$port-passTomcat3.txt
+				#patator http_fuzz method=GET url=$line user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 > logs/cracking/$ip-$port-passTomcat3.txt 2>> logs/cracking/$ip-$port-passTomcat3.txt
 				#si encontro el password
-				egrep -iq "200 OK" logs/cracking/$ip-$port-passTomcat3.txt
-				greprc=$?
-				if [[ $greprc -eq 0 ]] ; then			
-					echo -e "\t[i] Password encontrado"
-					# 12:56:35 patator    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
-					password=`grep --color=never "200 OK" logs/cracking/$ip-$port-passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
-					echo "$line (Usuario:root Password:$password)" > .vulnerabilidades/$ip-$port-passTomcat.txt								
-				fi
+				#egrep -iq "200 OK" logs/cracking/$ip-$port-passTomcat3.txt
+				#greprc=$?
+				#if [[ $greprc -eq 0 ]] ; then			
+					#echo -e "\t[i] Password encontrado"
+					## 12:56:35 patator    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
+					#password=`grep --color=never "200 OK" logs/cracking/$ip-$port-passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
+					#echo "$line (Usuario:root Password:$password)" > .vulnerabilidades/$ip-$port-passTomcat.txt								
+				#fi
 				
 			fi			
 		done			
@@ -244,6 +256,33 @@ then
 		insert_data
 	 fi	
 fi
+
+if [ -f .servicios/pentaho.txt ]
+then
+
+	if [ "$TYPE" = NULL ] ; then
+		echo -e "\n\t $OKBLUE Encontre sistemas de Pentaho activos. Realizar ataque de passwords ? s/n $RESET"	  
+		read bruteforce	  
+	fi
+	  	
+	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	   	 
+      	  
+		echo -e "$OKBLUE\n\t#################### Testing Pentahoo ######################$RESET"	
+		for line in $(cat .servicios/pentaho.txt); do
+			ip=`echo $line | cut -f1 -d":"`
+			port=`echo $line | cut -f2 -d":"`
+						
+			echo -e "[+] Probando $ip"
+			passWeb.pl -t $ip -p $port -d / -m pentaho -u admin -f top.txt  > logs/cracking/$ip-$port-password.txt
+			sleep 2
+			grep --color=never 'encontrado' logs/cracking/$ip-$port-password.txt | tee -a .vulnerabilidades/$ip-$port-password.txt
+			
+			echo ""			
+		done
+		insert_data
+	 fi	
+fi
+
 
 
 if [ -f .servicios/web401.txt ]

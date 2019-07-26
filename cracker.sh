@@ -148,7 +148,8 @@ then
 			if [[ $result = *"tomcat"* ]]; then
 				echo -e "\t[+] Tomcat identificado"
 				
-				patator http_fuzz method=GET url=$line  user_pass=tomcat:tomcat -e user_pass:b64 --threads=1 > logs/cracking/$ip-$port-passTomcat.txt 2>> logs/cracking/$ip-$port-passTomcat.txt
+				patator http_fuzz method=GET url=$line  user_pass=tomcat:tomcat -e user_pass:b64 --threads=1 >> logs/cracking/$ip-$port-passTomcat.txt 2>> logs/cracking/$ip-$port-passTomcat.txt
+				patator http_fuzz method=GET url=$line  user_pass=root:root -e user_pass:b64 --threads=1 >> logs/cracking/$ip-$port-passTomcat.txt 2>> logs/cracking/$ip-$port-passTomcat.txt
 
 				#patator http_fuzz method=GET url=$line user_pass=tomcat:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/$ip-$port-passTomcat.txt 2>> logs/cracking/$ip-$port-passTomcat.txt
 				#si encontro el password
@@ -466,9 +467,15 @@ then
 	  for ip in $(cat .servicios/MikroTik.txt); do		
 		echo -e "[+] Probando $ip"
 				
-		mkbrutus.py -t $ip -u admin --dictionary top.txt | tee -a  logs/cracking/$ip-8728-passwordMikroTik.txt
-		mkbrutus.py -t $ip -u $ENTIDAD --dictionary top.txt | tee -a  logs/cracking/$ip-8728-passwordMikroTik.txt
-		grep --color=never successful logs/cracking/$ip-8728-passwordMikroTik.txt > .vulnerabilidades/$ip-8728-passwordMikroTik.txt
+			echo "mkbrutus.py -t $ip -u admin --dictionary top.txt" >>  logs/cracking/$ip-8728-passwordMikroTik.txt		
+			mkbrutus.py -t $ip -u admin --dictionary top.txt >>  logs/cracking/$ip-8728-passwordMikroTik.txt
+			
+			echo "" >> logs/cracking/$ip-8728-passwordMikroTik.txt
+			echo "mkbrutus.py -t $ip -u $ENTIDAD --dictionary top.txt" >> logs/cracking/$ip-8728-passwordMikroTik.txt
+			mkbrutus.py -t $ip -u $ENTIDAD --dictionary top.txt >> logs/cracking/$ip-8728-passwordMikroTik.txt
+		
+			grep --color=never successful logs/cracking/$ip-8728-passwordMikroTik.txt > .vulnerabilidades/$ip-8728-passwordMikroTik.txt
+		
 		
 		echo ""			
 	 done
@@ -648,8 +655,8 @@ then
 fi
 
 echo -e "\t $OKBLUE REVISANDO ERRORES $RESET"
-grep -ira "timed out" logs/cracking/*
-grep -ira "Can't connect" logs/cracking/*
+grep -ira "timed out" logs/cracking/* 2>/dev/null
+grep -ira "Can't connect" logs/cracking/* 2>/dev/null
 	
 exit
 

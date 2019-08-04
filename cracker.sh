@@ -2,8 +2,8 @@
 # Author: Daniel Torres
 # daniel.torres@owasp.org
 
-THREADS="30"
 OKBLUE='\033[94m'
+THREADS="30"
 OKRED='\033[91m'
 OKGREEN='\033[92m'
 OKORANGE='\033[93m'
@@ -103,14 +103,14 @@ then
 			
 		for line in $(cat .servicios/admin-web.txt); do
 			echo -e "\n\t########### $line #######"
-			ip_port=`echo $line | cut -d "/" -f 3`
+			ip_port=`echo $line | cut -d "/" -f 3` # 190.129.69.107:80			
 			path=`echo $line | cut -d "/" -f 4`		
-			ip=`echo "$ip"_port | cut -d ":" -f 1`
-			port=`echo "$ip"_port | cut -d ":" -f 2`
-		
+			ip=`echo $ip_port | cut -d ":" -f 1`
+			port=`echo $ip_port | cut -d ":" -f 2`
+#			echo "webData.pl -t $ip -d $path -p $port -e todo -l /dev/null -r 4 "
 			result=`webData.pl -t $ip -d "/$path/" -p $port -e todo -l /dev/null -r 4`	
 			result=`echo "$result" | tr '[:upper:]' '[:lower:]'` # a minusculas
-			
+			echo ""
 			if [[ $result = *"phpmyadmin"* ]]; then
 				echo -e "\t[+] phpMyAdmin identificado"
 				passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u root -f top.txt > logs/cracking/"$ip"_"$port"_phpmyadminPassword.txt &

@@ -88,7 +88,7 @@ function insert_data () {
 	mv .vulnerabilidades/* .vulnerabilidades2 2>/dev/null		 	
 	}
 	
-
+IFS=$'\n'  # make newlines the only separator
 if [ -f .servicios/admin-web.txt ]
 then
 
@@ -103,15 +103,18 @@ then
 			
 		for line in $(cat .servicios/admin-web.txt); do
 			echo -e "\n\t########### $line #######"
-			ip_port=`echo $line | cut -d "/" -f 3` # 190.129.69.107:80			
-			path=`echo $line | cut -d "/" -f 4`		
+			ip_port_path=`echo $line | cut -d ";" -f 1`
+			fingerprint=`echo $line | cut -d ";" -f 2`
+			
+			ip_port=`echo $ip_port_path | cut -d "/" -f 3` # 190.129.69.107:80
+			path=`echo $ip_port_path | cut -d "/" -f 4`		
 			ip=`echo $ip_port | cut -d ":" -f 1`
 			port=`echo $ip_port | cut -d ":" -f 2`
 #			echo "webData.pl -t $ip -d $path -p $port -e todo -l /dev/null -r 4 "
-			result=`webData.pl -t $ip -d "/$path/" -p $port -e todo -l /dev/null -r 4`	
-			result=`echo "$result" | tr '[:upper:]' '[:lower:]'` # a minusculas
+			#result=`webData.pl -t $ip -d "/$path/" -p $port -e todo -l /dev/null -r 4`	
+			#result=`echo "$result" | tr '[:upper:]' '[:lower:]'` # a minusculas
 			echo ""
-			if [[ $result = *"phpmyadmin"* ]]; then
+			if [[ $fingerprint = *"phpmyadmin"* ]]; then
 				echo -e "\t[+] phpMyAdmin identificado"
 				passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u root -f top.txt > logs/cracking/"$ip"_"$port"_phpmyadminPassword.txt &
 				passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u admin -f top.txt >> logs/cracking/"$ip"_"$port"_phpmyadminPassword.txt &
@@ -135,7 +138,7 @@ then
 				grep --color=never 'encontrado' logs/cracking/"$ip"_"$port"_phpmyadminPassword.txt | sort | uniq > .vulnerabilidades/"$ip"_"$port"_phpmyadminPassword.txt 
 			fi	
 			
-			if [[ $result = *"joomla"* ]]; then
+			if [[ $fingerprint = *"joomla"* ]]; then
 				echo -e "\t[+] Joomla identificado"
 				echo -e "\t[+] Probando contraseñas comunes ...."
 				echo "admin" > username.txt
@@ -145,7 +148,7 @@ then
 						
 			fi	
 						
-			if [[ $result = *"tomcat"* ]]; then
+			if [[ $fingerprint = *"tomcat"* ]]; then
 				echo -e "\t[+] Tomcat identificado"
 				
 				patator http_fuzz method=GET url=$line  user_pass=tomcat:tomcat -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passTomcat.txt 2>> logs/cracking/"$ip"_"$port"_passTomcat.txt
@@ -446,7 +449,7 @@ then
 		medusa -e n -u pgsql -P top.txt -h $ip -M postgres >>  logs/cracking/"$ip"_postgres.txt
 		medusa -e n -u $ENTIDAD -P top.txt -h $ip -M postgres >>  logs/cracking/"$ip"_postgres.txt
 		
-		grep --color=never SUCCESS logs/cracking/"$ip"_postgres.txt > .vulnerabilidades/"$ip"_postgres_passwordBD.txt
+		grep --color=never SUCCESS logs/cracking/"$ip"_postgres.txt > .vulnerabilidades/"$ip"_5432_passwordBD.txt
 		
 	 done	
 	 insert_data
@@ -474,7 +477,7 @@ then
 			echo "mkbrutus.py -t $ip -u $ENTIDAD --dictionary top.txt" >> logs/cracking/"$ip"_8728_passwordMikroTik.txt
 			mkbrutus.py -t $ip -u $ENTIDAD --dictionary top.txt >> logs/cracking/"$ip"_8728_passwordMikroTik.txt
 		
-			grep --color=never successful logs/cracking/"$ip"_8728_passwordMikroTik.txt > .vulnerabilidades/"$ip"_8728_passwordMikroTik.txt
+			grep --color=never successful logs/cracking/"$ip"_8728_passwordMikroTik.txt | grep -v "unsuccessful" > .vulnerabilidades/"$ip"_8728_passwordMikroTik.txt
 		
 		
 		echo ""			
@@ -501,7 +504,11 @@ then
 			if [[ ${hostlive} == *"open"*  ]];then   	  
 				medusa -e n -u root -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_mysql.txt
 				medusa -e n -u mysql -P top.txt -h $ip -M mysql >> logs/cracking/"$ip"_mysql.txt
+				medusa -e n -u admin -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_mysql.txt
+				medusa -e n -u administrador -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_mysql.txt				
 				medusa -e n -u $ENTIDAD  -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_mysql.txt
+
+				
 				grep --color=never -i SUCCESS logs/cracking/"$ip"_mysql.txt | tee -a .vulnerabilidades/"$ip"_mysql_passwordBD.txt
 				echo ""			
 			else

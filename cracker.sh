@@ -101,10 +101,10 @@ then
       	  
 		echo -e "$OKBLUE\n\t#################### Testing pass web admin ######################$RESET"	
 			
-		for line in $(cat .servicios/admin-web.txt); do
-			echo -e "\n\t########### $line #######"
+		for line in $(cat .servicios/admin-web.txt); do			
 			ip_port_path=`echo $line | cut -d ";" -f 1`
 			fingerprint=`echo $line | cut -d ";" -f 2`
+			echo -e "\n\t########### $ip_port_path $fingerprint #######"
 			
 			ip_port=`echo $ip_port_path | cut -d "/" -f 3` # 190.129.69.107:80
 			path=`echo $ip_port_path | cut -d "/" -f 4`		

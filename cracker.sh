@@ -110,10 +110,19 @@ then
 			path=`echo $ip_port_path | cut -d "/" -f 4`		
 			ip=`echo $ip_port | cut -d ":" -f 1`
 			port=`echo $ip_port | cut -d ":" -f 2`
-#			echo "webData.pl -t $ip -d $path -p $port -e todo -l /dev/null -r 4 "
-			#result=`webData.pl -t $ip -d "/$path/" -p $port -e todo -l /dev/null -r 4`	
-			#result=`echo "$result" | tr '[:upper:]' '[:lower:]'` # a minusculas
+#			echo "webData.pl -t $ip -d $path -p $port -e todo -l /dev/null -r 4 "			
 			echo ""
+			if [[ $fingerprint = *"wordpress"* ]]; then
+				echo -e "\t[+] Wordpress identificado"
+				echo -e "\t[+] Probando contraseñas comunes ...."
+				#https://181.115.188.36:443/				
+				for user in $(cat .vulnerabilidades2/"$ip"_"$port"_wpusers.txt); do
+					wpscan --url $ip_port_path --wordlist top.txt --username $user >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+				done
+				
+				grep --color=never 'Successful' logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null | sort | uniq > .vulnerabilidades/"$ip"_"$port"_wordpressPass.txt 									
+			fi	
+			
 			if [[ $fingerprint = *"phpmyadmin"* ]]; then
 				echo -e "\t[+] phpMyAdmin identificado"
 				passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u root -f top.txt > logs/cracking/"$ip"_"$port"_passwordBD.txt &
@@ -307,23 +316,49 @@ then
 	  	
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	     	
       	  
-		echo -e "$OKBLUE\n\t#################### Testing pass web ######################$RESET"	
-		for ip in $(cat .servicios/web401.txt); do
-			echo -e "[+] Probando $ip"			
-			patator http_fuzz method=GET url="http://$ip/" user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 > logs/cracking/"$ip"_80-passwordAdivinado.txt 2> logs/cracking/"$ip"_80_passwordAdivinado.txt								
-			respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_80_passwordAdivinado.txt`
-			greprc=$?
-			if [[ $greprc -eq 0 ]] ; then
-				echo -n "[AdminWeb] Usuario:admin $respuesta" >> .vulnerabilidades/"$ip"_80_passwordAdivinado.txt
-			fi	
+		echo -e "$OKBLUE\n\t#################### Testing pass web (401) ######################$RESET"	
+		for line in $(cat .servicios/web401.txt); do
+			echo -e "[+] Probando $line"			
 			
-			
-			patator http_fuzz method=GET url="http://$ip/" user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 > logs/cracking/"$ip"_80_passwordAdivinado.txt 2> logs/cracking/"$ip"_80_passwordAdivinado.txt			
-			respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_80_passwordAdivinado.txt`
-			greprc=$?
-			if [[ $greprc -eq 0 ]] ; then
-				echo -n "[AdminWeb] Usuario:root $respuesta" >> .vulnerabilidades/"$ip"_80_passwordAdivinado.txt
+			if [[ ${line} == *"http"*  ]];then 							
+				#line = http://200.87.193.109:80/phpmyadmin/
+				ip=`echo $line | cut -d ":" -f2 | tr -d "/"`
+				
+				#probar con usuario admin
+				patator http_fuzz method=GET url="http://$ip/" user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_80-passwordAdivinado.txt 2> logs/cracking/"$ip"_80_passwordAdivinado1.txt
+				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_80_passwordAdivinado1.txt`
+				greprc=$?
+				if [[ $greprc -eq 0 ]] ; then
+					echo -n "[AdminWeb] Usuario:admin $respuesta" >> .vulnerabilidades/"$ip"_80_passwordAdivinado.txt
+				fi	
+				
+				#probar con usuario root
+				patator http_fuzz method=GET url="http://$ip/" user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_80_passwordAdivinado.txt 2> logs/cracking/"$ip"_80_passwordAdivinado2.txt			
+				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_80_passwordAdivinado2.txt`
+				greprc=$?
+				if [[ $greprc -eq 0 ]] ; then
+					echo -n "[AdminWeb] Usuario:root $respuesta" >> .vulnerabilidades/"$ip"_80_passwordAdivinado.txt
+				fi
+							
+			else
+				#line=10.0.0.2
+				#probar con usuario admin
+				patator http_fuzz method=GET url="http://$line/" user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$line"_80-passwordAdivinado.txt 2> logs/cracking/"$line"_80_passwordAdivinado1.txt
+				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_80_passwordAdivinado1.txt`
+				greprc=$?
+				if [[ $greprc -eq 0 ]] ; then
+					echo -n "[AdminWeb] Usuario:admin $respuesta" >> .vulnerabilidades/"$line"_80_passwordAdivinado.txt
+				fi	
+				
+				#probar con usuario root
+				patator http_fuzz method=GET url="http://$line/" user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$line"_80_passwordAdivinado.txt 2> logs/cracking/"$line"_80_passwordAdivinado2.txt			
+				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_80_passwordAdivinado2.txt`
+				greprc=$?
+				if [[ $greprc -eq 0 ]] ; then
+					echo -n "[AdminWeb] Usuario:root $respuesta" >> .vulnerabilidades/"$line"_80_passwordAdivinado.txt
+				fi
 			fi
+						
 			
 		done
 		insert_data

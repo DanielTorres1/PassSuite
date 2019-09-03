@@ -104,7 +104,7 @@ then
 		for line in $(cat .servicios/admin-web.txt); do			
 			ip_port_path=`echo $line | cut -d ";" -f 1`
 			fingerprint=`echo $line | cut -d ";" -f 2`
-			echo -e "\n\t########### $ip_port_path $fingerprint #######"
+			echo -e "\n\t########### $ip_port_path #######"
 			
 			ip_port=`echo $ip_port_path | cut -d "/" -f 3` # 190.129.69.107:80
 			path=`echo $ip_port_path | cut -d "/" -f 4`		
@@ -114,12 +114,17 @@ then
 			echo ""
 			if [[ $fingerprint = *"wordpress"* ]]; then
 				echo -e "\t[+] Wordpress identificado"
-				echo -e "\t[+] Probando contraseñas comunes ...."
-				#https://181.115.188.36:443/				
-				for user in $(cat .vulnerabilidades2/"$ip"_"$port"_wpusers.txt); do
-					wpscan --url $ip_port_path --wordlist top.txt --username $user >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
-				done
-				
+				echo -e "\t[+] Probando contraseñas comunes ...."				
+				if [ -f ".vulnerabilidades2/"$ip"_"$port"_wpusers.txt" ]; then
+					#https://181.115.188.36:443/				
+					for user in $(cat .vulnerabilidades2/"$ip"_"$port"_wpusers.txt); do
+						echo -e "\t\t[+] Probando con usuario $user"
+						wpscan --url $ip_port_path --wordlist `pwd`/top.txt --username $user >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+					done
+				else
+					echo -e "\t\t[+] Probando con usuario admin"
+					wpscan --url $ip_port_path --wordlist `pwd`/top.txt  --username admin >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+				fi						
 				grep --color=never 'Successful' logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null | sort | uniq > .vulnerabilidades/"$ip"_"$port"_wordpressPass.txt 									
 			fi	
 			
@@ -130,7 +135,7 @@ then
 				passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u wordpress -f top.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
 				passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u joomla -f top.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
 				passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u drupal -f top.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
-				
+				sleep 5
 				######## wait to finish########
 				while true; do
 					passWeb_instances=$((`ps aux | grep passWeb | wc -l` - 1)) 
@@ -159,26 +164,27 @@ then
 			fi	
 						
 			if [[ $fingerprint = *"tomcat"* ]]; then
-				echo -e "\t[+] Tomcat identificado"
-				
-				patator http_fuzz method=GET url=$line  user_pass=tomcat:tomcat -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt							
+				echo -e "\t[+] Tomcat identificado"							
+				echo "patator http_fuzz method=GET url=$ip_port_path  user_pass=tomcat:tomcat -e user_pass:b64 --threads=1" > logs/cracking/"$ip"_"$port"_passwordAdivinado.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt	
+				patator http_fuzz method=GET url=$ip_port_path  user_pass=tomcat:tomcat -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt	
 				egrep -iq "200 OK" logs/cracking/"$ip"_"$port"_passwordAdivinado.txt
 				greprc=$?
 				if [[ $greprc -eq 0 ]] ; then			
 					echo -e "\t[i] Password encontrado"
 					# 12:56:35 patator    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
 					#password=`grep --color=never "200 OK" logs/cracking/"$ip"_"$port"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`										
-					echo "[Tomcat] $line (Usuario:tomcat Password:tomcat)" > .vulnerabilidades/"$ip"_"$port"_passwordAdivinado.txt								
+					echo "[Tomcat] $ip_port_path (Usuario:tomcat Password:tomcat)" > .vulnerabilidades/"$ip"_"$port"_passwordAdivinado.txt								
 				fi
 				
-				patator http_fuzz method=GET url=$line  user_pass=root:root -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt
+				echo "patator http_fuzz method=GET url=$ip_port_path  user_pass=root:root -e user_pass:b64 --threads=1" > logs/cracking/"$ip"_"$port"_passwordAdivinado.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt
+				patator http_fuzz method=GET url=$ip_port_path  user_pass=root:root -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt
 				egrep -iq "200 OK" logs/cracking/"$ip"_"$port"_passwordAdivinado.txt
 				greprc=$?
 				if [[ $greprc -eq 0 ]] ; then			
 					echo -e "\t[i] Password encontrado"
 					# 12:56:35 patator    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
 					#password=`grep --color=never "200 OK" logs/cracking/"$ip"_"$port"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`										
-					echo "[Tomcat] $line (Usuario:root Password:root)" > .vulnerabilidades/"$ip"_"$port"_passwordAdivinado.txt								
+					echo "[Tomcat] $ip_port_path (Usuario:root Password:root)" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinado.txt								
 				fi
 				
 				#patator http_fuzz method=GET url=$line user_pass=tomcat:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passTomcat.txt 2>> logs/cracking/"$ip"_"$port"_passTomcat.txt

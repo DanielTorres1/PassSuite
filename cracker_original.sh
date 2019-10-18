@@ -286,7 +286,7 @@ then
 	 fi	
 fi
 
-if [ -f servicios/cisco.txt ]
+if [ -f servicios/cisco401.txt ]
 then	
 	
 	if [ "$TYPE" = NULL ] ; then
@@ -297,7 +297,7 @@ then
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 		  
 		sed -i '1 i\cisco' top.txt	#adicionar password cisco
 		echo -e "$OKBLUE\n\t#################### Testing pass CISCO ######################$RESET"	
-		for ip in $(cat servicios/cisco.txt); do			
+		for ip in $(cat servicios/cisco401.txt); do			
 			egrep -iq "80/open" .nmap_1000p/"$ip"_tcp.grep
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then			
@@ -641,9 +641,12 @@ then
 			ip=`echo $line | cut -f1 -d":"`
 			port=`echo $line | cut -f2 -d":"`
 			echo -e "[+] Probando $ip"
-			hostlive=`nmap -n -Pn -p 3306 $ip`					
-			if [[ ${hostlive} == *"open"*  ]];then   	  
-				
+			hostlive=`mysql -u mysql -pww $ip`				
+			#error
+			if [[ ${hostlive} == *"MySQL server through socket"*  ]];then   	  
+				echo "El servicio no esta funcionando correctamente"
+								
+			else
 				echo -e "\n medusa -e n -u root -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt
 				medusa -e n -u root -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt
 				
@@ -660,9 +663,8 @@ then
 				medusa -e n -u $ENTIDAD  -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt				
 				
 				grep --color=never -i SUCCESS logs/cracking/"$ip"_3306_passwordBD.txt | tee -a .vulnerabilidades/"$ip"_3306_passwordBD.txt
-				echo ""			
-			else
-				echo "Host apagado"
+				echo ""		
+				
 			fi				
 		done
 		insert_data		
@@ -809,9 +811,19 @@ then
 		
 		
 		######## revisar si no es impresora #####
+		#banner ftp
 		egrep -iq "Printer|JetDirect|LaserJet|KONICA|MULTI-ENVIRONMENT|Xerox" .banners2/"$ip"_21.txt
 		noImpresora21=$?
 		
+		#banner telnet						
+		noImpresora23=1		
+		if [ -f .banners2/"$ip"_23.txt ] 
+		then				
+			egrep -iq "Printer|JetDirect|LaserJet|KONICA|MULTI-ENVIRONMENT|Xerox" .banners2/"$ip"_23.txt 2>/dev/null
+			noImpresora23=$?
+		fi
+		
+		#banner web
 		noImpresora80=1		
 		if [ -f .enumeracion2/"$ip"_80_webData.txt ] 
 		then	
@@ -819,8 +831,8 @@ then
 			noImpresora80=$?
 		fi
 				
-		echo "noImpresora21 $noImpresora21 noImpresora80 $noImpresora80"
-		if [[ $noImpresora21 -eq 1 && $noImpresora80 -eq 1 ]] ; then			
+		echo "noImpresora21 $noImpresora21 noImpresora80 $noImpresora80 noImpresora23 $noImpresora23"
+		if [[ $noImpresora21 -eq 1 && $noImpresora80 -eq 1 && $noImpresora23 -eq 1 ]] ; then			
 			echo -e "[+] Probando $ip"		
 			
 			#echo -e "\n medusa -e n -u admin -P top.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinado.txt

@@ -48,6 +48,9 @@ cp crack-ntlm.sh /usr/bin
 cp generate-password.pl /usr/bin
 chmod a+x /usr/bin/generate-password.pl
 
+cp generate-users.pl /usr/bin
+chmod a+x /usr/bin/generate-users.pl
+
 cp webCrack.sh /usr/bin
 chmod a+x /usr/bin/webCrack.sh
 

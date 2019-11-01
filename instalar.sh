@@ -51,18 +51,10 @@ chmod a+x /usr/bin/generate-password.pl
 cp generate-users.pl /usr/bin
 chmod a+x /usr/bin/generate-users.pl
 
-cp webCrack.sh /usr/bin
-chmod a+x /usr/bin/webCrack.sh
-
-cp mailCracker.sh /usr/bin
-chmod a+x /usr/bin/mailCracker.sh
-
-chmod a+x /usr/bin/passTelnet.pl
-chmod a+x /usr/bin/crack-ntlm.sh
 
 echo -e "${RED}[+]${GREEN} Instalando john the ripper ${RESET}"
 distro=`cat /etc/*-release | head -1|cut -d "=" -f2`
-if [ $distro = "Kali" ]  || [ $distro = "Parrot" ] ; then 
+if [[ ${distro} == *"Kali"* || ${distro} == *"Parrot"* ]];then 
 	echo "{+} kali/Parrot detectado"
 	sudo apt-get install john
 
@@ -86,7 +78,7 @@ fi
 
 # oracle 
 
-apt-get install ruby-dev libaio-dev build-essential libgmp-dev
+apt-get install -y ruby-dev libaio-dev build-essential libgmp-dev
 mkdir /opt/oracle
 mv instantclient_18_3 /opt/oracle
 

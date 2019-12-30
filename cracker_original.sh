@@ -9,6 +9,8 @@ OKGREEN='\033[92m'
 OKORANGE='\033[93m'
 RESET='\e[0m'
 
+# RDP crak
+
 #vagrant
 #vcoadmin
 #vmware
@@ -489,9 +491,11 @@ then
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	  	 
       	  
 		echo -e "$OKBLUE\n\t#################### Testing pass ZKSoftware ######################$RESET"	
-		for ip in $(cat servicios/ZKSoftware.txt); do
+		for line in $(cat servicios/ZKSoftware.txt); do
+			ip=`echo $line | cut -f1 -d":"`
+			port=`echo $line | cut -f2 -d":"`
 			echo -e "[+] Probando $ip"		
-			echo -e "passWeb.pl -t $ip -p 80 -m ZKSoftware -u administrator -f top.txt " > logs/cracking/"$ip"_80_passwordZKSoftware.txt
+			echo -e "passWeb.pl -t $ip -p $port -m ZKSoftware -u administrator -f top.txt " > logs/cracking/"$ip"_80_passwordZKSoftware.txt
 			passWeb.pl -t $ip -p 80 -m ZKSoftware -u administrator -f top.txt >> logs/cracking/"$ip"_80_passwordZKSoftware.txt
 			grep --color=never 'encontrado' logs/cracking/"$ip"_80_passwordZKSoftware.txt | tee -a .vulnerabilidades/"$ip"_80_passwordZKSoftware.txt
 			echo ""			

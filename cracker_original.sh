@@ -319,6 +319,46 @@ then
 fi
 
 
+### SSH #########
+if [ -f servicios/ssh.txt ]
+then
+	interlace -tL servicios/ssh.txt -threads 10 -c "echo 'medusa -e n -u root -P top.txt -h _target_ -M ssh' >> logs/cracking/_target__22_passwordAdivinado.txt" --silent
+	interlace -tL servicios/ssh.txt -threads 10 -c "medusa -e n -u root -P top.txt -h _target_ -M ssh >> logs/cracking/_target__22_passwordAdivinado.txt" --silent
+		
+fi
+
+			
+if [ -f servicios/ssh.txt ]
+then
+		
+	for ip in $(cat servicios/ssh.txt); do			
+		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_22_passwordAdivinado.txt > .vulnerabilidades/"$ip"_22_passwordAdivinado.txt 2>/dev/null					
+	 done	
+	insert_data
+fi
+####################
+
+
+### telnet #########
+if [ -f servicios/telnet.txt ]
+then
+	interlace -tL servicios/telnet.txt -threads 10 -c "echo 'medusa -e n -u root -P top.txt -h _target_ -M telnet' >> logs/cracking/_target__23_passwordAdivinado.txt" --silent
+	interlace -tL servicios/telnet.txt -threads 10 -c "medusa -e n -u root -P top.txt -h _target_ -M telnet >> logs/cracking/_target__23_passwordAdivinado.txt" --silent
+		
+fi
+
+			
+if [ -f servicios/telnet.txt ]
+then
+		
+	for ip in $(cat servicios/telnet.txt); do			
+		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_23_passwordAdivinado.txt > .vulnerabilidades/"$ip"_23_passwordAdivinado.txt 2>/dev/null					
+	 done	
+	insert_data
+fi
+####################
+
+
 if [ -f servicios/PRTG.txt ]
 then
 
@@ -435,47 +475,38 @@ then
 	 fi	
 fi
 
+
+
+
+### Windows
+if [ -f servicios/Windows.txt ]
+then
+	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l administrador -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__445_passwordAdivinado.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l administrador -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__445_passwordAdivinado.txt 2>/dev/null" --silent
+	
+	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l administrator -P top.txt -t 1 _target_  smb' >> logs/cracking/_target__445_passwordAdivinado.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l administrator -P top.txt -t 1 _target_  smb >> logs/cracking/_target__445_passwordAdivinado.txt 2>/dev/null" --silent
+	
+	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l soporte -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__445_passwordAdivinado.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l soporte -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__445_passwordAdivinado.txt 2>/dev/null" --silent
+	
+	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l sistemas -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__445_passwordAdivinado.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l sistemas -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__445_passwordAdivinado.txt 2>/dev/null" --silent
+	
+	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l $ENTIDAD -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__445_passwordAdivinado.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l $ENTIDAD -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__445_passwordAdivinado.txt 2>/dev/null" --silent		
+			
+fi
+
+			
 if [ -f servicios/Windows.txt ]
 then
 		
-	if [ "$TYPE" = NULL ] ; then
-		echo -e "\n\t $OKBLUE Encontre servicios SMB activos (Windows). Realizar ataque de passwords ? s/n $RESET"	  
-		read bruteforce	  
-	fi
-	  	
-	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	
-
-	 echo -e "$OKBLUE\n\t#################### Windows auth ######################$RESET"	    
-	 for ip in $(cat servicios/Windows.txt); do		
-		echo -e "[+] Probando $ip"
-		hostlive=`nmap -n -Pn -p 445 $ip`
-		if [[ ${hostlive} == *"open"*  ]];then 
-		
-			echo -e "\n hydra -l administrador -P top.txt -t 1 $ip smb" >>  logs/cracking/"$ip"_445_passwordAdivinado.txt 2>/dev/null
-			hydra -l administrador -P top.txt -t 1 $ip smb >>  logs/cracking/"$ip"_445_passwordAdivinado.txt 2>/dev/null
-			
-			echo -e "\n hydra -l administrator -P top.txt -t 1 $ip smb" >> logs/cracking/"$ip"_445_passwordAdivinado.txt 2>/dev/null
-			hydra -l administrator -P top.txt -t 1 $ip smb >> logs/cracking/"$ip"_445_passwordAdivinado.txt 2>/dev/null
-			
-			echo -e "\n hydra -l soporte -P top.txt -t 1 $ip smb" >>  logs/cracking/"$ip"_445_passwordAdivinado.txt 2>/dev/null
-			hydra -l soporte -P top.txt -t 1 $ip smb >>  logs/cracking/"$ip"_445_passwordAdivinado.txt 2>/dev/null
-			
-			echo -e "\n hydra -l sistemas -P top.txt -t 1 $ip smb" >>  logs/cracking/"$ip"_445_passwordAdivinado.txt 2>/dev/null
-			hydra -l sistemas -P top.txt -t 1 $ip smb >>  logs/cracking/"$ip"_445_passwordAdivinado.txt 2>/dev/null
-			
-			echo -e "\n hydra -l $ENTIDAD -P top.txt -t 1 $ip smb" >>  logs/cracking/"$ip"_445_passwordAdivinado.txt 2>/dev/null		
-			hydra -l $ENTIDAD -P top.txt -t 1 $ip smb >>  logs/cracking/"$ip"_445_passwordAdivinado.txt 2>/dev/null		
-			sleep 2
-			egrep --color=never 'password:' logs/cracking/"$ip"_445_passwordAdivinado.txt | tee -a .vulnerabilidades/"$ip"_445_passwordAdivinado.txt
-			
-			#https://github.com/m4ll0k/SMBrute (shared)
-		
-		else
-			echo "$ip (Equipo apagado)"
-		fi									
+	for ip in $(cat servicios/Windows.txt); do			
+		egrep --color=never 'password:' logs/cracking/"$ip"_445_passwordAdivinado.txt | tee -a .vulnerabilidades/"$ip"_445_passwordAdivinado.txt			
+		#https://github.com/m4ll0k/SMBrute (shared)											
 	 done	
 	 insert_data
-   fi # if bruteforce   
 fi
 
 
@@ -570,14 +601,7 @@ fi
 if [ -f servicios/postgres.txt ]
 then
 
-	if [ "$TYPE" = NULL ] ; then
-		echo -e "\n\t $OKBLUE Encontre servicios postgres activos. Realizar ataque de passwords ? s/n $RESET"	  
-		read bruteforce	    
-	fi
-	  	
-	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
-
-	 echo -e "$OKBLUE\n\t#################### postgres ######################$RESET"	    
+	echo -e "$OKBLUE\n\t#################### postgres ######################$RESET"	    
 	 sed -i '1 i\postgres' top.txt	#adicionar password postgres
 	 for line in $(cat servicios/postgres.txt); do
 		ip=`echo $line | cut -f1 -d":"`
@@ -597,7 +621,6 @@ then
 		
 	 done	
 	 insert_data
-   fi # if bruteforce
 fi
 
 

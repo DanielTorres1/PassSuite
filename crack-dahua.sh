@@ -39,15 +39,25 @@ exit
 fi
 
 #sed -i 's/\$//' $FILE # Eliminar caracter $
-
-for dic in $( ls /usr/share/wordlists/*.txt -l -S | sort -k 5 -n | awk '{print $9}'); do  # lista los .txt (primero los archivos pequeños)
-echo "############# Using  $dic $1 ###############"
-#john --wordlist=$dic  $1;
-john --wordlist=$dic $FILE;  #u0:$dahua$i7lMtGcs:0:0:::o 
-
-
-#mv $dic $dic.bk
+rm ~/.john/john.pot
+for dic in $( ls /media/sistemas/Passwords/*.txt -l -S | sort -k 5 -n | awk '{print $9}'); do  # lista los .txt (primero los archivos pequeños)
+   echo "############# Using  $dic $1 ###############"   
+   john --wordlist=$dic $FILE;  #usuario:$dahua$i7lMtGcs   
 done
+
+#cisco
+if [ -f ~/.john/john.pot ]
+then
+	while read line       
+	do   
+      hash=`echo $line | cut -f1 -d":"`
+      password=`echo $line | cut -f2 -d":"`
+      echo "$hash $password"
+
+      sed -i "s/$hash/$password/g" $FILE
+		
+ 	done <~/.john/john.pot
+fi
 
 
 

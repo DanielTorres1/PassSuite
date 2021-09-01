@@ -30,6 +30,8 @@ EOF
 print_ascii_art
 
 echo -e "${RED}[+]${GREEN} Copiando passGen ${RESET}"
+apt install medusa
+
 cp cracker.sh /usr/bin
 chmod a+x /usr/bin/cracker.sh
 

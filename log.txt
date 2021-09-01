@@ -1,0 +1,1 @@
+WARN:   You should not pass the password on the command line. Type it interactively or use a config file instead.

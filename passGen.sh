@@ -1,4 +1,183 @@
 #!/bin/bash
-z="
-";WCz='`Y8 ';rCz='   Y';KEz='s';jGz='ss.t';nHz='A 5:';kFz='xt -';LCz=',  8';VFz='trar';JDz=' ,aa';HFz=' fin';UIz=' >> ';uDz='tipo';Sz='ARG;';VJz='/9, ';rz='pcio';LBz='ILE:';kCz='PPPP';EGz='cii_';lIz='le20';sCz='8,  ';OFz='para';tJz='E te';lHz='A 4:';sBz=' ,ad';Iz='ONS';kHz=' 4 d';NHz='| so';eFz=':  p';mGz='ev/n';Uz='t)  ';XJz=' o=0';Mz='TION';vCz='8';lGz='> /d';CFz='e es';IIz='A 9:';kz='SE=$';OBz='{ENT';yGz='t | ';SIz='--st';vGz='.txt';sFz='top.';VDz='ub.c';FBz='=${T';ICz='a,  ';IGz='LE =';DIz='spec';dEz='(Pas';BFz='dond';UGz='" ]';WDz='om/D';hHz='A 2:';iFz=' lis';rFz='p200';tIz='+)"';cCz='   8';hDz='g';qIz='+ an';YIz='t 2>';pHz=' 1 c';QCz='  8b';fEz='ds p';eJz='imer';eBz='ULL}';QIz=',etc';QFz='-v: ';vDz='. Pu';sz='n in';Qz='ILE=';uz='da: ';bCz='"  8';JHz='0.tx';cFz='ejem';aBz='OSE=';DEz='solo';pGz='E /u';DCz='aaaa';HIz='tos"';Lz=' $OP';GHz='0" ]';XEz='50 p';OIz=' 111';JJz='le12';nEz='pass';PCz='Yba,';mDz='-f: ';YHz=' -e ';xDz='ser:';DJz='1900';SJz=' l/1';XFz='e pa';yFz=' "1"';GEz='rone';NJz='8: M';FCz='PPYY';BBz=' 2;;';iEz='s).';nz='?)  ';IHz='le24';SCz='88""';SBz='{OUT';gHz='os"';fBz='func';VBz='UAGE';RGz='PE =';pCz=' `"Y';lCz='P88 ';tBz='ba,';FHz='op20';YBz='AGE:';tFz='txt ';qEz='ados';fJz='a le';ACz='   d';SDz='http';EDz='I   ';nGz='ull';vJz='txt';pEz='s us';LHz='mp-p';vHz='A 6:';fHz='ígit';sEz='quie';cz='G;;';MIz='sswo';HHz='le23';IDz='b,  ';cHz=' Pas';mJz='t --';pFz='v 1';eHz=' 2 d';eDz='{at}';NBz='TY=$';gz='T=$O';ZHz='"\n ';SHz='PUT';TJz=', e/';JCz=',adP';DDz='  ]8';dCz='  a8';cGz='s=ru';YGz='ist=';KCz='PYba';gGz='t >>';JEz='mune';yHz='d + ';MFz='o si';RFz='si p';FEz=' pat';TDz='s://';Jz='do';aIz='v/nu';OJz='utar';gCz='  88';lEz=' Gen';WFz='a qu';PGz='d`/$';pDz=' pal';CJz='A 13';lz='OPTA';LFz='esa ';cJz='uscu';Fz='e:o:';AIz='1 ca';cBz='RBOS';dGz='le14';ZFz='ta a';iDz='EOF';SEz='top5';xFz='E ==';FDz='Y8a.';XGz='ordl';GCz='ba, ';xCz=',88 ';IJz='le11';KBz='=${F';WBz='=${L';aHz='REGL';ZJz=': Vo';LJz=' REG';DHz='rm t';bBz='${VE';uGz='ts/t';NGz='uso';AGz=' ]';qDz='abra';KIz='A 15';WHz=']';ADz='   ]';xIz='(190';GGz='fi';mCz='  `"';BIz='ráct';eCz='P___';RHz='$OUT';SFz='onem';XIz='s.tx';ZIz=' /de';THz='= "o';Wz='YPE=';XBz='ANGU';UFz=' mos';gFz='en.s';pBz='8888';OCz='adPP';CBz='esac';gJz='tra"';AEz='ne :';jCz='a';VEz=' gen';pJz='2> /';YDz='lTor';aEz=' mas';IFz='al';fIz='le5 ';iHz=' 3 d';lFz='t on';jDz='}';tHz='cial';Zz='NTIT';qCz='8ba,';EIz='ial ';Ez='t:f:';lJz='le19';cDz='t}to';TCz='""""';uBz='88  ';PIz=',000';BEz=' Apl';LDz='"Y8 ';FGz='art';xBz='`"8b';GFz='ista';KJz='le13';RJz='/@ ,';mBz='cat ';TIz='dout';oFz='ne.t';MGz='en';gIz='le6 ';fFz='assG';HDz='  "8';rDz='s cl';hJz='A 17';TGz='op50';oCz=',   ';QGz=' $TY';Vz='   T';Kz='case';FIz='+ 2 ';oDz='a de';bz='PTAR';QHz='q > ';BDz='8I  ';LEz='offl';WJz='i=1,';LIz=': Pa';AFz='ivo ';az='Y=$O';qJz='dev/';qHz='arác';QBz='OUTP';VCz=' "" ';qGz='sr/s';DBz='done';mHz=' 5 d';CCz='88aa';GBz='YPE:';pz='rint';hFz='h -f';mz='RG;;';oBz='EOF"';Az='whil';dBz='E:=N';IEz='s co';Xz='e)  ';ez='   O';iBz='nt_a';Yz='   E';HBz='=NUL';hCz='P'\''  ';cEz='dos ';wEz=' -e';UBz='LANG';xHz='A 8:';wBz='d8"'\''';QEz='tron';yBz=',8P ';nJz='le16';UEz='Solo';KFz='Empr';NEz='todo';MCz='8   ';PDz='8P" ';xEz='-o: ';PJz=' s/$';jJz='odo"';iIz='le8 ';tDz='-t: ';TEz='0 : ';BGz='then';rIz='io (';ZDz='res1';uJz='s1.t';UDz='gith';uHz='"';mIz='le21';XCz=' I8[';ZCz='I8[ ';tEz='re p';REz='es';PFz='erar';cIz='le2 ';RIz='le1 ';WEz='era ';fz='UTPU';FFz='la l';vEz='etro';eGz=' --s';HJz='le10';MEz='ine:';wDz='ede ';rHz='ter ';BCz='8'\''';NIz='rd +';BJz='+) +';qFz='t to';PEz='s pa';Oz='f)  ';bIz='ll';VHz='ne" ';bHz='A 1:';dz='o)  ';XHz='echo';lBz=' {';QJz=' , a';Tz=';';OEz='s lo';rBz='    ';hIz='le7 ';vz='-$OP';jz='ERBO';kEz='00 :';oIz='A 10';eIz='le4 ';PHz=' uni';uIz='A 11';HEz='s ma';oHz='os +';sJz='le17';EFz='ira ';gEz='erso';DGz='t_as';aFz='plic';fGz='tdou';eEz='swor';xz='\n" ';oEz='word';TBz='PUT:';CDz='aa  ';CHz='UT';sHz='espe';ABz='exit';Nz='S in';lDz='USO:';dDz='rres';XDz='anie';yIz='0+)"';CIz='er e';aCz='   "';gBz='tion';PBz='ITY:';jFz='ta.t';mFz='line';rGz='hare';hBz=' pri';wIz='nio ';EJz='2012';Dz='s ":';TFz='os 1';sDz='ave';fCz='__88';bJz=' May';bDz='l{do';YJz='A 16';LGz='; th';oJz='ss1.';nCz='Y8ba';nDz='List';vIz='io a';jIz='le9 ';MBz='ENTI';WIz='-pas';hEz='nale';AHz='uniq';KDz='bbdP';jBz='scii';ZBz='VERB';NDz='`"Yb';oz='   p';WGz=' --w';EHz='emp-';NCz='   ,';uCz='P"""';MJz='LA 1';JBz='FILE';SGz='= "t';aJz='lver';nBz='<< "';hz='v)  ';mEz='200 ';RCz=',dPP';MDz='"'\''  ';gDz='p.or';yz='$0';VGz='john';wz='TARG';dHz='d  +';dJz='a pr';OHz='rt |';IBz='L}';wCz=' 88,';Pz='   F';VIz='temp';CEz='ica ';OGz='=`pw';fDz='owas';oGz='le22';Cz='topt';iGz='p-pa';kBz='_art';Bz='e ge';ODz='bdP"';iJz='la t';yDz='onli';uFz='-v 1';qz='f "O';aGz='E --';yEz='Arch';UHz='ffli';UJz='3, g';vBz='"8b ';GJz='7)"';qBz='ba  ';HCz='PPYb';vFz='if [';nFz=' -o ';hGz=' tem';ECz='8P'\'' ';iz='   V';yCz=' aa ';BHz=' > $';FJz='-201';DFz='crib';wFz=' $VE';MHz='ass.';CGz='prin';dIz='le3 ';iCz=' `"8';kJz='le18';GIz='digi';RDz='"Ybb';KGz='L ] ';EEz=' los';YFz='es s';bGz='rule';JFz='-e: ';NFz='gla ';UCz=''\''   ';wGz='xt |';KHz='t te';wHz='A 7:';sIz='2000';YEz='assw';bEz=' usa';jEz='top2';tGz='dlis';Rz='$OPT';nIz='else';kDz=' uso';Hz='OPTI';sGz='/wor';HGz=' $FI';jHz='A 3:';dFz='plo ';JGz=' NUL';AJz='A 12';tz='vali';rEz='. Re';YCz='""  ';kGz='xt 2';bFz='ando';uEz='aram';Gz='v:" ';RBz='UT=$';kIz='le15';GDz='.a88';pIz='rd  ';ZGz='$FIL';QDz='   `';ZEz='ords';EBz='TYPE';tCz='  8P';aDz=' - d';rJz='null';JIz='+ 3 ';xGz=' sor';
-eval "$Az$Bz$Cz$Dz$Ez$Fz$Gz$Hz$Iz$z$Jz$z$Kz$Lz$Mz$Nz$z$Oz$Pz$Qz$Rz$Sz$Tz$z$Uz$Vz$Wz$Rz$Sz$Tz$z$Xz$Yz$Zz$az$bz$cz$z$dz$ez$fz$gz$bz$cz$z$hz$iz$jz$kz$lz$mz$z$nz$oz$pz$qz$rz$sz$tz$uz$vz$wz$xz$yz$z$ABz$BBz$z$CBz$z$DBz$z$EBz$FBz$GBz$HBz$IBz$z$JBz$KBz$LBz$HBz$IBz$z$MBz$NBz$OBz$PBz$HBz$IBz$z$QBz$RBz$SBz$TBz$HBz$IBz$z$UBz$VBz$WBz$XBz$YBz$HBz$IBz$z$ZBz$aBz$bBz$cBz$dBz$eBz$z$fBz$gBz$hBz$iBz$jBz$kBz$lBz$z$mBz$nBz$oBz$z$pBz$pBz$qBz$rBz$rBz$rBz$rBz$rBz$rBz$rBz$rBz$rBz$sBz$pBz$tBz$z$uBz$rBz$vBz$rBz$rBz$rBz$rBz$rBz$rBz$rBz$rBz$rBz$wBz$rBz$xBz$z$uBz$rBz$yBz$rBz$rBz$rBz$rBz$rBz$rBz$rBz$rBz$ACz$BCz$z$CCz$DCz$ECz$sBz$FCz$GCz$sBz$HCz$ICz$JCz$KCz$LCz$MCz$rBz$rBz$NCz$OCz$PCz$QCz$RCz$PCz$z$SCz$TCz$UCz$VCz$rBz$WCz$XCz$rBz$YCz$ZCz$aCz$bCz$MCz$cCz$pBz$dCz$eCz$fCz$gCz$hCz$iCz$jCz$z$uBz$rBz$rBz$sBz$kCz$lCz$mCz$nCz$oCz$pCz$qCz$rCz$sCz$rBz$gCz$tCz$uCz$TCz$gCz$rBz$cCz$vCz$z$uBz$rBz$rBz$wCz$rBz$xCz$yCz$ADz$BDz$CDz$DDz$EDz$FDz$rBz$GDz$HDz$IDz$JDz$gCz$rBz$cCz$vCz$z$uBz$rBz$rBz$iCz$KDz$LDz$pCz$KDz$MDz$NDz$ODz$UCz$pCz$pBz$PDz$QDz$RDz$wBz$gCz$rBz$cCz$vCz$z$SDz$TDz$UDz$VDz$WDz$XDz$YDz$ZDz$aDz$XDz$bDz$cDz$dDz$eDz$fDz$gDz$hDz$z$iDz$z$jDz$z$fBz$gBz$kDz$lBz$z$mBz$nBz$oBz$z$lDz$z$mDz$nDz$oDz$pDz$qDz$rDz$sDz$z$tDz$uDz$vDz$wDz$xDz$z$yDz$AEz$BEz$CEz$DEz$EEz$FEz$GEz$HEz$IEz$JEz$KEz$z$LEz$MEz$BEz$CEz$NEz$OEz$PEz$QEz$REz$z$SEz$TEz$UEz$VEz$WEz$XEz$YEz$ZEz$aEz$bEz$cEz$dEz$eEz$fEz$gEz$hEz$iEz$z$jEz$kEz$lEz$WEz$mEz$nEz$oEz$HEz$pEz$qEz$rEz$sEz$tEz$uEz$vEz$wEz$z$xEz$yEz$AFz$BFz$CFz$DFz$EFz$FFz$GFz$HFz$IFz$z$JFz$KFz$LFz$MFz$NFz$OFz$VEz$PFz$z$QFz$RFz$SFz$TFz$UFz$VFz$WFz$XFz$QEz$YFz$CFz$ZFz$aFz$bFz$z$cFz$dFz$eFz$fFz$gFz$hFz$iFz$jFz$kFz$lFz$mFz$nFz$yDz$oFz$kFz$pFz$z$cFz$dFz$eFz$fFz$gFz$hFz$iFz$jFz$kFz$qFz$rFz$nFz$sFz$tFz$uFz$z$iDz$z$jDz$z$vFz$wFz$cBz$xFz$yFz$AGz$z$BGz$z$CGz$DGz$EGz$FGz$z$GGz$z$vFz$HGz$IGz$JGz$KGz$LGz$MGz$z$CGz$DGz$EGz$FGz$z$NGz$z$ABz$z$GGz$z$JBz$OGz$PGz$JBz$z$vFz$QGz$RGz$SGz$TGz$UGz$z$BGz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$dGz$eGz$fGz$gGz$hGz$iGz$jGz$kGz$lGz$mGz$nGz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$oGz$eGz$fGz$gGz$hGz$iGz$jGz$kGz$lGz$mGz$nGz$z$mBz$ZGz$pGz$qGz$rGz$sGz$tGz$uGz$TGz$vGz$hGz$iGz$jGz$wGz$xGz$yGz$AHz$BHz$QBz$CHz$z$DHz$EHz$nEz$vGz$z$ABz$z$GGz$z$vFz$QGz$RGz$SGz$FHz$GHz$z$BGz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$dGz$eGz$fGz$gGz$hGz$iGz$jGz$kGz$lGz$mGz$nGz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$oGz$eGz$fGz$gGz$hGz$iGz$jGz$kGz$lGz$mGz$nGz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$HHz$eGz$fGz$gGz$hGz$iGz$jGz$kGz$lGz$mGz$nGz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$IHz$eGz$fGz$gGz$hGz$iGz$jGz$kGz$lGz$mGz$nGz$z$mBz$ZGz$pGz$qGz$rGz$sGz$tGz$uGz$FHz$JHz$KHz$LHz$MHz$tFz$NHz$OHz$PHz$QHz$RHz$SHz$z$DHz$EHz$nEz$vGz$z$ABz$z$GGz$z$vFz$QGz$RGz$THz$UHz$VHz$WHz$z$BGz$z$vFz$wFz$cBz$xFz$yFz$AGz$z$BGz$z$XHz$YHz$ZHz$aHz$bHz$cHz$eEz$dHz$eHz$fHz$gHz$z$XHz$YHz$ZHz$aHz$hHz$cHz$eEz$dHz$iHz$fHz$gHz$z$XHz$YHz$ZHz$aHz$jHz$cHz$eEz$dHz$kHz$fHz$gHz$z$XHz$YHz$ZHz$aHz$lHz$cHz$eEz$dHz$mHz$fHz$gHz$z$XHz$YHz$ZHz$aHz$nHz$cHz$eEz$dHz$eHz$fHz$oHz$pHz$qHz$rHz$sHz$tHz$uHz$z$XHz$YHz$ZHz$aHz$vHz$cHz$eEz$dHz$iHz$fHz$oHz$pHz$qHz$rHz$sHz$tHz$uHz$z$XHz$YHz$ZHz$aHz$wHz$cHz$eEz$dHz$kHz$fHz$oHz$pHz$qHz$rHz$sHz$tHz$uHz$z$XHz$YHz$ZHz$aHz$xHz$cHz$eEz$yHz$AIz$BIz$CIz$DIz$EIz$FIz$GIz$HIz$z$XHz$YHz$ZHz$aHz$IIz$cHz$eEz$yHz$AIz$BIz$CIz$DIz$EIz$JIz$GIz$HIz$z$XHz$YHz$ZHz$aHz$KIz$LIz$MIz$NIz$OIz$PIz$QIz$uHz$z$GGz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$RIz$SIz$TIz$UIz$VIz$WIz$XIz$YIz$ZIz$aIz$bIz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$cIz$SIz$TIz$UIz$VIz$WIz$XIz$YIz$ZIz$aIz$bIz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$dIz$SIz$TIz$UIz$VIz$WIz$XIz$YIz$ZIz$aIz$bIz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$eIz$SIz$TIz$UIz$VIz$WIz$XIz$YIz$ZIz$aIz$bIz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$fIz$SIz$TIz$UIz$VIz$WIz$XIz$YIz$ZIz$aIz$bIz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$gIz$SIz$TIz$UIz$VIz$WIz$XIz$YIz$ZIz$aIz$bIz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$hIz$SIz$TIz$UIz$VIz$WIz$XIz$YIz$ZIz$aIz$bIz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$iIz$SIz$TIz$UIz$VIz$WIz$XIz$YIz$ZIz$aIz$bIz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$jIz$SIz$TIz$UIz$VIz$WIz$XIz$YIz$ZIz$aIz$bIz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$kIz$eGz$fGz$gGz$hGz$iGz$jGz$kGz$lGz$mGz$nGz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$lIz$eGz$fGz$gGz$hGz$iGz$jGz$kGz$lGz$mGz$nGz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$mIz$eGz$fGz$gGz$hGz$iGz$jGz$kGz$lGz$mGz$nGz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$oGz$eGz$fGz$gGz$hGz$iGz$jGz$kGz$lGz$mGz$nGz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$HHz$eGz$fGz$gGz$hGz$iGz$jGz$kGz$lGz$mGz$nGz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$IHz$eGz$fGz$gGz$hGz$iGz$jGz$kGz$lGz$mGz$nGz$z$nIz$z$vFz$wFz$cBz$xFz$yFz$AGz$z$BGz$z$XHz$YHz$ZHz$aHz$bHz$cHz$eEz$dHz$eHz$fHz$gHz$z$XHz$YHz$ZHz$aHz$oIz$LIz$MIz$pIz$qIz$rIz$sIz$tIz$z$XHz$YHz$ZHz$aHz$uIz$LIz$MIz$pIz$qIz$vIz$wIz$xIz$yIz$z$XHz$YHz$ZHz$aHz$AJz$LIz$MIz$pIz$qIz$rIz$sIz$BJz$pHz$qHz$rHz$sHz$tHz$uHz$z$XHz$YHz$ZHz$aHz$CJz$LIz$MIz$pIz$qIz$rIz$DJz$BJz$pHz$qHz$rHz$sHz$tHz$uHz$z$XHz$YHz$ZHz$aHz$CJz$LIz$MIz$pIz$qIz$rIz$EJz$FJz$GJz$z$XHz$YHz$ZHz$aHz$KIz$LIz$MIz$NIz$OIz$PIz$QIz$uHz$z$GGz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$RIz$SIz$TIz$UIz$VIz$WIz$XIz$YIz$ZIz$aIz$bIz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$HJz$eGz$fGz$gGz$hGz$iGz$jGz$kGz$lGz$mGz$nGz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$IJz$eGz$fGz$gGz$hGz$iGz$jGz$kGz$lGz$mGz$nGz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$JJz$eGz$fGz$gGz$hGz$iGz$jGz$kGz$lGz$mGz$nGz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$KJz$eGz$fGz$gGz$hGz$iGz$jGz$kGz$lGz$mGz$nGz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$dGz$eGz$fGz$gGz$hGz$iGz$jGz$kGz$lGz$mGz$nGz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$kIz$eGz$fGz$gGz$hGz$iGz$jGz$kGz$lGz$mGz$nGz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$HHz$eGz$fGz$gGz$hGz$iGz$jGz$kGz$lGz$mGz$nGz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$IHz$eGz$fGz$gGz$hGz$iGz$jGz$kGz$lGz$mGz$nGz$z$GGz$z$vFz$wFz$cBz$xFz$yFz$AGz$z$BGz$z$XHz$YHz$ZHz$LJz$MJz$NJz$OJz$PJz$QJz$RJz$SJz$TJz$UJz$VJz$WJz$XJz$uHz$z$XHz$YHz$ZHz$aHz$YJz$ZJz$aJz$bJz$cJz$FFz$dJz$eJz$fJz$gJz$z$XHz$YHz$ZHz$aHz$hJz$ZJz$aJz$bJz$cJz$iJz$jJz$z$GGz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$kJz$eGz$fGz$gGz$hGz$iGz$jGz$kGz$lGz$mGz$nGz$z$VGz$WGz$XGz$YGz$ZGz$aGz$bGz$cGz$lJz$eGz$fGz$gGz$hGz$iGz$jGz$kGz$lGz$mGz$nGz$z$VGz$WGz$XGz$YGz$VIz$WIz$XIz$mJz$bGz$cGz$nJz$eGz$fGz$gGz$hGz$iGz$oJz$tFz$pJz$qJz$rJz$z$VGz$WGz$XGz$YGz$VIz$WIz$XIz$mJz$bGz$cGz$sJz$eGz$fGz$gGz$hGz$iGz$oJz$tFz$pJz$qJz$rJz$z$mBz$ZGz$tJz$LHz$MHz$tFz$VIz$WIz$uJz$wGz$xGz$yGz$AHz$BHz$QBz$CHz$z$DHz$EHz$nEz$vGz$hGz$iGz$oJz$vJz"
+
+
+while getopts ":t:f:e:o:v:" OPTIONS
+do
+            case $OPTIONS in            
+            f)     FILE=$OPTARG;;
+            t)     TYPE=$OPTARG;;
+            e)     ENTITY=$OPTARG;;
+            o)     OUTPUT=$OPTARG;;
+            v)     VERBOSE=$OPTARG;;
+            ?)     printf "Opcion invalida: -$OPTARG\n" $0
+                          exit 2;;
+           esac
+done                                                                                                      
+
+
+TYPE=${TYPE:=NULL}
+FILE=${FILE:=NULL}
+ENTITY=${ENTITY:=NULL}
+OUTPUT=${OUTPUT:=NULL}
+LANGUAGE=${LANGUAGE:=NULL}
+VERBOSE=${VERBOSE:=NULL}
+
+
+
+function print_ascii_art {
+cat << "EOF"
+                                                                                       
+88888888ba                                       ,ad8888ba,                            
+88      "8b                                     d8"'    `"8b                           
+88      ,8P                                    d8'                                     
+88aaaaaa8P'  ,adPPYYba,  ,adPPYba,  ,adPPYba,  88              ,adPPYba,  8b,dPPYba,   
+88""""""'    ""     `Y8  I8[    ""  I8[    ""  88      88888  a8P_____88  88P'   `"8a  
+88           ,adPPPPP88   `"Y8ba,    `"Y8ba,   Y8,        88  8PP"""""""  88       88  
+88           88,    ,88  aa    ]8I  aa    ]8I   Y8a.    .a88  "8b,   ,aa  88       88  
+88           `"8bbdP"Y8  `"YbbdP"'  `"YbbdP"'    `"Y88888P"    `"Ybbd8"'  88       88  
+                                                                                                                                                                            
+https://github.com/DanielTorres1 - daniel{dot}torres{at}owasp.org
+EOF
+}
+
+
+function uso {
+cat << "EOF"
+                                                                                       
+USO: 
+
+-f: Lista de palabras clave
+-t: tipo. Puede ser:
+		online : Aplica solo los patrones mas comunes
+		offline: Aplica todos los patrones 
+		top50 : Solo genera 50 passwords mas usados (Passwords personales). 
+		top200 : Genera 200 passwords mas usados. Requiere parametro -e
+-o: Archivo donde escribira la lista final
+-e: Empresa o sigla para generar
+-v: si ponemos 1 mostrara que patrones se esta aplicando
+
+ejemplo :  passGen.sh -f lista.txt -t online -o online.txt -v 1
+
+ejemplo :  passGen.sh -f lista.txt -t top200 -o top.txt -v 1
+EOF
+}
+
+
+
+
+if [ $VERBOSE == "1" ]
+then
+   print_ascii_art
+fi
+
+
+
+if [ $FILE = NULL ] ; then
+
+print_ascii_art
+uso
+exit
+fi
+######################
+FILE=`pwd`/$FILE
+#echo $FILE
+
+ if [ $TYPE == "top50" ]
+  then
+  john --wordlist=$FILE --rules=rule14 --stdout >> temp-pass.txt 2> /dev/null	
+  john --wordlist=$FILE --rules=rule22 --stdout >> temp-pass.txt 2> /dev/null			
+  
+  cat $FILE /usr/share/wordlists/top50.txt temp-pass.txt | sort | uniq > $OUTPUT 
+  rm temp-pass.txt 
+  exit
+  fi
+  
+  if [ $TYPE == "top200" ]
+  then  
+  john --wordlist=$FILE --rules=rule14 --stdout >> temp-pass.txt 2> /dev/null	
+  john --wordlist=$FILE --rules=rule22 --stdout >> temp-pass.txt 2> /dev/null		
+  john --wordlist=$FILE --rules=rule23 --stdout >> temp-pass.txt 2> /dev/null		
+  john --wordlist=$FILE --rules=rule24 --stdout >> temp-pass.txt 2> /dev/null		
+  
+  cat $FILE /usr/share/wordlists/top200.txt temp-pass.txt | sort | uniq > $OUTPUT 
+  rm temp-pass.txt 
+  exit
+  fi
+  
+  if [ $TYPE == "offline" ]
+  then
+  
+	   if [ $VERBOSE == "1" ]
+      then
+        echo -e "\n REGLA 1: Password  + 2 dígitos"
+        echo -e "\n REGLA 2: Password  + 3 dígitos"
+        echo -e "\n REGLA 3: Password  + 4 dígitos"
+        echo -e "\n REGLA 4: Password  + 5 dígitos"
+        echo -e "\n REGLA 5: Password  + 2 dígitos + 1 carácter especial"
+        echo -e "\n REGLA 6: Password  + 3 dígitos + 1 carácter especial"
+        echo -e "\n REGLA 7: Password  + 4 dígitos + 1 carácter especial"
+        echo -e "\n REGLA 8: Password + 1 carácter especial + 2 digitos"
+        echo -e "\n REGLA 9: Password + 1 carácter especial + 3 digitos"      
+        echo -e "\n REGLA 15: Password + 111,000,etc"      
+      fi
+	  
+  	  john --wordlist=$FILE --rules=rule1 --stdout >> temp-pass.txt 2> /dev/null	  
+	  john --wordlist=$FILE --rules=rule2 --stdout >> temp-pass.txt 2> /dev/null
+	  john --wordlist=$FILE --rules=rule3 --stdout >> temp-pass.txt 2> /dev/null  
+	  john --wordlist=$FILE --rules=rule4 --stdout >> temp-pass.txt 2> /dev/null	 
+	  john --wordlist=$FILE --rules=rule5 --stdout >> temp-pass.txt 2> /dev/null	 
+	  john --wordlist=$FILE --rules=rule6 --stdout >> temp-pass.txt 2> /dev/null
+	  john --wordlist=$FILE --rules=rule7 --stdout >> temp-pass.txt 2> /dev/null
+	  john --wordlist=$FILE --rules=rule8 --stdout >> temp-pass.txt 2> /dev/null	
+	  john --wordlist=$FILE --rules=rule9 --stdout >> temp-pass.txt 2> /dev/null 	  
+	  john --wordlist=$FILE --rules=rule15 --stdout >> temp-pass.txt 2> /dev/null 	  
+	  john --wordlist=$FILE --rules=rule20 --stdout >> temp-pass.txt 2> /dev/null 	  
+	  john --wordlist=$FILE --rules=rule21 --stdout >> temp-pass.txt 2> /dev/null 	  
+	  john --wordlist=$FILE --rules=rule22 --stdout >> temp-pass.txt 2> /dev/null		
+	  john --wordlist=$FILE --rules=rule23 --stdout >> temp-pass.txt 2> /dev/null		
+	  john --wordlist=$FILE --rules=rule24 --stdout >> temp-pass.txt 2> /dev/null		
+   else
+
+
+    if [ $VERBOSE == "1" ]
+    then
+	  echo -e "\n REGLA 1: Password  + 2 dígitos"    
+	  echo -e "\n REGLA 10: Password  + anio (2000+)"
+	  echo -e "\n REGLA 11: Password  + anio anio (1900+)"
+	  echo -e "\n REGLA 12: Password  + anio (2000+) + 1 carácter especial"
+	  echo -e "\n REGLA 13: Password  + anio (1900+) + 1 carácter especial"
+	  echo -e "\n REGLA 13: Password  + anio (2012-2017)"
+	  echo -e "\n REGLA 15: Password + 111,000,etc"   
+    fi
+
+	  john --wordlist=$FILE --rules=rule1 --stdout >> temp-pass.txt 2> /dev/null	
+	  john --wordlist=$FILE --rules=rule10 --stdout >> temp-pass.txt 2> /dev/null	
+	  john --wordlist=$FILE --rules=rule11 --stdout >> temp-pass.txt 2> /dev/null
+	  john --wordlist=$FILE --rules=rule12 --stdout >> temp-pass.txt 2> /dev/null	
+	  john --wordlist=$FILE --rules=rule13 --stdout >> temp-pass.txt 2> /dev/null
+	  john --wordlist=$FILE --rules=rule14 --stdout >> temp-pass.txt 2> /dev/null
+	  john --wordlist=$FILE --rules=rule15 --stdout >> temp-pass.txt 2> /dev/null 	  
+	  john --wordlist=$FILE --rules=rule23 --stdout >> temp-pass.txt 2> /dev/null		
+	  john --wordlist=$FILE --rules=rule24 --stdout >> temp-pass.txt 2> /dev/null		
+   fi
+ 
+
+
+
+    if [ $VERBOSE == "1" ]
+    then	  
+	  	 echo -e "\n  REGLA 18: Mutar s/$ , a/@ , l/1, e/3, g/9, i=1, o=0"
+	  	 echo -e "\n REGLA 16: Volver Mayuscula la primera letra"
+		 echo -e "\n REGLA 17: Volver Mayuscula todo"	  
+    fi
+ 
+    
+    john --wordlist=$FILE --rules=rule18 --stdout >> temp-pass.txt 2> /dev/null
+    john --wordlist=$FILE --rules=rule19 --stdout >> temp-pass.txt 2> /dev/null
+    
+    john --wordlist=temp-pass.txt --rules=rule16 --stdout >> temp-pass1.txt 2> /dev/null
+    john --wordlist=temp-pass.txt --rules=rule17 --stdout >> temp-pass1.txt 2> /dev/null
+
+ cat $FILE temp-pass.txt temp-pass1.txt | sort | uniq > $OUTPUT 
+ rm temp-pass.txt temp-pass1.txt   
+   

@@ -102,10 +102,6 @@ echo "wordpress" >> top.txt
 echo "joomla" >> top.txt	
 echo "drupal" >> top.txt	
 
-#Desencriptar
-#7z x .resultados.7z -pcANRHPeREPZsCYGB8L64 >/dev/null
-#rm .resultados.7z
-
 
 function insert_data () {
 	find .vulnerabilidades -size  0 -print0 |xargs -0 rm 2>/dev/null # delete empty files	
@@ -894,11 +890,6 @@ fi
 #grep -ira "timed out" logs/cracking/* 2>/dev/null >> errores.log
 #grep -ira "Can't connect" logs/cracking/* 2>/dev/null >> errores.log
 
-#Encritar resultados
-#rm .vulnerabilidades2/* 2>/dev/null
-7z a .resultados.7z .resultados.db -pcANRHPeREPZsCYGB8L64 >/dev/null
-rm .resultados.db
-	
 exit
 
 if [ -f servicios/pop.txt ]

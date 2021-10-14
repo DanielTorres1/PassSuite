@@ -118,41 +118,41 @@ if [ -f servicios/rdp.txt ]; then
 
 		# user = administrador
 		patator rdp_login host=$ip user=administrador password=FILE0 0=top.txt  -l logs/cracking/rdp 
-		logFile=`grep OK logs/cracking/rdp/* | head -1| cut -d ":" -f1`
-		cp $logFile logs/cracking/"$ip"_"$port"_rdpPass1.txt #2>/dev/null
-		egrep -iq "OK" logs/cracking/"$ip"_"$port"_rdpPass1.txt
+		logFile=`grep OK logs/cracking/rdp/* | head -1| cut -d ":" -f1`		
+		egrep -iq "OK" $logFile 
 		greprc=$?
 		if [[ $greprc -eq 0 ]] ; then			
 			echo -e "\t[i] Password encontrado"
 			# 14:36:32 patator    INFO - 0     2      1.942 | Cndc2021                           |   123 | OK
 			password=`head -1 logs/cracking/"$ip"_"$port"_rdpPass1.txt | cut -d " " -f 4 | cut -d : -f2`
+			cp $logFile logs/cracking/"$ip"_"$port"_rdpPass.txt 2>/dev/null
 			echo "$line (Usuario:administrador Password:$password)" >> .vulnerabilidades/"$ip"_"$port"_rdpPass.txt								
 		fi
 
 		# user = "nombre entidad"
 		patator rdp_login host=$ip user=$ENTIDAD password=FILE0 0=top.txt -l logs/cracking/rdp2 
-		logFile=`grep OK logs/cracking/rdp2/* | head -1| cut -d ":" -f1`
-		cp $logFile logs/cracking/"$ip"_"$port"_rdpPass2.txt #2>/dev/null
-		egrep -iq "OK" logs/cracking/"$ip"_"$port"_rdpPass2.txt
+		logFile=`grep OK logs/cracking/rdp2/* | head -1| cut -d ":" -f1`		
+		egrep -iq "OK" $logFile 
 		greprc=$?
 		if [[ $greprc -eq 0 ]] ; then			
 			echo -e "\t[i] Password encontrado"
 			# 14:36:32 patator    INFO - 0     2      1.942 | Cndc2021                           |   123 | OK
 			password=`head -1 logs/cracking/"$ip"_"$port"_rdpPass2.txt | cut -d " " -f 4 | cut -d : -f2`
 			echo "$line (Usuario:$ENTIDAD Password:$password)" >> .vulnerabilidades/"$ip"_"$port"_rdpPass.txt								
+			cp $logFile logs/cracking/"$ip"_"$port"_rdpPass.txt #2>/dev/null
 		fi
 
 		# user = administrator
 		patator rdp_login host=$ip user=administrator password=FILE0 0=top.txt  -l logs/cracking/rdp3
-		logFile=`grep OK logs/cracking/rdp3/* | head -1| cut -d ":" -f1`
-		cp $logFile logs/cracking/"$ip"_"$port"_rdpPass1.txt #2>/dev/null
-		egrep -iq "OK" logs/cracking/"$ip"_"$port"_rdpPass1.txt
+		logFile=`grep OK logs/cracking/rdp3/* | head -1| cut -d ":" -f1`		
+		egrep -iq "OK" $logFile
 		greprc=$?
 		if [[ $greprc -eq 0 ]] ; then			
 			echo -e "\t[i] Password encontrado"
 			# 14:36:32 patator    INFO - 0     2      1.942 | Cndc2021                           |   123 | OK
 			password=`head -1 logs/cracking/"$ip"_"$port"_rdpPass1.txt | cut -d " " -f 4 | cut -d : -f2`
 			echo "$line (Usuario:administrator Password:$password)" >> .vulnerabilidades/"$ip"_"$port"_rdpPass.txt								
+			cp $logFile logs/cracking/"$ip"_"$port"_rdpPass.txt 2>/dev/null
 		fi
 
 		

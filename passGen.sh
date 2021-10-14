@@ -82,25 +82,18 @@ fi
 FILE=`pwd`/$FILE
 #echo $FILE
 
- if [ $TYPE == "top50" ]
-  then
-  john --wordlist=$FILE --rules=rule14 --stdout >> temp-pass.txt 2> /dev/null	
-  john --wordlist=$FILE --rules=rule22 --stdout >> temp-pass.txt 2> /dev/null			
-  
-  cat $FILE /usr/share/wordlists/top50.txt temp-pass.txt | sort | uniq > $OUTPUT 
-  rm temp-pass.txt 
-  exit
-  fi
-  
+ 
   if [ $TYPE == "top200" ]
   then  
   john --wordlist=$FILE --rules=rule14 --stdout >> temp-pass.txt 2> /dev/null	
   john --wordlist=$FILE --rules=rule22 --stdout >> temp-pass.txt 2> /dev/null		
   john --wordlist=$FILE --rules=rule23 --stdout >> temp-pass.txt 2> /dev/null		
   john --wordlist=$FILE --rules=rule24 --stdout >> temp-pass.txt 2> /dev/null		
+
+  john --wordlist=temp-pass.txt --rules=rule16 --stdout >> temp-pass1.txt 2> /dev/null
   
-  cat $FILE /usr/share/wordlists/top200.txt temp-pass.txt | sort | uniq > $OUTPUT 
-  rm temp-pass.txt 
+  cat $FILE /usr/share/wordlists/top200.txt temp-pass.txt temp-pass1.txt | sort | uniq > $OUTPUT 
+  rm temp-pass.txt temp-pass1.txt
   exit
   fi
   

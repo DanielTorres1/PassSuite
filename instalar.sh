@@ -55,27 +55,12 @@ chmod a+x /usr/bin/generate-users.pl
 
 
 echo -e "${RED}[+]${GREEN} Instalando john the ripper ${RESET}"
-distro=`cat /etc/*-release | head -1|cut -d "=" -f2`
-if [[ ${distro} == *"Kali"* || ${distro} == *"Parrot"* || ${distro} == *"ec2"* ]];then 
-	echo "{+} kali/Parrot detectado"
-	sudo apt-get install john
 
-	echo -e "${RED}[+]${GREEN} Copiando reglas de john the ripper ${RESET}"
-	sudo cat john.conf >> /etc/john/john.conf
-	echo ""
+sudo apt-get install john
+sudo cp /etc/john/john.conf /etc/john/john.conf.bk
+sudo cp john.conf  /etc/john/john.conf
 
-else
-	echo "{+} $distro detectado"
-	cp john.conf /opt/
-	cp john /usr/bin
-	chmod a+x /usr/bin/john
 
-	cd /opt/; wget https://github.com/magnumripper/JohnTheRipper/archive/bleeding-jumbo.tar.gz
-	tar -zxvf bleeding-jumbo.tar.gz
-	sudo cat john.conf >> JohnTheRipper-bleeding-jumbo/run/john.conf
-	cd JohnTheRipper-bleeding-jumbo/src
-	./configure && make
-fi	
 
 
 # oracle 
@@ -95,6 +80,7 @@ make
 make install
 
 cd /usr/share/wordlists
+rm top200.txt 2> /dev/null
 wget https://raw.githubusercontent.com/DanielTorres1/passwords/master/top200.txt
 
 

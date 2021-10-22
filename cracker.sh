@@ -187,7 +187,7 @@ then
 			ip=`echo $ip_port | cut -d ":" -f 1`
 			port=`echo $ip_port | cut -d ":" -f 2`
 			path="/"`echo $ip_port_path | cut -d "/" -f 4` # /wp-login.php
-			path= `echo $path sed -i 's/wp-login.php//'` #borrar wp-login.php y dejar path como / o /web/
+			path= `echo $path | sed 's/wp-login.php//'` #borrar wp-login.php y dejar path como / o /web/
 #			echo "webData.pl -t $ip -d $path -p $port -e todo -l /dev/null -r 4 "			
 			echo ""
 			if [[ $fingerprint = *"wordpress"* ]]; then

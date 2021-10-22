@@ -46,6 +46,8 @@ chmod a+x /usr/bin/XBruteForcer.pl
 
 cp passTelnet.pl /usr/bin
 cp crack-ntlm.sh /usr/bin
+cp wpbrute.sh /usr/bin
+chmod a+x /usr/bin/wpbrute.sh
 
 #cp generate-password.pl /usr/bin
 #chmod a+x /usr/bin/generate-password.pl

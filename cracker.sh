@@ -177,15 +177,17 @@ then
       	  
 		echo -e "$OKBLUE\n\t#################### Testing pass web admin ######################$RESET"	
 			
-		for line in $(cat servicios/admin-web.txt); do			
-			ip_port_path=`echo $line | cut -d ";" -f 1`
+		for line in $(cat servicios/admin-web.txt); do	
+			
+			ip_port_path=`echo $line | cut -d ";" -f 1` #https://www.sanmateo.com.bo:443/wp-login.php
 			fingerprint=`echo $line | cut -d ";" -f 2`
 			echo -e "\n\t########### $ip_port_path #######"
 			
 			ip_port=`echo $ip_port_path | cut -d "/" -f 3` # 190.129.69.107:80			
 			ip=`echo $ip_port | cut -d ":" -f 1`
 			port=`echo $ip_port | cut -d ":" -f 2`
-			path=`echo $ip_port_path | cut -d "/" -f 4`		
+			path="/"`echo $ip_port_path | cut -d "/" -f 4` # /wp-login.php
+			path= `echo $path sed -i 's/wp-login.php//'` #borrar wp-login.php y dejar path como / o /web/
 #			echo "webData.pl -t $ip -d $path -p $port -e todo -l /dev/null -r 4 "			
 			echo ""
 			if [[ $fingerprint = *"wordpress"* ]]; then

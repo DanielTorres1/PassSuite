@@ -11,26 +11,7 @@ RESET='\e[0m'
 
 # RDP crak
 
-#vagrant
-#vcoadmin
-#vmware
-#windows
-#Wonderware
-#zxcvbnm
-#sa
-#root
-#role1
-#postgres
-#prtgadmin
-#mysql
-#!manage
-#manager
-#passport
-#sqlserver123*
-#cisco
-#default
-#ftp
-#user                            
+#admin/admin, admin/password                       
 
 max_ins=10
 
@@ -93,14 +74,14 @@ if [ $DICTIONARY = NULL ] ; then
 	echo $ENTIDAD > base.txt
 	passGen.sh -f base.txt -t top200 -o top.txt 
 	rm base.txt
+	echo "wordpress" >> top.txt	
+	echo "joomla" >> top.txt	
+	echo "drupal" >> top.txt	
 else
-	mv $DICTIONARY top.txt	
-
+	cp $DICTIONARY top.txt	
+	#/usr/share/seclists/Passwords/Common-Credentials/10-million-password-list-top-10000.txt
 fi
 
-echo "wordpress" >> top.txt	
-echo "joomla" >> top.txt	
-echo "drupal" >> top.txt	
 
 
 function insert_data () {
@@ -110,6 +91,79 @@ function insert_data () {
 	}
 
 
+
+
+### SSH #########
+if [ -f servicios/ssh_onlyhost.txt ]
+then
+	interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "echo 'medusa -e n -u root -P top.txt -h _target_ -M ssh' >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent
+	interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "medusa -e n -u root -P top.txt -h _target_ -M ssh >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent
+		
+fi
+
+			
+if [ -f servicios/ssh_onlyhost.txt ]
+then
+		
+	for ip in $(cat servicios/ssh_onlyhost.txt); do			
+		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_22_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_22_passwordAdivinadoServ.txt 2>/dev/null					
+	 done	
+	insert_data
+fi
+####################
+
+### Windows
+if [ -f servicios/Windows.txt ]
+then
+	#interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l administrador -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	#interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l administrador -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	
+	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l administrator -P top.txt -t 1 _target_  smb' >> logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l administrator -P top.txt -t 1 _target_  smb >> logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	
+	#interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l soporte -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	#interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l soporte -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	
+	#interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l sistemas -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	#interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l sistemas -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	
+	#interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l $ENTIDAD -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	#interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l $ENTIDAD -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent		
+			
+fi
+
+			
+if [ -f servicios/Windows.txt ]
+then
+		
+	for ip in $(cat servicios/Windows.txt); do			
+		egrep --color=never -i 'login:' logs/cracking/"$ip"_445_passwordAdivinadoWin.txt | tee -a .vulnerabilidades/"$ip"_445_passwordAdivinadoWin.txt
+		#https://github.com/m4ll0k/SMBrute (shared)											
+	 done	
+	 insert_data
+fi
+
+
+### telnet #########
+if [ -f servicios/telnet_onlyhost.txt ]
+then
+	interlace -tL servicios/telnet_onlyhost.txt -threads 10 -c "echo 'medusa -e n -u root -P top.txt -h _target_ -M telnet' >> logs/cracking/_target__23_passwordAdivinadoServ.txt" --silent
+	interlace -tL servicios/telnet_onlyhost.txt -threads 10 -c "medusa -e n -u root -P top.txt -h _target_ -M telnet >> logs/cracking/_target__23_passwordAdivinadoServ.txt" --silent
+		
+fi
+
+			
+if [ -f servicios/telnet_onlyhost.txt ]
+then
+		
+	for ip in $(cat servicios/telnet_onlyhost.txt); do			
+		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_23_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_23_passwordAdivinadoServ.txt 2>/dev/null					
+	 done	
+	insert_data
+fi
+####################
+
+
 if [ -f servicios/rdp.txt ]; then	
 	for line in $(cat servicios/rdp.txt); do			
 		ip=`echo $line | cut -f1 -d":"`
@@ -117,44 +171,45 @@ if [ -f servicios/rdp.txt ]; then
 		echo -e "\n\t $OKBLUE Encontre servicios de RDP expuestos en $ip:$port $RESET"	  
 
 		# user = administrador
-		patator rdp_login host=$ip user=administrador password=FILE0 0=top.txt  -l logs/cracking/rdp 
-		logFile=`grep OK logs/cracking/rdp/* | head -1| cut -d ":" -f1`		
-		if [ -z "$logFile" ]; then
-			echo "Upps no se encontro passwords"
-		else
-			egrep -iq "OK" $logFile 
-			greprc=$?
-			if [[ $greprc -eq 0 ]] ; then			
-				echo -e "\t[i] Password encontrado"
-				# 14:36:32 patator    INFO - 0     2      1.942 | Cndc2021                           |   123 | OK
-				password=`head -1 $logFile | cut -d " " -f 4 | cut -d : -f2`
-				cp $logFile logs/cracking/"$ip"_"$port"_rdpPass.txt 2>/dev/null
-				echo "$line (Usuario:administrador Password:$password)" >> .vulnerabilidades/"$ip"_"$port"_rdpPass.txt								
-			fi
-		fi
-		rm logs/cracking/rdp/* # borrar logs
+		# patator rdp_login host=$ip user=administrador password=FILE0 0=top.txt  -l logs/cracking/rdp 
+		# logFile=`grep OK logs/cracking/rdp/* | head -1| cut -d ":" -f1`		
+		# echo "logFile $logFile"
+		# if [ -z "$logFile" ]; then
+		# 	echo "Upps no se encontro passwords"
+		# else
+		# 	egrep -iq "OK" $logFile 
+		# 	greprc=$?
+		# 	if [[ $greprc -eq 0 ]] ; then			
+		# 		echo -e "\t[i] Password encontrado"
+		# 		# 14:36:32 patator    INFO - 0     2      1.942 | Cndc2021                           |   123 | OK
+		# 		password=`head -1 $logFile | cut -d " " -f 4 | cut -d : -f2`
+		# 		cp $logFile logs/cracking/"$ip"_"$port"_rdpPass.txt 2>/dev/null
+		# 		echo "$line (Usuario:administrator Password:$password)" >> .vulnerabilidades/"$ip"_"$port"_rdpPass.txt								
+		# 	fi
+		# fi
+		# rm logs/cracking/rdp/* # borrar logs
 
 
 		
 
 		# user = "nombre entidad"
-		patator rdp_login host=$ip user=$ENTIDAD password=FILE0 0=top.txt -l logs/cracking/rdp2 
-		logFile=`grep OK logs/cracking/rdp2/* | head -1| cut -d ":" -f1`		
+		# patator rdp_login host=$ip user=$ENTIDAD password=FILE0 0=top.txt -l logs/cracking/rdp2 
+		# logFile=`grep OK logs/cracking/rdp2/* | head -1| cut -d ":" -f1`		
 
-		if [ -z "$logFile" ]; then
-			echo "Upps no se encontro passwords"
-		else
-			egrep -iq "OK" $logFile 
-			greprc=$?
-			if [[ $greprc -eq 0 ]] ; then			
-				echo -e "\t[i] Password encontrado"
-				# 14:36:32 patator    INFO - 0     2      1.942 | Cndc2021                           |   123 | OK
-				password=`head -1 $logFile | cut -d " " -f 4 | cut -d : -f2`
-				cp $logFile logs/cracking/"$ip"_"$port"_rdpPass.txt #2>/dev/null
-				echo "$line (Usuario:$ENTIDAD Password:$password)" >> .vulnerabilidades/"$ip"_"$port"_rdpPass.txt								
+		# if [ -z "$logFile" ]; then
+		# 	echo "Upps no se encontro passwords"
+		# else
+		# 	egrep -iq "OK" $logFile 
+		# 	greprc=$?
+		# 	if [[ $greprc -eq 0 ]] ; then			
+		# 		echo -e "\t[i] Password encontrado"
+		# 		# 14:36:32 patator    INFO - 0     2      1.942 | Cndc2021                           |   123 | OK
+		# 		password=`head -1 $logFile | cut -d " " -f 4 | cut -d : -f2`
+		# 		cp $logFile logs/cracking/"$ip"_"$port"_rdpPass.txt #2>/dev/null
+		# 		echo "$line (Usuario:$ENTIDAD Password:$password)" >> .vulnerabilidades/"$ip"_"$port"_rdpPass.txt								
 				
-			fi
-		fi
+		# 	fi
+		# fi
 		
 		
 
@@ -375,45 +430,6 @@ then
 fi
 
 
-### SSH #########
-if [ -f servicios/ssh_onlyhost.txt ]
-then
-	interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "echo 'medusa -e n -u root -P top.txt -h _target_ -M ssh' >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent
-	interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "medusa -e n -u root -P top.txt -h _target_ -M ssh >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent
-		
-fi
-
-			
-if [ -f servicios/ssh_onlyhost.txt ]
-then
-		
-	for ip in $(cat servicios/ssh_onlyhost.txt); do			
-		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_22_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_22_passwordAdivinadoServ.txt 2>/dev/null					
-	 done	
-	insert_data
-fi
-####################
-
-
-### telnet #########
-if [ -f servicios/telnet_onlyhost.txt ]
-then
-	interlace -tL servicios/telnet_onlyhost.txt -threads 10 -c "echo 'medusa -e n -u root -P top.txt -h _target_ -M telnet' >> logs/cracking/_target__23_passwordAdivinadoServ.txt" --silent
-	interlace -tL servicios/telnet_onlyhost.txt -threads 10 -c "medusa -e n -u root -P top.txt -h _target_ -M telnet >> logs/cracking/_target__23_passwordAdivinadoServ.txt" --silent
-		
-fi
-
-			
-if [ -f servicios/telnet_onlyhost.txt ]
-then
-		
-	for ip in $(cat servicios/telnet_onlyhost.txt); do			
-		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_23_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_23_passwordAdivinadoServ.txt 2>/dev/null					
-	 done	
-	insert_data
-fi
-####################
-
 
 if [ -f servicios/PRTG.txt ]
 then
@@ -470,11 +486,7 @@ fi
 if [ -f servicios/web401.txt ]
 then
 
-	if [ "$TYPE" = NULL ] ; then
-		echo -e "\n\t $OKBLUE Encontre web 401 activos. Realizar ataque de passwords ? s/n $RESET"	  
-		read bruteforce	  
-	fi
-	  	
+  	
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	     	
       	  
 		echo -e "$OKBLUE\n\t#################### Testing pass web (401) ######################$RESET"	
@@ -533,39 +545,6 @@ fi
 
 
 
-
-### Windows
-if [ -f servicios/Windows.txt ]
-then
-	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l administrador -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
-	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l administrador -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
-	
-	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l administrator -P top.txt -t 1 _target_  smb' >> logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
-	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l administrator -P top.txt -t 1 _target_  smb >> logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
-	
-	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l soporte -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
-	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l soporte -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
-	
-	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l sistemas -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
-	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l sistemas -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
-	
-	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l $ENTIDAD -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
-	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l $ENTIDAD -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent		
-			
-fi
-
-			
-if [ -f servicios/Windows.txt ]
-then
-		
-	for ip in $(cat servicios/Windows.txt); do			
-		egrep --color=never -i 'login:' logs/cracking/"$ip"_445_passwordAdivinadoWin.txt | tee -a .vulnerabilidades/"$ip"_445_passwordAdivinadoWin.txt
-		#https://github.com/m4ll0k/SMBrute (shared)											
-	 done	
-	 insert_data
-fi
-
-
 #falta
 if [ -f servicios/ZKSoftware.txt ]
 then
@@ -614,8 +593,8 @@ then
 		echo -e "\n medusa -e n -u adm -P top.txt -h $ip -M mssql" >>  logs/cracking/"$ip"_"$port"_passwordBD.txt
 		medusa -e n -u adm -P top.txt -h $ip -M mssql >>  logs/cracking/"$ip"_"$port"_passwordBD.txt
 		
-		echo -e "\n medusa -e n -u $ENTIDAD -P top.txt -h $ip -M mssql" >>  logs/cracking/"$ip"_"$port"_passwordBD.txt
-		medusa -e n -u $ENTIDAD -P top.txt -h $ip -M mssql >>  logs/cracking/"$ip"_"$port"_passwordBD.txt
+		#echo -e "\n medusa -e n -u $ENTIDAD -P top.txt -h $ip -M mssql" >>  logs/cracking/"$ip"_"$port"_passwordBD.txt
+		#medusa -e n -u $ENTIDAD -P top.txt -h $ip -M mssql >>  logs/cracking/"$ip"_"$port"_passwordBD.txt
 		
 		grep --color=never SUCCESS logs/cracking/"$ip"_"$port"_passwordBD.txt > .vulnerabilidades/"$ip"_"$port"_passwordBD.txt
 		
@@ -670,8 +649,8 @@ then
 		echo -e "\n medusa -e n -u pgsql -P top.txt -h $ip -M postgres" >>  logs/cracking/"$ip"_5432_passwordBD.txt
 		medusa -e n -u pgsql -P top.txt -h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt
 		
-		echo -e "\nmedusa -e n -u $ENTIDAD -P top.txt -h $ip -M postgres" >>  logs/cracking/"$ip"_5432_passwordBD.txt
-		medusa -e n -u $ENTIDAD -P top.txt -h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt
+		#echo -e "\nmedusa -e n -u $ENTIDAD -P top.txt -h $ip -M postgres" >>  logs/cracking/"$ip"_5432_passwordBD.txt
+		#medusa -e n -u $ENTIDAD -P top.txt -h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt
 		
 		grep --color=never SUCCESS logs/cracking/"$ip"_5432_passwordBD.txt > .vulnerabilidades/"$ip"_5432_passwordBD.txt
 		
@@ -739,11 +718,11 @@ then
 				echo -e "\n medusa -e n -u admin -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt
 				medusa -e n -u admin -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt
 				
-				echo -e "\n medusa -e n -u administrador -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
+				echo -e "\n medusa -e n -u administrator -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
 				medusa -e n -u administrador -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt				
 				
-				echo -e "\n medusa -e n -u $ENTIDAD  -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
-				medusa -e n -u $ENTIDAD  -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt				
+				#echo -e "\n medusa -e n -u $ENTIDAD  -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
+				#medusa -e n -u $ENTIDAD  -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt				
 				
 				grep --color=never -i SUCCESS logs/cracking/"$ip"_3306_passwordBD.txt | tee -a .vulnerabilidades/"$ip"_3306_passwordBD.txt
 				echo ""		
@@ -1043,7 +1022,7 @@ then
 		ncrack_instances=`pgrep ncrack | wc -l`
 		if [ "$ncrack_instances" -lt $max_ins ] #Max 10 instances
 		then
-			ncrack --user 'administrador' -P top.txt -p $port -g cd=8 $ip | tee -a  logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &			
+			ncrack --user 'administrator' -P top.txt -p $port -g cd=8 $ip | tee -a  logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &			
 			echo ""		
 		else
 			echo "Max instancias de ncrack ($max_ins)"
@@ -1071,7 +1050,7 @@ then
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 						
-		grep --color=never "administrador" logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
+		grep --color=never "administrator" logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
 		echo ""			
 	  done
 	 

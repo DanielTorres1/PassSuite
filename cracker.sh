@@ -298,12 +298,12 @@ then
 		
 		if [[ $fingerprint = *"phpmyadmin"* ]]; then
 			echo -e "\t[+] phpMyAdmin identificado"
-			echo "passWeb.pl -t $ip -p $port -m phpmyadmin -d \"/$path/\" -u root|admin|wordpress|joomla|drupal -f top.txt" > logs/cracking/"$ip"_"$port"_passwordBD.txt 
-			passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u root -f top.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
-			passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u admin -f top.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
-			passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u wordpress -f top.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
-			passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u joomla -f top.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
-			passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u drupal -f top.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
+			echo "passWeb.pl -t $ip -p $port -m phpmyadmin -d \"/$path/\" -u root|admin|wordpress|joomla|drupal -f top.txt" > logs/cracking/"$ip"_mongo_passwordBD.txt 
+			passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u root -f top.txt >> logs/cracking/"$ip"_mongo_passwordBD.txt &
+			passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u admin -f top.txt >> logs/cracking/"$ip"_mongo_passwordBD.txt &
+			passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u wordpress -f top.txt >> logs/cracking/"$ip"_mongo_passwordBD.txt &
+			passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u joomla -f top.txt >> logs/cracking/"$ip"_mongo_passwordBD.txt &
+			passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u drupal -f top.txt >> logs/cracking/"$ip"_mongo_passwordBD.txt &
 			sleep 5
 			######## wait to finish########
 			while true; do
@@ -319,7 +319,7 @@ then
 			done
 			##############################
 
-			grep --color=never 'encontrado' logs/cracking/"$ip"_"$port"_passwordBD.txt | sort | uniq > .vulnerabilidades/"$ip"_"$port"_passwordBD.txt 
+			grep --color=never 'encontrado' logs/cracking/"$ip"_mongo_passwordBD.txt | sort | uniq > .vulnerabilidades/"$ip"_mongo_passwordBD.txt 
 		fi	
 		
 		if [[ $fingerprint = *"joomla"* ]]; then
@@ -484,10 +484,7 @@ fi
 
 
 if [ -f servicios/web401.txt ]
-then
-
-  	
-	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	     	
+then     	
       	  
 		echo -e "$OKBLUE\n\t#################### Testing pass web (401) ######################$RESET"	
 		for line in $(cat servicios/web401.txt); do
@@ -540,7 +537,6 @@ then
 			
 		done
 		insert_data
-	 fi	
 fi
 
 
@@ -587,16 +583,16 @@ then
 		port=`echo $line | cut -f2 -d":"`
 		
 		echo -e "[+] Probando $ip"						
-		echo "medusa -e n -u sa -P top.txt -h $ip -M mssql" >> logs/cracking/"$ip"_"$port"_passwordBD.txt
-		medusa -e n -u sa -P top.txt -h $ip -M mssql >> logs/cracking/"$ip"_"$port"_passwordBD.txt
+		echo "medusa -e n -u sa -P top.txt -h $ip -M mssql" >> logs/cracking/"$ip"_mongo_passwordBD.txt
+		medusa -e n -u sa -P top.txt -h $ip -M mssql >> logs/cracking/"$ip"_mongo_passwordBD.txt
 		
-		echo -e "\n medusa -e n -u adm -P top.txt -h $ip -M mssql" >>  logs/cracking/"$ip"_"$port"_passwordBD.txt
-		medusa -e n -u adm -P top.txt -h $ip -M mssql >>  logs/cracking/"$ip"_"$port"_passwordBD.txt
+		echo -e "\n medusa -e n -u adm -P top.txt -h $ip -M mssql" >>  logs/cracking/"$ip"_mongo_passwordBD.txt
+		medusa -e n -u adm -P top.txt -h $ip -M mssql >>  logs/cracking/"$ip"_mongo_passwordBD.txt
 		
-		#echo -e "\n medusa -e n -u $ENTIDAD -P top.txt -h $ip -M mssql" >>  logs/cracking/"$ip"_"$port"_passwordBD.txt
-		#medusa -e n -u $ENTIDAD -P top.txt -h $ip -M mssql >>  logs/cracking/"$ip"_"$port"_passwordBD.txt
+		#echo -e "\n medusa -e n -u $ENTIDAD -P top.txt -h $ip -M mssql" >>  logs/cracking/"$ip"_mongo_passwordBD.txt
+		#medusa -e n -u $ENTIDAD -P top.txt -h $ip -M mssql >>  logs/cracking/"$ip"_mongo_passwordBD.txt
 		
-		grep --color=never SUCCESS logs/cracking/"$ip"_"$port"_passwordBD.txt > .vulnerabilidades/"$ip"_"$port"_passwordBD.txt
+		grep --color=never SUCCESS logs/cracking/"$ip"_mongo_passwordBD.txt > .vulnerabilidades/"$ip"_mongo_passwordBD.txt
 		
 	 done	
 	 insert_data
@@ -606,13 +602,9 @@ fi
 
 if [ -f servicios/oracle.txt ]
 then
-	if [ "$TYPE" = NULL ] ; then		
-		echo -e "\n\t $OKBLUE Encontre servicios oracle activos. Realizar ataque de passwords ? s/n $RESET"	  
-		read bruteforce	   
-	fi
+	echo -e "\n\t $OKBLUE Encontre servicios oracle activos. $RESET"	   
 	
 	#https://medium.com/@netscylla/pentesters-guide-to-oracle-hacking-1dcf7068d573  	
-	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
 				
 		export SQLPATH=/opt/oracle/instantclient_18_3
 		export TNS_ADMIN=/opt/oracle/instantclient_18_3
@@ -625,12 +617,35 @@ then
 		port=`echo $line | cut -f2 -d":"`
 		
 		echo -e "[+] Probando $ip"
-		msfconsole -x "use auxiliary/admin/oracle/oracle_login;set RHOSTS $ip;run;exit" > logs/vulnerabilidades/"$ip"_"$port"_passwordBD.txt 2>/dev/null		
-		egrep --color=never 'Found' logs/vulnerabilidades/"$ip"_"$port"_passwordBD.txt | tee -a .vulnerabilidades/"$ip"_"$port"_passwordBD.txt
+		msfconsole -x "use auxiliary/admin/oracle/oracle_login;set RHOSTS $ip;run;exit" > logs/vulnerabilidades/"$ip"_mongo_passwordBD.txt 2>/dev/null
+		egrep --color=never 'Found' logs/vulnerabilidades/"$ip"_mongo_passwordBD.txt | tee -a .vulnerabilidades/"$ip"_mongo_passwordBD.txt
+
+		SIDS=`grep '|' logs/vulnerabilidades/"$ip"_"$port"_oracleSids.txt | grep -v oracle-sid-brute | awk '{print $2}'`
+		
+		for SID in $SIDS; do
+			echo -e "[+] Probando SID $SID"
+			odat.sh passwordguesser -s $ip -p 1521 -d $SID --accounts-file /usr/share/wordlists/oracle_default_userpass.txt > logs/vulnerabilidades/"$ip"_mongo_passwordBD.txt 
+		done
+
+		
 		
 	 done	
 	 insert_data
-   fi # if bruteforce
+fi
+
+if [ -f servicios/mongoDB.txt ]
+then
+	echo -e "$OKBLUE #################### MongoDB (`wc -l servicios/mongoDB.txt`) ######################$RESET"
+	for line in $(cat servicios/mongoDB.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`		
+		echo -e "[+] Escaneando $ip:$port"
+		echo "nmap -n -sT -sV -p $port -Pn --script=mongodb-brute $ip"  > logs/vulnerabilidades/"$ip"_mongo_passwordBD.txt 2>/dev/null 
+		nmap -n -sT -sV -p $port -Pn --script=mongodb-databases $ip  >> logs/vulnerabilidades/"$ip"_mongo_passwordBD.txt 2>/dev/null 
+		grep "|" logs/vulnerabilidades/"$ip"_mongo_passwordBD.txt | egrep -iv "ACCESS_DENIED|false|Could|ERROR" > .vulnerabilidades/"$ip"_mongo_passwordBD.txt 				
+	done	
+	#insert clean data	
+	insert_data	
 fi
 
 if [ -f servicios/postgres.txt ]
@@ -774,13 +789,13 @@ then
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "[+] Probando $ip"
-		echo "nmap -n -sV -p $port --script=mongodb-brute $ip"  > logs/cracking/"$ip"_"$port"_passwordBD.txt 2>/dev/null 
-		nmap -n -sV -p $port --script=mongodb-brute $ip  >> logs/cracking/"$ip"_"$port"_passwordBD.txt 2>/dev/null 
+		echo "nmap -n -sV -p $port --script=mongodb-brute $ip"  > logs/cracking/"$ip"_mongo_passwordBD.txt 2>/dev/null 
+		nmap -n -sV -p $port --script=mongodb-brute $ip  >> logs/cracking/"$ip"_mongo_passwordBD.txt 2>/dev/null 
 		# -- |     root:Password1 - Valid credentials		
-		respuesta=`grep --color=never -iq "Valid credentials" logs/cracking/"$ip"_"$port"_passwordBD.txt `
+		respuesta=`grep --color=never -iq "Valid credentials" logs/cracking/"$ip"_mongo_passwordBD.txt `
 		greprc=$?
 		if [[ $greprc -eq 0 ]] ; then
-			echo -n "[MongoDB] $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordBD.txt
+			echo -n "[MongoDB] $respuesta" >> .vulnerabilidades/"$ip"_mongo_passwordBD.txt
 		fi					 
 		echo ""			
 	 done
@@ -802,12 +817,12 @@ then
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "\n\t########### $ip #######"			
-		echo "nmap -n -sV -p $port --script=redis-brute $ip"  > logs/cracking/"$ip"_"$port"_passwordBD.txt 2>/dev/null 
-		nmap -n -sV -p $port --script=redis-brute $ip  >> logs/cracking/"$ip"_"$port"_passwordBD.txt 2>/dev/null 		
-		respuesta=`grep --color=never -iq "Valid credentials" logs/cracking/"$ip"_"$port"_passwordBD.txt `
+		echo "nmap -n -sV -p $port --script=redis-brute $ip"  > logs/cracking/"$ip"_mongo_passwordBD.txt 2>/dev/null 
+		nmap -n -sV -p $port --script=redis-brute $ip  >> logs/cracking/"$ip"_mongo_passwordBD.txt 2>/dev/null 		
+		respuesta=`grep --color=never -iq "Valid credentials" logs/cracking/"$ip"_mongo_passwordBD.txt `
 		greprc=$?
 		if [[ $greprc -eq 0 ]] ; then
-			echo -n "[Redis] $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordBD.txt
+			echo -n "[Redis] $respuesta" >> .vulnerabilidades/"$ip"_mongo_passwordBD.txt
 		fi			
 		echo ""			
 	 done

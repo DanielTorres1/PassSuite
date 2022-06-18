@@ -402,31 +402,26 @@ fi
 if [ -f servicios/cisco401.txt ]
 then	
 	
-	if [ "$TYPE" = NULL ] ; then
-		echo -e "\n\t $OKBLUE Encontre dispositivos CISCO activos. Realizar ataque de passwords ? s/n $RESET"	  
-		read bruteforce	  
-	fi
-	  	
-	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 		  
-		sed -i '1 i\cisco' top.txt	#adicionar password cisco
-		echo -e "$OKBLUE\n\t#################### Testing pass CISCO ######################$RESET"	
-		for ip in $(cat servicios/cisco401.txt); do			
-			egrep -iq "80/open" .nmap_1000p/"$ip"_tcp.grep
+	echo -e "\n\t $OKBLUE Encontre dispositivos CISCO activos. Realizar ataque de passwords ? s/n $RESET"	  
+	  		  
+	sed -i '1 i\cisco' top.txt	#adicionar password cisco
+	echo -e "$OKBLUE\n\t#################### Testing pass CISCO ######################$RESET"	
+	for ip in $(cat servicios/cisco401.txt); do			
+		egrep -iq "80/open" .nmap_1000p/"$ip"_tcp.grep
+		greprc=$?
+		if [[ $greprc -eq 0 ]] ; then			
+			echo -e "[+] Probando $ip"
+			echo "patator http_fuzz method=GET url=\"http://$ip/\" user_pass=cisco:FILE0 0=top.txt -e user_pass:b64 --threads=1" >> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt
+			patator http_fuzz method=GET url="http://$ip/" user_pass=cisco:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt
+			respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_80_passwordAdivinadoServ.txt`
 			greprc=$?
-			if [[ $greprc -eq 0 ]] ; then			
-				echo -e "[+] Probando $ip"
-				echo "patator http_fuzz method=GET url=\"http://$ip/\" user_pass=cisco:FILE0 0=top.txt -e user_pass:b64 --threads=1" >> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt
-				patator http_fuzz method=GET url="http://$ip/" user_pass=cisco:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt
-				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_80_passwordAdivinadoServ.txt`
-				greprc=$?
-				if [[ $greprc -eq 0 ]] ; then
-					echo -n "[Cisco] Usuario:cisco $respuesta" >> .vulnerabilidades/"$ip"_80_passwordAdivinadoServ.txt
-				fi				
-			fi
-						
-		done
-		insert_data
-	 fi	
+			if [[ $greprc -eq 0 ]] ; then
+				echo -n "[Cisco] Usuario:cisco $respuesta" >> .vulnerabilidades/"$ip"_80_passwordAdivinadoServ.txt
+			fi				
+		fi
+					
+	done
+	insert_data	 
 fi
 
 
@@ -434,51 +429,41 @@ fi
 if [ -f servicios/PRTG.txt ]
 then
 
-	if [ "$TYPE" = NULL ] ; then
-		echo -e "\n\t $OKBLUE Encontre PRTG activos. Realizar ataque de passwords ? s/n $RESET"	  
-		read bruteforce	  
-	fi
+	echo -e "\n\t $OKBLUE Encontre PRTG activos. Realizar ataque de passwords ? s/n $RESET"	  
 	  	
-	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	   	       	  
-		echo -e "$OKBLUE\n\t#################### Testing PRTG ######################$RESET"	
-		sed -i '1 i\prtgadmin' top.txt	#adicionar password prtgadmin
-		for line in $(cat servicios/PRTG.txt); do
-			ip=`echo $line | cut -f1 -d":"`
-			port=`echo $line | cut -f2 -d":"`								
-			echo -e "[+] Probando $ip:$port"
-			echo "passWeb.pl -t $ip -p $port -d / -m PRTG -u prtgadmin -f top.txt" > logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
-			passWeb.pl -t $ip -p $port -d / -m PRTG -u prtgadmin -f top.txt >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
-			grep --color=never 'encontrado' logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
-			echo ""			
-		done
-		insert_data
-	 fi	
+	echo -e "$OKBLUE\n\t#################### Testing PRTG ######################$RESET"	
+	sed -i '1 i\prtgadmin' top.txt	#adicionar password prtgadmin
+	for line in $(cat servicios/PRTG.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`								
+		echo -e "[+] Probando $ip:$port"
+		echo "passWeb.pl -t $ip -p $port -d / -m PRTG -u prtgadmin -f top.txt" > logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
+		passWeb.pl -t $ip -p $port -d / -m PRTG -u prtgadmin -f top.txt >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
+		grep --color=never 'encontrado' logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
+		echo ""			
+	done
+	insert_data
+
 fi
 
 if [ -f servicios/pentaho.txt ]
 then
 
-	if [ "$TYPE" = NULL ] ; then
-		echo -e "\n\t $OKBLUE Encontre sistemas de Pentaho activos. Realizar ataque de passwords ? s/n $RESET"	  
-		read bruteforce	  
-	fi
-	  	
-	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	   	 
-      	  
-		echo -e "$OKBLUE\n\t#################### Testing Pentahoo ######################$RESET"	
-		for line in $(cat servicios/pentaho.txt); do
-			ip=`echo $line | cut -f1 -d":"`
-			port=`echo $line | cut -f2 -d":"`
-						
-			echo -e "[+] Probando $ip"
-			passWeb.pl -t $ip -p $port -d / -m pentaho -u admin -f top.txt  > logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
-			sleep 2
-			grep --color=never 'encontrado' logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt | tee -a .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
-			
-			echo ""			
-		done
-		insert_data
-	 fi	
+	echo -e "\n\t $OKBLUE Encontre sistemas de Pentaho activos.  $RESET"	  
+	  		  
+	echo -e "$OKBLUE\n\t#################### Testing Pentahoo ######################$RESET"	
+	for line in $(cat servicios/pentaho.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+					
+		echo -e "[+] Probando $ip"
+		passWeb.pl -t $ip -p $port -d / -m pentaho -u admin -f top.txt  > logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
+		sleep 2
+		grep --color=never 'encontrado' logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt | tee -a .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
+		
+		echo ""			
+	done
+	insert_data	
 fi
 
 
@@ -545,37 +530,25 @@ fi
 if [ -f servicios/ZKSoftware.txt ]
 then
 
-	if [ "$TYPE" = NULL ] ; then
-		echo -e "\n\t $OKBLUE Encontre servicios de ZKSoftware activos. Realizar ataque de passwords ? s/n $RESET"	  
-		read bruteforce	  
-	fi
-	  	
-	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	  	 
-      	  
-		echo -e "$OKBLUE\n\t#################### Testing pass ZKSoftware ######################$RESET"	
-		for line in $(cat servicios/ZKSoftware.txt); do
-			ip=`echo $line | cut -f1 -d":"`
-			port=`echo $line | cut -f2 -d":"`
-			echo -e "[+] Probando $ip"		
-			echo -e "passWeb.pl -t $ip -p $port -m ZKSoftware -u administrator -f top.txt " > logs/cracking/"$ip"_80_passwordZKSoftware.txt
-			passWeb.pl -t $ip -p 80 -m ZKSoftware -u administrator -f top.txt >> logs/cracking/"$ip"_80_passwordZKSoftware.txt
-			grep --color=never 'encontrado' logs/cracking/"$ip"_80_passwordZKSoftware.txt | tee -a .vulnerabilidades/"$ip"_80_passwordZKSoftware.txt
-			echo ""			
-		done
-		insert_data
-	 fi	
+	echo -e "$OKBLUE\n\t#################### Testing pass ZKSoftware ######################$RESET"	
+	for line in $(cat servicios/ZKSoftware.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+		echo -e "[+] Probando $ip"		
+		echo -e "passWeb.pl -t $ip -p $port -m ZKSoftware -u administrator -f top.txt " > logs/cracking/"$ip"_80_passwordZKSoftware.txt
+		passWeb.pl -t $ip -p 80 -m ZKSoftware -u administrator -f top.txt >> logs/cracking/"$ip"_80_passwordZKSoftware.txt
+		grep --color=never 'encontrado' logs/cracking/"$ip"_80_passwordZKSoftware.txt | tee -a .vulnerabilidades/"$ip"_80_passwordZKSoftware.txt
+		echo ""			
+	done
+	insert_data
+	
 fi
 
 
 if [ -f servicios/mssql.txt ]
 then
 
-	if [ "$TYPE" = NULL ] ; then
-		echo -e "\n\t $OKBLUE Encontre servicios MS-SQL activos. Realizar ataque de passwords ? s/n $RESET"	  
-		read bruteforce	   
-	fi
-	  	
-	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	
+	echo -e "\n\t $OKBLUE Encontre servicios MS-SQL activos $RESET"	  	
 
 	 echo -e "$OKBLUE\n\t#################### MS-SQL ######################$RESET"	    
 	 for line in $(cat servicios/mssql.txt); do
@@ -596,7 +569,6 @@ then
 		
 	 done	
 	 insert_data
-   fi # if bruteforce
 fi
 
 
@@ -676,10 +648,7 @@ fi
 
 if [ -f servicios/MikroTik.txt ]
 then
-	if [ "$TYPE" = NULL ] ; then
-		echo -e "\n\t $OKBLUE Encontre dispositivos MikroTik. Realizar ataque de passwords ? s/n $RESET"	  
-		read bruteforce	    
-	fi
+	echo -e "\n\t $OKBLUE Encontre dispositivos MikroTik. $RESET"	  
 	  	
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
 	      	  
@@ -699,16 +668,12 @@ then
 		
 		echo ""			
 	 done
-	 insert_data
-	fi # if bruteforce
+	 insert_data	
 fi
 
 if [ -f servicios/mysql.txt ]
 then
-	if [ "$TYPE" = NULL ] ; then
-		echo -e "\n\t $OKBLUE Encontre servicios de MySQL activos. Realizar ataque de passwords ? s/n $RESET"	  
-		read bruteforce	     
-	fi
+	echo -e "\n\t $OKBLUE Encontre servicios de MySQL activos. $RESET"	  
 	  	
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
        	
@@ -744,8 +709,7 @@ then
 				
 			fi				
 		done
-		insert_data		
-	fi # if bruteforce
+		insert_data			
 fi
 
 
@@ -777,12 +741,8 @@ fi
 
 if [ -f servicios/mongoDB.txt ]
 then
-	if [ "$TYPE" = NULL ] ; then
-		echo -e "\n\t $OKBLUE Encontre servicios de mongoDB activos. Realizar ataque de passwords ? s/n $RESET"	  
-		read bruteforce	      
-	fi
-	  	
-	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
+	echo -e "\n\t $OKBLUE Encontre servicios de mongoDB activos. $RESET"	  
+	
 	     	  
 	  echo -e "$OKBLUE\n\t#################### Testing  mongoDB ######################$RESET"	
 	  for line in $(cat servicios/mongoDB.txt); do
@@ -799,16 +759,12 @@ then
 		fi					 
 		echo ""			
 	 done
-	 insert_data
-	fi # if bruteforce
+	 insert_data	
 fi
 
 if [ -f servicios/redis.txt ]
 then
-	if [ "$TYPE" = NULL ] ; then
-		echo -e "\n\t $OKBLUE Encontre servicios de redis activos. Realizar ataque de passwords ? s/n $RESET"	  
-		read bruteforce	       
-	fi
+	echo -e "\n\t $OKBLUE Encontre servicios de redis activos. $RESET"	  
 	  	
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
      	  
@@ -826,18 +782,14 @@ then
 		fi			
 		echo ""			
 	 done
-	 insert_data
-	fi # if bruteforce
+	 insert_data	
 fi
 
 #falta
 if [ -f servicios/informix.txt ]
 then
 	
-	if [ "$TYPE" = NULL ] ; then
-		echo -e "\n\t $OKBLUE Encontre servicios de informix (SFI) activos. Realizar ataque de passwords ? s/n $RESET"	  
-		read bruteforce	       
-	fi
+	echo -e "\n\t $OKBLUE Encontre servicios de informix (SFI) activos.  $RESET"	  
 	  	
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
    	  
@@ -865,8 +817,7 @@ then
 		
 		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_22_passwordSFI.txt > .vulnerabilidades/"$ip"_22_passwordSFI.txt 					
 	 done
-	 insert_data
-	fi # if bruteforce
+	 insert_data	
 fi
 
 
@@ -874,10 +825,7 @@ fi
 if [ -f servicios/ftp.txt ]
 then
 
-	if [ "$TYPE" = NULL ] ; then
-		echo -e "\n\t $OKBLUE Encontre servicios de FTP activos. Realizar ataque de passwords ? s/n $RESET"	  
-		read bruteforce	        
-	fi
+	echo -e "\n\t $OKBLUE Encontre servicios de FTP activos.  $RESET"	  
 	  	
 	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	 
       	  
@@ -936,8 +884,7 @@ then
 		#######################################		
 				
 		done
-		insert_data
-	 fi	
+		insert_data	 
 fi
 
 #echo -e "\t $OKBLUE REVISANDO ERRORES $RESET"
@@ -1020,15 +967,8 @@ then
 fi	
 
 
-
-
 if [ -f servicios/vnc.txt ]
-then
-	echo -e "\n\t $OKBLUE Encontre servicios de VNC activos. Realizar ataque de passwords ? s/n $RESET"	  
-	read bruteforce	  
-	  
-	if [ $bruteforce == 's' ]
-    then      	  
+then   	  
 	  echo -e "$OKBLUE\n\t#################### Testing common pass VNC (lennnto) ######################$RESET"	
 	  for line in $(cat servicios/vnc.txt); do
 		ip=`echo $line | cut -f1 -d":"`
@@ -1070,8 +1010,7 @@ then
 	  done
 	 
 	 	 
-	 insert_data
-	fi # if bruteforce
+	 insert_data	
 fi
 	
 

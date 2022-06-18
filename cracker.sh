@@ -597,9 +597,7 @@ then
 		for SID in $SIDS; do
 			echo -e "[+] Probando SID $SID"
 			odat.sh passwordguesser -s $ip -p 1521 -d $SID --accounts-file /usr/share/wordlists/oracle_default_userpass.txt > logs/vulnerabilidades/"$ip"_mongo_passwordBD.txt 
-		done
-
-		
+		done		
 		
 	 done	
 	 insert_data
@@ -674,42 +672,40 @@ fi
 if [ -f servicios/mysql.txt ]
 then
 	echo -e "\n\t $OKBLUE Encontre servicios de MySQL activos. $RESET"	  
-	  	
-	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
        	
-		echo -e "$OKBLUE\n\t#################### Testing common pass MYSQL (lennnto) ######################$RESET"	
-		sed -i '1 i\mysql' top.txt	#adicionar password mysql
-		for line in $(cat servicios/mysql.txt); do
-			ip=`echo $line | cut -f1 -d":"`
-			port=`echo $line | cut -f2 -d":"`
-			echo -e "[+] Probando $ip"
-			hostlive=`mysql -u mysql -pww $ip`				
-			#error
-			if [[ ${hostlive} == *"MySQL server through socket"*  ]];then   	  
-				echo "El servicio no esta funcionando correctamente"
-								
-			else
-				echo -e "\n medusa -e n -u root -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt
-				medusa -e n -u root -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt
-				
-				echo -e "\n medusa -e n -u mysql -P top.txt -h $ip -M mysql" >> logs/cracking/"$ip"_3306_passwordBD.txt
-				medusa -e n -u mysql -P top.txt -h $ip -M mysql >> logs/cracking/"$ip"_3306_passwordBD.txt
-				
-				echo -e "\n medusa -e n -u admin -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt
-				medusa -e n -u admin -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt
-				
-				echo -e "\n medusa -e n -u administrator -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
-				medusa -e n -u administrador -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt				
-				
-				#echo -e "\n medusa -e n -u $ENTIDAD  -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
-				#medusa -e n -u $ENTIDAD  -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt				
-				
-				grep --color=never -i SUCCESS logs/cracking/"$ip"_3306_passwordBD.txt | tee -a .vulnerabilidades/"$ip"_3306_passwordBD.txt
-				echo ""		
-				
-			fi				
-		done
-		insert_data			
+	echo -e "$OKBLUE\n\t#################### Testing common pass MYSQL (lennnto) ######################$RESET"	
+	sed -i '1 i\mysql' top.txt	#adicionar password mysql
+	for line in $(cat servicios/mysql.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+		echo -e "[+] Probando $ip"
+		hostlive=`mysql -u mysql -pww $ip`				
+		#error
+		if [[ ${hostlive} == *"MySQL server through socket"*  ]];then   	  
+			echo "El servicio no esta funcionando correctamente"
+							
+		else
+			echo -e "\n medusa -e n -u root -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt
+			medusa -e n -u root -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt
+			
+			echo -e "\n medusa -e n -u mysql -P top.txt -h $ip -M mysql" >> logs/cracking/"$ip"_3306_passwordBD.txt
+			medusa -e n -u mysql -P top.txt -h $ip -M mysql >> logs/cracking/"$ip"_3306_passwordBD.txt
+			
+			echo -e "\n medusa -e n -u admin -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt
+			medusa -e n -u admin -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt
+			
+			echo -e "\n medusa -e n -u administrator -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
+			medusa -e n -u administrador -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt				
+			
+			#echo -e "\n medusa -e n -u $ENTIDAD  -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
+			#medusa -e n -u $ENTIDAD  -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt				
+			
+			grep --color=never -i SUCCESS logs/cracking/"$ip"_3306_passwordBD.txt | tee -a .vulnerabilidades/"$ip"_3306_passwordBD.txt
+			echo ""		
+			
+		fi				
+	done
+	insert_data			
 fi
 
 
@@ -740,26 +736,23 @@ fi
 
 
 if [ -f servicios/mongoDB.txt ]
-then
-	echo -e "\n\t $OKBLUE Encontre servicios de mongoDB activos. $RESET"	  
-	
-	     	  
-	  echo -e "$OKBLUE\n\t#################### Testing  mongoDB ######################$RESET"	
-	  for line in $(cat servicios/mongoDB.txt); do
-		ip=`echo $line | cut -f1 -d":"`
-		port=`echo $line | cut -f2 -d":"`
-		echo -e "[+] Probando $ip"
-		echo "nmap -n -sV -p $port --script=mongodb-brute $ip"  > logs/cracking/"$ip"_mongo_passwordBD.txt 2>/dev/null 
-		nmap -n -sV -p $port --script=mongodb-brute $ip  >> logs/cracking/"$ip"_mongo_passwordBD.txt 2>/dev/null 
-		# -- |     root:Password1 - Valid credentials		
-		respuesta=`grep --color=never -iq "Valid credentials" logs/cracking/"$ip"_mongo_passwordBD.txt `
-		greprc=$?
-		if [[ $greprc -eq 0 ]] ; then
-			echo -n "[MongoDB] $respuesta" >> .vulnerabilidades/"$ip"_mongo_passwordBD.txt
-		fi					 
-		echo ""			
-	 done
-	 insert_data	
+then     	  
+	echo -e "$OKBLUE\n\t#################### Testing  mongoDB ######################$RESET"	
+	for line in $(cat servicios/mongoDB.txt); do
+	ip=`echo $line | cut -f1 -d":"`
+	port=`echo $line | cut -f2 -d":"`
+	echo -e "[+] Probando $ip"
+	echo "nmap -n -sV -p $port --script=mongodb-brute $ip"  > logs/cracking/"$ip"_mongo_passwordBD.txt 2>/dev/null 
+	nmap -n -sV -p $port --script=mongodb-brute $ip  >> logs/cracking/"$ip"_mongo_passwordBD.txt 2>/dev/null 
+	# -- |     root:Password1 - Valid credentials		
+	respuesta=`grep --color=never -iq "Valid credentials" logs/cracking/"$ip"_mongo_passwordBD.txt `
+	greprc=$?
+	if [[ $greprc -eq 0 ]] ; then
+		echo -n "[MongoDB] $respuesta" >> .vulnerabilidades/"$ip"_mongo_passwordBD.txt
+	fi					 
+	echo ""			
+	done
+	insert_data	
 fi
 
 if [ -f servicios/redis.txt ]
@@ -1008,8 +1001,7 @@ then
 		grep --color=never "administrator" logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
 		echo ""			
 	  done
-	 
-	 	 
+	 	 	 
 	 insert_data	
 fi
 	

@@ -427,9 +427,7 @@ fi
 
 
 if [ -f servicios/PRTG.txt ]
-then
-
-	echo -e "\n\t $OKBLUE Encontre PRTG activos. Realizar ataque de passwords ? s/n $RESET"	  
+then 
 	  	
 	echo -e "$OKBLUE\n\t#################### Testing PRTG ######################$RESET"	
 	sed -i '1 i\prtgadmin' top.txt	#adicionar password prtgadmin
@@ -471,57 +469,57 @@ fi
 if [ -f servicios/web401.txt ]
 then     	
       	  
-		echo -e "$OKBLUE\n\t#################### Testing pass web (401) ######################$RESET"	
-		for line in $(cat servicios/web401.txt); do
-			echo -e "[+] Probando $line"			
+	echo -e "$OKBLUE\n\t#################### Testing pass web (401) ######################$RESET"	
+	for line in $(cat servicios/web401.txt); do
+		echo -e "[+] Probando $line"			
+		
+		if [[ ${line} == *"http"*  ]];then 							
+			#line = http://200.87.193.109:80/phpmyadmin/
+			ip=`echo $line | cut -d ":" -f2 | tr -d "/"`			
+			port=`echo $line | cut -d "/" -f 3| cut -d ":" -f2`	
 			
-			if [[ ${line} == *"http"*  ]];then 							
-				#line = http://200.87.193.109:80/phpmyadmin/
-				ip=`echo $line | cut -d ":" -f2 | tr -d "/"`			
-				port=`echo $line | cut -d "/" -f 3| cut -d ":" -f2`	
-				
+			#probar con usuario admin
+			patator http_fuzz method=GET url="$line" user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt
+			respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt`
+			greprc=$?
+			if [[ $greprc -eq 0 ]] ; then
+				echo -n "[AdminWeb] Usuario:admin $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
+			fi	
+			
+			#probar con usuario root
+			patator http_fuzz method=GET url="$line" user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt			
+			respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt`
+			greprc=$?
+			if [[ $greprc -eq 0 ]] ; then
+				echo -n "[AdminWeb] Usuario:root $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
+			fi
+						
+		else
+			#line=10.0.0.2:80
+			ip=`echo $line | cut -f1 -d":"`
+			port=`echo $line | cut -f2 -d":"`
+			if [[ ${port} == *"443"*  ]];then 	
 				#probar con usuario admin
-				patator http_fuzz method=GET url="$line" user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt
+				patator http_fuzz method=GET url="https://$ip/" user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt
 				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt`
 				greprc=$?
 				if [[ $greprc -eq 0 ]] ; then
 					echo -n "[AdminWeb] Usuario:admin $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
 				fi	
-				
+			
 				#probar con usuario root
-				patator http_fuzz method=GET url="$line" user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt			
+				patator http_fuzz method=GET url="http://$ip/" user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt			
 				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt`
 				greprc=$?
 				if [[ $greprc -eq 0 ]] ; then
 					echo -n "[AdminWeb] Usuario:root $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
 				fi
-							
-			else
-				#line=10.0.0.2:80
-				ip=`echo $line | cut -f1 -d":"`
-				port=`echo $line | cut -f2 -d":"`
-				if [[ ${port} == *"443"*  ]];then 	
-					#probar con usuario admin
-					patator http_fuzz method=GET url="https://$ip/" user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt
-					respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt`
-					greprc=$?
-					if [[ $greprc -eq 0 ]] ; then
-						echo -n "[AdminWeb] Usuario:admin $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
-					fi	
-				
-					#probar con usuario root
-					patator http_fuzz method=GET url="http://$ip/" user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt			
-					respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt`
-					greprc=$?
-					if [[ $greprc -eq 0 ]] ; then
-						echo -n "[AdminWeb] Usuario:root $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
-					fi
-				fi
 			fi
-						
-			
-		done
-		insert_data
+		fi
+					
+		
+	done
+	insert_data
 fi
 
 
@@ -547,8 +545,6 @@ fi
 
 if [ -f servicios/mssql.txt ]
 then
-
-	echo -e "\n\t $OKBLUE Encontre servicios MS-SQL activos $RESET"	  	
 
 	 echo -e "$OKBLUE\n\t#################### MS-SQL ######################$RESET"	    
 	 for line in $(cat servicios/mssql.txt); do
@@ -646,32 +642,28 @@ fi
 
 if [ -f servicios/MikroTik.txt ]
 then
-	echo -e "\n\t $OKBLUE Encontre dispositivos MikroTik. $RESET"	  
-	  	
-	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
-	      	  
-	  echo -e "$OKBLUE\n\t#################### Testing common pass MikroTik ######################$RESET"	
-	  for ip in $(cat servicios/MikroTik.txt); do		
+	  		      	  
+	echo -e "$OKBLUE\n\t#################### Testing common pass MikroTik ######################$RESET"	
+	for ip in $(cat servicios/MikroTik.txt); do		
 		echo -e "[+] Probando $ip"
 				
-			echo "mkbrutus.py -t $ip -u admin --dictionary top.txt" >>  logs/cracking/"$ip"_8728_passwordMikroTik.txt		
-			mkbrutus.py -t $ip -u admin --dictionary top.txt >>  logs/cracking/"$ip"_8728_passwordMikroTik.txt
-			
-			echo "" >> logs/cracking/"$ip"_8728_passwordMikroTik.txt
-			echo "mkbrutus.py -t $ip -u $ENTIDAD --dictionary top.txt" >> logs/cracking/"$ip"_8728_passwordMikroTik.txt
-			mkbrutus.py -t $ip -u $ENTIDAD --dictionary top.txt >> logs/cracking/"$ip"_8728_passwordMikroTik.txt
+		echo "mkbrutus.py -t $ip -u admin --dictionary top.txt" >>  logs/cracking/"$ip"_8728_passwordMikroTik.txt		
+		mkbrutus.py -t $ip -u admin --dictionary top.txt >>  logs/cracking/"$ip"_8728_passwordMikroTik.txt
 		
-			grep --color=never successful logs/cracking/"$ip"_8728_passwordMikroTik.txt | grep -v "unsuccessful" > .vulnerabilidades/"$ip"_8728_passwordMikroTik.txt
+		echo "" >> logs/cracking/"$ip"_8728_passwordMikroTik.txt
+		echo "mkbrutus.py -t $ip -u $ENTIDAD --dictionary top.txt" >> logs/cracking/"$ip"_8728_passwordMikroTik.txt
+		mkbrutus.py -t $ip -u $ENTIDAD --dictionary top.txt >> logs/cracking/"$ip"_8728_passwordMikroTik.txt
+
+		grep --color=never successful logs/cracking/"$ip"_8728_passwordMikroTik.txt | grep -v "unsuccessful" > .vulnerabilidades/"$ip"_8728_passwordMikroTik.txt
 		
 		
 		echo ""			
-	 done
-	 insert_data	
+	done
+	insert_data	
 fi
 
 if [ -f servicios/mysql.txt ]
 then
-	echo -e "\n\t $OKBLUE Encontre servicios de MySQL activos. $RESET"	  
        	
 	echo -e "$OKBLUE\n\t#################### Testing common pass MYSQL (lennnto) ######################$RESET"	
 	sed -i '1 i\mysql' top.txt	#adicionar password mysql
@@ -739,30 +731,27 @@ if [ -f servicios/mongoDB.txt ]
 then     	  
 	echo -e "$OKBLUE\n\t#################### Testing  mongoDB ######################$RESET"	
 	for line in $(cat servicios/mongoDB.txt); do
-	ip=`echo $line | cut -f1 -d":"`
-	port=`echo $line | cut -f2 -d":"`
-	echo -e "[+] Probando $ip"
-	echo "nmap -n -sV -p $port --script=mongodb-brute $ip"  > logs/cracking/"$ip"_mongo_passwordBD.txt 2>/dev/null 
-	nmap -n -sV -p $port --script=mongodb-brute $ip  >> logs/cracking/"$ip"_mongo_passwordBD.txt 2>/dev/null 
-	# -- |     root:Password1 - Valid credentials		
-	respuesta=`grep --color=never -iq "Valid credentials" logs/cracking/"$ip"_mongo_passwordBD.txt `
-	greprc=$?
-	if [[ $greprc -eq 0 ]] ; then
-		echo -n "[MongoDB] $respuesta" >> .vulnerabilidades/"$ip"_mongo_passwordBD.txt
-	fi					 
-	echo ""			
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+		echo -e "[+] Probando $ip"
+		echo "nmap -n -sV -p $port --script=mongodb-brute $ip"  > logs/cracking/"$ip"_mongo_passwordBD.txt 2>/dev/null 
+		nmap -n -sV -p $port --script=mongodb-brute $ip  >> logs/cracking/"$ip"_mongo_passwordBD.txt 2>/dev/null 
+		# -- |     root:Password1 - Valid credentials		
+		respuesta=`grep --color=never -iq "Valid credentials" logs/cracking/"$ip"_mongo_passwordBD.txt `
+		greprc=$?
+		if [[ $greprc -eq 0 ]] ; then
+			echo -n "[MongoDB] $respuesta" >> .vulnerabilidades/"$ip"_mongo_passwordBD.txt
+		fi					 
+		echo ""			
 	done
 	insert_data	
 fi
 
 if [ -f servicios/redis.txt ]
 then
-	echo -e "\n\t $OKBLUE Encontre servicios de redis activos. $RESET"	  
-	  	
-	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
-     	  
-	  echo -e "$OKBLUE\n\t#################### Testing common pass redis ######################$RESET"	
-	  for line in $(cat servicios/redis.txt); do
+	 	  
+	echo -e "$OKBLUE\n\t#################### Testing common pass redis ######################$RESET"	
+	for line in $(cat servicios/redis.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "\n\t########### $ip #######"			
@@ -774,8 +763,8 @@ then
 			echo -n "[Redis] $respuesta" >> .vulnerabilidades/"$ip"_mongo_passwordBD.txt
 		fi			
 		echo ""			
-	 done
-	 insert_data	
+	done
+	insert_data	
 fi
 
 #falta
@@ -816,68 +805,64 @@ fi
 
 
 if [ -f servicios/ftp.txt ]
-then
-
-	echo -e "\n\t $OKBLUE Encontre servicios de FTP activos.  $RESET"	  
-	  	
-	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 	 
+then 
       	  
-		echo -e "$OKBLUE\n\t#################### Testing pass FTP ######################$RESET"	
-		for line in $(cat servicios/ftp.txt); do
-		ip=`echo $line | cut -f1 -d":"`
-		port=`echo $line | cut -f2 -d":"`
+	echo -e "$OKBLUE\n\t#################### Testing pass FTP ######################$RESET"	
+	for line in $(cat servicios/ftp.txt); do
+	ip=`echo $line | cut -f1 -d":"`
+	port=`echo $line | cut -f2 -d":"`
+	
+	
+	######## revisar si no es impresora #####
+	#banner ftp
+	egrep -iq "Printer|JetDirect|LaserJet|KONICA|MULTI-ENVIRONMENT|Xerox" .banners2/"$ip"_21.txt
+	noImpresora21=$?
+	
+	#banner telnet						
+	noImpresora23=1		
+	if [ -f .banners2/"$ip"_23.txt ] 
+	then				
+		egrep -iq "Printer|JetDirect|LaserJet|KONICA|MULTI-ENVIRONMENT|Xerox" .banners2/"$ip"_23.txt 2>/dev/null
+		noImpresora23=$?
+	fi
+	
+	#banner web
+	noImpresora80=1		
+	if [ -f .enumeracion2/"$ip"_80_webData.txt ] 
+	then	
+		egrep -iq "Printer|JetDirect|LaserJet|KONICA|MULTI-ENVIRONMENT|Xerox" .enumeracion2/"$ip"_80_webData.txt 2>/dev/null
+		noImpresora80=$?
+	fi
+			
+	echo "noImpresora21 $noImpresora21 noImpresora80 $noImpresora80 noImpresora23 $noImpresora23"
+	if [[ $noImpresora21 -eq 1 && $noImpresora80 -eq 1 && $noImpresora23 -eq 1 ]] ; then			
+		echo -e "[+] Probando $ip"		
 		
+		#echo -e "\n medusa -e n -u admin -P top.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
+		#medusa -e n -u admin -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
 		
-		######## revisar si no es impresora #####
-		#banner ftp
-		egrep -iq "Printer|JetDirect|LaserJet|KONICA|MULTI-ENVIRONMENT|Xerox" .banners2/"$ip"_21.txt
-		noImpresora21=$?
+		echo -e "\n medusa -e n -u root -P top.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
+		medusa -e n -u root -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
 		
-		#banner telnet						
-		noImpresora23=1		
-		if [ -f .banners2/"$ip"_23.txt ] 
-		then				
-			egrep -iq "Printer|JetDirect|LaserJet|KONICA|MULTI-ENVIRONMENT|Xerox" .banners2/"$ip"_23.txt 2>/dev/null
-			noImpresora23=$?
+		echo -e "\n medusa -e n -u ftp -P top.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt					
+		medusa -e n -u ftp -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt					
+		
+		respuesta=`grep --color=never SUCCESS logs/cracking/"$ip"_21_passwordAdivinadoServ.txt`
+		greprc=$?
+		if [[ $greprc -eq 0 ]] ; then
+			echo -n "[FTP] $respuesta" >> .vulnerabilidades/"$ip"_21_passwordAdivinadoServ.txt
 		fi
 		
-		#banner web
-		noImpresora80=1		
-		if [ -f .enumeracion2/"$ip"_80_webData.txt ] 
-		then	
-			egrep -iq "Printer|JetDirect|LaserJet|KONICA|MULTI-ENVIRONMENT|Xerox" .enumeracion2/"$ip"_80_webData.txt 2>/dev/null
-			noImpresora80=$?
-		fi
-				
-		echo "noImpresora21 $noImpresora21 noImpresora80 $noImpresora80 noImpresora23 $noImpresora23"
-		if [[ $noImpresora21 -eq 1 && $noImpresora80 -eq 1 && $noImpresora23 -eq 1 ]] ; then			
-			echo -e "[+] Probando $ip"		
-			
-			#echo -e "\n medusa -e n -u admin -P top.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
-			#medusa -e n -u admin -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
-			
-			echo -e "\n medusa -e n -u root -P top.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
-			medusa -e n -u root -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
-			
-			echo -e "\n medusa -e n -u ftp -P top.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt					
-			medusa -e n -u ftp -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt					
-			
-			respuesta=`grep --color=never SUCCESS logs/cracking/"$ip"_21_passwordAdivinadoServ.txt`
-			greprc=$?
-			if [[ $greprc -eq 0 ]] ; then
-				echo -n "[FTP] $respuesta" >> .vulnerabilidades/"$ip"_21_passwordAdivinadoServ.txt
-			fi
-			
-			echo ""		
-		else			
-			echo -e "\t[+] Es una impresora"			
+		echo ""		
+	else			
+		echo -e "\t[+] Es una impresora"			
 
-			echo ""		
-		fi	
-		#######################################		
-				
-		done
-		insert_data	 
+		echo ""		
+	fi	
+	#######################################		
+			
+	done
+	insert_data	 
 fi
 
 #echo -e "\t $OKBLUE REVISANDO ERRORES $RESET"
@@ -1020,6 +1005,3 @@ fi
 ##16:40:34 patator    INFO - code  size   time | candidate                          |   num | mesg
 #16:40:34 patator    INFO - -----------------------------------------------------------------------------
 #16:40:34 patator    INFO - 200   25    0.127 |                                    |     1 | Your new password please
-
-
-

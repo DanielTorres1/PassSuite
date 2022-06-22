@@ -392,8 +392,7 @@ then
 				## 12:56:35 patator    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
 				#password=`grep --color=never "200 OK" logs/cracking/"$ip"_"$port"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
 				#echo "$line (Usuario:root Password:$password)" > .vulnerabilidades/"$ip"_"$port"_passTomcat.txt								
-			#fi
-			
+			#fi			
 		fi			
 	done			
 	insert_data
@@ -516,8 +515,7 @@ then
 				fi
 			fi
 		fi
-					
-		
+							
 	done
 	insert_data
 fi
@@ -769,11 +767,7 @@ fi
 
 #falta
 if [ -f servicios/informix.txt ]
-then
-	
-	echo -e "\n\t $OKBLUE Encontre servicios de informix (SFI) activos.  $RESET"	  
-	  	
-	if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
+then	
    	  
 	  echo -e "$OKBLUE\n\t#################### Testing common pass informix (SFI) ######################$RESET"	
 	  for line in $(cat servicios/informix.txt); do

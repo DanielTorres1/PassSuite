@@ -53,6 +53,7 @@ chmod a+x /usr/bin/wpbrute.sh
 #chmod a+x /usr/bin/generate-password.pl
 
 cp generate-users.pl /usr/bin
+cp patator.py /usr/bin
 chmod a+x /usr/bin/generate-users.pl
 
 

@@ -355,8 +355,8 @@ then
 				echo "[Tomcat] $ip_port_path (Usuario:xxx Password:xxx)" > .vulnerabilidades/"$ip"_tomcat_passwordAdivinadoServ.txt								
 			else
 				echo -e "\t\t[+] Bruteforcing passwords (user=tomcat)"	
-				echo "patator.py http_fuzz method=GET url=$line user_pass=tomcat:FILE0 0=top-web.txt -e user_pass:b64 --threads=3" >> logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt 				
-				patator.py http_fuzz method=GET url=$line user_pass=tomcat:FILE0 0=top-web.txt -e user_pass:b64 --threads=3 > logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt			
+				echo "patator.py http_fuzz method=GET url=$line user_pass=tomcat:FILE0 0=top.txt -e user_pass:b64 --threads=3" >> logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt 				
+				patator.py http_fuzz method=GET url=$line user_pass=tomcat:FILE0 0=top.txt -e user_pass:b64 --threads=3 > logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt			
 				egrep -iq "200 OK" logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt
 				greprc=$?
 				if [[ $greprc -eq 0 ]] ; then			

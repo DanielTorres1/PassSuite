@@ -121,14 +121,14 @@ then
 	interlace -tL servicios/Windows.txt -threads 10 -c "echo  '\n hydra -l administrador -P top.txt -t 1 _target_  smb' >> logs/cracking/_target__windows_passwordAdivinado.txt 2>/dev/null" --silent
 	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l administrador -P top.txt -t 1 _target_  smb >> logs/cracking/_target__windows_passwordAdivinado.txt 2>/dev/null" --silent
 		
-	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l soporte -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
-	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l soporte -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l soporte -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinado.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l soporte -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinado.txt 2>/dev/null" --silent
 	
-	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l sistemas -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
-	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l sistemas -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l sistemas -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinado.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l sistemas -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinado.txt 2>/dev/null" --silent
 	
-	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l $ENTIDAD -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent
-	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l $ENTIDAD -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__445_passwordAdivinadoWin.txt 2>/dev/null" --silent		
+	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l $ENTIDAD -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinado.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l $ENTIDAD -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinado.txt 2>/dev/null" --silent		
 			
 fi
 

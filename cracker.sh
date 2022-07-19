@@ -171,11 +171,11 @@ if [ -f servicios/rdp.txt ]; then
 		
 		####### user administrador ####
 		patator.py rdp_login host=$ip user=administrador password=FILE0 0=top.txt -x quit:egrep='OK|PASSWORD_EXPIRED|ERRCONNECT_CONNECT_CANCELLED' 2> logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt
-		egrep -iq  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK" logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt
+		egrep -iq  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK|ERRCONNECT_CONNECT_CANCELLED" logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt
 		greprc=$?
 		if [[ $greprc -eq 0 ]] ; then	
 			echo -e "\t$OKRED[!] Password found \n $RESET"
-			creds=`egrep  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK"  logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt | awk '{print $9}'`
+			creds=`egrep  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK|ERRCONNECT_CONNECT_CANCELLED"  logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt | awk '{print $9}'`
 			echo "administrador:$creds" >> .vulnerabilidades/"$ip"_rdp_passwordAdivinadoWin.txt
 		fi	
 		##############################

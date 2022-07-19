@@ -40,7 +40,7 @@ fi
 
 #sed -i 's/\$//' $FILE # Eliminar caracter $
 rm ~/.john/john.pot
-for dic in $( ls /media/sistemas/Passwords/*.txt -l -S | sort -k 5 -n | awk '{print $9}'); do  # lista los .txt (primero los archivos pequeños)
+for dic in $( ls /media/sistemas/Passwords/Passwords/*.txt -l -S | sort -k 5 -n | awk '{print $9}'); do  # lista los .txt (primero los archivos pequeños)
    echo "############# Using  $dic $1 ###############"   
    john --wordlist=$dic $FILE;  #usuario:$dahua$i7lMtGcs   
 done

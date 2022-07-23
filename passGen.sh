@@ -92,7 +92,7 @@ FILE=`pwd`/$FILE
 
   john --wordlist=temp-pass.txt --rules=rule16 --stdout >> temp-pass1.txt 2> /dev/null
   
-  cat $FILE /usr/share/wordlists/top200.txt temp-pass.txt temp-pass1.txt | sort | uniq > $OUTPUT 
+  cat $FILE /usr/share/lanscanner/top200.txt temp-pass.txt temp-pass1.txt | sort | uniq > $OUTPUT 
   rm temp-pass.txt temp-pass1.txt
   exit
   fi

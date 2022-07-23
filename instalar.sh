@@ -84,8 +84,4 @@ cd ..
 # make
 # make install
 
-cd /usr/share/wordlists
-rm top200.txt 2> /dev/null
-rm usuarios-en.txt 2> /dev/null
-wget https://raw.githubusercontent.com/DanielTorres1/passwords/master/top200.txt
-wget https://raw.githubusercontent.com/DanielTorres1/passwords/master/usuarios-en.txt
+cp top200.txt /usr/share/lanscanner/

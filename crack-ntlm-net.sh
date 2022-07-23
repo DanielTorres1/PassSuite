@@ -18,23 +18,25 @@ EOF
 print_ascii_art
  
 
-while getopts ":f:d:" OPTIONS
+while getopts ":f:d:k:" OPTIONS
 do
             case $OPTIONS in            
             f)     FOLDER=$OPTARG;;
-            d)     DICTIONARY=$OPTARG;;
+            d)     DICTIONARY_FOLDER=$OPTARG;;
+            k)     KEYWORD=$OPTARG;;
             ?)     printf "Opcion invalida: -$OPTARG\n" $0
                           exit 2;;
            esac
 done
 
 FOLDER=${FOLDER:=NULL}
-DICTIONARY=${DICTIONARY:=NULL}
+DICTIONARY_FOLDER=${DICTIONARY_FOLDER:=NULL}
+KEYWORD=${KEYWORD:=NULL}
 
 if [ $FOLDER = NULL ] ; then
 
 echo "|              														 			"
-echo "| USO: crack-ntlm-net.sh -f folder   "
+echo "| USO: crack-ntlm-net.sh -f folder-with-hashes -d /media/sistemas/Passwords/Passwords/ -k diaconia  "
 echo "|																		 			"
 echo ""
 exit
@@ -47,5 +49,11 @@ for archivo in $(ls $FOLDER/*.txt); do
    head -1 $archivo >> hash-ntlm.txt
 done
 
+echo "Generating custom password dic"
+echo $KEYWORD >> keyword.txt
+passGen.sh -f keyword.txt -t offline: -o offline.txt -v 1
+echo "copy offline.txt to $DICTIONARY_FOLDER"
+cp offline.txt $DICTIONARY_FOLDER
+
 echo "Generated hashfile with `wc -l hash-ntlm.txt`"
-./hashcat.bin -m 5600 -a 0 hash-ntlm.txt $DICTIONARY -o cracked.txt
+./hashcat.bin -m 5600 -a 0 hash-ntlm.txt $DICTIONARY_FOLDER -o cracked.txt

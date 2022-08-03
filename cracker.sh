@@ -55,6 +55,7 @@ Ejecutar el script en el directorio creado por lanscanner (https://github.com/Da
 
 Opciones: 
 -e : Nombre de la empresa (Usado para generar diccionario de passwords)
+-l : idioma es/en
  
 -d :Diccionario de passwords a usar (opcional)
 

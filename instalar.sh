@@ -30,8 +30,6 @@ EOF
 print_ascii_art
 
 echo -e "${RED}[+]${GREEN} Copiando passGen ${RESET}"
-apt install medusa crowbar
-
 cp cracker.sh /usr/bin
 chmod a+x /usr/bin/cracker.sh
 
@@ -58,7 +56,7 @@ chmod a+x /usr/bin/generate-users.pl
 
 
 echo -e "${RED}[+]${GREEN} Instalando john the ripper ${RESET}"
-
+apt install medusa crowbar
 sudo apt-get -y install john
 sudo cp /etc/john/john.conf /etc/john/john.conf.bk
 sudo cp john.conf  /etc/john/john.conf

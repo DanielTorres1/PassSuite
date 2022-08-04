@@ -235,20 +235,20 @@ then
 		path_web=`echo "/"$path_web`
 
 		
-		if [[ $fingerprint = *"wordpress"* ]]; then
-			echo -e "$OKGREEN \t[+] Wordpress identificado en $host:$port $RESET"
+		if [[ $fingerprint = *"wordpress"* ]]; then			
 			ip_port_path=`echo $ip_port_path |sed 's/wp-login.php//g'`
+			echo -e "$OKGREEN \t[+] Wordpress identificado en $ip_port_path $RESET"
 
 			echo -e "\t[+] Probando contraseñas comunes ...."
 			if [ -f ".vulnerabilidades2/"$host"_"$port"_wpUsers.txt" ]; then
 				#https://181.115.188.36:443/				
 				for user in $(cat .vulnerabilidades2/"$host"_"$port"_wpUsers.txt | awk '{print $2}'); do
 					echo -e "\t\t[+] Probando usuarios identificados. Probando con usuario ($user)"
-					wpbrute.sh --url=$ip_port_path--user=$user --wordlist=passwords.txt >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+					wpbrute.sh --url=$ip_port_path --user=$user --wordlist=passwords.txt >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
 				done
 			else
 				echo -e "\t\t[+] Probando con usuario admin"				
-				wpbrute.sh --url=$ip_port_path--user=admin --wordlist=passwords.txt >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+				wpbrute.sh --url=$ip_port_path --user=admin --wordlist=passwords.txt >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
 			fi						
 			grep --color=never -i 'Credenciales' logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null | sort | uniq > .vulnerabilidades/"$host"_"$port"_passwordAdivinadoServ.txt 									
 		fi	

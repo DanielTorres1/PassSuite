@@ -29,11 +29,10 @@ echo -e "$OKGREEN#################################### EMPEZANDO A CRACKEAR #####
 
 
 
-while getopts ":k:d:t:l:h:" OPTIONS
+while getopts ":k:d:l:h:" OPTIONS
 do
             case $OPTIONS in
-            k)     ENTIDAD=$OPTARG;;
-            t)     TYPE=$OPTARG;;
+            k)     ENTIDAD=$OPTARG;;            
             d)     DICTIONARY=$OPTARG;; 
 			l)     LANGUAGE=$OPTARG;;           
             ?)     printf "Opcion invalida: -$OPTARG\n" $0
@@ -43,11 +42,11 @@ done
 
 ENTIDAD=${ENTIDAD:=NULL}
 DICTIONARY=${DICTIONARY:=NULL}
-TYPE=${TYPE:=NULL}
 LANGUAGE=${LANGUAGE:=NULL} # en/es
 tomcat_passwrods_combo="/usr/share/lanscanner/tomcat-passwds.txt"
 FILE_SUBDOMAINS="importarMaltego/subdominios-scan.csv"
 
+echo "LANGUAGE $LANGUAGE ENTIDAD(k) $ENTIDAD DICTIONARY $DICTIONARY"
 if [[ ${ENTIDAD} = NULL  && ${DICTIONARY} = NULL  ]];then 
 
 cat << "EOF"

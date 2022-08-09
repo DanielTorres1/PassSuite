@@ -240,7 +240,7 @@ then
 			ip_port_path=`echo $ip_port_path |sed 's/wp-login.php//g'`
 			echo -e "$OKGREEN \t[+] Wordpress identificado en $ip_port_path $RESET"
 
-			grep -i ",$host" $FILE_SUBDOMAINS | grep -qi InMotion
+			grep -i ",$host" $FILE_SUBDOMAINS 2>/dev/null | grep -qi InMotion
     		greprc=$?
     		if [[ $greprc -eq 0 ]];then 
 				echo -e "$OKRED \t[+] Hosting InMotion detectado $RESET"
@@ -262,7 +262,7 @@ then
 		
 		if [[ $fingerprint = *"phpmyadmin"* ]]; then
 			echo -e "\t[+] phpMyAdmin identificado"
-			echo "passWeb.pl -t $host -p $port -m phpmyadmin -d \"/$path_web\" -u root|admin|wordpress|joomla|drupal|phpmyadmin -f passwords.txt" > logs/cracking/"$host"_"$port"_passwordBD.txt 
+			echo "passWeb.pl -t $host -p $port -m phpmyadmin -d \"$path_web\" -u root|admin|wordpress|joomla|drupal|phpmyadmin -f passwords.txt" > logs/cracking/"$host"_"$port"_passwordBD.txt 
 			passWeb.pl -t $host -p $port -m phpmyadmin -d "$path_web" -u root -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt &
 			passWeb.pl -t $host -p $port -m phpmyadmin -d "$path_web" -u admin -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt &			
 			passWeb.pl -t $host -p $port -m phpmyadmin -d "$path_web" -u phpmyadmin -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt &
@@ -305,9 +305,7 @@ then
 			done
 			##############################
 
-			grep --color=never 'encontrado' logs/cracking/"$host"_"$port"_passwordBD.txt | sort | uniq > .vulnerabilidades/"$host"_"$port"_passwordBD.txt
-			grep --color=never 'Usuario' logs/cracking/"$host"_"$port"_passwordBD.txt >> .vulnerabilidades/"$host"_"$port"_passwordBD.txt
-			
+			grep --color=never 'Password encontrado' logs/cracking/"$host"_"$port"_passwordBD.txt | sort | uniq > .vulnerabilidades/"$host"_"$port"_passwordBD.txt						
 		fi	
 		
 		if [[ $fingerprint = *"joomla"* ]]; then
@@ -322,7 +320,7 @@ then
 			rm username.txt
 					
 		fi	
-		echo "fingerprint $fingerprint"	
+		#echo "fingerprint $fingerprint"	
 		echo "line $line"	
 		if [[ $fingerprint = *"tomcat"* || $line = *'/manager/html'* ]]; then
 			echo -e "\t[+] Tomcat identificado ($ip_port_path)"										
@@ -816,8 +814,8 @@ then
 		#echo -e "\n medusa -e n -u admin -P passwords.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
 		#medusa -e n -u admin -P passwords.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
 		
-		echo -e "\n medusa  -u root -P passwords.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
-		medusa  -u root -P passwords.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
+		#echo -e "\n medusa  -u root -P passwords.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
+		#medusa  -u root -P passwords.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
 		
 		echo -e "\n medusa  -u ftp -P passwords.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt					
 		medusa -u ftp -P passwords.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt					

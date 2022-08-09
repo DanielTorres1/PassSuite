@@ -29,10 +29,10 @@ echo -e "$OKGREEN#################################### EMPEZANDO A CRACKEAR #####
 
 
 
-while getopts ":e:d:t:l:h:" OPTIONS
+while getopts ":k:d:t:l:h:" OPTIONS
 do
             case $OPTIONS in
-            e)     ENTIDAD=$OPTARG;;
+            k)     ENTIDAD=$OPTARG;;
             t)     TYPE=$OPTARG;;
             d)     DICTIONARY=$OPTARG;; 
 			l)     LANGUAGE=$OPTARG;;           
@@ -61,10 +61,10 @@ Opciones:
 -d :Diccionario de passwords a usar (opcional)
 
 Ejemplo 1: Ataque de diccionario con passwords personallizados (basados en la palabra "microsoft") + 20 passwords mas usados
-	cracker.sh -e microsoft 
+	cracker.sh -e microsoft -l es
 
 Ejemplo 2: Ataque de diccionario con lista de passwords
-	cracker.sh -d passwords.txt 
+	cracker.sh -d passwords.txt -l en
 EOF
 
 exit

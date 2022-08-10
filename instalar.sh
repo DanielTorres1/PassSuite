@@ -56,8 +56,7 @@ chmod a+x /usr/bin/generate-users.pl
 
 
 echo -e "${RED}[+]${GREEN} Instalando john the ripper ${RESET}"
-apt install medusa crowbar
-sudo apt-get -y install john
+sudo apt-get -y install john medusa crowbar hydra libmongoc-dev 
 sudo cp /etc/john/john.conf /etc/john/john.conf.bk
 sudo cp john.conf  /etc/john/john.conf
 

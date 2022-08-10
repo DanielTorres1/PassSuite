@@ -84,12 +84,16 @@ fi
 
 if [ $DICTIONARY = NULL ] ; then
 
-	echo $ENTIDAD > base.txt
-	passGen.sh -f base.txt -t top500 -l $LANGUAGE -o passwords.txt
-	rm base.txt
+	if [ $ENTIDAD != NULL ] ; then
+		echo $ENTIDAD > base.txt
+		passGen.sh -f base.txt -t top500 -l $LANGUAGE -o passwords.txt
+		rm base.txt			
+	else
+	   cp /usr/share/lanscanner/top500-$LANGUAGE.txt passwords.txt
+	fi
 	echo "wordpress" >> passwords.txt	
 	echo "joomla" >> passwords.txt	
-	echo "drupal" >> passwords.txt	
+	echo "drupal" >> passwords.txt
 else
 	cp $DICTIONARY passwords.txt	
 	
@@ -125,21 +129,22 @@ if [ -f servicios/Windows.txt ]
 then
 	echo -e "\n\t $OKBLUE Testing windows auth  $RESET"	  	
 	
-	interlace -tL servicios/Windows.txt -threads 10 -c "echo  '\n hydra -v -l $admin_user -P passwords.txt -t 1 _target_  smb' >> logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -v -l $admin_user -P passwords.txt -t 1 _target_  smb >> logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "echo  '\n docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u $admin_user -p /home/passwords.txt' >> logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+
+	interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u $admin_user -p /home/passwords.txt >> logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
 
 	if [[ "$MODE" == "assessment"  ]]; then 
 
 		if [ "$LANGUAGE" == "es" ]; then
-			interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -v -l soporte -P passwords.txt -t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-			interlace -tL servicios/Windows.txt -threads 10 -c "hydra -v -l soporte -P passwords.txt -t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+			interlace -tL servicios/Windows.txt -threads 10 -c "echo -e 'docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u soporte -p /home/passwords.txt' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+			interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u soporte -p /home/passwords.txt >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
 			
-			interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -v -l sistemas -P passwords.txt -t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-			interlace -tL servicios/Windows.txt -threads 10 -c "hydra -v -l sistemas -P passwords.txt -t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+			interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u sistemas -p /home/passwords.txt' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+			interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u sistemas -p /home/passwords.txt>>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
 		fi
 			
-		interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -v -l $ENTIDAD -P passwords.txt -t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-		interlace -tL servicios/Windows.txt -threads 10 -c "hydra -v -l $ENTIDAD -P passwords.txt -t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent		
+		interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u $ENTIDAD -p /home/passwords.txt' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+		interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u $ENTIDAD -p /home/passwords.txt >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent		
 	fi	
 fi
 
@@ -853,8 +858,8 @@ fi
 
 if [ -f servicios/Windows.txt ]
 then		
-	for ip in $(cat servicios/Windows.txt); do			
-		egrep --color=never -i 'login:' logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt | tee -a .vulnerabilidades/"$ip"_windows_passwordAdivinadoWin.txt
+	for ip in $(cat servicios/Windows.txt); do					
+		grep '+' logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g" | grep -v 'passFakeTest123' > .vulnerabilidades/"$ip"_windows_passwordAdivinadoWin.txt
 		#https://github.com/m4ll0k/SMBrute (shared)											
 	 done	
 	 insert_data

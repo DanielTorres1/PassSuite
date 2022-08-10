@@ -1,3 +1,4 @@
+passFakeTest123
 $1234
 000000
 111111
@@ -270,11 +271,7 @@ Febrero2023*
 graco
 hijillas
 hijitobello
-hijitos7
 HIJODEDIOS
-hijodeputa
-hijoputa94
-hijos
 hijoteamodemasiado
 hola
 Hola
@@ -475,12 +472,6 @@ pringles
 P@ssw0rd
 P@ssw0rd!
 P@ssword!
-puta
-putasdemierdas
-Putavida
-putazos
-putos
-putosmierdas
 qwer
 qwer789
 qwert12345

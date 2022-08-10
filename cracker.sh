@@ -47,7 +47,7 @@ tomcat_passwrods_combo="/usr/share/lanscanner/tomcat-passwds.txt"
 FILE_SUBDOMAINS="importarMaltego/subdominios-scan.csv"
 
 echo "LANGUAGE $LANGUAGE ENTIDAD(k) $ENTIDAD DICTIONARY $DICTIONARY"
-if [[ ${ENTIDAD} = NULL  && ${DICTIONARY} = NULL  ]];then 
+if [[ ${LANGUAGE} = NULL  ]];then 
 
 cat << "EOF"
 

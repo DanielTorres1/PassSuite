@@ -125,35 +125,25 @@ if [ -f servicios/Windows.txt ]
 then
 	echo -e "\n\t $OKBLUE Testing windows auth  $RESET"	  	
 	
-	interlace -tL servicios/Windows.txt -threads 10 -c "echo  '\n hydra -l $admin_user -P passwords.txt-t 1 _target_  smb' >> logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l $admin_user -P passwords.txt-t 1 _target_  smb >> logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "echo  '\n hydra -l $admin_user -P passwords.txt -t 1 _target_  smb' >> logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l $admin_user -P passwords.txt -t 1 _target_  smb >> logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
 
 	if [[ "$MODE" == "assessment"  ]]; then 
 
 		if [ "$LANGUAGE" == "es" ]; then
-			interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l soporte -P passwords.txt-t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-			interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l soporte -P passwords.txt-t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+			interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l soporte -P passwords.txt -t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+			interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l soporte -P passwords.txt -t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
 			
-			interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l sistemas -P passwords.txt-t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-			interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l sistemas -P passwords.txt-t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+			interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l sistemas -P passwords.txt -t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+			interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l sistemas -P passwords.txt -t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
 		fi
 			
-		interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l $ENTIDAD -P passwords.txt-t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-		interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l $ENTIDAD -P passwords.txt-t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent		
+		interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l $ENTIDAD -P passwords.txt -t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+		interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l $ENTIDAD -P passwords.txt -t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent		
 	fi	
 fi
 
 			
-if [ -f servicios/Windows.txt ]
-then
-		
-	for ip in $(cat servicios/Windows.txt); do			
-		egrep --color=never -i 'login:' logs/cracking/"$ip"_windows_passwordAdivinado.txt | tee -a .vulnerabilidades/"$ip"_windows_passwordAdivinado.txt
-		#https://github.com/m4ll0k/SMBrute (shared)											
-	 done	
-	 insert_data
-fi
-
 
 ### telnet #########
 if [ -f servicios/telnet_onlyhost.txt ]
@@ -162,15 +152,6 @@ then
 	interlace -tL servicios/telnet_onlyhost.txt -threads 10 -c "medusa -e n -u root -P passwords.txt -h _target_ -M telnet >> logs/cracking/_target__23_passwordAdivinadoServ.txt" --silent
 fi
 
-			
-if [ -f servicios/telnet_onlyhost.txt ]
-then
-		
-	for ip in $(cat servicios/telnet_onlyhost.txt); do			
-		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_23_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_23_passwordAdivinadoServ.txt 2>/dev/null					
-	 done	
-	insert_data
-fi
 ####################
 
 
@@ -846,148 +827,171 @@ fi
 #grep -ira "timed out" logs/cracking/* 2>/dev/null >> errores.log
 #grep -ira "Can't connect" logs/cracking/* 2>/dev/null >> errores.log
 
+######## wait to finish########
+while true; do
+	scan_instancias=$((`ps aux | egrep 'medusa|hydra" | wc -l` - 1)) 
+if [ "$scan_instancias" -gt 0 ]
+	then
+		echo -e "\t[i] Todavia hay escaneos de medusa/hydra activos ($scan_instancias)"  
+		sleep 30
+	else
+		break		  		 
+	fi				
+done
+##############################
+
 if [ -f servicios/ssh_onlyhost.txt ]
 then
 		
-	######## wait to finish########
-	while true; do
-		medusa_instancias=$((`ps aux | grep medusa | wc -l` - 1)) 
-	if [ "$medusa_instancias" -gt 0 ]
-		then
-			echo -e "\t[i] Todavia hay escaneos de medusa activos ($medusa_instancias)"  
-			sleep 30
-		else
-			break		  		 
-		fi				
-	done
-	##############################
-
 	for ip in $(cat servicios/ssh_onlyhost.txt); do			
 		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_22_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_22_passwordAdivinadoServ.txt 2>/dev/null					
 	 done	
 	insert_data
 fi
 
-exit
 
-if [ -f servicios/pop.txt ]
+
+
+if [ -f servicios/Windows.txt ]
 then
-	echo -e "\n\t $OKBLUE Encontre servicios de POP activos. Realizar ataque de passwords ? s/n $RESET"	  
-	read bruteforce	  
-	  
-	if [ $bruteforce == 's' ]
-    then     			
-      echo -e "\n\t $OKBLUE Archivo con la lista de usuarios? Formato: Daniel;Torres;Sandi $RESET"	  
-	  read users_file  	  
-	  
-	  echo -e "$OKBLUE\n\t#################### Testing common pass POP ######################$RESET"	
-	  for line in $(cat servicios/pop.txt); do
-		ip=`echo $line | cut -f1 -d":"`
-		port=`echo $line | cut -f2 -d":"`
-		echo -e "\n\t########### $ip #######"	
-		for fullname in $(cat $users_file); do
-			echo -e "\n\t########### Testing fullname $fullname #######"			
-			generate_password.pl "$fullname" > passwords2.txt # password en base a su usuario
-			head -1 passwords2.txt > base.txt # solo primer nombre
-			passGen.sh -f base.txt -t top50 -o passwords3.txt # mutaciones de su nombre
-			cat passwords2.txt passwords3.txt passwords.txt| sort | uniq > passwords.txt			
-			username=`tail -1 passwords2.txt` # dtorres
-			echo -e "\n\t[+] username $username"			
-			patator.py pop_login host=$ip user=$username password=FILE0 0=passwords.txt >> logs/cracking/"$ip"_pop-$username.txt 2>> logs/cracking/"$ip"_pop-$username.txt		
-			grep --color=never messages logs/cracking/"$ip"_pop-$username.txt >> .vulnerabilidades/"$ip"_pop_passwordAdivinadoServ.txt
-			echo ""					
-			rm passwords.txt passwords2.txt passwords3.txt			
-			echo "Dormir 5 min"
-			sleep 300;
-		done					
-		echo ""			
-	 done
-	 insert_data
-	fi # if bruteforce
-fi
-	
-
-if [ -f servicios/pop3pw.txt ]
-then
-	echo -e "\n\t $OKBLUE Encontre servicios de pop3pw activos. Realizar ataque de passwords ? s/n $RESET"	  
-	read bruteforce	  
-	  
-	if [ $bruteforce == 's' ]
-    then     			
-      echo -e "\n\t $OKBLUE Archivo con la lista de usuarios? Formato: Daniel;Torres;Sandi $RESET"	  
-	  read users_file  	  
-	  
-	  echo -e "$OKBLUE\n\t#################### Testing common pass POP  ######################$RESET"	
-	  for line in $(cat servicios/pop3pw.txt); do
-		ip=`echo $line | cut -f1 -d":"`
-		port=`echo $line | cut -f2 -d":"`
-		echo -e "\n\t########### $ip #######"	
-		for fullname in $(cat $users_file); do
-			echo -e "\n\t########### Testing fullname $fullname #######"			
-			generate_password.pl "$fullname" > passwords2.txt # password en base a su usuario
-			head -1 passwords2.txt > base.txt # solo primer nombre
-			passGen.sh -f base.txt -t top50 -o passwords3.txt # mutaciones de su nombre
-			cat passwords2.txt passwords3.txt passwords.txt| sort | uniq > passwords.txt			
-			username=`tail -1 passwords2.txt` # dtorres
-			echo -e "\n\t[+] username $username"			
-			patator.py pop_passd host=$ip user=$username password=FILE0 0=passwords.txt >> logs/cracking/"$ip"_pop3pw-$username.txt 2>> logs/cracking/"$ip"_pop3pw-$username.txt		
-			grep --color=never "new password " logs/cracking/"$ip"_pop3pw-$username.txt >> .vulnerabilidades/"$ip"_pop3pw_passwordAdivinadoServ.txt
-			echo ""					
-			rm passwords.txt passwords2.txt passwords3.txt			
-			echo "Dormir 5 min"
-			sleep 300;
-		done					
-		echo ""			
-	 done
-	 insert_data
-	fi # if bruteforce
-fi	
-
-
-if [ -f servicios/vnc.txt ]
-then   	  
-	  echo -e "$OKBLUE\n\t#################### Testing common pass VNC (lennnto) ######################$RESET"	
-	  for line in $(cat servicios/vnc.txt); do
-		ip=`echo $line | cut -f1 -d":"`
-		port=`echo $line | cut -f2 -d":"`
-		echo -e "\n\t########### $ip #######"					
-		ncrack_instances=`pgrep ncrack | wc -l`
-		if [ "$ncrack_instances" -lt $max_ins ] #Max 10 instances
-		then
-			ncrack --user "$admin_user" -P passwords.txt-p $port -g cd=8 $ip | tee -a  logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &			
-			echo ""		
-		else
-			echo "Max instancias de ncrack ($max_ins)"
-			sleep 10;
-				
-		fi		
 		
-	  done
-	  
-	  sleep 5
-	  ### wait to finish
-	  while true; do
-		ncrack_instances=`pgrep ncrack | wc -l`
-		if [ "$ncrack_instances" -gt 0 ]
-		then
-			echo "Todavia hay escaneos de ncrack activos ($ncrack_instances)"  
-			sleep 30
-		else
-			break		  		 
-		fi				
-	  done
-	
-	  echo -e "\n\t########### Checking success #######"	
-	  for line in $(cat servicios/vnc.txt); do
-		ip=`echo $line | cut -f1 -d":"`
-		port=`echo $line | cut -f2 -d":"`
-						
-		grep --color=never "$admin_user" logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
-		echo ""			
-	  done
-	 	 	 
-	 insert_data	
+	for ip in $(cat servicios/Windows.txt); do			
+		egrep --color=never -i 'login:' logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt | tee -a .vulnerabilidades/"$ip"_windows_passwordAdivinadoWin.txt
+		#https://github.com/m4ll0k/SMBrute (shared)											
+	 done	
+	 insert_data
 fi
+
+			
+if [ -f servicios/telnet_onlyhost.txt ]
+then
+		
+	for ip in $(cat servicios/telnet_onlyhost.txt); do			
+		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_23_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_23_passwordAdivinadoServ.txt 2>/dev/null					
+	 done	
+	insert_data
+fi
+
+
+
+# if [ -f servicios/pop.txt ]
+# then
+# 	echo -e "\n\t $OKBLUE Encontre servicios de POP activos. Realizar ataque de passwords ? s/n $RESET"	  
+# 	read bruteforce	  
+	  
+# 	if [ $bruteforce == 's' ]
+#     then     			
+#       echo -e "\n\t $OKBLUE Archivo con la lista de usuarios? Formato: Daniel;Torres;Sandi $RESET"	  
+# 	  read users_file  	  
+	  
+# 	  echo -e "$OKBLUE\n\t#################### Testing common pass POP ######################$RESET"	
+# 	  for line in $(cat servicios/pop.txt); do
+# 		ip=`echo $line | cut -f1 -d":"`
+# 		port=`echo $line | cut -f2 -d":"`
+# 		echo -e "\n\t########### $ip #######"	
+# 		for fullname in $(cat $users_file); do
+# 			echo -e "\n\t########### Testing fullname $fullname #######"			
+# 			generate_password.pl "$fullname" > passwords2.txt # password en base a su usuario
+# 			head -1 passwords2.txt > base.txt # solo primer nombre
+# 			passGen.sh -f base.txt -t top50 -o passwords3.txt # mutaciones de su nombre
+# 			cat passwords2.txt passwords3.txt passwords.txt| sort | uniq > passwords.txt			
+# 			username=`tail -1 passwords2.txt` # dtorres
+# 			echo -e "\n\t[+] username $username"			
+# 			patator.py pop_login host=$ip user=$username password=FILE0 0=passwords.txt >> logs/cracking/"$ip"_pop-$username.txt 2>> logs/cracking/"$ip"_pop-$username.txt		
+# 			grep --color=never messages logs/cracking/"$ip"_pop-$username.txt >> .vulnerabilidades/"$ip"_pop_passwordAdivinadoServ.txt
+# 			echo ""					
+# 			rm passwords.txt passwords2.txt passwords3.txt			
+# 			echo "Dormir 5 min"
+# 			sleep 300;
+# 		done					
+# 		echo ""			
+# 	 done
+# 	 insert_data
+# 	fi # if bruteforce
+# fi
+	
+
+# if [ -f servicios/pop3pw.txt ]
+# then
+# 	echo -e "\n\t $OKBLUE Encontre servicios de pop3pw activos. Realizar ataque de passwords ? s/n $RESET"	  
+# 	read bruteforce	  
+	  
+# 	if [ $bruteforce == 's' ]
+#     then     			
+#       echo -e "\n\t $OKBLUE Archivo con la lista de usuarios? Formato: Daniel;Torres;Sandi $RESET"	  
+# 	  read users_file  	  
+	  
+# 	  echo -e "$OKBLUE\n\t#################### Testing common pass POP  ######################$RESET"	
+# 	  for line in $(cat servicios/pop3pw.txt); do
+# 		ip=`echo $line | cut -f1 -d":"`
+# 		port=`echo $line | cut -f2 -d":"`
+# 		echo -e "\n\t########### $ip #######"	
+# 		for fullname in $(cat $users_file); do
+# 			echo -e "\n\t########### Testing fullname $fullname #######"			
+# 			generate_password.pl "$fullname" > passwords2.txt # password en base a su usuario
+# 			head -1 passwords2.txt > base.txt # solo primer nombre
+# 			passGen.sh -f base.txt -t top50 -o passwords3.txt # mutaciones de su nombre
+# 			cat passwords2.txt passwords3.txt passwords.txt| sort | uniq > passwords.txt			
+# 			username=`tail -1 passwords2.txt` # dtorres
+# 			echo -e "\n\t[+] username $username"			
+# 			patator.py pop_passd host=$ip user=$username password=FILE0 0=passwords.txt >> logs/cracking/"$ip"_pop3pw-$username.txt 2>> logs/cracking/"$ip"_pop3pw-$username.txt		
+# 			grep --color=never "new password " logs/cracking/"$ip"_pop3pw-$username.txt >> .vulnerabilidades/"$ip"_pop3pw_passwordAdivinadoServ.txt
+# 			echo ""					
+# 			rm passwords.txt passwords2.txt passwords3.txt			
+# 			echo "Dormir 5 min"
+# 			sleep 300;
+# 		done					
+# 		echo ""			
+# 	 done
+# 	 insert_data
+# 	fi # if bruteforce
+# fi	
+
+
+# if [ -f servicios/vnc.txt ]
+# then   	  
+# 	  echo -e "$OKBLUE\n\t#################### Testing common pass VNC (lennnto) ######################$RESET"	
+# 	  for line in $(cat servicios/vnc.txt); do
+# 		ip=`echo $line | cut -f1 -d":"`
+# 		port=`echo $line | cut -f2 -d":"`
+# 		echo -e "\n\t########### $ip #######"					
+# 		ncrack_instances=`pgrep ncrack | wc -l`
+# 		if [ "$ncrack_instances" -lt $max_ins ] #Max 10 instances
+# 		then
+# 			ncrack --user "$admin_user" -P passwords.txt-p $port -g cd=8 $ip | tee -a  logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &			
+# 			echo ""		
+# 		else
+# 			echo "Max instancias de ncrack ($max_ins)"
+# 			sleep 10;
+				
+# 		fi		
+		
+# 	  done
+	  
+# 	  sleep 5
+# 	  ### wait to finish
+# 	  while true; do
+# 		ncrack_instances=`pgrep ncrack | wc -l`
+# 		if [ "$ncrack_instances" -gt 0 ]
+# 		then
+# 			echo "Todavia hay escaneos de ncrack activos ($ncrack_instances)"  
+# 			sleep 30
+# 		else
+# 			break		  		 
+# 		fi				
+# 	  done
+	
+# 	  echo -e "\n\t########### Checking success #######"	
+# 	  for line in $(cat servicios/vnc.txt); do
+# 		ip=`echo $line | cut -f1 -d":"`
+# 		port=`echo $line | cut -f2 -d":"`
+						
+# 		grep --color=never "$admin_user" logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
+# 		echo ""			
+# 	  done
+	 	 	 
+# 	 insert_data	
+# fi
 	
 
 #patator.py pop_login host=181.115.239.243 user=msanti password='Bichito$9'

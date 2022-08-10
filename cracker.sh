@@ -829,8 +829,8 @@ fi
 
 ######## wait to finish########
 while true; do
-	scan_instancias=$((`ps aux | egrep 'medusa|hydra" | wc -l` - 1)) 
-if [ "$scan_instancias" -gt 0 ]
+	scan_instancias=$((`ps aux | egrep 'medusa|hydra' | wc -l` - 1)) 
+	if [ "$scan_instancias" -gt 0 ]
 	then
 		echo -e "\t[i] Todavia hay escaneos de medusa/hydra activos ($scan_instancias)"  
 		sleep 30
@@ -841,8 +841,7 @@ done
 ##############################
 
 if [ -f servicios/ssh_onlyhost.txt ]
-then
-		
+then		
 	for ip in $(cat servicios/ssh_onlyhost.txt); do			
 		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_22_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_22_passwordAdivinadoServ.txt 2>/dev/null					
 	 done	
@@ -853,8 +852,7 @@ fi
 
 
 if [ -f servicios/Windows.txt ]
-then
-		
+then		
 	for ip in $(cat servicios/Windows.txt); do			
 		egrep --color=never -i 'login:' logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt | tee -a .vulnerabilidades/"$ip"_windows_passwordAdivinadoWin.txt
 		#https://github.com/m4ll0k/SMBrute (shared)											

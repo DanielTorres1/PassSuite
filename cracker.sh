@@ -29,12 +29,13 @@ echo -e "$OKGREEN#################################### EMPEZANDO A CRACKEAR #####
 
 
 
-while getopts ":k:d:l:h:" OPTIONS
+while getopts ":k:d:l:m:h:" OPTIONS
 do
             case $OPTIONS in
             k)     ENTIDAD=$OPTARG;;            
             d)     DICTIONARY=$OPTARG;; 
-			l)     LANGUAGE=$OPTARG;;           
+			l)     LANGUAGE=$OPTARG;;   
+			m)     MODE=$OPTARG;;        
             ?)     printf "Opcion invalida: -$OPTARG\n" $0
                           exit 2;;
            esac
@@ -42,11 +43,12 @@ done
 
 ENTIDAD=${ENTIDAD:=NULL}
 DICTIONARY=${DICTIONARY:=NULL}
+MODE=${MODE:=NULL} # assessment/hacking
 LANGUAGE=${LANGUAGE:=NULL} # en/es
 tomcat_passwrods_combo="/usr/share/lanscanner/tomcat-passwds.txt"
 FILE_SUBDOMAINS="importarMaltego/subdominios-scan.csv"
 
-echo "LANGUAGE $LANGUAGE ENTIDAD(k) $ENTIDAD DICTIONARY $DICTIONARY"
+echo "LANGUAGE $LANGUAGE MODE $MODE ENTIDAD(k) $ENTIDAD DICTIONARY $DICTIONARY"
 if [[ ${LANGUAGE} = NULL  ]];then 
 
 cat << "EOF"
@@ -56,6 +58,7 @@ Ejecutar el script en el directorio creado por lanscanner (https://github.com/Da
 Opciones: 
 -e : Nombre de la empresa (Usado para generar diccionario de passwords)
 -l : idioma es/en
+-m : Mode [assessment/hacking]	
  
 -d :Diccionario de passwords a usar (opcional)
 
@@ -125,17 +128,19 @@ then
 	interlace -tL servicios/Windows.txt -threads 10 -c "echo  '\n hydra -l $admin_user -P passwords.txt-t 1 _target_  smb' >> logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
 	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l $admin_user -P passwords.txt-t 1 _target_  smb >> logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
 
-	if [ "$LANGUAGE" == "es" ]; then
-		interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l soporte -P passwords.txt-t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-		interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l soporte -P passwords.txt-t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-		
-		interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l sistemas -P passwords.txt-t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-		interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l sistemas -P passwords.txt-t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-	fi
-		
-	interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l $ENTIDAD -P passwords.txt-t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-	interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l $ENTIDAD -P passwords.txt-t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent		
+	if [[ "$MODE" == "assessment"  ]]; then 
+
+		if [ "$LANGUAGE" == "es" ]; then
+			interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l soporte -P passwords.txt-t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+			interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l soporte -P passwords.txt-t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
 			
+			interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l sistemas -P passwords.txt-t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+			interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l sistemas -P passwords.txt-t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+		fi
+			
+		interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n hydra -l $ENTIDAD -P passwords.txt-t 1 _target_  smb' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+		interlace -tL servicios/Windows.txt -threads 10 -c "hydra -l $ENTIDAD -P passwords.txt-t 1 _target_  smb >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent		
+	fi	
 fi
 
 			

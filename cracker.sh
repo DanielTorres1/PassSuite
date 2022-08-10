@@ -104,9 +104,9 @@ function insert_data () {
 
 
 
+find  servicios -size  0 -print0 |xargs -0 rm 2>/dev/null 
 
 ### SSH #########
-
 
 if [ -f servicios/ssh_onlyhost.txt ]
 then

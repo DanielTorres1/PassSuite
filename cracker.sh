@@ -637,7 +637,7 @@ if [ -f servicios/mysql.txt ]
 then
        	
 	echo -e "$OKBLUE\n\t#################### Testing common pass MYSQL (lennnto) ######################$RESET"	
-	sed -i '1 i\mysql' passwords.txt	#adicionar password mysql
+#	sed -i '1 i\mysql' passwords.txt	#adicionar password mysql
 	for line in $(cat servicios/mysql.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`

@@ -252,30 +252,30 @@ then
 		
 		if [[ $fingerprint = *"phpmyadmin"* ]]; then
 			echo -e "\t[+] phpMyAdmin identificado"
-			echo "passWeb.pl -t $host -p $port -m phpmyadmin -d \"$path_web\" -u root|admin|wordpress|joomla|drupal|phpmyadmin -f passwords.txt" > logs/cracking/"$host"_"$port"_passwordBD.txt 
-			passWeb.pl -t $host -p $port -m phpmyadmin -d "$path_web" -u root -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt &
-			passWeb.pl -t $host -p $port -m phpmyadmin -d "$path_web" -u admin -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt &			
-			passWeb.pl -t $host -p $port -m phpmyadmin -d "$path_web" -u phpmyadmin -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt &
+			echo "passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d \"$path_web\" -u root|admin|wordpress|joomla|drupal|phpmyadmin -f passwords.txt" > logs/cracking/"$host"_"$port"_passwordBD.txt 
+			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u root -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt &
+			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u admin -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt &			
+			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u phpmyadmin -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt &
 
 			#######  wordpress ######
 			grep -qi wordpress .enumeracion2/"$host"_"$port"_webData.txt
 			greprc=$?
 			if [[ $greprc -eq 0 ]];then 
-				passWeb.pl -t $host -p $port -m phpmyadmin -d "$path_web" -u wordpress -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt &
+				passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u wordpress -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt &
 			fi
 
 			#######  joomla ######
 			grep -qi joomla .enumeracion2/"$host"_"$port"_webData.txt
 			greprc=$?
 			if [[ $greprc -eq 0 ]];then 
-				passWeb.pl -t $host -p $port -m phpmyadmin -d "$path_web" -u joomla -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt &
+				passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u joomla -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt &
 			fi
 
 			#######  drupal ######
 			grep -qi drupal .enumeracion2/"$host"_"$port"_webData.txt
 			greprc=$?
 			if [[ $greprc -eq 0 ]];then 
-				passWeb.pl -t $host -p $port -m phpmyadmin -d "$path_web" -u drupal -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt&
+				passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u drupal -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordBD.txt&
 			fi
 
 					
@@ -403,8 +403,8 @@ then
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`								
 		echo -e "[+] Probando $ip:$port"
-		echo "passWeb.pl -t $ip -p $port -d / -m PRTG -u prtgadmin -f passwords.txt" > logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
-		passWeb.pl -t $ip -p $port -d / -m PRTG -u prtgadmin -f passwords.txt>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
+		echo "passWeb.pl -s https -t $ip -p $port -d / -m PRTG -u prtgadmin -f passwords.txt" > logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
+		passWeb.pl -s https -t $ip -p $port -d / -m PRTG -u prtgadmin -f passwords.txt>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
 		grep --color=never 'encontrado' logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
 		echo ""			
 	done
@@ -423,7 +423,7 @@ then
 		port=`echo $line | cut -f2 -d":"`
 					
 		echo -e "[+] Probando $ip"
-		passWeb.pl -t $ip -p $port -d / -m pentaho -u admin -f passwords.txt > logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
+		passWeb.pl -s https -t $ip -p $port -d / -m pentaho -u admin -f passwords.txt > logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
 		sleep 2
 		grep --color=never 'encontrado' logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt | tee -a .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
 		
@@ -500,8 +500,8 @@ then
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "[+] Probando $ip"		
-		echo -e "passWeb.pl -t $ip -p $port -m ZKSoftware -u administrator -f passwords.txt" > logs/cracking/"$ip"_80_passwordZKSoftware.txt
-		passWeb.pl -t $ip -p 80 -m ZKSoftware -u administrator -f passwords.txt>> logs/cracking/"$ip"_80_passwordZKSoftware.txt
+		echo -e "passWeb.pl -s https -t $ip -p $port -m ZKSoftware -u administrator -f passwords.txt" > logs/cracking/"$ip"_80_passwordZKSoftware.txt
+		passWeb.pl -s https -t $ip -p 80 -m ZKSoftware -u administrator -f passwords.txt>> logs/cracking/"$ip"_80_passwordZKSoftware.txt
 		grep --color=never 'encontrado' logs/cracking/"$ip"_80_passwordZKSoftware.txt | tee -a .vulnerabilidades/"$ip"_80_passwordZKSoftware.txt
 		echo ""			
 	done

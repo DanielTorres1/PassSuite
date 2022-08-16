@@ -124,29 +124,7 @@ fi
 			
 ####################
 
-### Windows
-if [ -f servicios/Windows.txt ]
-then
-	echo -e "\n\t $OKBLUE Testing windows auth  $RESET"	  	
-	
-	interlace -tL servicios/Windows.txt -threads 10 -c "echo  '\n docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u $admin_user -p /home/passwords.txt' >> logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
 
-	interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u $admin_user -p /home/passwords.txt | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >> logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-
-	if [[ "$MODE" == "assessment"  ]]; then 
-
-		if [ "$LANGUAGE" == "es" ]; then
-			interlace -tL servicios/Windows.txt -threads 10 -c "echo -e 'docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u soporte -p /home/passwords.txt' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-			interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u soporte -p /home/passwords.txt | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-			
-			interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u sistemas -p /home/passwords.txt' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-			interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u sistemas -p /home/passwords.txt | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-		fi
-			
-		interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u $ENTIDAD -p /home/passwords.txt' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-		interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u $ENTIDAD -p /home/passwords.txt | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent		
-	fi	
-fi
 
 			
 
@@ -168,7 +146,7 @@ if [ -f servicios/rdp.txt ]; then
 		
 		####### user administrador ####
 		patator.py rdp_login host=$ip user=$admin_user password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED|ERRCONNECT_CONNECT_CANCELLED' 2> logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt
-		egrep -iq  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK|ERRCONNECT_CONNECT_CANCELLED" logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt
+		egrep -q  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK|ERRCONNECT_CONNECT_CANCELLED" logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt
 		greprc=$?
 		if [[ $greprc -eq 0 ]] ; then	
 			echo -e "\t$OKRED[!] Password found \n $RESET"
@@ -659,16 +637,40 @@ then
 	insert_data	 
 fi
 
+
+### Windows
+if [ -f servicios/Windows.txt ]
+then
+	echo -e "\n\t $OKBLUE Testing windows auth  $RESET"	  	
+	
+	interlace -tL servicios/Windows.txt -threads 10 -c "echo  '\n docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u $admin_user -p /home/passwords.txt' >> logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+
+	interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u $admin_user -p /home/passwords.txt | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >> logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+
+	if [[ "$MODE" == "assessment"  ]]; then 
+
+		if [ "$LANGUAGE" == "es" ]; then
+			interlace -tL servicios/Windows.txt -threads 10 -c "echo -e 'docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u soporte -p /home/passwords.txt' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+			interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u soporte -p /home/passwords.txt | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+			
+			interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u sistemas -p /home/passwords.txt' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+			interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u sistemas -p /home/passwords.txt | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+		fi
+			
+		interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u $ENTIDAD -p /home/passwords.txt' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+		interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u $ENTIDAD -p /home/passwords.txt | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent		
+	fi	
+fi
 #echo -e "\t $OKBLUE REVISANDO ERRORES $RESET"
 #grep -ira "timed out" logs/cracking/* 2>/dev/null >> errores.log
 #grep -ira "Can't connect" logs/cracking/* 2>/dev/null >> errores.log
 
 ######## wait to finish########
 while true; do
-	scan_instancias=$((`ps aux | egrep 'medusa|hydra' | wc -l` - 1)) 
+	scan_instancias=$((`ps aux | egrep 'medusa|hydra|docker' | wc -l` - 1)) 
 	if [ "$scan_instancias" -gt 0 ]
 	then
-		echo -e "\t[i] Todavia hay escaneos de medusa/hydra activos ($scan_instancias)"  
+		echo -e "\t[i] Todavia hay escaneos de medusa/hydra/docker activos ($scan_instancias)"  
 		sleep 30
 	else
 		break		  		 
@@ -809,7 +811,7 @@ then
 			done
 			##############################
 
-			egrep --color=never 'Password encontrado|sistema sin password' logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt | sort | uniq > .vulnerabilidades/"$host"_"$port"_passwordPhpMyadmin.txt						
+			egrep --color=never -i 'Password encontrado|sistema sin password' logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt | sort | uniq > .vulnerabilidades/"$host"_"$port"_passwordPhpMyadmin.txt						
 		fi	
 		
 		if [[ $fingerprint = *"joomla"* ]]; then

@@ -667,7 +667,7 @@ fi
 
 ######## wait to finish########
 while true; do
-	scan_instancias=$((`ps aux | egrep 'medusa|hydra|docker' | wc -l` - 1)) 
+	scan_instancias=$((`ps aux | egrep 'medusa|hydra|docker' | egrep -v 'dockerd|grep' | wc -l` - 1)) 
 	if [ "$scan_instancias" -gt 0 ]
 	then
 		echo -e "\t[i] Todavia hay escaneos de medusa/hydra/docker activos ($scan_instancias)"  

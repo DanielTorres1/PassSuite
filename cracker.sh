@@ -56,14 +56,14 @@ cat << "EOF"
 Ejecutar el script en el directorio creado por lanscanner (https://github.com/DanielTorres1/lanscanner)
 
 Opciones: 
--e : Nombre de la empresa (Usado para generar diccionario de passwords)
+-k : Nombre de la empresa (Usado para generar diccionario de passwords)
 -l : idioma es/en
 -m : Mode [assessment/hacking]	
  
 -d :Diccionario de passwords a usar (opcional)
 
 Ejemplo 1: Ataque de diccionario con passwords personallizados (basados en la palabra "microsoft") + 20 passwords mas usados
-	cracker.sh -e microsoft -l es
+	cracker.sh -k microsoft -l es
 
 Ejemplo 2: Ataque de diccionario con lista de passwords
 	cracker.sh -d passwords.txt -l en

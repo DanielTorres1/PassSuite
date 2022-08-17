@@ -710,7 +710,9 @@ fi
 
 
 
-IFS=$'\n'  # make newlines the only separator
+
+old_ifs="$IFS"
+IFS=$'\n'  # make newlines the only separator     
 
 if [ -f servicios/admin-web.txt ]
 then
@@ -878,7 +880,8 @@ then
 				#password=`grep --color=never "200 OK" logs/cracking/"$host"_"$port"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
 				#echo "$line (Usuario:root Password:$password)" > .vulnerabilidades/"$host"_"$port"_passTomcat.txt								
 			#fi			
-		fi			
+		fi	
+	IFS=$old_ifs		
 	done			
 	insert_data
 fi

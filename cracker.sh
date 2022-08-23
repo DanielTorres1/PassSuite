@@ -119,7 +119,7 @@ if [ -f servicios/admin-web.txt ]
 then	  		  
 	echo -e "$OKBLUE\n\t#################### Testing pass web admin ######################$RESET"			
 	for line in $(cat servicios/admin-web.txt); do	
-		IFS=$old_ifs						
+		IFS=$old_ifs
 		ip_port_path=`echo $line | cut -d ";" -f 1` #https://www.sanmateo.com.bo/wp-login.php https://www.sanmateo.com.bo:8443/wp-login.php		
 		fingerprint=`echo $line | cut -d ";" -f 2`
 		echo -e "\n\t########### $ip_port_path #######"	
@@ -484,8 +484,8 @@ then
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "[+] Probando $ip"		
-		echo -e "passWeb.pl -s https -t $ip -p $port -m ZKSoftware -u administrator -f passwords.txt" > logs/cracking/"$ip"_80_passwordZKSoftware.txt
-		passWeb.pl -s https -t $ip -p 80 -m ZKSoftware -u administrator -f passwords.txt>> logs/cracking/"$ip"_80_passwordZKSoftware.txt
+		echo -e "passWeb.pl -s http -t $ip -p $port -m ZKSoftware -u administrator -f passwords.txt" > logs/cracking/"$ip"_80_passwordZKSoftware.txt
+		passWeb.pl -s http -t $ip -p 80 -m ZKSoftware -u administrator -f passwords.txt >> logs/cracking/"$ip"_80_passwordZKSoftware.txt
 		grep --color=never 'encontrado' logs/cracking/"$ip"_80_passwordZKSoftware.txt | tee -a .vulnerabilidades/"$ip"_80_passwordZKSoftware.txt
 		echo ""			
 	done
@@ -693,7 +693,7 @@ then
 		if [[ $greprc -eq 0 ]] ; then
 			echo -n "[MongoDB] $respuesta" >> .vulnerabilidades/"$ip"_mongo_passwordBD.txt
 		fi					 
-		echo ""			
+		echo ""
 	done
 	insert_data	
 fi
@@ -842,10 +842,10 @@ fi
 
 ######## wait to finish########
 while true; do
-	scan_instancias=$((`ps aux | egrep 'medusa|hydra|docker' | egrep -v 'dockerd|grep' | wc -l` - 1)) 
+	scan_instancias=$((`ps aux | egrep 'medusa|docker' | egrep -v 'dockerd|grep' | wc -l` - 1)) 
 	if [ "$scan_instancias" -gt 0 ]
 	then
-		echo -e "\t[i] Todavia hay escaneos de medusa/hydra/docker activos ($scan_instancias)"  
+		echo -e "\t[i] Todavia hay escaneos de medusa/docker activos ($scan_instancias)"  
 		sleep 30
 	else
 		break		  		 

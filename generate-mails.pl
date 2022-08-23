@@ -5,6 +5,7 @@ use Data::Dumper;
 no warnings 'uninitialized';
 
 my $names_file=$ARGV[0]; # format --> juan daniel torres sandi
+my $domain=$ARGV[1]; #coopsanjoaquin.com
  
 
 open (MYINPUT,"<$names_file") || die "ERROR: Can not open the file $names_file\n";
@@ -58,8 +59,8 @@ my $username5 = $name.$initial2; # danielt
 my $username6 = $name.".".$lastname1; #daniel.torres
 my $username7 = $name.$lastname1; # danieltorres
 
-open (SALIDA,">>users.txt") || die "ERROR: No puedo abrir el fichero users.txt\n";
-print SALIDA "$username1;$username2;$username3;$username4;$username5;$username6;$username7;$lastname1\n";
+open (SALIDA,">>users.csv") || die "ERROR: No puedo abrir el fichero users.txt\n";
+print SALIDA "$username1\@$domain;$username2\@$domain;$username3\@$domain;$username4\@$domain;$username5\@$domain;$username6\@$domain;$username7\@$domain;$lastname1\@$domain\n";
 close (SALIDA);
 
 }

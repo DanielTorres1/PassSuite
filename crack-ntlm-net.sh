@@ -43,10 +43,10 @@ exit
 fi
 
 rm cracked.txt 2>/dev/null
-rm hash-ntlm.txt 2>/dev/null
+rm hash-ntlm-net.txt 2>/dev/null
 
 for archivo in $(ls $FOLDER/*.txt); do
-   head -1 $archivo >> hash-ntlm.txt
+   head -1 $archivo >> hash-ntlm-net.txt
 done
 
 echo "Generating custom password dic"
@@ -55,5 +55,5 @@ passGen.sh -f keyword.txt -t offline: -o offline.txt -v 1
 echo "copy offline.txt to $DICTIONARY_FOLDER"
 cp offline.txt $DICTIONARY_FOLDER
 
-echo "Generated hashfile with `wc -l hash-ntlm.txt`"
-./hashcat.bin -m 5600 -a 0 hash-ntlm.txt $DICTIONARY_FOLDER -o cracked.txt
+echo "Generated hashfile with `wc -l hash-ntlm-net.txt`"
+./hashcat.bin -m 5600 -a 0 hash-ntlm-net.txt $DICTIONARY_FOLDER -o cracked.txt

@@ -50,7 +50,7 @@ for archivo in $(ls $FOLDER/*.txt); do
 done
 
 echo "Generating custom password dic"
-echo $KEYWORD >> keyword.txt
+echo $KEYWORD > keyword.txt
 passGen.sh -f keyword.txt -t offline: -o offline.txt -v 1
 echo "copy offline.txt to $DICTIONARY_FOLDER"
 cp offline.txt $DICTIONARY_FOLDER

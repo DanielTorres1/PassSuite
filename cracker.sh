@@ -43,7 +43,7 @@ done
 
 ENTIDAD=${ENTIDAD:=NULL}
 DICTIONARY=${DICTIONARY:=NULL}
-MODE=${MODE:=NULL} # assessment/hacking
+MODE=${MODE:=NULL} # vulnerabilidades/hacking
 LANGUAGE=${LANGUAGE:=NULL} # en/es
 tomcat_passwrods_combo="/usr/share/lanscanner/tomcat-passwds.txt"
 FILE_SUBDOMAINS="importarMaltego/subdominios-scan.csv"
@@ -58,7 +58,7 @@ Ejecutar el script en el directorio creado por lanscanner (https://github.com/Da
 Opciones: 
 -k : Nombre de la empresa (Usado para generar diccionario de passwords)
 -l : idioma es/en
--m : Mode [assessment/hacking]	
+-m : Mode [vulnerabilidades/hacking]	
  
 -d :Diccionario de passwords a usar (opcional)
 
@@ -482,11 +482,12 @@ then
 	echo -e "$OKBLUE\n\t#################### Testing pass ZKSoftware ######################$RESET"	
 	for line in $(cat servicios/ZKSoftware.txt); do
 		ip=`echo $line | cut -f1 -d":"`
-		port=`echo $line | cut -f2 -d":"`
+		port=`echo $line | cut -f2 -d":"`		
+		sed -i '1i123456' passwords.txt
 		echo -e "[+] Probando $ip"		
-		echo -e "passWeb.pl -s http -t $ip -p $port -m ZKSoftware -u administrator -f passwords.txt" > logs/cracking/"$ip"_80_passwordZKSoftware.txt
-		passWeb.pl -s http -t $ip -p 80 -m ZKSoftware -u administrator -f passwords.txt >> logs/cracking/"$ip"_80_passwordZKSoftware.txt
-		grep --color=never 'encontrado' logs/cracking/"$ip"_80_passwordZKSoftware.txt | tee -a .vulnerabilidades/"$ip"_80_passwordZKSoftware.txt
+		echo -e "passWeb.pl -s http -t $ip -p $port -m ZKSoftware -u administrator -f passwords.txt" > logs/cracking/"$ip"_"$port"_passwordZKSoftware.txt
+		passWeb.pl -s http -t $ip -p $port -m ZKSoftware -u administrator -f passwords.txt >> logs/cracking/"$ip"_"$port"_passwordZKSoftware.txt
+		grep --color=never 'encontrado' logs/cracking/"$ip"_"$port"_passwordZKSoftware.txt | tee -a .vulnerabilidades/"$ip"_"$port"_passwordZKSoftware.txt
 		echo ""			
 	done
 	insert_data
@@ -822,7 +823,7 @@ then
 
 	interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u $admin_user -p /home/passwords.txt | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >> logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
 
-	if [[ "$MODE" == "assessment"  ]]; then 
+	if [[ "$MODE" == "vulnerabilidades"  ]]; then 
 
 		if [ "$LANGUAGE" == "es" ]; then
 			interlace -tL servicios/Windows.txt -threads 10 -c "echo -e 'docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u soporte -p /home/passwords.txt' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent

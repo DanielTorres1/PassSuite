@@ -50,9 +50,9 @@ cp passTelnet.pl /usr/bin
 #cp generate-password.pl /usr/bin
 #chmod a+x /usr/bin/generate-password.pl
 
-cp generate-users.pl /usr/bin
+cp generate-mails.pl /usr/bin
 cp patator.py /usr/bin
-chmod a+x /usr/bin/generate-users.pl
+chmod a+x /usr/bin/generate-mails.pl
 
 
 echo -e "${RED}[+]${GREEN} Instalando john the ripper ${RESET}"

@@ -325,7 +325,7 @@ if [ -f servicios/rdp.txt ]; then
 		greprc=$?
 		if [[ $greprc -eq 0 ]] ; then	
 			echo -e "\t$OKRED[!] Password found \n $RESET"
-			creds=`egrep  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK|ERRCONNECT_CONNECT_CANCELLED"  logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt | awk '{print $9}'`
+			creds=`egrep  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK"  logs/cracking/"$ip"_rdp_passwordAdivinadoWin.txt | awk '{print $9}'`
 			echo "$admin_user:$creds" >> .vulnerabilidades/"$ip"_rdp_passwordAdivinadoWin.txt
 		fi	
 		##############################

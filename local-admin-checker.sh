@@ -63,45 +63,11 @@ fi
 echo -e "$OKBLUE Probando con usuario: $USUARIO  y hash $HASH $RESET"
 ######################
 
-if [ $FILE = NULL ] ; then
-
-	if [ -f reportes/reporte-OS.txt ]
-	then
-	
-		for ip in $(grep -i Windows reportes/reporte-OS.txt| cut -d ";" -f1 ); do	
-			echo -e "[+] $OKBLUE Testeando $ip .. $RESET"
-			if [ $HASH = NULL ] ; then
-			#echo "PASSWORD $PASSWORD"
-				pth-winexe -U $USUARIO%$PASSWORD //$ip ipconfig > logs/vulnerabilidades/$ip-windows-logeoRemoto.txt
-			else
-				pth-winexe -U $USUARIO%aad3b435b51404eeaad3b435b51404ee:$HASH //$ip ipconfig > logs/vulnerabilidades/$ip-windows-logeoRemoto.txt
-					
-			fi
-			
-			egrep -qai "IPv4" logs/vulnerabilidades/$ip-windows-logeoRemoto.txt
-			greprc=$?
-			if [[ $greprc -eq 0 ]] ; then						
-				echo -e "\t$OKRED[i] Logeo remoto habilitado $RESET"
-				if [ $HASH = NULL ] ; then
-					echo -e "Usuario:$USUARIO Pasword:$password" >> .vulnerabilidades/$ip-windows-logeoRemoto.txt
-				else
-					echo -e "Usuario:$USUARIO Hash:aad3b435b51404eeaad3b435b51404ee:$HASH" >> .vulnerabilidades/$ip-windows-logeoRemoto.txt
-				fi
-				
-			else
-				echo -e "\t$OKGREEN[!] OK \n $RESET"				
-			fi										
-		done
-	else
-		echo -e "$OKRED [!] Error. Esta ejecuando en el directorio creado por lanScanner.sh ? $RESET"
-	fi
-else
-
   for ip in $(cat $FILE); do	
 			echo -e "[+] $OKBLUE Testeando $ip .. $RESET"
 			if [ $HASH = NULL ] ; then
-			#echo "PASSWORD $PASSWORD"
-				pth-winexe -U $USUARIO%$PASSWORD //$ip ipconfig > logs/vulnerabilidades/$ip-windows-logeoRemoto.txt
+			#echo "PASSWORD $PASSWORD"				
+				docker run  -it byt3bl33d3r/crackmapexec smb $ip -u $USUARIO -p $PASSWORD --local-auth -x ipconfig | tee logs/vulnerabilidades/$ip-windows-logeoRemoto.txt
 			else
 				pth-winexe -U $USUARIO%aad3b435b51404eeaad3b435b51404ee:$HASH //$ip ipconfig > logs/vulnerabilidades/$ip-windows-logeoRemoto.txt
 					
@@ -122,7 +88,6 @@ else
 			fi	
 					
 	done
-fi
 
 insert_data
 

@@ -826,15 +826,15 @@ then
 	if [[ "$MODE" == "vulnerabilidades"  ]]; then 
 
 		if [ "$LANGUAGE" == "es" ]; then
-			interlace -tL servicios/Windows.txt -threads 10 -c "echo -e 'docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u soporte -p /home/passwords.txt' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-			interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u soporte -p /home/passwords.txt | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+			interlace -tL servicios/Windows.txt -threads 10 -c "echo -e 'docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u soporte -p /home/passwords.txt --local-auth' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+			interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u soporte -p /home/passwords.txt --local-auth | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
 			
-			interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u sistemas -p /home/passwords.txt' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-			interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u sistemas -p /home/passwords.txt | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+			interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u sistemas -p /home/passwords.txt --local-auth' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+			interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u sistemas -p /home/passwords.txt --local-auth | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
 		fi
 			
-		interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u $ENTIDAD -p /home/passwords.txt' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-		interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u $ENTIDAD -p /home/passwords.txt | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent		
+		interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u $ENTIDAD -p /home/passwords.txt --local-auth' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
+		interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u $ENTIDAD -p /home/passwords.txt --local-auth | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent		
 	fi	
 fi
 #echo -e "\t $OKBLUE REVISANDO ERRORES $RESET"

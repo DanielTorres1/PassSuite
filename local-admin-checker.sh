@@ -67,20 +67,20 @@ echo -e "$OKBLUE Probando con usuario: $USUARIO  y hash $HASH $RESET"
 			echo -e "[+] $OKBLUE Testeando $ip .. $RESET"
 			if [ $HASH = NULL ] ; then
 			#echo "PASSWORD $PASSWORD"				
-				docker run  -it byt3bl33d3r/crackmapexec smb $ip -u $USUARIO -p $PASSWORD --local-auth -x ipconfig | tee logs/vulnerabilidades/$ip-windows-logeoRemoto.txt
+				docker run  -it byt3bl33d3r/crackmapexec smb $ip -u $USUARIO -p $PASSWORD --local-auth -x ipconfig | tee logs/vulnerabilidades/"$ip"_windows_logeoRemoto.txt
 			else
-				pth-winexe -U $USUARIO%aad3b435b51404eeaad3b435b51404ee:$HASH //$ip ipconfig > logs/vulnerabilidades/$ip-windows-logeoRemoto.txt
+				pth-winexe -U $USUARIO%aad3b435b51404eeaad3b435b51404ee:$HASH //$ip ipconfig > logs/vulnerabilidades/"$ip"_windows_logeoRemoto.txt
 					
 			fi
 			
-			egrep -qai "IPv4" logs/vulnerabilidades/$ip-windows-logeoRemoto.txt
+			egrep -qai "IPv4" logs/vulnerabilidades/"$ip"_windows_logeoRemoto.txt
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then						
 				echo -e "\t$OKRED[i] Logeo remoto habilitado $RESET"
 				if [ $HASH = NULL ] ; then
-					echo -e "Usuario:$USUARIO Pasword:$password" >> .vulnerabilidades/$ip-windows-logeoRemoto.txt
+					echo -e "Usuario:$USUARIO Pasword:$password" >> .vulnerabilidades/"$ip"_windows_logeoRemoto.txt
 				else
-					echo -e "Usuario:$USUARIO Hash:aad3b435b51404eeaad3b435b51404ee:$HASH" >> .vulnerabilidades/$ip-windows-logeoRemoto.txt
+					echo -e "Usuario:$USUARIO Hash:aad3b435b51404eeaad3b435b51404ee:$HASH" >> .vulnerabilidades/"$ip"_windows_logeoRemoto.txt
 				fi
 				
 			else

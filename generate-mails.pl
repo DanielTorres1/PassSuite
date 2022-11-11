@@ -59,8 +59,13 @@ my $username5 = $name.$initial2; # danielt
 my $username6 = $name.".".$lastname1; #daniel.torres
 my $username7 = $name.$lastname1; # danieltorres
 
+my $username7 = $initial1.$lastname1.$initial3; # jsotof@cacqui.com
+
+
+
+
 open (SALIDA,">>users.csv") || die "ERROR: No puedo abrir el fichero users.txt\n";
-print SALIDA "$username1\@$domain;$username2\@$domain;$username3\@$domain;$username4\@$domain;$username5\@$domain;$username6\@$domain;$username7\@$domain;$lastname1\@$domain\n";
+print SALIDA "$username1\@$domain;$username2\@$domain;$username3\@$domain;$username4\@$domain;$username5\@$domain;$username6\@$domain;$username7\@$domain;$lastname1\@$domain;$username7\@$domain\n";
 close (SALIDA);
 
 }

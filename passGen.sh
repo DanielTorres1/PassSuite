@@ -1,14 +1,12 @@
 #!/bin/bash
 
-
-while getopts ":t:f:e:l:o:v:" OPTIONS
+while getopts ":t:f:e:o:v:" OPTIONS
 do
             case $OPTIONS in            
             f)     FILE=$OPTARG;;
             t)     TYPE=$OPTARG;;
             e)     ENTITY=$OPTARG;;
-            o)     OUTPUT=$OPTARG;;
-            l)     LANGUAGE=$OPTARG;;    
+            o)     OUTPUT=$OPTARG;;               
             v)     VERBOSE=$OPTARG;;
             ?)     printf "Opcion invalida: -$OPTARG\n" $0
                           exit 2;;
@@ -20,9 +18,7 @@ TYPE=${TYPE:=NULL}
 FILE=${FILE:=NULL}
 ENTITY=${ENTITY:=NULL}
 OUTPUT=${OUTPUT:=NULL}
-LANGUAGE=${LANGUAGE:=NULL}
 VERBOSE=${VERBOSE:=NULL}
-
 
 
 function print_ascii_art {
@@ -50,9 +46,7 @@ USO:
 -f: Lista de palabras clave
 -t: tipo. Puede ser:
 		online : Aplica solo los patrones mas comunes
-		offline: Aplica todos los patrones 
-		top50 : Solo genera 50 passwords mas usados (Passwords personales). 
-		top500 : Genera 200 passwords mas usados. Requiere parametro -e
+		offline: Aplica todos los patrones 				
 -o: Archivo donde escribira la lista final
 -e: Empresa o sigla para generar
 -v: si ponemos 1 mostrara que patrones se esta aplicando
@@ -84,7 +78,7 @@ FILE=`pwd`/$FILE
 #echo $FILE
 
  
-  if [ $TYPE == "top500" ]
+  if [ $TYPE == "online" ]
   then  
   john --wordlist=$FILE --rules=rule14 --stdout >> temp-pass.txt 2> /dev/null	
   john --wordlist=$FILE --rules=rule22 --stdout >> temp-pass.txt 2> /dev/null		
@@ -93,7 +87,7 @@ FILE=`pwd`/$FILE
 
   john --wordlist=temp-pass.txt --rules=rule16 --stdout >> temp-pass1.txt 2> /dev/null
   
-  cat $FILE /usr/share/lanscanner/top500-"$LANGUAGE".txt temp-pass.txt temp-pass1.txt | sort | uniq > $OUTPUT 
+  cat $FILE temp-pass.txt temp-pass1.txt | sort | uniq > $OUTPUT 
   rm temp-pass.txt temp-pass1.txt
   exit
   fi

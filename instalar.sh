@@ -81,5 +81,11 @@ cd ..
 # make
 # make install
 
-cp top500-en.txt /usr/share/lanscanner/
-cp top500-es.txt /usr/share/lanscanner/
+cp worldlist/passwords-top500-en.txt /usr/share/lanscanner/
+cp worldlist/passwords-top500-es.txt /usr/share/lanscanner/
+cp worldlist/passwords-top5000-es.txt /usr/share/lanscanner/
+cp worldlist/passwords-top5000-en.txt /usr/share/lanscanner/
+
+cp worldlist/usuarios-es.txt /usr/share/lanscanner/
+cp worldlist/usuarios-en.txt /usr/share/lanscanner/
+

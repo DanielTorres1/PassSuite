@@ -868,7 +868,7 @@ fi
 if [ -f servicios/Windows.txt ]
 then		
 	for ip in $(cat servicios/Windows.txt); do					
-		grep '\[+\]' logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt  | grep -v 'passFakeTest123' > .vulnerabilidades/"$ip"_windows_passwordAdivinadoWin.txt
+		grep -ira '\[+\]' logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt  | grep -iav 'passFakeTest123' > .vulnerabilidades/"$ip"_windows_passwordAdivinadoWin.txt
 		#https://github.com/m4ll0k/SMBrute (shared)											
 	 done	
 	 insert_data

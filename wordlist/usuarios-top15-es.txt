@@ -6,11 +6,9 @@ info
 adm
 mysql
 user
-administrator
+administrador
 oracle
 ftp
-pi
-puppet
 ansible
 ec2-user
 vagrant

@@ -78,8 +78,8 @@ fi
 
 #rm enumeracion/* 2>/dev/null
 #rm .vulnerabilidades/* 2>/dev/null
-USERNAMES_FILE="/usr/share/lanscanner/usuarios-$LANGUAGE.txt"
-PASSWORDS_FILE="/usr/share/lanscanner/passwords-top500-$LANGUAGE.txt"
+USERNAMES_FILE="/usr/share/lanscanner/usuarios-top15-$LANGUAGE.txt"
+PASSWORDS_FILE="/usr/share/lanscanner/passwords-top50-$LANGUAGE.txt"
 
 if [ "$LANGUAGE" == "es" ]; then
 	admin_user='administrador'
@@ -88,7 +88,7 @@ else
 fi
 
 if [ $EXTRATEST == "oscp" ]; then
-PASSWORDS_FILE="/usr/share/lanscanner/passwords-top5000-$LANGUAGE.txt"
+PASSWORDS_FILE="/usr/share/lanscanner/passwords-top500-$LANGUAGE.txt"
 fi
 
 
@@ -161,17 +161,24 @@ then
 				echo -e "\t[+] Probando contraseñas comunes ...."
 				if [ -f ".vulnerabilidades2/"$host"_"$port"_wpUsers.txt" ]; then
 					#https://181.115.188.36:443/				
-					for user in $(cat .vulnerabilidades2/"$host"_"$port"_wpUsers.txt | awk '{print $2}'); do
+					for user in $(cat .vulnerabilidades2/"$host"_"$port"_wpUsers.txt |sort| awk '{print $2}'); do
 						echo -e "\t\t[+] Probando usuarios identificados. Probando con usuario ($user)"
-						echo "WpCrack.py -t $ip_port_path -u $user --p passwords.txt" >> logs/cracking/"$host"_"$port"_passwordAdminWeb.txt 2>/dev/null
-						WpCrack.py -t $ip_port_path -u $user --p passwords.txt >> logs/cracking/"$host"_"$port"_passwordAdminWeb.txt 2>/dev/null
+						echo "WpCrack.py -t $ip_port_path -u $user --p passwords.txt" >> logs/cracking/"$host"_"$user"-"$port"_passwordWordpress.txt
+						WpCrack.py -t $ip_port_path -u $user --p passwords.txt >> logs/cracking/"$host"_"$user"-"$port"_passwordWordpress.txt 2>> logs/cracking/"$host"_"$user"-"$port"_passwordWordpress.txt 						
+						egrep -iaq "Credenciales" logs/cracking/"$host"_*_passwordWordpress.txt 2>/dev/null
+						greprc=$?
+						if [[ $greprc -eq 0 ]] ; then	
+							echo -e "\t\t[+] Credenciales encontradas"						
+							break
+						fi
 					done
 				else
 					echo -e "\t\t[+] Probando con usuario admin"	
-					echo "WpCrack.py -t $ip_port_path -u admin --p passwords.txt" >> logs/cracking/"$host"_"$port"_passwordAdminWeb.txt 2>/dev/null
-					WpCrack.py -t $ip_port_path -u admin --p passwords.txt >> logs/cracking/"$host"_"$port"_passwordAdminWeb.txt 2>/dev/null
+					echo "WpCrack.py -t $ip_port_path -u admin --p passwords.txt" >> logs/cracking/"$host"_"admin-$port"_passwordWordpress.txt 2>/dev/null
+					WpCrack.py -t $ip_port_path -u admin --p passwords.txt >> logs/cracking/"$host"_"admin-$port"_passwordWordpress.txt 2>/dev/null
 				fi						
-				grep --color=never -i 'Credenciales' logs/cracking/"$host"_"$port"_passwordAdminWeb.txt 2>/dev/null | grep -v "passFakeTest123" | sort | uniq > .vulnerabilidades/"$host"_"$port"_passwordAdminWeb.txt 
+				grep --color=never -ia 'Credenciales' logs/cracking/"$host"_*_passwordWordpress.txt 2>/dev/null | grep -v "passFakeTest123"  > logs/vulnerabilidades/"$host"_"$port"_passwordWordpress.txt
+				grep -i credenciales logs/vulnerabilidades/"$host"_"$port"_passwordWordpress.txt > .vulnerabilidades/"$host"_"$port"_passwordWordpress.txt 
 			fi			
 		fi	
 		
@@ -296,28 +303,37 @@ fi
 
 ### SSH #########
 
-if [ -f servicios/ssh_onlyhost.txt ]
-then
-	echo -e "\n\t $OKBLUE Encontre servicios de SSH expuestos en  $RESET"	  
-	if [ $EXTRATEST == "oscp" ]; then		
-		for username in $(cat $USERNAMES_FILE); do
-			interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "medusa -u $username -P passwords.txt -h _target_ -M ssh >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent &
-		done
-	else
-		#interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "echo 'medusa -e n -u root -P passwords.txt -h _target_ -M ssh' >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent
-		interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "medusa -e n -u root -P passwords.txt -h _target_ -M ssh >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent &		
-	fi		
+if [ -f servicios/ssh.txt ]
+then	
+	echo -e "$OKBLUE\n\t#################### Testing pass SSH ######################$RESET"	
+	for line in $(cat servicios/ssh.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+
+		if [ -f .vulnerabilidades2/"$ip"_"$port"_enumeracionUsuariosSSH.txt ]; then	
+			echo "Usuarios identificados mediante CVE" 
+			cat .vulnerabilidades2/"$ip"_"$port"_enumeracionUsuariosSSH.txt
+			for username in $(cat .vulnerabilidades2/"$ip"_"$port"_enumeracionUsuariosSSH.txt); do
+				echo "Probando usuario: $username"
+				medusa -u $username -P passwords.txt -h $ip -M ssh >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
+			done			
+		else
+			echo "Probando usuario: root"
+			#interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "echo 'medusa -e n -u root -P passwords.txt -h _target_ -M ssh' >> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent
+			interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "medusa -e n -u root -P passwords.txt -h _target_ -M ssh >> logs/cracking/_target__22_passwordAdivinadoServ.txt 2>> logs/cracking/_target__22_passwordAdivinadoServ.txt" --silent &		
+		fi	
+	
+	done	
 fi
 
 			
 ####################
 
-
-
 	
 ### telnet #########
 if [ -f servicios/telnet_onlyhost.txt ]
 then
+	echo -e "$OKBLUE\n\t#################### Testing pass TELNET ######################$RESET"	
 	interlace -tL servicios/telnet_onlyhost.txt -threads 10 -c "echo 'medusa -e n -u root -P passwords.txt -h _target_ -M telnet' >> logs/cracking/_target__23_passwordAdivinadoServ.txt" --silent
 	interlace -tL servicios/telnet_onlyhost.txt -threads 10 -c "medusa -e n -u root -P passwords.txt -h _target_ -M telnet >> logs/cracking/_target__23_passwordAdivinadoServ.txt" --silent
 fi
@@ -810,7 +826,7 @@ then
 		respuesta=`grep --color=never SUCCESS logs/cracking/"$ip"_21_passwordAdivinadoServ.txt`
 		greprc=$?
 		if [[ $greprc -eq 0 ]] ; then
-			echo -n "[FTP] $respuesta" >> .vulnerabilidades/"$ip"_21_passwordAdivinadoServ.txt
+			echo -n "[FTP] $respuesta" | grep -iv 'passFakeTest123' >> .vulnerabilidades/"$ip"_21_passwordAdivinadoServ.txt
 		fi
 		
 		echo ""		

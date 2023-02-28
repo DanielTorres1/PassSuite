@@ -48,7 +48,7 @@ MODE=${MODE:=NULL} # vulnerabilidades/hacking
 LANGUAGE=${LANGUAGE:=NULL} # en/es
 EXTRATEST=${EXTRATEST:=NULL} # oscp
 
-tomcat_passwrods_combo="/usr/share/lanscanner/tomcat-passwds.txt"
+tomcat_passwords_combo="/usr/share/lanscanner/tomcat-passwds.txt"
 FILE_SUBDOMAINS="importarMaltego/subdominios-scan.csv"
 
 echo "LANGUAGE $LANGUAGE MODE $MODE ENTIDAD(k) $ENTIDAD DICTIONARY $DICTIONARY EXTRATEST $EXTRATEST"
@@ -79,7 +79,6 @@ fi
 #rm enumeracion/* 2>/dev/null
 #rm .vulnerabilidades/* 2>/dev/null
 USERNAMES_FILE="/usr/share/lanscanner/usuarios-top15-$LANGUAGE.txt"
-PASSWORDS_FILE="/usr/share/lanscanner/passwords-top50-$LANGUAGE.txt"
 
 if [ "$LANGUAGE" == "es" ]; then
 	admin_user='administrador'
@@ -88,18 +87,21 @@ else
 fi
 
 if [ $EXTRATEST == "oscp" ]; then
-PASSWORDS_FILE="/usr/share/lanscanner/passwords-top500-$LANGUAGE.txt"
+	PASSWORDS_FILE="/usr/share/lanscanner/passwords-top500-$LANGUAGE.txt"
+else
+	PASSWORDS_FILE="/usr/share/lanscanner/passwords-top50-$LANGUAGE.txt"
 fi
 
 
 if [ $DICTIONARY = NULL ] ; then
 
 	if [ $ENTIDAD != NULL ] ; then
+		echo "Generando diccionario"
 		echo $ENTIDAD > base.txt
 		passGen.sh -f base.txt -t online -o online.txt
-		cat online.txt $PASSWORDS_FILE | sort | uniq >  passwords.txt
-		rm base.txt			
+		cat online.txt $PASSWORDS_FILE | sort | uniq >  passwords.txt			
 	else
+		echo "PASSWORDS_FILE $PASSWORDS_FILE"
 	   cp $PASSWORDS_FILE passwords.txt
 	fi
 	echo "wordpress" >> passwords.txt	
@@ -248,8 +250,8 @@ then
 		if [[ $fingerprint = *"tomcat"* || $line = *'/manager/html'* ]]; then
 			echo -e "\t[+] Tomcat identificado ($ip_port_path)"										
 			echo -e "\t\t[+] Testing common passwords"	
-			#echo "patator.py http_fuzz url=$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwrods_combo" 
-			patator.py http_fuzz url=$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwrods_combo >> logs/cracking/"$host"_tomcat_passwordDefecto.txt 2>> logs/cracking/"$host"_tomcat_passwordDefecto.txt
+			#echo "patator.py http_fuzz url=$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwords_combo" 
+			patator.py http_fuzz url=$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwords_combo >> logs/cracking/"$host"_tomcat_passwordDefecto.txt 2>> logs/cracking/"$host"_tomcat_passwordDefecto.txt
 			egrep -iq "INFO - 200" logs/cracking/"$host"_tomcat_passwordDefecto.txt
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then			

@@ -247,18 +247,18 @@ then
 		fi	
 		#echo "fingerprint $fingerprint"	
 		echo "line $line"	
-		if [[ $fingerprint = *"tomcat"* || $line = *'/manager/html'* ]]; then
+		if [ $line = *'/manager/html'* ]; then
 			echo -e "\t[+] Tomcat identificado ($ip_port_path)"										
 			echo -e "\t\t[+] Testing common passwords"	
 			#echo "patator.py http_fuzz url=$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwords_combo" 
-			patator.py http_fuzz url=$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwords_combo >> logs/cracking/"$host"_tomcat_passwordDefecto.txt 2>> logs/cracking/"$host"_tomcat_passwordDefecto.txt
-			egrep -iq "INFO - 200" logs/cracking/"$host"_tomcat_passwordDefecto.txt
+			patator.py http_fuzz url=$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwords_combo >> logs/cracking/"$host"_"$port"_passwordDefecto.txt 2>> logs/cracking/"$host"_"$port"_passwordDefecto.txt
+			egrep -iq "INFO - 200" logs/cracking/"$host"_"$port"_passwordDefecto.txt
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then			
 				echo -e "\t\t[i] Password encontrado"				
 				# 09:55:46 patator    INFO - 200  22077:-1       0.522 | tomcat:s3cret                      |    25 | HTTP/1.1 200
-				creds=`grep --color=never "INFO - 200" logs/cracking/"$host"_tomcat_passwordDefecto.txt | cut -d "|" -f 2 | tr -d ' '`
-				echo "$ip_port_path (Creds $creds)" > .vulnerabilidades/"$host"_tomcat_passwordDefecto.txt
+				creds=`grep --color=never "INFO - 200" logs/cracking/"$host"_"$port"_passwordDefecto.txt | cut -d "|" -f 2 | tr -d ' '`
+				echo "$ip_port_path (Creds $creds)" > .vulnerabilidades/"$host"_"$port"_passwordDefecto.txt
 			else
 				echo -e "\t\t[+] Bruteforcing passwords (user=tomcat)"	
 				#echo "patator.py http_fuzz method=GET url=$ip_port_path user_pass=tomcat:FILE0 0=passwords.txt -e user_pass:b64 --threads=3" >> logs/cracking/"$host"_tomcat_passwordAdminWeb.txt 				

@@ -126,10 +126,10 @@ find  servicios -size  0 -print0 |xargs -0 rm 2>/dev/null
 old_ifs="$IFS"
 IFS=$'\n'  # make newlines the only separator     
 
-if [ -f servicios/admin-web.txt ]
+if [ -f servicios/admin-web-fingerprint.txt ]
 then	  		  
 	echo -e "$OKBLUE\n\t#################### Testing pass web admin ######################$RESET"			
-	for line in $(cat servicios/admin-web.txt); do	
+	for line in $(cat servicios/admin-web-fingerprint.txt); do	
 		IFS=$old_ifs
 		ip_port_path=`echo $line | cut -d ";" -f 1` #https://www.sanmateo.com.bo/wp-login.php https://www.sanmateo.com.bo:8443/wp-login.php		
 		fingerprint=`echo $line | cut -d ";" -f 2`

@@ -29,14 +29,15 @@ echo -e "$OKGREEN#################################### EMPEZANDO A CRACKEAR #####
 
 
 
-while getopts ":k:d:l:m:h:e:" OPTIONS
+while getopts ":k:d:l:m:h:e:v:" OPTIONS
 do
             case $OPTIONS in
             k)     ENTIDAD=$OPTARG;;            
             d)     DICTIONARY=$OPTARG;; 
-			l)     LANGUAGE=$OPTARG;;   
+			l)     LENGUAJE=$OPTARG;;   
 			m)     MODE=$OPTARG;;      
 			e)     EXTRATEST=$OPTARG;;  
+			v)	   VERBOSE=$OPTARG;; 
             ?)     printf "Opcion invalida: -$OPTARG\n" $0
                           exit 2;;
            esac
@@ -45,14 +46,14 @@ done
 ENTIDAD=${ENTIDAD:=NULL}
 DICTIONARY=${DICTIONARY:=NULL}
 MODE=${MODE:=NULL} # vulnerabilidades/hacking
-LANGUAGE=${LANGUAGE:=NULL} # en/es
+LENGUAJE=${LENGUAJE:=NULL} # en/es
 EXTRATEST=${EXTRATEST:=NULL} # oscp
 
 tomcat_passwords_combo="/usr/share/lanscanner/tomcat-passwds.txt"
 FILE_SUBDOMAINS="importarMaltego/subdominios-scan.csv"
 
-echo "LANGUAGE $LANGUAGE MODE $MODE ENTIDAD(k) $ENTIDAD DICTIONARY $DICTIONARY EXTRATEST $EXTRATEST"
-if [[ ${LANGUAGE} = NULL  ]];then 
+echo "LENGUAJE $LENGUAJE MODE $MODE ENTIDAD(k) $ENTIDAD DICTIONARY $DICTIONARY EXTRATEST $EXTRATEST VERBOSE:$VERBOSE"
+if [[ ${LENGUAJE} = NULL  ]];then 
 
 cat << "EOF"
 
@@ -62,7 +63,7 @@ Opciones:
 -k : Nombre de la empresa (Usado para generar diccionario de passwords)
 -l : idioma es/en
 -m : Mode [vulnerabilidades/hacking]	
- 
+-v : Verbose
 -d :Diccionario de passwords a usar (opcional)
 
 Ejemplo 1: Ataque de diccionario con passwords personallizados (basados en la palabra "microsoft") + 20 passwords mas usados
@@ -78,18 +79,18 @@ fi
 
 #rm enumeracion/* 2>/dev/null
 #rm .vulnerabilidades/* 2>/dev/null
-USERNAMES_FILE="/usr/share/lanscanner/usuarios-top15-$LANGUAGE.txt"
+USERNAMES_FILE="/usr/share/lanscanner/usuarios-top15-$LENGUAJE.txt"
 
-if [ "$LANGUAGE" == "es" ]; then
+if [ "$LENGUAJE" == "es" ]; then
 	admin_user='administrador'
 else
 	admin_user='administrator'
 fi
 
 if [ $EXTRATEST == "oscp" ]; then
-	PASSWORDS_FILE="/usr/share/lanscanner/passwords-top500-$LANGUAGE.txt"
+	PASSWORDS_FILE="/usr/share/lanscanner/passwords-top500-$LENGUAJE.txt"
 else
-	PASSWORDS_FILE="/usr/share/lanscanner/passwords-top50-$LANGUAGE.txt"
+	PASSWORDS_FILE="/usr/share/lanscanner/passwords-top50-$LENGUAJE.txt"
 fi
 
 
@@ -247,7 +248,7 @@ then
 		fi	
 		#echo "fingerprint $fingerprint"	
 		echo "line $line"	
-		if [ $line = *'/manager/html'* ]; then
+		if [[ $line = *'/manager/html'* ]]; then
 			echo -e "\t[+] Tomcat identificado ($ip_port_path)"										
 			echo -e "\t\t[+] Testing common passwords"	
 			#echo "patator.py http_fuzz url=$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwords_combo" 
@@ -855,7 +856,7 @@ then
 
 	if [[ "$MODE" == "vulnerabilidades" || "$MODE" == "completo" ]]; then 
 
-		if [ "$LANGUAGE" == "es" ]; then
+		if [ "$LENGUAJE" == "es" ]; then
 			interlace -tL servicios/Windows.txt -threads 10 -c "echo -e 'docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u soporte -p /home/passwords.txt --local-auth' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
 			interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u soporte -p /home/passwords.txt --local-auth | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
 			

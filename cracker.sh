@@ -130,14 +130,14 @@ if [ -f servicios/rdp.txt ]; then
 		echo -e "\n\t $OKBLUE Encontre servicios de RDP expuestos en $ip:$port $RESET"	  
 		
 		####### user administrador/administrator ####
-		patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$admin_user password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED|ERRCONNECT_CONNECT_CANCELLED' | grep -v 'Progress' 2> logs/cracking/"$ip"_"$admin_user"-3389_passwordAdivinadoWin.txt &
+		patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$admin_user password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED|ERRCONNECT_CONNECT_CANCELLED' 2> logs/cracking/"$ip"_"$admin_user"-3389_passwordAdivinadoWin2.txt &
 		
 		##############################
 
 		if [ -z "$ENTIDAD" ]
 		then
 			####### user $ENTIDAD ####
-			patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED' | grep -v 'Progress' 2>> logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin.txt &		
+			patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED'  2>> logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin2.txt &		
 			##############################
 		fi
 
@@ -919,6 +919,9 @@ then
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "[+] Parse $ip:$port"				
 				
+		grep -v 'Progress' logs/cracking/"$ip"_"$admin_user"-3389_passwordAdivinadoWin2.txt > logs/cracking/"$ip"_"$admin_user"-3389_passwordAdivinadoWin.txt 
+		grep -v 'Progress' logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin2.txt > logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin.txt
+
 		egrep -q  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK" logs/cracking/"$ip"_"$admin_user"-3389_passwordAdivinadoWin.txt
 		greprc=$?
 		if [[ $greprc -eq 0 ]] ; then	

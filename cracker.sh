@@ -920,8 +920,7 @@ then
 		echo -e "[+] Parse $ip:$port"				
 				
 		grep -v 'Progress' logs/cracking/"$ip"_"$admin_user"-3389_passwordAdivinadoWin2.txt > logs/cracking/"$ip"_"$admin_user"-3389_passwordAdivinadoWin.txt 
-		grep -v 'Progress' logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin2.txt > logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin.txt 2>/dev/null
-
+		rm logs/cracking/"$ip"_"$admin_user"-3389_passwordAdivinadoWin2.txt
 		egrep -q  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK" logs/cracking/"$ip"_"$admin_user"-3389_passwordAdivinadoWin.txt
 		greprc=$?
 		if [[ $greprc -eq 0 ]] ; then	
@@ -930,14 +929,18 @@ then
 			echo "$admin_user:$creds" >> .vulnerabilidades/"$ip"_3389_passwordAdivinadoWin.txt
 		fi	
 		
-		egrep -iq  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK" logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin.txt
-		greprc=$?
-		if [[ $greprc -eq 0 ]] ; then	
-			echo -e "\t$OKRED[!] Password found \n $RESET"
-			creds=`egrep  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK"  logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin.txt | awk '{print $9}'`
-			echo "$ENTIDAD:$creds" >> .vulnerabilidades/"$ip"_3389_passwordAdivinadoWin.txt
-		fi	
-
+		if [[ -z "$ENTIDAD" && "$ENTIDAD" != NULL ]];then
+			grep -v 'Progress' logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin2.txt > logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin.txt 2>/dev/null
+			rm logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin2.txt
+			egrep -iq  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK" logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin.txt
+			greprc=$?
+			if [[ $greprc -eq 0 ]] ; then	
+				echo -e "\t$OKRED[!] Password found \n $RESET"
+				creds=`egrep  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK"  logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin.txt | awk '{print $9}'`
+				echo "$ENTIDAD:$creds" >> .vulnerabilidades/"$ip"_3389_passwordAdivinadoWin.txt
+			fi	
+		fi
+						
 	 done	
 	insert_data
 fi

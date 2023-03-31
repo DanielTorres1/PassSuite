@@ -130,14 +130,14 @@ if [ -f servicios/rdp.txt ]; then
 		echo -e "\n\t $OKBLUE Encontre servicios de RDP expuestos en $ip:$port $RESET"	  
 		
 		####### user administrador/administrator ####
-		patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$admin_user password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED|ERRCONNECT_CONNECT_CANCELLED' 2> logs/cracking/"$ip"_3389_passwordAdivinadoWin.txt &
+		patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$admin_user password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED|ERRCONNECT_CONNECT_CANCELLED' | grep -v 'Progress' 2> logs/cracking/"$ip"_"$admin_user"-3389_passwordAdivinadoWin.txt &
 		
 		##############################
 
 		if [ -z "$ENTIDAD" ]
 		then
 			####### user $ENTIDAD ####
-			patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED' 2>> logs/cracking/"$ip"_3389_passwordAdivinadoWin.txt &		
+			patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED' | grep -v 'Progress' 2>> logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin.txt &		
 			##############################
 		fi
 
@@ -851,7 +851,7 @@ fi #modo completo/vulnerabilidades
 
 ######## wait to finish########
 while true; do
-	scan_instancias=$((`ps aux | egrep 'medusa|docker|passWeb|patator.py' | egrep -v 'dockerd|grep' | wc -l` - 1)) 
+	scan_instancias=$((`ps aux | egrep 'medusa|docker|passWeb|patator.py' | egrep -v 'dockerd|color|keyring' | wc -l` - 1)) 
 	if [ "$scan_instancias" -gt 0 ]
 	then
 		echo -e "\t[i] Todavia hay escaneos de medusa/docker/passWeb activos ($scan_instancias)"  
@@ -919,19 +919,19 @@ then
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "[+] Parse $ip:$port"				
 				
-		egrep -q  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK" logs/cracking/"$ip"_3389_passwordAdivinadoWin.txt
+		egrep -q  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK" logs/cracking/"$ip"_"$admin_user"-3389_passwordAdivinadoWin.txt
 		greprc=$?
 		if [[ $greprc -eq 0 ]] ; then	
 			echo -e "\t$OKRED[!] Password found \n $RESET"
-			creds=`egrep  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK"  logs/cracking/"$ip"_3389_passwordAdivinadoWin.txt | awk '{print $9}'`
+			creds=`egrep  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK"  logs/cracking/"$ip"_"$admin_user"-3389_passwordAdivinadoWin.txt| awk '{print $9}'`
 			echo "$admin_user:$creds" >> .vulnerabilidades/"$ip"_3389_passwordAdivinadoWin.txt
 		fi	
 		
-		egrep -iq  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK" logs/cracking/"$ip"_3389_passwordAdivinadoWin.txt
+		egrep -iq  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK" logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin.txt
 		greprc=$?
 		if [[ $greprc -eq 0 ]] ; then	
 			echo -e "\t$OKRED[!] Password found \n $RESET"
-			creds=`egrep  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK"  logs/cracking/"$ip"_3389_passwordAdivinadoWin.txt | awk '{print $9}'`
+			creds=`egrep  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK"  logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin.txt | awk '{print $9}'`
 			echo "$ENTIDAD:$creds" >> .vulnerabilidades/"$ip"_3389_passwordAdivinadoWin.txt
 		fi	
 

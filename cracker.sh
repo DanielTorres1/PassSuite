@@ -130,11 +130,12 @@ if [ -f servicios/rdp.txt ]; then
 		echo -e "\n\t $OKBLUE Encontre servicios de RDP expuestos en $ip:$port $RESET"	  
 		
 		####### user administrador/administrator ####
+		echo "admin_user $admin_user"
 		patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$admin_user password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED|ERRCONNECT_CONNECT_CANCELLED' 2> logs/cracking/"$ip"_"$admin_user"-3389_passwordAdivinadoWin2.txt &
 		
 		##############################
 
-		if [ -z "$ENTIDAD" ]
+		if [ -z "$ENTIDAD" && "$ENTIDAD" != NULL ]
 		then
 			####### user $ENTIDAD ####
 			patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED'  2>> logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin2.txt &		
@@ -162,7 +163,7 @@ then
 			echo -e "\n medusa -e n -u adm -P passwords.txt -h $ip -M mssql -f -t 1 "  >>  logs/cracking/"$ip"_1433_passwordBD.txt
 			medusa -e n -u adm -P passwords.txt -h $ip -M mssql -f -t 1 >>  logs/cracking/"$ip"_1433_passwordBD.txt 2>/dev/null &			
 
-			if [ -z "$ENTIDAD" ]; then
+			if [ -z "$ENTIDAD" && "$ENTIDAD" != NULL ]
 				echo -e "\n medusa -e n -u $ENTIDAD -P passwords.txt -h $ip -M mssql -f -t 1 "  >>  logs/cracking/"$ip"_mongo_passwordBD.txt
 				medusa -e n -u $ENTIDAD -P passwords.txt -h $ip -M mssql -f -t 1 >>  logs/cracking/"$ip"_mongo_passwordBD.txt
 			fi
@@ -231,7 +232,7 @@ then
 				echo -e "\n medusa -e n -u $admin_user -P passwords.txt -h $ip -M mysql -f -t 1 " >>  logs/cracking/"$ip"_3306_passwordBD.txt				
 				medusa -e n -u $admin_user -P passwords.txt -h $ip -M mysql -f -t 1  >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null &		
 				
-				if [ -z "$ENTIDAD" ]; then
+				if [ -z "$ENTIDAD" && "$ENTIDAD" != NULL ]
 					echo -e "\n medusa -e n -u $ENTIDAD  -P passwords.txt -h $ip -M mysql -f -t 1 " >>  logs/cracking/"$ip"_3306_passwordBD.txt				
 					medusa -e n -u $ENTIDAD  -P passwords.txt -h $ip -M mysql -f -t 1  >>  logs/cracking/"$ip"_3306_passwordBD.txt	&
 				fi
@@ -920,7 +921,7 @@ then
 		echo -e "[+] Parse $ip:$port"				
 				
 		grep -v 'Progress' logs/cracking/"$ip"_"$admin_user"-3389_passwordAdivinadoWin2.txt > logs/cracking/"$ip"_"$admin_user"-3389_passwordAdivinadoWin.txt 
-		grep -v 'Progress' logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin2.txt > logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin.txt
+		grep -v 'Progress' logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin2.txt > logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin.txt 2>/dev/null
 
 		egrep -q  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK" logs/cracking/"$ip"_"$admin_user"-3389_passwordAdivinadoWin.txt
 		greprc=$?

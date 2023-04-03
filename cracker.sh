@@ -277,11 +277,11 @@ then
 		if [[ $fingerprint = *"phpmyadmin"* ]]; then
 			echo -e "\t[+] phpMyAdmin identificado"
 			echo "passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d \"$path_web\" -u root|admin -f passwords.txt" > logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt 
-			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u root -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &						
-			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u admin -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &			
+			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u root -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
+			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u admin -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
+			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u mysql -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
 
-			if [[ "$MODE" == "vulnerabilidades"  || "$MODE" == "completo" ]] ; then	
-				passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u phpmyadmin -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
+			if [[ "$MODE" == "vulnerabilidades"  || "$MODE" == "completo" ]] ; then					
 				#######  wordpress user ######
 				grep -qi wordpress .enumeracion2/"$host"_"$port"_webData.txt
 				greprc=$?
@@ -851,7 +851,7 @@ fi #modo completo/vulnerabilidades
 
 ######## wait to finish########
 while true; do
-	scan_instancias=$((`ps aux | egrep 'medusa|docker|passWeb|patator.py' | egrep -v 'dockerd|color|keyring' | wc -l` - 1)) 
+	scan_instancias=$((`ps aux | egrep 'medusa|docker|passWeb|patator.py' | egrep -v 'dockerd|color|keyring|docker-proxy' | wc -l` - 1)) 
 	if [ "$scan_instancias" -gt 0 ]
 	then
 		echo -e "\t[i] Todavia hay escaneos de medusa/docker/passWeb activos ($scan_instancias)"  

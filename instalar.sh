@@ -65,24 +65,7 @@ cd DefaultCreds-cheat-sheet
 pip install -r requirements.txt --break-system-packages
 cd ..
 
-# oracle 
-
-# apt-get install -y ruby-dev libaio-dev build-essential libgmp-dev
-# mkdir /opt/oracle
-# mv instantclient_18_3 /opt/oracle
-
-# export PATH=$PATH:/opt/oracle/instantclient_18_3
-# export SQLPATH=/opt/oracle/instantclient_18_3
-# export TNS_ADMIN=/opt/oracle/instantclient_18_3
-# export LD_LIBRARY_PATH=/opt/oracle/instantclient_18_3
-# export ORACLE_HOME=/opt/oracle/instantclient_18_3
-
-# cd ruby-oci8-ruby-oci8-2.1.8
-# make
-# make install
-
 cp wordlist/passwords* /usr/share/lanscanner/
-
 cp wordlist/usuarios-top15-en.txt /usr/share/lanscanner/
 cp wordlist/usuarios-top15-es.txt /usr/share/lanscanner/
 

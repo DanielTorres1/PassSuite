@@ -83,7 +83,8 @@ FILE=`pwd`/$FILE
   john --wordlist=$FILE --rules=rule14 --stdout >> temp-pass.txt 2> /dev/null	
   john --wordlist=$FILE --rules=rule22 --stdout >> temp-pass.txt 2> /dev/null		
   john --wordlist=$FILE --rules=rule23 --stdout >> temp-pass.txt 2> /dev/null		
-  john --wordlist=$FILE --rules=rule24 --stdout >> temp-pass.txt 2> /dev/null		
+  john --wordlist=$FILE --rules=rule24 --stdout >> temp-pass.txt 2> /dev/null
+  john --wordlist=$FILE --rules=rule25 --stdout >> temp-pass.txt 2> /dev/null		
 
   john --wordlist=temp-pass.txt --rules=rule16 --stdout >> temp-pass1.txt 2> /dev/null
   

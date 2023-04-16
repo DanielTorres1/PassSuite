@@ -254,23 +254,26 @@ fi
 		for line in $(cat servicios/Windows.txt); do
 			ip=`echo $line | cut -f1 -d":"`
 			port=`echo $line | cut -f2 -d":"`
+			echo -e "[+] Probando $ip:$port"
 
-			echo  "\n crackmapexec smb $ip -u $admin_user -p passwords.txt" >> logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
-			crackmapexec smb $ip -u $admin_user -p passwords.txt | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >> logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
+			echo "patator smb_login host=$ip user=$admin_user password=FILE0 0=passwords.txt " > logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt
+			patator smb_login host=$ip user=$admin_user password=FILE0 0=passwords.txt  2> logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt 
 
 			if [[ "$MODE" == "vulnerabilidades" || "$MODE" == "completo" ]]; then 
 
 				if [ "$LENGUAJE" == "es" ]; then
-					echo -e "crackmapexec smb $ip -u soporte -p passwords.txt --local-auth" >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
-					crackmapexec smb $ip -u soporte -p passwords.txt --local-auth | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
+					echo "patator smb_login host=$ip user=soporte password=FILE0 0=passwords.txt " >> logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 
+					patator smb_login host=$ip user=soporte password=FILE0 0=passwords.txt  2>> logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 
 					
-					echo -e "\n crackmapexec smb $ip -u sistemas -p passwords.txt --local-auth" >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
-					crackmapexec smb $ip -u sistemas -p passwords.txt --local-auth | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
-				fi
-					
-				echo -e "\n crackmapexec smb $ip -u $ENTIDAD -p passwords.txt --local-auth" >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null
-				crackmapexec smb $ip -u $ENTIDAD -p passwords.txt --local-auth | sed -r 's/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g' >>  logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt 2>/dev/null	&
+					echo "patator smb_login host=$ip user=sistemas password=FILE0 0=passwords.txt " >> logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 
+					patator smb_login host=$ip user=sistemas password=FILE0 0=passwords.txt  2>> logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 
+				fi			
 			fi
+
+			if [[ -z "$ENTIDAD" && "$ENTIDAD" != NULL ]];then
+				echo "patator smb_login host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt " > logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt
+				patator smb_login host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt  2> logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 
+			fi	
 		done	
 	fi
 
@@ -858,7 +861,7 @@ fi #modo completo/vulnerabilidades
 
 ######## wait to finish########
 while true; do
-	scan_instancias=$((`ps aux | egrep 'medusa|passWeb|patator.py|crackmapexec' | egrep -v 'color|keyring|vscode-server|responder' | wc -l` - 1)) 
+	scan_instancias=$((`ps aux | egrep 'medusa|passWeb|patator|crackmapexec' | egrep -v 'color|keyring|vscode-server|responder' | wc -l` - 1)) 
 	if [ "$scan_instancias" -gt 0 ]
 	then
 		echo -e "\t[i] Todavia hay escaneos de medusa/passWeb activos ($scan_instancias)"  
@@ -959,7 +962,26 @@ then
 	echo -e "$OKBLUE #################### PARSE (`wc -l servicios/Windows.txt`) ######################$RESET"	    		
 	for ip in $(cat servicios/Windows.txt); do	
 		echo -e "[+] Parse $ip"					
-		grep -ira '\[+\]' logs/cracking/"$ip"_windows_passwordAdivinadoWin.txt  | grep -iav 'passFakeTest123' > .vulnerabilidades/"$ip"_windows_passwordAdivinadoWin.txt
+				
+		password_smb=`grep -i windows logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'}`
+		if [[ -n "$password_smb" ]];then
+			echo "Usuario:$admin_user Password:$password_smb" >	.vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+		fi
+
+		password_smb=`grep -i windows logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'}`
+		if [[ -n "$password_smb" ]];then
+			echo "Usuario:soporte Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+		fi
+
+		password_smb=`grep -i windows logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'}`
+		if [[ -n "$password_smb" ]];then
+			echo "Usuario:$ENTIDAD Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+		fi
+
+		password_smb=`grep -i windows logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'} `
+		if [[ -n "$password_smb" ]];then
+			echo "Usuario:sistemas Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+		fi
 		#https://github.com/m4ll0k/SMBrute (shared)											
 	 done	
 	 insert_data

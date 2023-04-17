@@ -337,9 +337,7 @@ then
 				if [[ $greprc -eq 0 ]];then 
 					passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u drupal -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt&
 				fi	
-			fi
-									
-			egrep --color=never -i 'Password encontrado|sistema sin password' logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt | sort | uniq > .vulnerabilidades/"$host"_"$port"_passwordPhpMyadmin.txt								
+			fi												
 		
 		fi	
 			
@@ -873,6 +871,8 @@ done
 ##############################
 
 ############################## PARSE ############################
+
+
 if [ -f servicios/postgres.txt ]
 then
     echo -e "$OKBLUE #################### PARSE (`wc -l servicios/postgres.txt`) ######################$RESET"	    
@@ -1027,6 +1027,8 @@ then
 		host=`echo $host_port | cut -d ":" -f 1`				
 		path_web=`echo $ip_port_path | cut -d "/" -f 4-5`	
 		path_web=`echo "/"$path_web`
+
+		egrep --color=never -i 'Password encontrado|sistema sin password' logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt 2>/dev/null | sort | uniq > .vulnerabilidades/"$host"_"$port"_passwordPhpMyadmin.txt	 
 		
 		if [[ $fingerprint = *"joomla"* ]]; then
 			grep --color=never 'Successful login' logs/cracking/"$host"_"$port"_passwordCMS.txt | sort | uniq > .vulnerabilidades/"$host"_"$port"_passwordCMS.txt 
@@ -1059,6 +1061,7 @@ then
 		fi	
 
 	done
+	insert_data
 fi
 
 

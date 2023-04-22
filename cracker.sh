@@ -394,8 +394,8 @@ then
 					echo "WpCrack.py -t $ip_port_path -u admin --p passwords.txt" >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null
 					WpCrack.py -t $ip_port_path -u admin --p passwords.txt >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null
 				fi						
-				grep --color=never -ia 'Credenciales' logs/cracking/"$host"_*_passwordCMS.txt 2>/dev/null | grep -v "passFakeTest123"  > logs/vulnerabilidades/"$host"_"$port"_passwordCMS.txt
-				grep -i credenciales logs/vulnerabilidades/"$host"_"$port"_passwordCMS.txt > .vulnerabilidades/"$host"_"$port"_passwordCMS.txt 
+				grep --color=never -ia 'Credenciales' logs/cracking/"$host"_*_passwordCMS.txt 2>/dev/null  > logs/vulnerabilidades/"$host"_"$port"_passwordCMS.txt
+				grep -i credenciales logs/vulnerabilidades/"$host"_"$port"_passwordCMS.txt > .vulnerabilidades/"$host"_"$port"_passwordCMS.txt  2>/dev/null 
 			fi			
 		fi	
 		

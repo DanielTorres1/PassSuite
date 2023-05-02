@@ -1031,7 +1031,7 @@ then
 		egrep --color=never -i 'Password encontrado|sistema sin password' logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt 2>/dev/null | sort | uniq > .vulnerabilidades/"$host"_"$port"_passwordPhpMyadmin.txt	 
 		
 		if [[ $fingerprint = *"joomla"* ]]; then
-			grep --color=never 'Successful login' logs/cracking/"$host"_"$port"_passwordCMS.txt | sort | uniq > .vulnerabilidades/"$host"_"$port"_passwordCMS.txt 
+			grep --color=never 'Successful login' logs/cracking/"$host"_"$port"_passwordCMS.txt 2>/dev/null| sort | uniq > .vulnerabilidades/"$host"_"$port"_passwordCMS.txt 
 		fi
 
 

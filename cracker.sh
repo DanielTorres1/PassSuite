@@ -252,9 +252,8 @@ fi
 	then		
 		echo -e "$OKBLUE\n\t#################### Testing windows auth ######################$RESET"			
 		for line in $(cat servicios/Windows.txt); do
-			ip=`echo $line | cut -f1 -d":"`
-			port=`echo $line | cut -f2 -d":"`
-			echo -e "[+] Probando $ip:$port"
+			ip=`echo $line | cut -f1 -d":"`			
+			echo -e "[+] Probando $ip"
 
 			echo "patator smb_login host=$ip user=$admin_user password=FILE0 0=passwords.txt " > logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt
 			patator smb_login host=$ip user=$admin_user password=FILE0 0=passwords.txt  2> logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt 

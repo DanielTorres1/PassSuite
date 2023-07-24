@@ -267,7 +267,7 @@ then
 	echo -e "$OKBLUE\n\t#################### Testing windows auth ######################$RESET"			
 	for line in $(cat servicios/Windows.txt); do
 		ip=`echo $line | cut -f1 -d":"`			
-		grep -iq 'allows sessions using username' .vulnerabilidades2/"$ip"_445_nullsession.txt		
+		grep -iq 'allows sessions using username' .vulnerabilidades2/"$ip"_445_nullsession.txt 2>/dev/null
 		greprc=$?
 		if [[ $greprc -eq 0 ]] ; then	
 			echo -e "[+] Null session detectada en $ip"
@@ -276,22 +276,22 @@ then
 			echo -e "[+] Probando $ip"
 
 			echo "patator smb_login host=$ip user=$admin_user password=FILE0 0=passwords.txt " > logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt
-			patator smb_login host=$ip user=$admin_user password=FILE0 0=passwords.txt  2> logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt 
+			patator smb_login host=$ip user=$admin_user password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE  2> logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt 
 
 			if [[ "$MODE" == "total" ]]; then 
 
 				if [ "$LENGUAJE" == "es" ]; then
 					echo "patator smb_login host=$ip user=soporte password=FILE0 0=passwords.txt " >> logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 
-					patator smb_login host=$ip user=soporte password=FILE0 0=passwords.txt  2>> logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 
+					patator smb_login host=$ip user=soporte password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE 2>> logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 
 					
 					echo "patator smb_login host=$ip user=sistemas password=FILE0 0=passwords.txt " >> logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 
-					patator smb_login host=$ip user=sistemas password=FILE0 0=passwords.txt  2>> logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 
+					patator smb_login host=$ip user=sistemas password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE 2>> logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 
 				fi			
 			fi
 
 			if [[ ! -z $ENTIDAD ]];then
 				echo "patator smb_login host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt " > logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt
-				patator smb_login host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt  2> logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 
+				patator smb_login host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE 2> logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 
 			fi	
 		fi # no null session
 	done	
@@ -991,30 +991,46 @@ then
 	echo -e "$OKBLUE #################### PARSE (`wc -l servicios/Windows.txt`) ######################$RESET"	    		
 	for ip in $(cat servicios/Windows.txt); do	
 		echo -e "[+] Parse $ip"					
-		grep -iq 'allows sessions using username' .vulnerabilidades2/"$ip"_445_nullsession.txt		
+		grep -iq 'allows sessions using username' .vulnerabilidades2/"$ip"_445_nullsession.txt	2>/dev/null	
 		greprc=$?
 		if [[ $greprc -eq 0 ]] ; then	
 			echo -e "[+] Null session detectada en $ip"
 		else
-			password_smb=`grep -i windows logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'}`
-			if [[ -n "$password_smb" ]];then
-				echo "Usuario:$admin_user Password:$password_smb" >	.vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+			passwords_ok=`grep -qi windows logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt`			
+			if [[  $passwords_ok -lt 3 ]];then 
+				password_smb=`grep -i windows logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'}`
+				if [[ -n "$password_smb" ]];then
+					echo "Usuario:$admin_user Password:$password_smb" >	.vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+				fi
 			fi
+						
+			passwords_ok=`grep -qi windows logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 2>/dev/null`
+			if [[  $passwords_ok -lt 3 ]];then 
+				password_smb=`grep -i windows logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'}`
+				if [[ -n "$password_smb" ]];then
+					echo "Usuario:soporte Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+				fi
+			fi
+			
+			if [ ! -z $ENTIDAD ] ; then
+				passwords_ok=`grep -qi windows logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 2>/dev/null`
+				if [[  $passwords_ok -lt 3 ]];then 
+					password_smb=`grep -i windows logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 2>/dev/null | awk {'print $9'}`
+					if [[ -n "$password_smb" ]];then
+						echo "Usuario:$ENTIDAD Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+					fi
+				fi	
+			fi
+					
 
-			password_smb=`grep -i windows logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'}`
-			if [[ -n "$password_smb" ]];then
-				echo "Usuario:soporte Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+			passwords_ok=`grep -qi windows logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 2>/dev/null`			
+			if [[  $passwords_ok -lt 3 ]];then 
+				password_smb=`grep -i windows logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'} `
+				if [[ -n "$password_smb" ]];then
+					echo "Usuario:sistemas Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+				fi
 			fi
-
-			password_smb=`grep -i windows logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'}`
-			if [[ -n "$password_smb" ]];then
-				echo "Usuario:$ENTIDAD Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
-			fi
-
-			password_smb=`grep -i windows logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'} `
-			if [[ -n "$password_smb" ]];then
-				echo "Usuario:sistemas Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
-			fi
+			
 		fi
 		#https://github.com/m4ll0k/SMBrute (shared)											
 	 done	

@@ -14,8 +14,7 @@ do
             case $OPTIONS in            
             u)     USUARIO=$OPTARG;;
             h)     HASH=$OPTARG;;
-            p)     PASSWORD=$OPTARG;;
-            f)     FILE=$OPTARG;;            
+            p)     PASSWORD=$OPTARG;;                    
             ?)     printf "Opcion invalida: -$OPTARG\n" $0
                           exit 2;;
            esac
@@ -24,7 +23,6 @@ done
 USUARIO=${USUARIO:=NULL}
 HASH=${HASH:=NULL}
 PASSWORD=${PASSWORD:=NULL}
-FILE=${FILE:=NULL}
 
 function insert_data () {
 	find .vulnerabilidades -size  0 -print0 |xargs -0 rm 2>/dev/null # delete empty files
@@ -53,7 +51,7 @@ print_ascii_art
 
 if [ $USUARIO = NULL ] ; then
 echo "|              														 			"
-echo "| USO: local-admin-checker.sh -u [usuario] -h [hash] -p [password] -f [file]"
+echo "| USO: local-admin-checker.sh -u [usuario] -h [hash] -p [password]"
 echo "|																		 			"
 echo ""
 exit
@@ -74,15 +72,15 @@ echo -e "$OKBLUE Probando con usuario: $USUARIO  y hash $HASH $RESET"
 			#echo "PASSWORD $PASSWORD"				
 				echo "Usando password $PASSWORD"
 				crackmapexec smb $ip -u $USUARIO -p $PASSWORD --local-auth  | tee logs/vulnerabilidades/"$ip"_smb_logeoRemoto1.txt #local
-				crackmapexec smb $ip -u $USUARIO -p $PASSWORD  | tee logs/vulnerabilidades/"$ip"_smb_logeoRemoto2.txt	#dominio
+				#crackmapexec smb $ip -u $USUARIO -p $PASSWORD  | tee logs/vulnerabilidades/"$ip"_smb_logeoRemoto2.txt	#dominio
 			else
 				echo "Usando HASH $HASH"
 				echo "crackmapexec smb $ip -u $USUARIO -H $HASH --local-auth "
 				crackmapexec smb $ip -u $USUARIO -H $HASH --local-auth  | tee logs/vulnerabilidades/"$ip"_smb_logeoRemoto1.txt #local
-				crackmapexec smb $ip -u $USUARIO -H $HASH  | tee logs/vulnerabilidades/"$ip"_smb_logeoRemoto2.txt #dominio					
+				#crackmapexec smb $ip -u $USUARIO -H $HASH  | tee logs/vulnerabilidades/"$ip"_smb_logeoRemoto2.txt #dominio					
 			fi
 			
-			grep -qai '+' logs/vulnerabilidades/"$ip"_smb_logeoRemoto1.txt
+			grep -qai '+' logs/vulnerabilidades/"$ip"_smb_logeoRemoto1.txt 2>/dev/null
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then						
 				echo -e "\t$OKRED[i] Logeo remoto habilitado $RESET"
@@ -93,7 +91,7 @@ echo -e "$OKBLUE Probando con usuario: $USUARIO  y hash $HASH $RESET"
 				fi			
 			fi	
 
-			grep -qai '+' logs/vulnerabilidades/"$ip"_smb_logeoRemoto2.txt
+			grep -qai '+' logs/vulnerabilidades/"$ip"_smb_logeoRemoto2.txt 2>/dev/null
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then						
 				echo -e "\t$OKRED[i] Logeo remoto habilitado $RESET"

@@ -170,13 +170,14 @@ if [ -f servicios/rdp.txt ]; then
 		
 		####### user administrador/administrator ####
 		echo "admin_user $admin_user"
-		patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$admin_user password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED|ERRCONNECT_CONNECT_CANCELLED' 2> logs/cracking/"$ip"_"$admin_user"-3389_passwordAdivinadoWin2.txt &
+		#patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$admin_user password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED|ERRCONNECT_CONNECT_CANCELLED' 2> logs/cracking/"$ip"_"$admin_user"-3389_passwordAdivinadoWin2.txt &
 		
 		##############################
 
 		if [[ ! -z $ENTIDAD ]] ;then	
 			####### user $ENTIDAD ####
-			patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED'  2>> logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin2.txt &		
+			echo ""
+			#patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED'  2>> logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin2.txt &		
 			##############################
 		fi
 

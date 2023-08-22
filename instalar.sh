@@ -32,6 +32,7 @@ print_ascii_art
 echo -e "${RED}[+]${GREEN} Copiando passGen ${RESET}"
 cp cracker.sh /usr/bin
 chmod a+x /usr/bin/cracker.sh
+cp local-admin-checker.sh /usr/bin/local-admin-checker.sh
 
 cp WpCrack.py /usr/bin
 chmod a+x /usr/bin/WpCrack.py

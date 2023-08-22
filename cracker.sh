@@ -64,34 +64,11 @@ while (( "$#" )); do
 done
 
 
-function waitWeb (){
-	######## wait to finish ########
-	sleep $1
-	  while true; do
-	    free_ram=`free -m | grep -i mem | awk '{print $7}'`
-		script_instancias=$((`ps aux | egrep "medusa|patator|crackmap|hydra" | egrep -v 'discover.sh|lanscanner.sh|autohack.sh|heka.sh|grep -E' | wc -l` - 1)) 
-		#if [ "$VERBOSE" == 's' ]; then  echo "RAM=$free_ram"; date; fi
-		if [[ $free_ram -lt $MIN_RAM || $script_instancias -gt $MAX_SCRIPT_INSTANCES  ]];then 
-			echo -e "\t[i] Todavia hay muchos escaneos de medusa/patator activos ($script_instancias) RAM=$free_ram"  
-			sleep 5
-		else
-			break		  		 
-		fi					
-	  done
-	  ##############################
-}
 
-################## Config HERE ####################
-MIN_RAM=900;
-MAX_SCRIPT_INSTANCES=100
 tomcat_passwords_combo="/usr/share/lanscanner/tomcat-passwds.txt"
 FILE_SUBDOMAINS="importarMaltego/subdominios-scan.csv"
-<<<<<<< HEAD
-###############################
-=======
 MAX_SCRIPT_INSTANCES=10
 MIN_RAM=900
->>>>>>> 6ff8b8c (update)
 
 echo "LENGUAJE $LENGUAJE MODE $MODE ENTIDAD(k) $ENTIDAD DICTIONARY $DICTIONARY EXTRATEST $EXTRATEST VERBOSE:$VERBOSE SPEED $SPEED"
 if [[ -z $LENGUAJE ]];then 
@@ -170,7 +147,6 @@ if [ -f servicios/rdp.txt ]; then
 	for line in $(cat servicios/rdp.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
-		waitWeb 0.5
 		echo -e "[+] Probando $ip:$port"
 
 		while true; do			
@@ -311,7 +287,7 @@ then
 		if [[ $greprc -eq 0 ]] ; then	
 			echo -e "[+] Null session detectada en $ip"
 		else
-			waitWeb 0.5
+
 			echo -e "[+] Probando $ip"
 			while true; do			
 				free_ram=`free -m | grep -i mem | awk '{print $7}'`		

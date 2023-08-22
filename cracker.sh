@@ -67,7 +67,7 @@ done
 
 tomcat_passwords_combo="/usr/share/lanscanner/tomcat-passwds.txt"
 FILE_SUBDOMAINS="importarMaltego/subdominios-scan.csv"
-MAX_SCRIPT_INSTANCES=10
+MAX_SCRIPT_INSTANCES=30
 MIN_RAM=900
 
 echo "LENGUAJE $LENGUAJE MODE $MODE ENTIDAD(k) $ENTIDAD DICTIONARY $DICTIONARY EXTRATEST $EXTRATEST VERBOSE:$VERBOSE SPEED $SPEED"
@@ -287,32 +287,31 @@ then
 		if [[ $greprc -eq 0 ]] ; then	
 			echo -e "[+] Null session detectada en $ip"
 		else
-
 			echo -e "[+] Probando $ip"
 			while true; do			
 				free_ram=`free -m | grep -i mem | awk '{print $7}'`		
 				script_instancias=$((`ps aux | egrep 'patator|medusa|ncrack' | wc -l` - 1)) 			
 				
 				if [[ $free_ram -gt $MIN_RAM && $script_instancias -lt $MAX_SCRIPT_INSTANCES  ]];then 										
-					echo "patator smb_login host=$ip user=$admin_user password=FILE0 0=passwords.txt " > logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt
-					patator smb_login host=$ip user=$admin_user password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE  2> logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt 
+					echo "patator smb_login -t 1 host=$ip user=$admin_user password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE -R logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt " > logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt
+					patator smb_login -t 1 host=$ip user=$admin_user password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE -R logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt 2> /dev/null &
 					
-					if [[ "$MODE" == "total" ]]; then 
+					if [[ "$MODE" == "total" && "$EXTRATEST" == "oscp"  ]]; then 
 						if [ "$LENGUAJE" == "es" ]; then
 							echo "patator smb_login host=$ip user=soporte password=FILE0 0=passwords.txt " >> logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 
-							patator smb_login host=$ip user=soporte password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE 2>> logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 
+							patator smb_login -t 1 host=$ip user=soporte password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE -R logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 2>> /dev/null &
 							
 							echo "patator smb_login host=$ip user=sistemas password=FILE0 0=passwords.txt " >> logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 
-							patator smb_login host=$ip user=sistemas password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE 2>> logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 
+							patator smb_login -t 1 host=$ip user=sistemas password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE -R logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 2>> /dev/null &
+						fi	
+
+						if [[ ! -z $ENTIDAD ]];then
+							echo "patator smb_login host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt " > logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt
+							patator smb_login -t 1 host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE -R logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 2> /dev/null &
 						fi			
-					fi
-
-					if [[ ! -z $ENTIDAD ]];then
-						echo "patator smb_login host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt " > logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt
-						patator smb_login host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE 2> logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 
-					fi	
-
-					break
+					fi					
+					sleep 1
+					break					
 				else								
 					script_instancias=`ps aux | egrep 'patator|medusa|ncrack' | egrep -v 'discover.sh|lanscanner.sh|autohack.sh|heka.sh|grep -E'| wc -l`
 					echo -e "\t[-] Scripts online ($script_instancias) RAM = $free_ram Mb "

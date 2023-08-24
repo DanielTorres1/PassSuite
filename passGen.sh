@@ -81,6 +81,7 @@ FILE=`pwd`/$FILE
   if [ $TYPE == "online" ]
   then  
   john --wordlist=$FILE --rules=rule14 --stdout >> temp-pass.txt 2> /dev/null	
+  john --wordlist=$FILE --rules=rule18 --stdout >> temp-pass.txt 2> /dev/null
   john --wordlist=$FILE --rules=rule22 --stdout >> temp-pass.txt 2> /dev/null		
   john --wordlist=$FILE --rules=rule23 --stdout >> temp-pass.txt 2> /dev/null		
   john --wordlist=$FILE --rules=rule24 --stdout >> temp-pass.txt 2> /dev/null
@@ -155,7 +156,7 @@ FILE=`pwd`/$FILE
 
     if [ $VERBOSE == "1" ]
     then	  
-	  	 echo -e "\n  REGLA 18: Mutar s/$ , a/@ , l/1, e/3, g/9, i=1, o=0"
+	  	 echo -e "\n  REGLA 18: Mutar s/$ , a/4 , l/1, e/3, g/9, i=1, o=0"
 	  	 echo -e "\n REGLA 16: Volver Mayuscula la primera letra"
 		 echo -e "\n REGLA 17: Volver Mayuscula todo"	  
     fi

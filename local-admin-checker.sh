@@ -48,7 +48,8 @@ EOF
 
 
 print_ascii_art
-
+MIN_RAM=900;
+MAX_SCRIPT_INSTANCES=10
 if [ $USUARIO = NULL ] ; then
 echo "|              														 			"
 echo "| USO: local-admin-checker.sh -u [usuario] -h [hash] -p [password]"
@@ -64,6 +65,22 @@ fi
 #3) secretsdump.py -sam SAM.save -system SYSTEM.save LOCAL
 #   secretsdump -security SECURITY.save -system SYSTEM.save LOCAL # DCC2 (Domain Cached credentials 2 ) hashcat mode 2100
 echo -e "$OKBLUE  USUARIO:$USUARIO HASH:$HASH PASSWORD:$PASSWORD $RESET"
+
+function checkRAM (){
+	while true; do
+		free_ram=`free -m | grep -i mem | awk '{print $7}'`		
+		script_instancias=$((`ps aux | egrep 'webData|passWeb|crackmap' | wc -l` - 1)) 
+		python_instancias=$((`ps aux | grep get_ssl_cert | wc -l` - 1)) 
+		script_instancias=$((script_instancias + python_instancias))
+
+		if [[ $free_ram -gt $MIN_RAM  && $script_instancias -lt $MAX_SCRIPT_INSTANCES  ]];then
+			break
+		else	
+			echo "Poca RAM $MIN_RAM MB ($script_instancias scripts activos)"
+			sleep 3 
+		fi
+	done
+}
 ######################
 
   for ip in $(ls .enumeracion2_archived| grep 'crackmapexec' | cut -d "_" -f1); do
@@ -71,16 +88,30 @@ echo -e "$OKBLUE  USUARIO:$USUARIO HASH:$HASH PASSWORD:$PASSWORD $RESET"
 			if [ "$PASSWORD" != NULL ] ; then
 			#echo "PASSWORD $PASSWORD"				
 				echo "Usando password $PASSWORD"
-				crackmapexec smb $ip -u $USUARIO -p $PASSWORD --local-auth  | tee logs/vulnerabilidades/"$ip"_smb_logeoRemoto1.txt #local
-				#crackmapexec smb $ip -u $USUARIO -p $PASSWORD  | tee logs/vulnerabilidades/"$ip"_smb_logeoRemoto2.txt	#dominio
+				crackmapexec smb $ip -u $USUARIO -p $PASSWORD --local-auth  | tee -a logs/cracking/"$ip"_smb_logeoRemoto1.txt & #local
+				sleep 0.3
+				#crackmapexec smb $ip -u $USUARIO -p $PASSWORD  | tee logs/cracking/"$ip"_smb_logeoRemoto2.txt	#dominio
 			else
 				echo "Usando HASH $HASH"
 				echo "crackmapexec smb $ip -u $USUARIO -H $HASH --local-auth "
-				crackmapexec smb $ip -u $USUARIO -H $HASH --local-auth  | tee logs/vulnerabilidades/"$ip"_smb_logeoRemoto1.txt #local
-				#crackmapexec smb $ip -u $USUARIO -H $HASH  | tee logs/vulnerabilidades/"$ip"_smb_logeoRemoto2.txt #dominio					
-			fi
-			
-			grep -qai '+' logs/vulnerabilidades/"$ip"_smb_logeoRemoto1.txt 2>/dev/null
+				crackmapexec smb $ip -u $USUARIO -H $HASH --local-auth  | tee -a logs/cracking/"$ip"_smb_logeoRemoto1.txt & #local
+				#crackmapexec smb $ip -u $USUARIO -H $HASH  | tee logs/cracking/"$ip"_smb_logeoRemoto2.txt #dominio					
+			fi	
+	done
+
+	while true; do
+		crackmap_instancias=`ps aux | egrep 'crackmapexec' | wc -l`		
+		if [ "$crackmap_instancias" -gt 1 ]
+		then
+			echo -e "\t[i] Todavia hay scripts activos ($crackmap_instancias)"				
+			sleep 1
+		else
+			break		
+		fi
+	done	# done true	
+
+	for ip in $(ls .enumeracion2_archived| grep 'crackmapexec' | cut -d "_" -f1); do		
+			grep -qai '+' logs/cracking/"$ip"_smb_logeoRemoto1.txt 2>/dev/null
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then						
 				echo -e "\t$OKRED[i] Logeo remoto habilitado $RESET"
@@ -91,7 +122,7 @@ echo -e "$OKBLUE  USUARIO:$USUARIO HASH:$HASH PASSWORD:$PASSWORD $RESET"
 				fi			
 			fi	
 
-			grep -qai '+' logs/vulnerabilidades/"$ip"_smb_logeoRemoto2.txt 2>/dev/null
+			grep -qai '+' logs/cracking/"$ip"_smb_logeoRemoto2.txt 2>/dev/null
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then						
 				echo -e "\t$OKRED[i] Logeo remoto habilitado $RESET"
@@ -101,8 +132,7 @@ echo -e "$OKBLUE  USUARIO:$USUARIO HASH:$HASH PASSWORD:$PASSWORD $RESET"
 					echo -e "Usuario:$USUARIO Hash:aad3b435b51404eeaad3b435b51404ee:$HASH (dominio)" >> .vulnerabilidades/"$ip"_smb_logeoRemoto.txt
 				fi			
 			fi	
-					
-	done
+	done	
 
 insert_data
 

@@ -47,9 +47,9 @@ EOF
 }
 
 
-print_ascii_art
+#print_ascii_art
 MIN_RAM=900;
-MAX_SCRIPT_INSTANCES=10
+MAX_SCRIPT_INSTANCES=15
 if [ $USUARIO = NULL ] ; then
 echo "|              														 			"
 echo "| USO: local-admin-checker.sh -u [usuario] -h [hash] -p [password]"
@@ -83,19 +83,19 @@ function checkRAM (){
 }
 ######################
 
-  for ip in $(ls .enumeracion2_archived| grep 'crackmapexec' | cut -d "_" -f1); do
+  for ip in $(cat servicios/Windows.txt); do
 			echo -e "[+] $OKBLUE Testeando $ip .. $RESET"
 			if [ "$PASSWORD" != NULL ] ; then
 			#echo "PASSWORD $PASSWORD"				
 				echo "Usando password $PASSWORD"
-				crackmapexec smb $ip -u $USUARIO -p $PASSWORD --local-auth  | tee -a logs/cracking/"$ip"_smb_logeoRemoto1.txt & #local
+				crackmapexec smb $ip -u $USUARIO -p $PASSWORD --local-auth  | tee -a logs/cracking/"$ip"_smb_passwordAdivinadoWin1.txt & #local
 				sleep 0.3
-				#crackmapexec smb $ip -u $USUARIO -p $PASSWORD  | tee logs/cracking/"$ip"_smb_logeoRemoto2.txt	#dominio
+				#crackmapexec smb $ip -u $USUARIO -p $PASSWORD  | tee logs/cracking/"$ip"_smb_passwordAdivinadoWin2.txt	#dominio
 			else
 				echo "Usando HASH $HASH"
 				echo "crackmapexec smb $ip -u $USUARIO -H $HASH --local-auth "
-				crackmapexec smb $ip -u $USUARIO -H $HASH --local-auth  | tee -a logs/cracking/"$ip"_smb_logeoRemoto1.txt & #local
-				#crackmapexec smb $ip -u $USUARIO -H $HASH  | tee logs/cracking/"$ip"_smb_logeoRemoto2.txt #dominio					
+				crackmapexec smb $ip -u $USUARIO -H $HASH --local-auth  | tee -a logs/cracking/"$ip"_smb_passwordAdivinadoWin1.txt & #local
+				#crackmapexec smb $ip -u $USUARIO -H $HASH  | tee logs/cracking/"$ip"_smb_passwordAdivinadoWin2.txt #dominio					
 			fi	
 	done
 
@@ -110,27 +110,31 @@ function checkRAM (){
 		fi
 	done	# done true	
 
-	for ip in $(ls .enumeracion2_archived| grep 'crackmapexec' | cut -d "_" -f1); do		
-			grep -qai '+' logs/cracking/"$ip"_smb_logeoRemoto1.txt 2>/dev/null
+	for ip in $(cat servicios/Windows.txt); do		
+			grep -qai '+' logs/cracking/"$ip"_smb_passwordAdivinadoWin1.txt 2>/dev/null
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then						
 				echo -e "\t$OKRED[i] Logeo remoto habilitado $RESET"
 				if [ "$PASSWORD" != NULL ] ; then
-					echo -e "Usuario:$USUARIO Pasword:$password (local)" >> .vulnerabilidades/"$ip"_smb_logeoRemoto.txt
+					echo -e "Usuario:$USUARIO Pasword:$PASSWORD (local)" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
 				else
-					echo -e "Usuario:$USUARIO Hash:aad3b435b51404eeaad3b435b51404ee:$HASH (local)" >> .vulnerabilidades/"$ip"_smb_logeoRemoto.txt
-				fi			
+					echo -e "Usuario:$USUARIO Hash:aad3b435b51404eeaad3b435b51404ee:$HASH (local)" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+				fi
+			sed -i "/$ip/d" servicios/Windows.txt #borrar de la lista
+			exit		
 			fi	
 
-			grep -qai '+' logs/cracking/"$ip"_smb_logeoRemoto2.txt 2>/dev/null
+			grep -qai '+' logs/cracking/"$ip"_smb_passwordAdivinadoWin2.txt 2>/dev/null
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then						
 				echo -e "\t$OKRED[i] Logeo remoto habilitado $RESET"
 				if [ -z $HASH ] ; then
-					echo -e "Usuario:$USUARIO Pasword:$password (dominio)" >> .vulnerabilidades/"$ip"_smb_logeoRemoto.txt
+					echo -e "Usuario:$USUARIO Pasword:$PASSWORD (dominio)" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
 				else
-					echo -e "Usuario:$USUARIO Hash:aad3b435b51404eeaad3b435b51404ee:$HASH (dominio)" >> .vulnerabilidades/"$ip"_smb_logeoRemoto.txt
-				fi			
+					echo -e "Usuario:$USUARIO Hash:aad3b435b51404eeaad3b435b51404ee:$HASH (dominio)" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+				fi	
+			sed -i "/$ip/d" servicios/Windows.txt #borrar de la lista
+			exit		
 			fi	
 	done	
 

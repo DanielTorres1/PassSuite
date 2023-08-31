@@ -77,21 +77,30 @@ fi
 FILE=`pwd`/$FILE
 #echo $FILE
 
- 
+  if [ $TYPE == "top10" ]
+  then  
+    john --wordlist=$FILE --rules=rule26 --stdout >> temp-pass.txt 2> /dev/null	
+    john --wordlist=temp-pass.txt --rules=rule16 --stdout >> temp-pass1.txt 2> /dev/null
+    
+    cat temp-pass.txt temp-pass1.txt | sort | uniq > $OUTPUT 
+    rm temp-pass.txt temp-pass1.txt
+    exit
+  fi
+
   if [ $TYPE == "online" ]
   then  
-  john --wordlist=$FILE --rules=rule14 --stdout >> temp-pass.txt 2> /dev/null	
-  john --wordlist=$FILE --rules=rule18 --stdout >> temp-pass.txt 2> /dev/null
-  john --wordlist=$FILE --rules=rule22 --stdout >> temp-pass.txt 2> /dev/null		
-  john --wordlist=$FILE --rules=rule23 --stdout >> temp-pass.txt 2> /dev/null		
-  john --wordlist=$FILE --rules=rule24 --stdout >> temp-pass.txt 2> /dev/null
-  john --wordlist=$FILE --rules=rule25 --stdout >> temp-pass.txt 2> /dev/null		
+    john --wordlist=$FILE --rules=rule14 --stdout >> temp-pass.txt 2> /dev/null	
+    john --wordlist=$FILE --rules=rule18 --stdout >> temp-pass.txt 2> /dev/null
+    john --wordlist=$FILE --rules=rule22 --stdout >> temp-pass.txt 2> /dev/null		
+    john --wordlist=$FILE --rules=rule23 --stdout >> temp-pass.txt 2> /dev/null		
+    john --wordlist=$FILE --rules=rule24 --stdout >> temp-pass.txt 2> /dev/null
+    john --wordlist=$FILE --rules=rule25 --stdout >> temp-pass.txt 2> /dev/null		
 
-  john --wordlist=temp-pass.txt --rules=rule16 --stdout >> temp-pass1.txt 2> /dev/null
-  
-  cat $FILE temp-pass.txt temp-pass1.txt | sort | uniq > $OUTPUT 
-  rm temp-pass.txt temp-pass1.txt
-  exit
+    john --wordlist=temp-pass.txt --rules=rule16 --stdout >> temp-pass1.txt 2> /dev/null
+    
+    cat $FILE temp-pass.txt temp-pass1.txt | sort | uniq > $OUTPUT 
+    rm temp-pass.txt temp-pass1.txt
+    exit
   fi
   
   if [ $TYPE == "offline" ]
@@ -111,7 +120,7 @@ FILE=`pwd`/$FILE
         echo -e "\n REGLA 15: Password + 111,000,etc"      
       fi
 	  
-  	  john --wordlist=$FILE --rules=rule1 --stdout >> temp-pass.txt 2> /dev/null	  
+  	john --wordlist=$FILE --rules=rule1 --stdout >> temp-pass.txt 2> /dev/null	  
 	  john --wordlist=$FILE --rules=rule2 --stdout >> temp-pass.txt 2> /dev/null
 	  john --wordlist=$FILE --rules=rule3 --stdout >> temp-pass.txt 2> /dev/null  
 	  john --wordlist=$FILE --rules=rule4 --stdout >> temp-pass.txt 2> /dev/null	 

@@ -119,6 +119,7 @@ if [ -z $DICTIONARY ] ; then
 		echo "Generando diccionario"
 		echo $ENTIDAD > base.txt
 		passGen.sh -f base.txt -t online -o online.txt
+		passGen.sh -f base.txt -t top10 -o top10.txt
 		cat online.txt $PASSWORDS_FILE | sort | uniq >  passwords.txt		
 	else
 		echo "PASSWORDS_FILE $PASSWORDS_FILE"
@@ -138,46 +139,29 @@ function insert_data () {
 	mv .vulnerabilidades/* .vulnerabilidades2 2>/dev/null		 	
 	}
 
+#!/bin/bash
+
+check_windows_up() {
+    ip=$(echo "$1" | cut -f1 -d":")
+    count=$(crackmapexec smb "$ip" -u administrator -p 'testpass' --local-auth | grep '\[-\]' | wc -l)
+    if [ "$count" -eq 1 ]; then
+        echo "$ip" >> servicios/Windows2.txt
+    fi
+}
+export -f check_windows_up
+
+
+
+
+#  IPs que estén en rdp.txt pero no en Windows.txt
+sort servicios/only_rdp.txt > servicios/rdp_sorted.txt 2>/dev/null
+sort servicios/Windows.txt > servicios/Windows_sorted.txt 2>/dev/null
+comm -23 servicios/rdp_sorted.txt servicios/Windows.txt > servicios/only_rdp.txt 2>/dev/null
+#####
+
 
 find  servicios -size  0 -print0 |xargs -0 rm 2>/dev/null 
 echo "Revisar servicios "
-
-if [ -f servicios/rdp.txt ]; then	
-	echo -e "$OKBLUE\n\t#################### RDP ######################$RESET"	    
-	for line in $(cat servicios/rdp.txt); do
-		ip=`echo $line | cut -f1 -d":"`
-		port=`echo $line | cut -f2 -d":"`
-		echo -e "[+] Probando $ip:$port"
-
-		while true; do			
-			free_ram=`free -m | grep -i mem | awk '{print $7}'`		
-			script_instancias=$((`ps aux | egrep 'patator|medusa|ncrack' | wc -l` - 1)) 			
-			
-			if [[ $free_ram -gt $MIN_RAM && $script_instancias -lt $MAX_SCRIPT_INSTANCES  ]];then 					
-				####### user administrador/administrator ####
-				echo "admin_user $admin_user"
-				patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$admin_user password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED|ERRCONNECT_CONNECT_CANCELLED|ERRCONNECT_TLS_CONNECT_FAILED' 2> logs/cracking/"$ip"_"$admin_user"-3389_passwordAdivinadoWin2.txt &
-				
-				##############################
-
-				if [[ ! -z $ENTIDAD ]] ;then	
-					####### user $ENTIDAD ####
-					echo ""
-					patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED|ERRCONNECT_CONNECT_CANCELLED|ERRCONNECT_TLS_CONNECT_FAILED'  2>> logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin2.txt &
-					##############################
-				fi			
-				break
-			else								
-				script_instancias=`ps aux | egrep 'patator|medusa|ncrack' | egrep -v 'discover.sh|lanscanner.sh|autohack.sh|heka.sh|grep -E'| wc -l`
-				echo -e "\t[-] Scripts online ($script_instancias) RAM = $free_ram Mb "
-				sleep 3										
-			fi		
-		done # while true
-
-	 done	
-	 insert_data
-
-fi
 
 
 if [ -f servicios/mssql.txt ]
@@ -277,14 +261,18 @@ fi
 
 
 ### Windows
-if [ -f servicios/Windows.txt ]
+# check up, check false positive
+cat servicios/Windows.txt | xargs -I {} -P 10 bash -c 'check_windows_up "$@"' _ {}
+
+if [ -f servicios/Windows2.txt ]
 then		
 	echo -e "$OKBLUE\n\t#################### Testing windows auth ######################$RESET"			
 	for password in $(cat passwords.txt); do
-		local-admin-checker.sh -u Administrator -p "$password"
+		#probar todos los host con $password
+		local-admin-checker.sh -u $admin_user -p "$password"
 	done
-
-	# for line in $(cat servicios/Windows.txt); do
+fi
+	# for line in $(cat servicios/Windows2.txt); do
 	# 	ip=`echo $line | cut -f1 -d":"`			
 	# 	grep -iq 'allows sessions using username' .vulnerabilidades2/"$ip"_445_nullsession.txt 2>/dev/null
 	# 	greprc=$?
@@ -325,7 +313,47 @@ then
 	# 		done # while true			
 	# 	fi # no null session		
 	#done	
+#fi
+
+
+if [ -f servicios/only_rdp.txt ]; then	
+
+	echo -e "$OKBLUE\n\t#################### RDP ######################$RESET"	    
+	for line in $(cat servicios/only_rdp.txt); do
+		ip=`echo $line | cut -f1 -d":"`
+		port=`echo $line | cut -f2 -d":"`
+		echo -e "[+] Probando $ip:$port"
+
+		while true; do			
+			free_ram=`free -m | grep -i mem | awk '{print $7}'`		
+			script_instancias=$((`ps aux | egrep 'patator|medusa|ncrack' | wc -l` - 1)) 			
+			
+			if [[ $free_ram -gt $MIN_RAM && $script_instancias -lt $MAX_SCRIPT_INSTANCES  ]];then 					
+				####### user administrador/administrator ####
+				echo "admin_user $admin_user"
+				patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$admin_user password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED|ERRCONNECT_CONNECT_CANCELLED|ERRCONNECT_TLS_CONNECT_FAILED' 2> logs/cracking/"$ip"_"$admin_user"-3389_passwordAdivinadoWin2.txt &
+				
+				##############################
+
+				if [[ ! -z $ENTIDAD ]] ;then	
+					####### user $ENTIDAD ####
+					echo ""
+					patator.py rdp_login --rate-limit=1 --threads=1 host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt -x quit:egrep='OK|PASSWORD_EXPIRED|ERRCONNECT_CONNECT_CANCELLED|ERRCONNECT_TLS_CONNECT_FAILED'  2>> logs/cracking/"$ip"_"$ENTIDAD"-3389_passwordAdivinadoWin2.txt &
+					##############################
+				fi			
+				break
+			else								
+				script_instancias=`ps aux | egrep 'patator|medusa|ncrack' | egrep -v 'discover.sh|lanscanner.sh|autohack.sh|heka.sh|grep -E'| wc -l`
+				echo -e "\t[-] Scripts online ($script_instancias) RAM = $free_ram Mb "
+				sleep 3										
+			fi		
+		done # while true
+
+	 done	
+	 insert_data
+
 fi
+
 
 ### SSH #########
 if [ -f servicios/ssh.txt ]
@@ -890,7 +918,7 @@ if [[ "$MODE" == "total" ]] ; then
 				free_ram=`free -m | grep -i mem | awk '{print $7}'`		
 				script_instancias=$((`ps aux | egrep 'patator|medusa|ncrack' | wc -l` - 1)) 							
 				if [[ $free_ram -gt $MIN_RAM && $script_instancias -lt $MAX_SCRIPT_INSTANCES  ]];then 										
-					ncrack --user "$admin_user" -P passwords.txt -g cd=8 $ip:$port | tee -a  logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
+					ncrack --user "$admin_user" -P top10.txt -g cd=8 $ip:$port | tee -a  logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
 					echo ""				
 					break
 				else								
@@ -981,10 +1009,10 @@ then
 fi
 
 #PARSE
-if [ -f servicios/rdp.txt ]
+if [ -f servicios/only_rdp.txt ]
 then		
-	echo -e "$OKBLUE #################### PARSE (`wc -l servicios/rdp.txt`) ######################$RESET"	    
-	for line in $(cat servicios/rdp.txt); do
+	echo -e "$OKBLUE #################### PARSE (`wc -l servicios/only_rdp.txt`) ######################$RESET"	    
+	for line in $(cat servicios/only_rdp.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "[+] Parse $ip:$port"				
@@ -1017,56 +1045,56 @@ fi
 
 
 
-if [ -f servicios/Windows.txt ]
-then
-	echo -e "$OKBLUE #################### PARSE (`wc -l servicios/Windows.txt`) ######################$RESET"	    		
-	for ip in $(cat servicios/Windows.txt); do	
-		echo -e "[+] Parse $ip"					
-		grep -iq 'allows sessions using username' .vulnerabilidades2/"$ip"_445_nullsession.txt	2>/dev/null	
-		greprc=$?
-		if [[ $greprc -eq 0 ]] ; then	
-			echo -e "[+] Null session detectada en $ip"
-		else
-			passwords_ok=`grep -qi windows logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt`			
-			if [[  $passwords_ok -lt 3 ]];then 
-				password_smb=`grep -i windows logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'}`
-				if [[ -n "$password_smb" ]];then
-					echo "Usuario:$admin_user Password:$password_smb" >	.vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
-				fi
-			fi
+# if [ -f servicios/Windows2.txt ]
+# then
+# 	echo -e "$OKBLUE #################### PARSE (`wc -l servicios/Windows2.txt`) ######################$RESET"	    		
+# 	for ip in $(cat servicios/Windows2.txt); do	
+# 		echo -e "[+] Parse $ip"					
+# 		grep -iq 'allows sessions using username' .vulnerabilidades2/"$ip"_445_nullsession.txt	2>/dev/null	
+# 		greprc=$?
+# 		if [[ $greprc -eq 0 ]] ; then	
+# 			echo -e "[+] Null session detectada en $ip"
+# 		else
+# 			passwords_ok=`grep -qi windows logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt`			
+# 			if [[  $passwords_ok -lt 3 ]];then 
+# 				password_smb=`grep -i windows logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'}`
+# 				if [[ -n "$password_smb" ]];then
+# 					echo "Usuario:$admin_user Password:$password_smb" >	.vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+# 				fi
+# 			fi
 						
-			passwords_ok=`grep -qi windows logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 2>/dev/null`
-			if [[  $passwords_ok -lt 3 ]];then 
-				password_smb=`grep -i windows logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'}`
-				if [[ -n "$password_smb" ]];then
-					echo "Usuario:soporte Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
-				fi
-			fi
+# 			passwords_ok=`grep -qi windows logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 2>/dev/null`
+# 			if [[  $passwords_ok -lt 3 ]];then 
+# 				password_smb=`grep -i windows logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'}`
+# 				if [[ -n "$password_smb" ]];then
+# 					echo "Usuario:soporte Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+# 				fi
+# 			fi
 			
-			if [ ! -z $ENTIDAD ] ; then
-				passwords_ok=`grep -qi windows logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 2>/dev/null`
-				if [[  $passwords_ok -lt 3 ]];then 
-					password_smb=`grep -i windows logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 2>/dev/null | awk {'print $9'}`
-					if [[ -n "$password_smb" ]];then
-						echo "Usuario:$ENTIDAD Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
-					fi
-				fi	
-			fi
+# 			if [ ! -z $ENTIDAD ] ; then
+# 				passwords_ok=`grep -qi windows logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 2>/dev/null`
+# 				if [[  $passwords_ok -lt 3 ]];then 
+# 					password_smb=`grep -i windows logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 2>/dev/null | awk {'print $9'}`
+# 					if [[ -n "$password_smb" ]];then
+# 						echo "Usuario:$ENTIDAD Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+# 					fi
+# 				fi	
+# 			fi
 					
 
-			passwords_ok=`grep -qi windows logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 2>/dev/null`			
-			if [[  $passwords_ok -lt 3 ]];then 
-				password_smb=`grep -i windows logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'} `
-				if [[ -n "$password_smb" ]];then
-					echo "Usuario:sistemas Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
-				fi
-			fi
+# 			passwords_ok=`grep -qi windows logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 2>/dev/null`			
+# 			if [[  $passwords_ok -lt 3 ]];then 
+# 				password_smb=`grep -i windows logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'} `
+# 				if [[ -n "$password_smb" ]];then
+# 					echo "Usuario:sistemas Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+# 				fi
+# 			fi
 			
-		fi
-		#https://github.com/m4ll0k/SMBrute (shared)											
-	 done	
-	 insert_data
-fi
+# 		fi
+# 		#https://github.com/m4ll0k/SMBrute (shared)											
+# 	 done	
+# 	 insert_data
+# fi
 
 if [ -f servicios/telnet.txt ]
 then		

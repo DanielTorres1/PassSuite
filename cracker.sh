@@ -261,7 +261,7 @@ fi
 
 
 ### Windows
-# check up, check false positive
+# check up, check false positive and save servicios/Windows2.txt
 cat servicios/Windows.txt | xargs -I {} -P 10 bash -c 'check_windows_up "$@"' _ {}
 
 if [ -f servicios/Windows2.txt ]
@@ -269,7 +269,7 @@ then
 	echo -e "$OKBLUE\n\t#################### Testing windows auth ######################$RESET"			
 	for password in $(cat passwords.txt); do
 		#probar todos los host con $password
-		local-admin-checker.sh -u $admin_user -p "$password"
+		local-admin-checker.sh -u $admin_user -p "$password" -f servicios/Windows2.txt
 	done
 fi
 	# for line in $(cat servicios/Windows2.txt); do

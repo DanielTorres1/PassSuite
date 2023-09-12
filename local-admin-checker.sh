@@ -112,7 +112,9 @@ function checkRAM (){
 		fi
 	done	# done true	
 
-	for ip in $(cat $FILE); do		
+	for ip in $(cat $FILE); do
+				
+			################ user hacked ########
 			grep -qai '+' logs/cracking/"$ip"_smb_passwordAdivinadoWin1.txt 2>/dev/null
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then						
@@ -122,10 +124,11 @@ function checkRAM (){
 				else
 					echo -e "Usuario:$USUARIO Hash:aad3b435b51404eeaad3b435b51404ee:$HASH (local)" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
 				fi
-			sed -i "/$ip/d" $FILE #borrar de la lista
-			exit		
+				sed -i "/$ip/d" $FILE #borrar de la lista
+				exit		
 			fi	
-
+			
+			
 			grep -qai '+' logs/cracking/"$ip"_smb_passwordAdivinadoWin2.txt 2>/dev/null
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then						
@@ -135,9 +138,29 @@ function checkRAM (){
 				else
 					echo -e "Usuario:$USUARIO Hash:aad3b435b51404eeaad3b435b51404ee:$HASH (dominio)" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
 				fi	
-			sed -i "/$ip/d" $FILE #borrar de la lista
+				sed -i "/$ip/d" $FILE #borrar de la lista
+				exit		
+			fi	
+			########################################
+			
+			########### user locked #####
+			grep -qai 'STATUS_ACCOUNT_LOCKED_OUT' logs/cracking/"$ip"_smb_passwordAdivinadoWin1.txt 2>/dev/null
+			greprc=$?
+			if [[ $greprc -eq 0 ]] ; then						
+				echo -e "\t$OKRED[i] USER LOCKET $RESET"
+				sed -i "/$ip/d" $FILE #borrar de la lista
 			exit		
 			fi	
+			
+			grep -qai 'STATUS_ACCOUNT_LOCKED_OUT' logs/cracking/"$ip"_smb_passwordAdivinadoWin2.txt 2>/dev/null
+			greprc=$?
+			if [[ $greprc -eq 0 ]] ; then						
+				echo -e "\t$OKRED[i] USER LOCKET $RESET"				
+				sed -i "/$ip/d" $FILE #borrar de la lista
+			exit		
+			fi	
+			################
+
 	done	
 
 insert_data

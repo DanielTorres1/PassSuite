@@ -280,7 +280,7 @@ cat servicios/Windows.txt 2>/dev/null| xargs -I {} -P 10 bash -c 'check_windows_
 if [ -f servicios/Windows2.txt ]
 then		
 	echo -e "$OKBLUE\n\t#################### Testing windows auth ######################$RESET"			
-	for password in $(cat passwords.txt); do
+	for password in $(cat top10.txt); do
 		#probar todos los host con $password
 		local-admin-checker.sh -u $admin_user -p "$password" -f servicios/Windows2.txt
 	done

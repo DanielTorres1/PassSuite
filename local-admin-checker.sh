@@ -90,13 +90,13 @@ function checkRAM (){
 			if [ "$PASSWORD" != NULL ] ; then
 			#echo "PASSWORD $PASSWORD"				
 				echo "Usando password $PASSWORD"
-				crackmapexec smb $ip -u $USUARIO -p $PASSWORD --local-auth  | tee -a logs/cracking/"$ip"_smb_passwordAdivinadoWin1.txt & #local
+				crackmapexec smb $ip -u $USUARIO -p $PASSWORD --local-auth  | tee -a logs/cracking/"$ip"_smb_passwordAdivinadoWin.txt & #local
 				sleep 0.3
 				#crackmapexec smb $ip -u $USUARIO -p $PASSWORD  | tee logs/cracking/"$ip"_smb_passwordAdivinadoWin2.txt	#dominio
 			else
 				echo "Usando HASH $HASH"
 				echo "crackmapexec smb $ip -u $USUARIO -H $HASH --local-auth "
-				crackmapexec smb $ip -u $USUARIO -H $HASH --local-auth  | tee -a logs/cracking/"$ip"_smb_passwordAdivinadoWin1.txt & #local
+				crackmapexec smb $ip -u $USUARIO -H $HASH --local-auth  | tee -a logs/cracking/"$ip"_smb_passwordAdivinadoWin.txt & #local
 				#crackmapexec smb $ip -u $USUARIO -H $HASH  | tee logs/cracking/"$ip"_smb_passwordAdivinadoWin2.txt #dominio					
 			fi	
 	done
@@ -115,7 +115,7 @@ function checkRAM (){
 	for ip in $(cat $FILE); do
 				
 			################ user hacked ########
-			grep -qai '+' logs/cracking/"$ip"_smb_passwordAdivinadoWin1.txt 2>/dev/null
+			grep -qai '+' logs/cracking/"$ip"_smb_passwordAdivinadoWin.txt 2>/dev/null
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then						
 				echo -e "\t$OKRED[i] Logeo remoto habilitado $RESET"
@@ -144,7 +144,7 @@ function checkRAM (){
 			########################################
 			
 			########### user locked #####
-			grep -qai 'STATUS_ACCOUNT_LOCKED_OUT' logs/cracking/"$ip"_smb_passwordAdivinadoWin1.txt 2>/dev/null
+			grep -qai 'STATUS_ACCOUNT_LOCKED_OUT' logs/cracking/"$ip"_smb_passwordAdivinadoWin.txt 2>/dev/null
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then						
 				echo -e "\t$OKRED[i] USER LOCKET $RESET"
@@ -160,7 +160,7 @@ function checkRAM (){
 			exit		
 			fi	
 			################
-
+		#cat logs/cracking/"$ip"_smb_passwordAdivinadoWin.txt logs/cracking/"$ip"_smb_passwordAdivinadoWin2.txt > logs/cracking/"$ip"_smb_passwordAdivinadoWin.txt
 	done	
 
 insert_data

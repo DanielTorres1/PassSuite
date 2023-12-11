@@ -70,3 +70,5 @@ cp wordlist/passwords* /usr/share/lanscanner/
 cp wordlist/usuarios-top15-en.txt /usr/share/lanscanner/
 cp wordlist/usuarios-top15-es.txt /usr/share/lanscanner/
 
+cp -r psudohash /usr/bin/pentest/
+cp psudohash.sh /usr/bin/pentest/psudohash.sh

@@ -27,7 +27,7 @@ Usage examples:
       python3 psudohash.py -w <keywords> -cpa
 	
   Thorough:
-      python3 psudohash.py -w <keywords> -cpa -an 3 -y 1990-2022
+      python3 psudohash.py -w <keywords> -cpa -an 3 -y 2020-2025
 '''
 	)
 
@@ -525,10 +525,7 @@ def main():
 	print(f'[{MAIN}Info{END}] Calculating output length and size...')
 
 	# Inform user about the output size
-	try:
-		concent = input(f'[{ORANGE}Warning{END}] This operation will produce {BOLD}{total_size[0]}{END} words, {BOLD}{fsize}{END}. Are you sure you want to proceed? [y/n]: ')
-	except KeyboardInterrupt:
-		exit('\n')
+	concent = 'y'
 	
 	if concent.lower() not in ['y', 'yes']:
 		sys.exit(f'\n[{RED}X{END}] Aborting.')

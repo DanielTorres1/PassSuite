@@ -177,6 +177,18 @@ FILE=`pwd`/$FILE
     john --wordlist=temp-pass.txt --rules=rule16 --stdout >> temp-pass1.txt 2> /dev/null
     john --wordlist=temp-pass.txt --rules=rule17 --stdout >> temp-pass1.txt 2> /dev/null
 
- cat $FILE temp-pass.txt temp-pass1.txt | sort | uniq > $OUTPUT 
- rm temp-pass.txt temp-pass1.txt   
+    # Inicializa el contador de líneas
+    contador=1
+
+    # Lee el archivo línea por línea
+    while IFS= read -r linea
+    do
+        psudohash.sh -w $linea -cpa -an 3 -y 2020-2025 -o `pwd`/psudohash"$contador".txt
+        ((contador++))
+    done < "$FILE"
+
+   
+
+ cat $FILE temp-pass.txt temp-pass1.txt psudohash* | sort | uniq > $OUTPUT 
+ rm temp-pass.txt temp-pass1.txt psudohash*  
    

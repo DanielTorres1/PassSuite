@@ -413,7 +413,7 @@ fi
 old_ifs="$IFS"
 IFS=$'\n'  # make newlines the only separator     
 
-if [ -f servicios/admin-web-fingerprint.txt ]
+if [ -f servicios/admin-web-fingerprint-inserted.txt ]
 then	  		  
 	echo -e "$OKBLUE\n\t#################### Testing pass web admin ######################$RESET"			
 	for line in $(cat servicios/admin-web-fingerprint.txt); do	

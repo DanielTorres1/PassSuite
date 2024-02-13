@@ -416,7 +416,7 @@ IFS=$'\n'  # make newlines the only separator
 if [ -f servicios/admin-web-fingerprint-inserted.txt ]
 then	  		  
 	echo -e "$OKBLUE\n\t#################### Testing pass web admin ######################$RESET"			
-	for line in $(cat servicios/admin-web-fingerprint.txt); do	
+	for line in $(cat servicios/admin-web-fingerprint-inserted.txt); do	
 		IFS=$old_ifs
 		ip_port_path=`echo $line | cut -d ";" -f 1` #https://www.sanmateo.com.bo/wp-login.php https://www.sanmateo.com.bo:8443/wp-login.php		
 		fingerprint=`echo $line | cut -d ";" -f 2`

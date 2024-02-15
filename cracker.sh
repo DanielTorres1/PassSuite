@@ -508,7 +508,7 @@ then
 				echo -e "\t[+] Probando contraseñas comunes ...."
 				if [ -f ".vulnerabilidades2/"$host"_"$port"_wpUsers.txt" ]; then
 					#https://181.115.188.36:443/				
-					for user in $(cat .vulnerabilidades2/"$host"_"$port"_wpUsers.txt |sort| awk '{print $2}'); do
+					for user in $(cat .vulnerabilidades2/"$host"_"$port"_wpUsers.txt); do
 						echo -e "\t\t[+] Probando usuarios identificados. Probando con usuario ($user)"
 						echo "WpCrack.py -t $ip_port_path -u $user --p passwords.txt" >> logs/cracking/"$host"_"$user"-"$port"_passwordCMS.txt
 						WpCrack.py -t $ip_port_path -u $user --p passwords.txt >> logs/cracking/"$host"_"$user"-"$port"_passwordCMS.txt 2>> logs/cracking/"$host"_"$user"-"$port"_passwordCMS.txt

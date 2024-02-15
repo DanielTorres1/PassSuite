@@ -205,7 +205,7 @@ if __name__ == "__main__":
                     break
                 
             if success_login is True:
-                log.success("Credenciales \""+args.usr+"\" : \""+password+"\"")
+                log.success("Credencials: \""+args.usr+"\" : \""+password+"\"")
                 os._exit(0)
             else:
                 log.failed("cannot enter into the target dashboard")

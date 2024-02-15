@@ -512,7 +512,7 @@ then
 						echo -e "\t\t[+] Probando usuarios identificados. Probando con usuario ($user)"
 						echo "WpCrack.py -t $ip_port_path -u $user --p passwords.txt" >> logs/cracking/"$host"_"$user"-"$port"_passwordCMS.txt
 						WpCrack.py -t $ip_port_path -u $user --p passwords.txt >> logs/cracking/"$host"_"$user"-"$port"_passwordCMS.txt 2>> logs/cracking/"$host"_"$user"-"$port"_passwordCMS.txt
-						egrep -iaq "Credenciales" logs/cracking/"$host"_*_passwordCMS.txt 2>/dev/null
+						egrep -iaq "Credencials" logs/cracking/"$host"_*_passwordCMS.txt 2>/dev/null
 						greprc=$?
 						if [[ $greprc -eq 0 ]] ; then	
 							echo -e "\t\t[+] Credenciales encontradas"						
@@ -520,7 +520,7 @@ then
 						fi
 					done
 				else
-					echo -e "\t\t[+] Probando con usuario admin"	
+					echo -e "\t\t[+] Probando con usuario por defecto admin"	
 					echo "WpCrack.py -t $ip_port_path -u admin --p passwords.txt" >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null
 					WpCrack.py -t $ip_port_path -u admin --p passwords.txt >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null
 				fi						

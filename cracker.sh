@@ -384,26 +384,15 @@ then
 		port=`echo $line | cut -f2 -d":"`
 
 		if [[ ! -z $ENTIDAD ]];then
-			echo "Usuario $entidad" 
-			medusa -t 1 -f -u $entidad -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &			
-		fi				
-
-		if [ -f .enumeracion2/"$ip"_445_localUsers.txt ]; then	
-			echo "Usuarios identificados mediante enum4linux" 
-			for username in $(cat .enumeracion2/"$ip"_445_localUsers.txt); do
-				echo "Probando usuario: $username en $ip"
-				medusa -t 1 -f -u $username -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
-			done
-		fi
-
-		if [ -f .vulnerabilidades2/"$ip"_"$port"_enumeracionUsuariosSSH.txt ]; then	
-			echo "Usuarios identificados mediante CVE" 				
-			for username in $(cat .vulnerabilidades2/"$ip"_"$port"_enumeracionUsuariosSSH.txt); do
-				echo "Probando usuario: $username en $ip"
-				medusa -t 1 -f -u $username -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
-			done									
+			echo "Usuario $ENTIDAD" 
+			medusa -t 1 -f -u $ENTIDAD -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &			
 		fi		
-		
+
+		for user_ssh in $(cat logs/enumeracion/"$ip"_users.txt); do
+			echo "Probando usuario: $user_ssh en $ip"
+			medusa -t 1 -f -u $user_ssh -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
+		done
+				
 		echo "Probando usuario: root"								
 		medusa -t 1 -f -u root -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
 	done	
@@ -535,27 +524,27 @@ fi
 
 
 
-			#patator.py http_fuzz method=GET url=$line user_pass=manager:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 > logs/cracking/"$host"_"$port"_passTomcat2.txt 2>> logs/cracking/"$host"_"$port"_passTomcat2.txt
-			#si encontro el password
+	#patator.py http_fuzz method=GET url=$line user_pass=manager:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 > logs/cracking/"$host"_"$port"_passTomcat2.txt 2>> logs/cracking/"$host"_"$port"_passTomcat2.txt
+	#si encontro el password
 #				egrep -iq "200 OK" logs/cracking/"$host"_"$port"_passTomcat2.txt
-			#greprc=$?
-			#if [[ $greprc -eq 0 ]] ; then			
-				#echo -e "\t[i] Password encontrado"
-				## 12:56:35 patator.py    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
-				#password=`grep --color=never "200 OK" logs/cracking/"$host"_"$port"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
-				#echo "$line (Usuario:manager Password:$password)" > .vulnerabilidades/"$host"_"$port"_passTomcat.txt								
-			#fi
-			
-			#patator.py http_fuzz method=GET url=$line user_pass=root:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 > logs/cracking/"$host"_"$port"_passTomcat3.txt 2>> logs/cracking/"$host"_"$port"_passTomcat3.txt
-			#si encontro el password
-			#egrep -iq "200 OK" logs/cracking/"$host"_"$port"_passTomcat3.txt
-			#greprc=$?
-			#if [[ $greprc -eq 0 ]] ; then			
-				#echo -e "\t[i] Password encontrado"
-				## 12:56:35 patator.py    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
-				#password=`grep --color=never "200 OK" logs/cracking/"$host"_"$port"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
-				#echo "$line (Usuario:root Password:$password)" > .vulnerabilidades/"$host"_"$port"_passTomcat.txt								
-			#fi		
+	#greprc=$?
+	#if [[ $greprc -eq 0 ]] ; then			
+		#echo -e "\t[i] Password encontrado"
+		## 12:56:35 patator.py    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
+		#password=`grep --color=never "200 OK" logs/cracking/"$host"_"$port"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
+		#echo "$line (Usuario:manager Password:$password)" > .vulnerabilidades/"$host"_"$port"_passTomcat.txt								
+	#fi
+	
+	#patator.py http_fuzz method=GET url=$line user_pass=root:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 > logs/cracking/"$host"_"$port"_passTomcat3.txt 2>> logs/cracking/"$host"_"$port"_passTomcat3.txt
+	#si encontro el password
+	#egrep -iq "200 OK" logs/cracking/"$host"_"$port"_passTomcat3.txt
+	#greprc=$?
+	#if [[ $greprc -eq 0 ]] ; then			
+		#echo -e "\t[i] Password encontrado"
+		## 12:56:35 patator.py    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
+		#password=`grep --color=never "200 OK" logs/cracking/"$host"_"$port"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
+		#echo "$line (Usuario:root Password:$password)" > .vulnerabilidades/"$host"_"$port"_passTomcat.txt								
+	#fi		
 
 
 # if [ -f servicios/pptp.txt ]
@@ -636,7 +625,7 @@ fi
 		#port=`echo $line | cut -f2 -d":"`
 		#echo -e "[+] Probando $ip"
 #		medusa -t 1 -f -e ns -u root -P passwords.txt -h $ip -M vmauthd | tee -a  logs/cracking/"$ip"_vmware.txt	
-		#medusa -t 1 -f -e ns -u $entidad  -P passwords.txt -h $ip -M vmauthd | tee -a  logs/cracking/"$ip"_vmware.txt
+		#medusa -t 1 -f -e ns -u $ENTIDAD  -P passwords.txt -h $ip -M vmauthd | tee -a  logs/cracking/"$ip"_vmware.txt
 		#grep --color=never SUCCESS logs/cracking/"$ip"_vmware.txt > .vulnerabilidades/"$ip"_vmware_passwordAdivinadoServ.txt
 #		echo ""			
 	 #done
@@ -724,7 +713,7 @@ if [[ "$MODE" == "total" ]] ; then
 		for line in $(cat servicios/telnet.txt); do
 			ip=`echo $line | cut -f1 -d":"`
 			port=`echo $line | cut -f2 -d":"`
-			medusa -t 1 -f -e ns -u $entidad -P passwords.txt -h $ip -M telnet >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
+			medusa -t 1 -f -e ns -u $ENTIDAD -P passwords.txt -h $ip -M telnet >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
 			medusa -t 1 -f -e ns -u root -P passwords.txt -h $ip -M telnet >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
 		done	
 	fi
@@ -1063,58 +1052,6 @@ then
 	insert_data
 fi
 
-
-
-# if [ -f servicios/Windows2.txt ]
-# then
-# 	echo -e "$OKBLUE #################### PARSE (`wc -l servicios/Windows2.txt`) ######################$RESET"	    		
-# 	for ip in $(cat servicios/Windows2.txt); do	
-# 		echo -e "[+] Parse $ip"					
-# 		grep -iq 'allows sessions using username' .vulnerabilidades2/"$ip"_445_nullsession.txt	2>/dev/null	
-# 		greprc=$?
-# 		if [[ $greprc -eq 0 ]] ; then	
-# 			echo -e "[+] Null session detectada en $ip"
-# 		else
-# 			passwords_ok=`grep -qi windows logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt`			
-# 			if [[  $passwords_ok -lt 3 ]];then 
-# 				password_smb=`grep -i windows logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'}`
-# 				if [[ -n "$password_smb" ]];then
-# 					echo "Usuario:$admin_user Password:$password_smb" >	.vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
-# 				fi
-# 			fi
-						
-# 			passwords_ok=`grep -qi windows logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 2>/dev/null`
-# 			if [[  $passwords_ok -lt 3 ]];then 
-# 				password_smb=`grep -i windows logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'}`
-# 				if [[ -n "$password_smb" ]];then
-# 					echo "Usuario:soporte Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
-# 				fi
-# 			fi
-			
-# 			if [ ! -z $ENTIDAD ] ; then
-# 				passwords_ok=`grep -qi windows logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 2>/dev/null`
-# 				if [[  $passwords_ok -lt 3 ]];then 
-# 					password_smb=`grep -i windows logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 2>/dev/null | awk {'print $9'}`
-# 					if [[ -n "$password_smb" ]];then
-# 						echo "Usuario:$ENTIDAD Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
-# 					fi
-# 				fi	
-# 			fi
-					
-
-# 			passwords_ok=`grep -qi windows logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 2>/dev/null`			
-# 			if [[  $passwords_ok -lt 3 ]];then 
-# 				password_smb=`grep -i windows logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'} `
-# 				if [[ -n "$password_smb" ]];then
-# 					echo "Usuario:sistemas Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
-# 				fi
-# 			fi
-			
-# 		fi
-# 		#https://github.com/m4ll0k/SMBrute (shared)											
-# 	 done	
-# 	 insert_data
-# fi
 
 if [ -f servicios/telnet.txt ]
 then		

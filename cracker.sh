@@ -382,18 +382,19 @@ then
 	for line in $(cat servicios/ssh.txt); do
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
+		echo -e "[+]IP: $ip" 
 
 		if [[ ! -z $ENTIDAD ]];then
-			echo "Probando usuario: $ENTIDAD" 
+			echo -e "\t[+]Probando usuario: $ENTIDAD" 
 			medusa -t 1 -f -u $ENTIDAD -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &			
 		fi
 
 		for user_ssh in $(cat logs/enumeracion/"$ip"_users.txt 2>/dev/null); do
-			echo "Probando usuario: $user_ssh en $ip"
+			echo -e "\t[+]Probando usuario: $user_ssh en $ip"
 			medusa -t 1 -f -u $user_ssh -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
 		done
 				
-		echo "Probando usuario: root"								
+		echo -e "\t[+]Probando usuario: root"								
 		medusa -t 1 -f -u root -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
 	done	
 fi

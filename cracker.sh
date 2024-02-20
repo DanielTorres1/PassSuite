@@ -384,7 +384,7 @@ then
 		port=`echo $line | cut -f2 -d":"`
 
 		if [[ ! -z $ENTIDAD ]];then
-			echo "Usuario $ENTIDAD" 
+			echo "Probando usuario: $ENTIDAD" 
 			medusa -t 1 -f -u $ENTIDAD -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &			
 		fi
 
@@ -435,6 +435,12 @@ then
 			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u root -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
 			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u admin -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
 			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u mysql -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
+			sleep 60
+			for user_ssh in $(cat logs/enumeracion/"$ip"_users.txt 2>/dev/null); do
+				echo "Probando usuario: $user_ssh en $ip"
+				passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u $user_ssh -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
+				sleep 60
+			done
 
 			if [[ "$MODE" == "total" ]] ; then					
 				#######  wordpress user ######

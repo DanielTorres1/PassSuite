@@ -386,9 +386,9 @@ then
 		if [[ ! -z $ENTIDAD ]];then
 			echo "Usuario $ENTIDAD" 
 			medusa -t 1 -f -u $ENTIDAD -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &			
-		fi		
+		fi
 
-		for user_ssh in $(cat logs/enumeracion/"$ip"_users.txt); do
+		for user_ssh in $(cat logs/enumeracion/"$ip"_users.txt 2>/dev/null); do
 			echo "Probando usuario: $user_ssh en $ip"
 			medusa -t 1 -f -u $user_ssh -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
 		done

@@ -149,7 +149,7 @@ check_windows_up() {
     ip=$(echo "$1" | cut -f1 -d":")
     count=$(crackmapexec smb "$ip" -u administrator -p 'testpass' --local-auth | grep '\[-\]' | wc -l)
     if [ "$count" -eq 1 ]; then
-        echo "$ip" >> servicios/Windows2.txt
+        echo "$ip" >> servicios/WindowsAlive.txt
     fi
 }
 export -f check_windows_up
@@ -157,10 +157,11 @@ export -f check_windows_up
 
 
 
-#  IPs que estén en rdp.txt pero no en Windows.txt
+#  IPs que estén en rdp.txt pero no en Windows.txt (RDP es mas lento, mejor bruteforce SMB)
 sort servicios/only_rdp.txt > servicios/rdp_sorted.txt 2>/dev/null
 sort servicios/Windows.txt > servicios/Windows_sorted.txt 2>/dev/null
-comm -23 servicios/rdp_sorted.txt servicios/Windows.txt > servicios/only_rdp.txt 2>/dev/null
+comm -23 servicios/rdp_sorted.txt servicios/Windows_sorted.txt > servicios/only_rdp.txt 2>/dev/null
+rm servicios/Windows_sorted.txt 2>/dev/null
 #####
 
 
@@ -281,18 +282,18 @@ then
 		
 fi
 ### Windows
-# check up, check false positive and save servicios/Windows2.txt
+# check up, check false positive and save servicios/WindowsAlive.txt
 cat servicios/Windows.txt 2>/dev/null| xargs -I {} -P 10 bash -c 'check_windows_up "$@"' _ {}
 
-if [ -f servicios/Windows2.txt ]
+if [ -f servicios/WindowsAlive.txt ]
 then		
 	echo -e "$OKBLUE\n\t#################### Testing windows auth ######################$RESET"			
 	for password in $(cat top10.txt); do
 		#probar todos los host con $password
-		local-admin-checker.sh -u $admin_user -p "$password" -f servicios/Windows2.txt
+		local-admin-checker.sh -u $admin_user -p "$password" -f servicios/WindowsAlive.txt
 	done
 fi
-	# for line in $(cat servicios/Windows2.txt); do
+	# for line in $(cat servicios/WindowsAlive.txt); do
 	# 	ip=`echo $line | cut -f1 -d":"`			
 	# 	grep -iq 'allows sessions using username' .vulnerabilidades2/"$ip"_445_nullsession.txt 2>/dev/null
 	# 	greprc=$?

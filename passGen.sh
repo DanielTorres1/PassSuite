@@ -51,9 +51,9 @@ USO:
 -e: Empresa o sigla para generar
 -v: si ponemos 1 mostrara que patrones se esta aplicando
 
-ejemplo :  passGen.sh -f lista.txt -t online -o online.txt -l es -v 1
+ejemplo :  passGen.sh -f lista.txt -t online -o online.txt -v 1
 
-ejemplo :  passGen.sh -f lista.txt -t top500 -o top.txt -l en -v 1
+ejemplo :  passGen.sh -f lista.txt -t top500 -o top.txt -v 1
 EOF
 }
 
@@ -89,6 +89,7 @@ FILE=`pwd`/$FILE
 
   if [ $TYPE == "online" ]
   then  
+  
     john --wordlist=$FILE --rules=rule14 --stdout >> temp-pass.txt 2> /dev/null	
     john --wordlist=$FILE --rules=rule18 --stdout >> temp-pass.txt 2> /dev/null
     john --wordlist=$FILE --rules=rule22 --stdout >> temp-pass.txt 2> /dev/null		
@@ -189,6 +190,6 @@ FILE=`pwd`/$FILE
 
    
 
- cat $FILE temp-pass.txt temp-pass1.txt psudohash* | sort | uniq > $OUTPUT 
+ cat $FILE temp-pass.txt temp-pass1.txt psudohash* > $OUTPUT 
  rm temp-pass.txt temp-pass1.txt psudohash*  
    

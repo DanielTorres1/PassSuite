@@ -73,6 +73,7 @@ tomcat_passwords_combo="/usr/share/lanscanner/tomcat-passwds.txt"
 FILE_SUBDOMAINS="importarMaltego/subdominios-scan.csv"
 MAX_SCRIPT_INSTANCES=30
 MIN_RAM=900
+COUNTRY='bolivia'
 
 echo "LENGUAJE $LENGUAJE MODE $MODE ENTIDAD(k) $ENTIDAD DICTIONARY $DICTIONARY EXTRATEST $EXTRATEST VERBOSE:$VERBOSE SPEED $SPEED"
 if [[ -z $LENGUAJE ]];then 
@@ -110,12 +111,8 @@ else
 	admin_user='administrator'
 fi
 
-if [ "$EXTRATEST" == "oscp" ]; then
-	PASSWORDS_FILE="/usr/share/lanscanner/passwords-top500-$LENGUAJE.txt"
-else
-	PASSWORDS_FILE="/usr/share/lanscanner/passwords-top10-$LENGUAJE.txt"
-fi
-
+PASSWORDS_TOP10_FILE="/usr/share/lanscanner/passwords-top10-$LENGUAJE.txt"
+PASSWORDS_TOP500_FILE="/usr/share/lanscanner/passwords-top500-$LENGUAJE.txt"
 
 if [ -z $DICTIONARY ] ; then
 
@@ -124,15 +121,17 @@ if [ -z $DICTIONARY ] ; then
 		echo $ENTIDAD > base.txt
 		passGen.sh -f base.txt -t online -o online.txt
 		passGen.sh -f base.txt -t top10 -o passwords.txt
-		cat online.txt $PASSWORDS_FILE | sort | uniq >  passwords.txt		
+		cat online.txt $PASSWORDS_TOP10_FILE /usr/share/lanscanner/"$COUNTRY".txt | sort | uniq >  passwords.txt
+		cat online.txt $PASSWORDS_TOP500_FILE /usr/share/lanscanner/"$COUNTRY".txt | sort | uniq >  passwords-web.txt
 	else
 		echo "PASSWORDS_FILE $PASSWORDS_FILE"
-	   cp $PASSWORDS_FILE passwords.txt
+		cat $PASSWORDS_TOP10_FILE | sort | uniq >  passwords.txt	
+		cat $PASSWORDS_TOP500_FILE /usr/share/lanscanner/"$COUNTRY".txt | sort | uniq >  passwords-web.txt		
 	fi
 	echo "Done Generando"
-	# echo "wordpress" >> passwords.txt	
-	# echo "joomla" >> passwords.txt	
-	# echo "drupal" >> passwords.txt
+	echo "wordpress" >> passwords-web.txt		
+	echo "joomla" >> passwords-web.txt	
+	echo "drupal" >> passwords-web.txt	
 else
 	cp $DICTIONARY passwords.txt		
 fi
@@ -434,13 +433,13 @@ then
 		if [[ $fingerprint = *"phpmyadmin"* ]]; then
 			echo -e "\t[+] phpMyAdmin identificado"
 			echo "passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d \"$path_web\" -u root|admin -f passwords.txt" > logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt 
-			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u root -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
-			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u admin -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
-			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u mysql -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
+			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u root -f passwords-web.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
+			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u admin -f passwords-web.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
+			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u mysql -f passwords-web.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
 			sleep 60
 			for user_ssh in $(cat logs/enumeracion/"$ip"_users.txt 2>/dev/null); do
 				echo "Probando usuario: $user_ssh en $ip"
-				passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u $user_ssh -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
+				passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u $user_ssh -f passwords-web.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
 				sleep 60
 			done
 
@@ -449,21 +448,21 @@ then
 				grep -qi wordpress .enumeracion2/"$host"_"$port"_webData.txt
 				greprc=$?
 				if [[ $greprc -eq 0 ]];then 
-					passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u wordpress -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
+					passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u wordpress -f passwords-web.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
 				fi
 
 				#######  joomla user ######
 				grep -qi joomla .enumeracion2/"$host"_"$port"_webData.txt
 				greprc=$?
 				if [[ $greprc -eq 0 ]];then 
-					passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u joomla -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
+					passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u joomla -f passwords-web.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
 				fi
 
 				#######  drupal user ######			
 				grep -qi drupal .enumeracion2/"$host"_"$port"_webData.txt
 				greprc=$?
 				if [[ $greprc -eq 0 ]];then 
-					passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u drupal -f passwords.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt&
+					passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u drupal -f passwords-web.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt&
 				fi	
 			fi												
 		
@@ -507,8 +506,8 @@ then
 					#https://181.115.188.36:443/				
 					for user in $(cat .vulnerabilidades2/"$host"_"$port"_wpUsers.txt); do
 						echo -e "\t\t[+] Probando usuarios identificados. Probando con usuario ($user)"
-						echo "WpCrack.py -t $ip_port_path -u $user --p passwords.txt" >> logs/cracking/"$host"_"$user"-"$port"_passwordCMS.txt
-						WpCrack.py -t $ip_port_path -u $user --p passwords.txt >> logs/cracking/"$host"_"$user"-"$port"_passwordCMS.txt 2>> logs/cracking/"$host"_"$user"-"$port"_passwordCMS.txt
+						echo "WpCrack.py -t $ip_port_path -u $user --p passwords-web.txt" >> logs/cracking/"$host"_"$user"-"$port"_passwordCMS.txt
+						WpCrack.py -t $ip_port_path -u $user --p passwords-web.txt >> logs/cracking/"$host"_"$user"-"$port"_passwordCMS.txt 2>> logs/cracking/"$host"_"$user"-"$port"_passwordCMS.txt
 						egrep -iaq "Credencials" logs/cracking/"$host"_*_passwordCMS.txt 2>/dev/null
 						greprc=$?
 						if [[ $greprc -eq 0 ]] ; then	
@@ -518,8 +517,8 @@ then
 					done
 				else
 					echo -e "\t\t[+] Probando con usuario por defecto admin"	
-					echo "WpCrack.py -t $ip_port_path -u admin --p passwords.txt" >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null
-					WpCrack.py -t $ip_port_path -u admin --p passwords.txt >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null
+					echo "WpCrack.py -t $ip_port_path -u admin --p passwords-web.txt" >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null
+					WpCrack.py -t $ip_port_path -u admin --p passwords-web.txt >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null
 				fi						
 				grep --color=never -ia 'Credenciales' logs/cracking/"$host"_*_passwordCMS.txt 2>/dev/null  > logs/vulnerabilidades/"$host"_"$port"_passwordCMS.txt
 				grep -i credenciales logs/vulnerabilidades/"$host"_"$port"_passwordCMS.txt > .vulnerabilidades/"$host"_"$port"_passwordCMS.txt  2>/dev/null 

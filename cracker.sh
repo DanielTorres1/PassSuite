@@ -953,10 +953,10 @@ fi #modo total
 
 ######## wait to finish########
 while true; do
-	scan_instancias=$((`ps aux | egrep 'medusa -t 1 -f |passWeb|patator|crackmapexec' | egrep -v 'color|keyring|vscode-server|responder' | wc -l` - 1)) 
+	scan_instancias=$((`ps aux | egrep 'medusa|passWeb|patator|crackmapexec|WpCrack' | egrep -v 'color|keyring|vscode-server|responder' | wc -l` - 1)) 
 	if [ "$scan_instancias" -gt 0 ]
 	then
-		echo -e "\t[i] Todavia hay escaneos de medusa -t 1 -f /passWeb activos ($scan_instancias)"  
+		echo -e "\t[i] Todavia hay escaneos activos ($scan_instancias)"  
 		sleep 30
 	else
 		break		  		 

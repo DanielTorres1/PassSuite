@@ -203,11 +203,9 @@ then
 			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u root -f passwords-web.txt >> logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordPhpMyadmin.txt &
 			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u admin -f passwords-web.txt >> logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordPhpMyadmin.txt &
 			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u mysql -f passwords-web.txt >> logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordPhpMyadmin.txt &
-			sleep 60
 			for user_ssh in $(cat logs/enumeracion/"$ip"_users.txt 2>/dev/null); do
 				echo "Probando usuario: $user_ssh en $ip"
 				passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u $user_ssh -f passwords-web.txt >> logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordPhpMyadmin.txt &
-				sleep 60
 			done
 
 			if [[ "$MODE" == "total" ]] ; then					

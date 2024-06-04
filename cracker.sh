@@ -270,6 +270,11 @@ then
 			else
 				echo -e "\t[+] Probando contraseñas comunes ...."
 
+				newdomain=$(cut -d '^' -f3 "logs/enumeracion/${host}_${port}-${path_web_sin_slash}_webDataInfo.txt")
+				if [ -n "$newdomain" ]; then
+					host=$newdomain
+				fi
+
 				
 				if [ -f ".vulnerabilidades2/"$host"_"$port-$path_web_sin_slash"_wpUsers.txt" ]; then
 					#https://181.115.188.36:443/				

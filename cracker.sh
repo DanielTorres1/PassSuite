@@ -261,6 +261,7 @@ then
 
 		if [[ $fingerprint = *"wordpress"* ]]; then			
 			ip_port_path=`echo $ip_port_path |sed 's/wp-login.php//g'`
+			path_web_sin_slash=`echo $path_web_sin_slash |sed 's/wp-login.php//g'`
 			echo -e "$OKGREEN \t[+] Wordpress identificado en $ip_port_path $RESET"
 
 			grep -i ",$host" $FILE_SUBDOMAINS 2>/dev/null | grep -qi InMotion

@@ -280,13 +280,13 @@ then
 					#https://181.115.188.36:443/				
 					for user in $(cat .vulnerabilidades2/"$host"_"$port-$path_web_sin_slash"_wpUsers.txt); do
 						echo -e "\t\t[+] Probando usuarios identificados. Probando con usuario ($user)"
-						echo "WpCrack.py -t $ip_port_path -u $user -p passwords-web.txt --thread 1" >> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS.txt
-						WpCrack.py -t $ip_port_path -u $user -p passwords-web.txt --thread 1 >> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS.txt 2>> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS.txt &
+						echo "WpCrack.py -t $ip_port_path -u $user --p passwords-web.txt --thread 1" >> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS.txt
+						WpCrack.py -t $ip_port_path -u $user --p passwords-web.txt --thread 1 >> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS.txt 2>> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS.txt &
 					done
 				else
 					echo -e "\t\t[+] Probando con usuario por defecto admin"	
-					echo "WpCrack.py -t $ip_port_path -u admin -p passwords-web.txt" >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null
-					WpCrack.py -t $ip_port_path -u admin -p passwords-web.txt --thread 1 >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null
+					echo "WpCrack.py -t $ip_port_path -u admin --p passwords-web.txt" >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null
+					WpCrack.py -t $ip_port_path -u admin --p passwords-web.txt --thread 1 >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null
 				fi						
 			fi			
 		fi	

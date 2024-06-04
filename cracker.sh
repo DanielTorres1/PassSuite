@@ -268,11 +268,14 @@ then
 				echo -e "$OKRED \t[+] Hosting InMotion detectado $RESET"
 			else
 				echo -e "\t[+] Probando contraseñas comunes ...."
-
-				newdomain=$(cut -d '^' -f3 "logs/enumeracion/${host}_${port}-${path_web_sin_slash}_webDataInfo.txt")
-				if [ -n "$newdomain" ]; then
+				grep -qi "\^" "logs/enumeracion/${host}_${port}-${path_web_sin_slash}_webDataInfo.txt"
+				greprc=$?
+				if [[ $greprc -eq 0 ]];then
+					newdomain=$(cut -d '^' -f3 "logs/enumeracion/${host}_${port}-${path_web_sin_slash}_webDataInfo.txt")
 					host=$newdomain
+					echo "newdomain $newdomain"
 				fi
+
 
 				
 				if [ -f ".vulnerabilidades2/"$host"_"$port-$path_web_sin_slash"_wpUsers.txt" ]; then

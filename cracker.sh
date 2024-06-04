@@ -191,7 +191,7 @@ then
 		fi
 		host=`echo $host_port | cut -d ":" -f 1`				
 		path_web=`echo $ip_port_path | cut -d "/" -f 4-5`	
-		path_web=`echo "/"$path_web`
+		path_web=`echo "/"$path_web"/"`
 		path_web_sin_slash=$(echo "$path_web" | tr -d '/')
 
 		if [ $VERBOSE == 's' ]; then  echo -e "[+] host = $host port=$port path_web = $path_web " ; fi

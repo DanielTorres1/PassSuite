@@ -198,7 +198,7 @@ then
 		
 		if [[ $fingerprint = *"phpmyadmin"* ]]; then
 			echo -e "\t[+] phpMyAdmin identificado"
-			echo "passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d \"$path_web\" -u root|admin -f passwords.txt" > logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordPhpMyadmin.txt 
+			echo "passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d \"$path_web\" -u root|admin -f passwords-web.txt" > logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordPhpMyadmin.txt 
 			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u root -f passwords-web.txt >> logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordPhpMyadmin.txt &
 			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u admin -f passwords-web.txt >> logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordPhpMyadmin.txt &
 			passWeb.pl -s $proto_http -t $host -p $port -m phpmyadmin -d "$path_web" -u mysql -f passwords-web.txt >> logs/cracking/"$host"_"$port-$path_web_sin_slash"_passwordPhpMyadmin.txt &

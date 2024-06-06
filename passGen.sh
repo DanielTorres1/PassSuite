@@ -59,6 +59,7 @@ EOF
 
 
 
+TOP100_PASSWORDS='/usr/share/lanscanner/passwords-top100-es.txt'
 
 if [ $VERBOSE == "1" ]
 then
@@ -97,9 +98,13 @@ FILE=`pwd`/$FILE
     john --wordlist=$FILE --rules=rule24 --stdout >> temp-pass.txt 2> /dev/null
     john --wordlist=$FILE --rules=rule25 --stdout >> temp-pass.txt 2> /dev/null		
 
+    #mayuscula la primera letra
     john --wordlist=temp-pass.txt --rules=rule16 --stdout >> temp-pass1.txt 2> /dev/null
+
+    #mayuscula todo
+    john --wordlist=temp-pass.txt --rules=rule17 --stdout >> temp-pass1.txt 2> /dev/null
     
-    cat $FILE temp-pass.txt temp-pass1.txt | sort | uniq > $OUTPUT 
+    cat $FILE temp-pass.txt temp-pass1.txt $TOP100_PASSWORDS| sort | uniq > $OUTPUT 
     rm temp-pass.txt temp-pass1.txt
     exit
   fi

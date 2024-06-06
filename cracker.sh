@@ -514,16 +514,16 @@ then
 
 		if [[ ! -z $ENTIDAD ]];then
 			echo -e "\t[+]Probando usuario: $ENTIDAD" 
-			medusa -t 1 -f -u $ENTIDAD -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt &			
+			medusa -t 1 -f -u $ENTIDAD -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &			
 		fi
 
 		for user_ssh in $(cat logs/enumeracion/"$ip"_users.txt 2>/dev/null); do
 			echo -e "\t[+]Probando usuario: $user_ssh en $ip"
-			medusa -t 1 -f -u $user_ssh -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt &
+			medusa -t 1 -f -u $user_ssh -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
 		done
 				
 		echo -e "\t[+]Probando usuario: root"								
-		medusa -t 1 -f -u root -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt &
+		medusa -t 1 -f -u root -P passwords.txt -h $ip -M ssh -n $port -e s >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
 	done	
 fi
 
@@ -720,8 +720,8 @@ if [[ "$MODE" == "total" ]] ; then
 		for line in $(cat servicios/telnet.txt); do
 			ip=`echo $line | cut -f1 -d":"`
 			port=`echo $line | cut -f2 -d":"`
-			medusa -t 1 -f -e ns -u $ENTIDAD -P passwords.txt -h $ip -M telnet >> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt &
-			medusa -t 1 -f -e ns -u root -P passwords.txt -h $ip -M telnet >> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt &
+			medusa -t 1 -f -e ns -u $ENTIDAD -P passwords.txt -h $ip -M telnet >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
+			medusa -t 1 -f -e ns -u root -P passwords.txt -h $ip -M telnet >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
 		done	
 	fi
 
@@ -736,9 +736,9 @@ if [[ "$MODE" == "total" ]] ; then
 			ip=`echo $line | cut -f1 -d":"`
 			port=`echo $line | cut -f2 -d":"`								
 			echo -e "[+] Probando $ip:$port"
-			echo "passWeb.pl -s https -t $ip -p $port -d / -m PRTG -u prtgadmin -f passwords.txt" > logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt
-			passWeb.pl -s https -t $ip -p $port -d / -m PRTG -u prtgadmin -f passwords.txt>> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt
-			grep --color=never 'encontrado' logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt
+			echo "passWeb.pl -s https -t $ip -p $port -d / -m PRTG -u prtgadmin -f passwords.txt" > logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
+			passWeb.pl -s https -t $ip -p $port -d / -m PRTG -u prtgadmin -f passwords.txt>> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
+			grep --color=never 'encontrado' logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
 			echo ""			
 		done
 		insert_data
@@ -756,9 +756,9 @@ if [[ "$MODE" == "total" ]] ; then
 			port=`echo $line | cut -f2 -d":"`
 						
 			echo -e "[+] Probando $ip"
-			passWeb.pl -s https -t $ip -p $port -d / -m pentaho -u admin -f passwords.txt > logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt
+			passWeb.pl -s https -t $ip -p $port -d / -m pentaho -u admin -f passwords.txt > logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt
 			sleep 2
-			grep --color=never 'encontrado' logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt | tee -a .vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt
+			grep --color=never 'encontrado' logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt | tee -a .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
 			
 			echo ""			
 		done
@@ -778,19 +778,19 @@ if [[ "$MODE" == "total" ]] ; then
 				port=`echo $line | cut -d "/" -f 3| cut -d ":" -f2`	
 				
 				#probar con usuario admin
-				patator.py http_fuzz method=GET url="$line" user_pass=admin:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinado1.txt
+				patator.py http_fuzz method=GET url="$line" user_pass=admin:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinado1.txt
 				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinado1.txt`
 				greprc=$?
 				if [[ $greprc -eq 0 ]] ; then
-					echo -n "[AdminWeb] Usuario:admin $respuesta" >> .vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt
+					echo -n "[AdminWeb] Usuario:admin $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
 				fi	
 				
 				#probar con usuario root
-				patator.py http_fuzz method=GET url="$line" user_pass=root:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinado2.txt			
+				patator.py http_fuzz method=GET url="$line" user_pass=root:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinado2.txt			
 				respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinado2.txt`
 				greprc=$?
 				if [[ $greprc -eq 0 ]] ; then
-					echo -n "[AdminWeb] Usuario:root $respuesta" >> .vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt
+					echo -n "[AdminWeb] Usuario:root $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
 				fi
 							
 			else
@@ -799,19 +799,19 @@ if [[ "$MODE" == "total" ]] ; then
 				port=`echo $line | cut -f2 -d":"`
 				if [[ ${port} == *"443"*  ]];then 	
 					#probar con usuario admin
-					patator.py http_fuzz method=GET url="https://$ip/" user_pass=admin:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinado1.txt
+					patator.py http_fuzz method=GET url="https://$ip/" user_pass=admin:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinado1.txt
 					respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinado1.txt`
 					greprc=$?
 					if [[ $greprc -eq 0 ]] ; then
-						echo -n "[AdminWeb] Usuario:admin $respuesta" >> .vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt
+						echo -n "[AdminWeb] Usuario:admin $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
 					fi	
 				
 					#probar con usuario root
-					patator.py http_fuzz method=GET url="http://$ip/" user_pass=root:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinado2.txt			
+					patator.py http_fuzz method=GET url="http://$ip/" user_pass=root:FILE0 0=passwords.txt -e user_pass:b64 --threads=1 >> logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt 2> logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinado2.txt			
 					respuesta=`grep --color=never '200 OK' logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinado2.txt`
 					greprc=$?
 					if [[ $greprc -eq 0 ]] ; then
-						echo -n "[AdminWeb] Usuario:root $respuesta" >> .vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt
+						echo -n "[AdminWeb] Usuario:root $respuesta" >> .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt
 					fi
 				fi
 			fi
@@ -934,7 +934,7 @@ if [[ "$MODE" == "total" ]] ; then
 				free_ram=`free -m | grep -i mem | awk '{print $7}'`		
 				script_instancias=$((`ps aux | egrep 'patator|medusa|ncrack' | wc -l` - 1)) 							
 				if [[ $free_ram -gt $MIN_RAM && $script_instancias -lt $MAX_SCRIPT_INSTANCES  ]];then 										
-					ncrack --user "$admin_user" -P passwords.txt -g cd=8 $ip:$port | tee -a  logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt &
+					ncrack --user "$admin_user" -P passwords.txt -g cd=8 $ip:$port | tee -a  logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt &
 					echo ""				
 					break
 				else								
@@ -973,7 +973,7 @@ then
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`	
 		echo -e "[+] Parse $ip:$port"	
-		grep --color=never "$admin_user" logs/cracking/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt 2>/dev/null
+		grep --color=never "$admin_user" logs/cracking/"$ip"_"$port"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
 	done
 fi	
 
@@ -1019,7 +1019,7 @@ then
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "[+] Parse $ip:$port"				
-		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt 2>/dev/null					
+		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null					
 	 done	
 	insert_data
 fi
@@ -1067,7 +1067,7 @@ then
 		ip=`echo $line | cut -f1 -d":"`
 		port=`echo $line | cut -f2 -d":"`
 		echo -e "[+] Parse $ip:$port"				
-		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port-$path_web_sin_slash"_passwordAdivinadoServ.txt 2>/dev/null
+		grep --color=never SUCCESS logs/vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt > .vulnerabilidades/"$ip"_"$port"_passwordAdivinadoServ.txt 2>/dev/null
 	 done	
 	insert_data
 fi

@@ -288,7 +288,7 @@ then
 				else
 					echo -e "\t\t[+] Probando con usuario por defecto admin"	
 					echo "WpCrack.py -t $ip_port_path -u admin --p passwords-web.txt" >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null
-					WpCrack.py -t $ip_port_path -u admin --p passwords-web.txt --thread 1 >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null
+					WpCrack.py -t $ip_port_path -u admin --p passwords-web.txt --thread 1 >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null &
 				fi						
 			fi			
 		fi	

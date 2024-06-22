@@ -196,11 +196,12 @@ then
 		path_web=`echo "/"$path_web_sin_slash"/"`
 
 		echo "Buscando company: (.enumeracion2/"$host"_443-_company.txt)"
-		ls .enumeracion2/"$host"_443-_company.txt
+		cat .enumeracion2/"$host"_443-_company.txt
 		if [ -s ".enumeracion2/"$host"_443-_company.txt" ]; then
 			echo "generando password personalizados"
 			passGen.sh -f ".enumeracion2/"$host"_443_company.txt" -t online -o passwords-$host.txt
 			cat passwords-$host.txt passwords-web.txt > passwords-web-specific.txt
+			sleep 600
 		else
 			cat passwords-web.txt > passwords-web-specific.txt
 		fi

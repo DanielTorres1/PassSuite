@@ -171,7 +171,7 @@ echo "Revisar servicios "
 
 
 
-if [ -f servicios/admin-web-fingerprint-inserted.txt ]
+if [ -f servicios/admin-web-custom-inserted.txt ]
 then	  		  
 	echo -e "$OKBLUE\n\t#################### Testing pass web admin ######################$RESET"			
 	while IFS= read -r line 
@@ -285,20 +285,20 @@ then
 					#https://181.115.188.36:443/				
 					for user in $(cat .vulnerabilidades2/"$host"_"$port-$path_web_sin_slash"_wpUsers.txt); do
 						echo -e "\t\t[+] Probando usuarios identificados. Probando con usuario ($user)"
-						echo "wpscan --url $ip_port_path --passwords passwords-web.txt --usernames $user" >> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS-wordpress.txt
+						echo "wpscan --disable-tls-checks  --random-user-agent  --url $ip_port_path --passwords passwords-web.txt --usernames $user" >> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS-wordpress.txt
 						#WpCrack.py -t $ip_port_path -u $user --p passwords-web.txt --thread 1 >> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS.txt 2>> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS.txt &
-						wpscan --url $ip_port_path --passwords passwords-web.txt --usernames $user >> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS-wordpress.txt  2>&1 &
+						wpscan --disable-tls-checks  --random-user-agent --url $ip_port_path --passwords passwords-web.txt --usernames $user >> logs/cracking/"$host"_"$user"-"$port-$path_web_sin_slash"_passwordCMS-wordpress.txt  2>&1 &
 						sleep 10
 					done
 				else
 					echo -e "\t\t[+] Probando con usuario por defecto admin"	
-					echo "wpscan --url $ip_port_path --passwords passwords-web.txt  --usernames admin" >> logs/cracking/"$host"_admin-"$port"-"$path_web_sin_slash"_passwordCMS-wordpress.txt 2>/dev/null
+					echo "wpscan --disable-tls-checks  --random-user-agent  --url $ip_port_path --passwords passwords-web.txt  --usernames admin" >> logs/cracking/"$host"_admin-"$port"-"$path_web_sin_slash"_passwordCMS-wordpress.txt 2>/dev/null
 					#WpCrack.py -t $ip_port_path -u admin --p passwords-web.txt --thread 1 >> logs/cracking/"$host"_"admin-$port"_passwordCMS.txt 2>/dev/null &
-					wpscan --url $ip_port_path --passwords passwords-web.txt  --usernames admin >> logs/cracking/"$host"_admin-"$port"-"$path_web_sin_slash"_passwordCMS-wordpress.txt  2>&1 &
+					wpscan --disable-tls-checks  --random-user-agent  --url $ip_port_path --passwords passwords-web.txt  --usernames admin >> logs/cracking/"$host"_admin-"$port"-"$path_web_sin_slash"_passwordCMS-wordpress.txt  2>&1 &
 				fi						
 			fi			
 		fi	
-	done < servicios/admin-web-fingerprint-inserted.txt			
+	done < servicios/admin-web-custom-inserted.txt			
 fi
 
 
@@ -1083,9 +1083,9 @@ fi
 
 
 #PARSE
-if [ -f servicios/admin-web-fingerprint-inserted.txt ]
+if [ -f servicios/admin-web-custom-inserted.txt ]
 then	  		  
-	echo -e "$OKBLUE #################### PARSE (`wc -l servicios/admin-web-fingerprint-inserted.txt`) ######################$RESET"	    
+	echo -e "$OKBLUE #################### PARSE (`wc -l servicios/admin-web-custom-inserted.txt`) ######################$RESET"	    
 
 	
 	while IFS= read -r line 
@@ -1148,7 +1148,7 @@ then
 			fi																							
 		fi	
 
-	done < servicios/admin-web-fingerprint-inserted.txt	
+	done < servicios/admin-web-custom-inserted.txt	
 	insert_data
 fi
 

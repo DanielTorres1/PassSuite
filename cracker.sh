@@ -192,12 +192,14 @@ then
 			fi
 		fi
 		host=`echo $host_port | cut -d ":" -f 1`				
-		path_web_sin_slash=`echo $ip_port_path | cut -d "/" -f 4-5`	
+		path_web_sin_slash=`echo $ip_port_path | cut -d "/" -f 4-5 | sed 's/\///g'`	
 		path_web=`echo "/"$path_web_sin_slash"/"`
 
-
-		if [ -s ".enumeracion2/"$host"_"$port-$path_web_sin_slash"_company.txt" ]; then
-			passGen.sh -f .enumeracion2/"$host"_"$port-$path_web_sin_slash"_company.txt -t online -o passwords-$host.txt
+		echo "Buscando company: (.enumeracion2/"$host"_443_company.txt)"
+		ls .enumeracion2/"$host"_443_company.txt
+		if [ -s ".enumeracion2/"$host"_443_company.txt" ]; then
+			echo "generando password personalizados"
+			passGen.sh -f ".enumeracion2/"$host"_443_company.txt" -t online -o passwords-$host.txt
 			cat passwords-$host.txt passwords-web.txt > passwords-web-specific.txt
 		else
 			cat passwords-web.txt > passwords-web-specific.txt
@@ -1119,8 +1121,8 @@ then
 		fi
 
 		if [[ $fingerprint = *"wordpress"* ]]; then
-		
-			grep --color=never -ia 'Username' logs/cracking/"$host"_*-"$port"-"$path_web_sin_slash"_passwordCMS-wordpress.txt > .vulnerabilidades/"$host"_"$port-$path_web_sin_slash"_passwordCMS-wordpress.txt
+			path_web_sin_slash=`echo $path_web_sin_slash |sed 's/wp-login.php//g'`
+			grep --color=never 'Username' logs/cracking/"$host"_*-"$port"-"$path_web_sin_slash"_passwordCMS-wordpress.txt > .vulnerabilidades/"$host"_"$port-$path_web_sin_slash"_passwordCMS-wordpress.txt
 		fi
 
 		if [[ $fingerprint = *'tomcat admin'* ]]; then

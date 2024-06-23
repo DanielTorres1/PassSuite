@@ -199,9 +199,9 @@ then
 		cat .enumeracion2/"$host"_443-_company.txt
 		if [ -s ".enumeracion2/"$host"_443-_company.txt" ]; then
 			echo "generando password personalizados"
-			passGen.sh -f ".enumeracion2/"$host"_443_company.txt" -t online -o passwords-$host.txt
+			passGen.sh -f ".enumeracion2/"$host"_443-_company.txt" -t online -o passwords-$host.txt
 			cat passwords-$host.txt passwords-web.txt > passwords-web-specific.txt
-			sleep 600
+			sleep 60
 		else
 			cat passwords-web.txt > passwords-web-specific.txt
 		fi

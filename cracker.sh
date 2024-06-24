@@ -196,18 +196,16 @@ then
 		path_web=`echo "/"$path_web_sin_slash"/"`
 
 		echo "Buscando company: (.enumeracion2/"$host"_443-_company.txt)"
-		cat .enumeracion2/"$host"_443-_company.txt
 		if [ -s ".enumeracion2/"$host"_443-_company.txt" ]; then
 			echo "generando password personalizados"
 			passGen.sh -f ".enumeracion2/"$host"_443-_company.txt" -t online -o passwords-$host.txt
 			cat passwords-$host.txt passwords-web.txt > passwords-web-specific.txt
-			sleep 60
 		else
 			cat passwords-web.txt > passwords-web-specific.txt
 		fi
 
-		if [ $VERBOSE == 's' ]; then  echo -e "[+] host = $host port=$port path_web = $path_web " ; fi
-		if [ $VERBOSE == 's' ]; then  echo -e "fingerprint $fingerprint" ; fi
+		if [ "$VERBOSE" == 's' ]; then  echo -e "[+] host = $host port=$port path_web = $path_web " ; fi
+		if [ "$VERBOSE" == 's' ]; then  echo -e "fingerprint $fingerprint" ; fi
 		
 		if [[ $fingerprint = *"phpmyadmin"* ]]; then
 			echo -e "\t[+] phpMyAdmin identificado"
@@ -423,53 +421,54 @@ cat servicios/Windows.txt 2>/dev/null| xargs -I {} -P 10 bash -c 'check_windows_
 if [ -f servicios/WindowsAlive.txt ]
 then		
 	echo -e "$OKBLUE\n\t#################### Testing windows auth ######################$RESET"			
-	for password in $(cat passwords.txt); do
-		#probar todos los host con $password
-		local-admin-checker.sh -u $admin_user -p "$password" -f servicios/WindowsAlive.txt
-	done
-fi
-	# for line in $(cat servicios/WindowsAlive.txt); do
-	# 	ip=`echo $line | cut -f1 -d":"`			
-	# 	grep -iq 'allows sessions using username' .vulnerabilidades2/"$ip"_445_nullsession.txt 2>/dev/null
-	# 	greprc=$?
-	# 	if [[ $greprc -eq 0 ]] ; then	
-	# 		echo -e "[+] Null session detectada en $ip"
-	# 	else
-	# 		echo -e "[+] Probando $ip"
-	# 		while true; do			
-	# 			free_ram=`free -m | grep -i mem | awk '{print $7}'`		
-	# 			script_instancias=$((`ps aux | egrep 'patator|medusa|ncrack' | wc -l` - 1)) 			
+	# for password in $(cat passwords.txt); do
+	# 	#probar todos los host con $password
+	# 	local-admin-checker.sh -u $admin_user -p "$password" -f servicios/WindowsAlive.txt
+	# done
+
+
+	for line in $(cat servicios/WindowsAlive.txt); do
+		ip=`echo $line | cut -f1 -d":"`			
+		grep -iq 'allows sessions using username' .vulnerabilidades2/"$ip"_445_nullsession.txt 2>/dev/null
+		greprc=$?
+		if [[ $greprc -eq 0 ]] ; then	
+			echo -e "[+] Null session detectada en $ip"
+		else
+			echo -e "[+] Probando $ip"
+			while true; do			
+				free_ram=`free -m | grep -i mem | awk '{print $7}'`		
+				script_instancias=$((`ps aux | egrep 'patator|medusa|ncrack' | wc -l` - 1)) 			
 				
-	# 			if [[ $free_ram -gt $MIN_RAM && $script_instancias -lt $MAX_SCRIPT_INSTANCES  ]];then 										
-	# 				echo "patator smb_login -t 1 host=$ip user=$admin_user password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE -R logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt " > logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt
-	# 				patator smb_login -t 1 host=$ip user=$admin_user password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE -R logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt 2> /dev/null &
+				if [[ $free_ram -gt $MIN_RAM && $script_instancias -lt $MAX_SCRIPT_INSTANCES  ]];then 										
+					echo "patator smb_login -t 1 host=$ip user=$admin_user password=FILE0 0=passwords.txt -x quit:code=0  -R logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt " > logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt
+					patator smb_login -t 1 host=$ip user=$admin_user password=FILE0 0=passwords.txt -x quit:code=0  -R logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt 2> /dev/null &
 					
-	# 				if [[ "$MODE" == "total" && "$EXTRATEST" == "oscp"  ]]; then 
-	# 					if [ "$LENGUAJE" == "es" ]; then
-	# 						echo "patator smb_login host=$ip user=soporte password=FILE0 0=passwords.txt " >> logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 
-	# 						patator smb_login -t 1 host=$ip user=soporte password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE -R logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 2>> /dev/null &
+					if [[ "$MODE" == "total" && "$EXTRATEST" == "oscp"  ]]; then 
+						if [ "$LENGUAJE" == "es" ]; then
+							echo "patator smb_login host=$ip user=soporte password=FILE0 0=passwords.txt -x quit:code=0 " >> logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 
+							patator smb_login -t 1 host=$ip user=soporte password=FILE0 0=passwords.txt -x quit:code=0  -R logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 2>> /dev/null &
 
 							
-	# 						echo "patator smb_login host=$ip user=sistemas password=FILE0 0=passwords.txt " >> logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 
-	# 						patator smb_login -t 1 host=$ip user=sistemas password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE -R logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 2>> /dev/null &
-	# 					fi	
+							echo "patator smb_login host=$ip user=sistemas password=FILE0 0=passwords.txt -x quit:code=0 " >> logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 
+							patator smb_login -t 1 host=$ip user=sistemas password=FILE0 0=passwords.txt -x quit:code=0  -R logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 2>> /dev/null &
+						fi	
 
-	# 					if [[ ! -z $ENTIDAD ]];then
-	# 						echo "patator smb_login host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt " > logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt
-	# 						patator smb_login -t 1 host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt -x ignore:fgrep=STATUS_LOGON_FAILURE -R logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 2> /dev/null &
-	# 					fi			
-	# 				fi					
-	# 				sleep 1
-	# 				break					
-	# 			else								
-	# 				script_instancias=`ps aux | egrep 'patator|medusa|ncrack' | egrep -v 'discover.sh|lanscanner.sh|autohack.sh|heka.sh|grep -E'| wc -l`
-	# 				echo -e "\t[-] Scripts online ($script_instancias) RAM = $free_ram Mb "
-	# 				sleep 3										
-	# 			fi		
-	# 		done # while true			
-	# 	fi # no null session		
-	#done	
-#fi
+						if [[ ! -z $ENTIDAD ]];then
+							echo "patator smb_login host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt -x quit:code=0 " > logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt
+							patator smb_login -t 1 host=$ip user=$ENTIDAD password=FILE0 0=passwords.txt -x quit:code=0  -R logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 2> /dev/null &
+						fi			
+					fi					
+					sleep 1
+					break					
+				else								
+					script_instancias=`ps aux | egrep 'patator|medusa|ncrack' | egrep -v 'discover.sh|lanscanner.sh|autohack.sh|heka.sh|grep -E'| wc -l`
+					echo -e "\t[-] Scripts online ($script_instancias) RAM = $free_ram Mb "
+					sleep 3										
+				fi		
+			done # while true			
+		fi # no null session		
+	done	
+fi
 
 
 if [ -f servicios/only_rdp.txt ]; then	
@@ -1154,6 +1153,62 @@ then
 	insert_data
 fi
 
+
+if [ -f servicios/WindowsAlive.txt ]
+then
+	echo -e "$OKBLUE #################### PARSE (`wc -l servicios/WindowsAlive.txt`) ######################$RESET"	    		
+	for ip in $(cat servicios/WindowsAlive.txt); do	
+		echo -e "[+] Parse $ip"					
+		grep -iq 'allows sessions using username' .vulnerabilidades2/"$ip"_445_nullsession.txt	2>/dev/null	
+		
+		sed -i '/remaining/d' logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt 2>/dev/null	
+		sed -i '/remaining/d' logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 2>/dev/null
+		sed -i '/remaining/d' logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 2>/dev/null
+		sed -i '/remaining/d' logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 2>/dev/null
+
+		greprc=$?
+		if [[ $greprc -eq 0 ]] ; then	
+			echo -e "[+] Null session detectada en $ip"
+		else
+			passwords_ok=`grep -qi windows logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt`			
+			if [[  $passwords_ok -lt 3 ]];then 
+				password_smb=`grep -i windows logs/cracking/"$ip"_"$admin_user"-smb_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'}`
+				if [[ -n "$password_smb" ]];then
+					echo "Usuario:$admin_user Password:$password_smb" >	.vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+				fi
+			fi
+						
+			passwords_ok=`grep -qi windows logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 2>/dev/null`
+			if [[  $passwords_ok -lt 3 ]];then 
+				password_smb=`grep -i windows logs/cracking/"$ip"_soporte-windows_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'}`
+				if [[ -n "$password_smb" ]];then
+					echo "Usuario:soporte Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+				fi
+			fi
+			
+			if [ ! -z $ENTIDAD ] ; then
+				passwords_ok=`grep -qi windows logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 2>/dev/null`
+				if [[  $passwords_ok -lt 3 ]];then 
+					password_smb=`grep -i windows logs/cracking/"$ip"_"$ENTIDAD"-smb_passwordAdivinadoWin.txt 2>/dev/null | awk {'print $9'}`
+					if [[ -n "$password_smb" ]];then
+						echo "Usuario:$ENTIDAD Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+					fi
+				fi	
+			fi
+					
+
+			passwords_ok=`grep -qi windows logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 2>/dev/null`			
+			if [[  $passwords_ok -lt 3 ]];then 
+				password_smb=`grep -i windows logs/cracking/"$ip"_sistemas-windows_passwordAdivinadoWin.txt 2>/dev/null| awk {'print $9'} `
+				if [[ -n "$password_smb" ]];then
+					echo "Usuario:sistemas Password:$password_smb" >> .vulnerabilidades/"$ip"_smb_passwordAdivinadoWin.txt
+				fi
+			fi
+			
+		fi										
+	 done	
+	 insert_data
+fi
 
 
 # if [ -f servicios/pop.txt ]

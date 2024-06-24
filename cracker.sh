@@ -200,6 +200,7 @@ then
 			echo "generando password personalizados"
 			passGen.sh -f ".enumeracion2/"$host"_443-_company.txt" -t online -o passwords-$host.txt
 			cat passwords-$host.txt passwords-web.txt > passwords-web-specific.txt
+			rm passwords-$host.txt
 		else
 			cat passwords-web.txt > passwords-web-specific.txt
 		fi
